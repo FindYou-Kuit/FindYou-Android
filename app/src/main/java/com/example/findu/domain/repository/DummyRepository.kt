@@ -1,7 +1,7 @@
 package com.example.findu.domain.repository
 
-import com.example.findu.data.dataremote.model.response.DummyResponseDto
+import com.example.findu.domain.model.DummyData
 
 interface DummyRepository{
-    suspend fun dummy():Result<DummyResponseDto>
+    suspend fun dummy():Result<DummyData>
 }
