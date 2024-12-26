@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">FindU</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- bottom navigation-->
+    <string name="bottom_nav_home">홈</string>
+    <string name="bottom_nav_search">조회</string>
+    <string name="bottom_nav_report">신고</string>
+    <string name="bottom_nav_info">정보</string>
+    <string name="bottom_nav_my">마이</string>
 </resources>
