@@ -71,4 +71,8 @@ dependencies {
     // Hilt
     implementation(libs.bundles.hilt)
     kapt(libs.hilt.compiler)
+
+    // Jetpack Navigation
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 }
