@@ -2,21 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/fragment_home"
+        android:icon="@drawable/img_bottom_nav_home"
         android:title="@string/bottom_nav_home" />
 
     <item
         android:id="@+id/fragment_search"
+        android:icon="@drawable/img_bottom_nav_search"
         android:title="@string/bottom_nav_search" />
 
     <item
         android:id="@+id/fragment_report"
+        android:icon="@drawable/img_bottom_nav_report"
         android:title="@string/bottom_nav_report" />
 
     <item
         android:id="@+id/fragment_info"
+        android:icon="@drawable/img_bottom_nav_info"
         android:title="@string/bottom_nav_info" />
 
     <item
         android:id="@+id/fragment_my"
+        android:icon="@drawable/img_bottom_nav_my"
         android:title="@string/bottom_nav_my" />
 </menu>
