@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 피그마 상 letter Spacing -0.3px -->
+    <!-- 안드로이드 XML 에서의 letterSpacing 단위 : em -->
+    <!-- em = px / sp -->
+
+    <style name="TextAppearance.FindU" parent="">
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+    </style>
+
+    <!--head-->
+    <style name="TextAppearance.FindU.head_01" parent="">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:letterSpacing">-0.0125</item>
+    </style>
+
+    <style name="TextAppearance.FindU.head_02_bold" parent="">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:letterSpacing">-0.0167</item>
+    </style>
+
+    <style name="TextAppearance.FindU.head_02_regular" parent="">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:letterSpacing">-0.0167</item>
+    </style>
+
+    <!--body1-->
+    <style name="TextAppearance.FindU.body_01_bold" parent="">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:letterSpacing">-0.0188</item>
+    </style>
+
+    <style name="TextAppearance.FindU.body_01_regular" parent="">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:letterSpacing">-0.0188</item>
+    </style>
+
+    <!--body2-->
+    <style name="TextAppearance.FindU.body_02_bold" parent="">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:letterSpacing">-0.0214</item>
+    </style>
+
+    <style name="TextAppearance.FindU.body_02_regular" parent="">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:letterSpacing">-0.0214</item>
+    </style>
+
+    <!--caption-->
+    <style name="TextAppearance.FindU.caption_12" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:letterSpacing">-0.025</item>
+    </style>
+
+    <style name="TextAppearance.FindU.caption_11" parent="">
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:letterSpacing">-0.0273</item>
+    </style>
+
+</resources>
