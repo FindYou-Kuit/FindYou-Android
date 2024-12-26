@@ -21,12 +21,19 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bnv_main"
+        style="@style/BottomNavigationStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_bottom_nav"
+        android:paddingBottom="15dp"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemRippleColor="@null"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_main" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
