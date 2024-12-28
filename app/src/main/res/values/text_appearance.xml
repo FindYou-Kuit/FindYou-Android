@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- 피그마 상 letter Spacing -0.3px -->
-    <!-- 안드로이드 XML 에서의 letterSpacing 단위 : em -->
-    <!-- em = px / sp -->
-
     <style name="TextAppearance.FindU" parent="">
         <item name="android:includeFontPadding">false</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
