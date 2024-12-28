@@ -7,48 +7,61 @@
     </style>
 
     <!--head-->
-    <style name="TextAppearance.FindU.head_01" parent="">
+    <style name="TextAppearance.FindU.Head1_SB_24" parent="">
         <item name="android:textSize">24sp</item>
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:letterSpacing">-0.0125</item>
     </style>
 
-    <style name="TextAppearance.FindU.head_02_bold" parent="">
+    <style name="TextAppearance.FindU.Head2_SB_20" parent="">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:letterSpacing">-0.015</item>
+    </style>
+
+    <style name="TextAppearance.FindU.Head3_SB_18" parent="">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:letterSpacing">-0.0167</item>
     </style>
 
-    <style name="TextAppearance.FindU.head_02_regular" parent="">
+    <style name="TextAppearance.FindU.Head3_R_18" parent="">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/pretendard_regular</item>
         <item name="android:letterSpacing">-0.0167</item>
     </style>
 
     <!--body1-->
-    <style name="TextAppearance.FindU.body_01_bold" parent="">
+    <style name="TextAppearance.FindU.Body1_SB_16" parent="">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:letterSpacing">-0.0188</item>
     </style>
 
-    <style name="TextAppearance.FindU.body_01_regular" parent="">
+    <style name="TextAppearance.FindU.Body1_R_16" parent="">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/pretendard_regular</item>
         <item name="android:letterSpacing">-0.0188</item>
     </style>
 
     <!--body2-->
-    <style name="TextAppearance.FindU.body_02_bold" parent="">
+    <style name="TextAppearance.FindU.Body2_SB_14" parent="">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:letterSpacing">-0.0214</item>
     </style>
 
-    <style name="TextAppearance.FindU.body_02_regular" parent="">
+    <style name="TextAppearance.FindU.Body2_R_14" parent="">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/pretendard_regular</item>
         <item name="android:letterSpacing">-0.0214</item>
+    </style>
+
+    <!--tag-->
+    <style name="TextAppearance.FindU.Tag1_SB_12" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:letterSpacing">-0.025</item>
     </style>
 
     <!--caption-->
@@ -63,5 +76,13 @@
         <item name="android:fontFamily">@font/pretendard_regular</item>
         <item name="android:letterSpacing">-0.0273</item>
     </style>
+
+    <!--home-->
+    <style name="TextAppearance.FindU.Home_SB_10" parent="">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:letterSpacing">-0.03</item>
+    </style>
+
 
 </resources>
