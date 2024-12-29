@@ -28,6 +28,8 @@
         android:paddingBottom="15dp"
         app:itemIconTint="@color/bottom_nav_color"
         app:itemRippleColor="@null"
+        app:itemTextAppearanceActive="@style/TextAppearance.FindU.Home_SB_10"
+        app:itemTextAppearanceInactive="@style/TextAppearance.FindU.Home_SB_10"
         app:itemTextColor="@color/bottom_nav_color"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
