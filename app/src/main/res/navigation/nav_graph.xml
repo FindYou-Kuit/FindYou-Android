@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragment_home">
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.example.findu.presentation.ui.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/fragment_search"
+        android:name="com.example.findu.presentation.ui.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/fragment_report"
+        android:name="com.example.findu.presentation.ui.report.ReportFragment"
+        android:label="Report"
+        tools:layout="@layout/fragment_report" />
+
+    <fragment
+        android:id="@+id/fragment_info"
+        android:name="com.example.findu.presentation.ui.info.InfoFragment"
+        android:label="Info"
+        tools:layout="@layout/fragment_info" />
+
+    <fragment
+        android:id="@+id/fragment_my"
+        android:name="com.example.findu.presentation.ui.my.MyFragment"
+        android:label="My"
+        tools:layout="@layout/fragment_my" />
+
+</navigation>
