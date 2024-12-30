@@ -1,4 +1,4 @@
-package com.example.findu.data.dataremote.datasource.remote
+package com.example.findu.data.dataremote.datasource
 
 import com.example.findu.data.dataremote.model.response.DummyResponseDto
 

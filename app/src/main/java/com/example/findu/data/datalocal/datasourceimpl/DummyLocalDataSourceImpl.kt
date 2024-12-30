@@ -1,9 +1,9 @@
-package com.example.findu.data.dataremote.datasourceimpl.local
+package com.example.findu.data.datalocal.datasourceimpl
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.example.findu.data.dataremote.datasource.local.DummyLocalDataSource
+import com.example.findu.data.datalocal.datasource.DummyLocalDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
