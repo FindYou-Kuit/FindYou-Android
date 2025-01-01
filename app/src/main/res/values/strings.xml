@@ -11,5 +11,7 @@
     <!-- home-->
     <string name="home_top_bar_logo">홈 탑바 로고</string>
     <string name="home_top_bar_profile">홈 탑바 프로필</string>
+    <string name="home_today_bar_rescue">오늘 구조된 동물</string>
+    <string name="home_today_bar_report">오늘 신고된 동물</string>
 
 </resources>
