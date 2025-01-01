@@ -1,9 +1,9 @@
 package com.example.findu.di
 
-import com.example.findu.data.dataremote.datasource.local.DummyLocalDataSource
-import com.example.findu.data.dataremote.datasource.remote.DummyRemoteDataSource
-import com.example.findu.data.dataremote.datasourceimpl.local.DummyLocalDataSourceImpl
-import com.example.findu.data.dataremote.datasourceimpl.remote.DummyRemoteDataSourceImpl
+import com.example.findu.data.datalocal.datasource.DummyLocalDataSource
+import com.example.findu.data.dataremote.datasource.DummyRemoteDataSource
+import com.example.findu.data.datalocal.datasourceimpl.DummyLocalDataSourceImpl
+import com.example.findu.data.dataremote.datasourceimpl.DummyRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
