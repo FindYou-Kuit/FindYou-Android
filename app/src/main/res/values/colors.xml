@@ -13,12 +13,12 @@
     <color name="green1">#43C661</color>
     <color name="green2">#DEFDE4</color>
     <!--gray-->
-    <color name="grey1">#F3F3F3</color>
-    <color name="grey2">#E7E7E7</color>
-    <color name="grey3">#CFCFCF</color>
-    <color name="grey4">#A0A0A0</color>
-    <color name="grey5">#585858</color>
-    <color name="grey6">#111111</color>
+    <color name="gray1">#F3F3F3</color>
+    <color name="gray2">#E7E7E7</color>
+    <color name="gray3">#CFCFCF</color>
+    <color name="gray4">#A0A0A0</color>
+    <color name="gray5">#585858</color>
+    <color name="gray6">#111111</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
