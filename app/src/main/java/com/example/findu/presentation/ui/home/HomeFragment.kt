@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.databinding.FragmentHomeBinding
 
@@ -46,6 +47,19 @@ class HomeFragment : Fragment() {
     private fun setupBanner() {
         val vpAdapter = HomeBannerAdapter(dummyImageUrls)
         binding.vpHomeBanner.adapter = vpAdapter
+
+        val startPosition = Int.MAX_VALUE / 2
+        binding.vpHomeBanner.setCurrentItem(
+            startPosition - (startPosition % dummyImageUrls.size),
+            false
+        )
+
+        binding.vpHomeBanner.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+            }
+        })
     }
 
     override fun onDestroyView() {

@@ -19,13 +19,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:text="@string/home_banner_num"
+        android:background="@drawable/bg_home_banner_number"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@id/iv_home_vp_img"
-        app:layout_constraintEnd_toEndOf="@id/iv_home_vp_img"/>
+        app:layout_constraintEnd_toEndOf="@id/iv_home_vp_img">
+
+        <TextView
+            android:id="@+id/tv_home_banner_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="5dp"
+            android:text="@string/home_banner_num"
+            android:textAppearance="@style/TextAppearance.FindU.Home_SB_10"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
