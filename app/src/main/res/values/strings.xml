@@ -7,4 +7,8 @@
     <string name="bottom_nav_report">신고</string>
     <string name="bottom_nav_info">정보</string>
     <string name="bottom_nav_my">마이</string>
+
+    <!-- search-->
+    <string name="search_main_title">조회하기</string>
+
 </resources>
