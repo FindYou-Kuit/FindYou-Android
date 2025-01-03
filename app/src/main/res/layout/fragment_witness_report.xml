@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:paddingHorizontal="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_report_top_title">
@@ -31,6 +30,7 @@
             android:id="@+id/tv_report_upload_image_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
             android:text="@string/report_upload_image_title"
             android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,8 +43,10 @@
             android:layout_marginTop="3dp"
             android:clipToPadding="false"
             android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/tv_report_upload_image_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_report_upload_image_title"
+            tools:listitem="@layout/item_report_uploaded_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -133,7 +135,7 @@
             android:layout_height="35dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_edit_text_breed"
-            android:drawableEnd="@drawable/img_report_arrow_down"
+            android:drawableEnd="@drawable/img_report_arrow_down_16_g5"
             android:enabled="false"
             android:hint="@string/report_breed_input_hint"
             android:paddingStart="12dp"
@@ -145,7 +147,7 @@
             android:id="@+id/cl_report_breeds_recycler_container"
             android:layout_width="match_parent"
             android:layout_height="248dp"
-            android:background="@drawable/bg_bottom_radius_8"
+            android:background="@drawable/bg_white_bottom_radius_8"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/et_report_breed_field">
 
@@ -182,11 +184,11 @@
             android:id="@+id/rv_report_colors"
             android:layout_width="wrap_content"
             android:layout_height="83dp"
-            tools:listitem="@layout/item_report_colors"
             android:layout_marginTop="13dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_report_color_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_report_color_title"
+            tools:listitem="@layout/item_report_colors" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
