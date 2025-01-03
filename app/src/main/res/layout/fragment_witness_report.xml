@@ -47,5 +47,67 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_report_species_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/cl_report_image_container">
+
+        <TextView
+            android:id="@+id/tv_report_species_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/species_title"
+            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/rg_report_species"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="13dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/tv_report_species_title">
+
+            <RadioButton
+                android:id="@+id/rb_report_dog_button"
+                android:layout_width="105dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_radio_button_left"
+                android:button="transparent"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/species_dog"
+                android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
+
+            <RadioButton
+                android:id="@+id/rb_report_cat_button"
+                android:layout_width="110dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_radio_button_center"
+                android:button="transparent"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/species_cat"
+                android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
+
+            <RadioButton
+                android:id="@+id/rb_report_extra_button"
+                android:layout_width="105dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_radio_button_right"
+                android:button="transparent"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/species_extra"
+                android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
+
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,4 +13,8 @@
     <string name="missing_report">실종신고</string>
     <string name="report_title">신고하기</string>
     <string name="upload_image_title">사진을 등록해주세요!</string>
+    <string name="species_title">어떤 동물인가요?</string>
+    <string name="species_dog">강아지</string>
+    <string name="species_cat">고양이</string>
+    <string name="species_extra">기타</string>
 </resources>
