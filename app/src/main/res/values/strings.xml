@@ -8,13 +8,28 @@
     <string name="bottom_nav_info">정보</string>
     <string name="bottom_nav_my">마이</string>
 
-    <!--  report  -->
-    <string name="witness_report">목격신고</string>
-    <string name="missing_report">실종신고</string>
+    <!--  witness report  -->
+    <string name="report_witness">목격신고</string>
+    <string name="report_missing">실종신고</string>
     <string name="report_title">신고하기</string>
-    <string name="upload_image_title">사진을 등록해주세요!</string>
-    <string name="species_title">어떤 동물인가요?</string>
-    <string name="species_dog">강아지</string>
-    <string name="species_cat">고양이</string>
-    <string name="species_extra">기타</string>
+    <string name="report_upload_image_title">사진을 등록해주세요!</string>
+    <string name="report_species_title">어떤 동물인가요?</string>
+    <string name="report_species_dog">강아지</string>
+    <string name="report_species_cat">고양이</string>
+    <string name="report_species_extra">기타</string>
+    <string name="report_breed_title">어떤 품종인가요?</string>
+    <string name="report_breed_input_hint">품종을 선택해주세요.</string>
+    <string name="report_color_title">반려동물의 털색을 표시해 주세요!.</string>
+
+    <!--  colors  -->
+    <string name="black_color">검정색</string>
+    <string name="yellow_color">노란색</string>
+    <string name="spotted_color">점박이</string>
+    <string name="white_color">하얀색</string>
+    <string name="brown_color">갈색</string>
+    <string name="striped_color">줄무늬</string>
+    <string name="gray_color">회색</string>
+    <string name="red_color">적색</string>
+    <string name="etc_color">기타</string>
+
 </resources>
