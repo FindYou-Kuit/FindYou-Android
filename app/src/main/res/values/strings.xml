@@ -7,4 +7,10 @@
     <string name="bottom_nav_report">신고</string>
     <string name="bottom_nav_info">정보</string>
     <string name="bottom_nav_my">마이</string>
+
+    <!--  report  -->
+    <string name="witness_report">목격신고</string>
+    <string name="missing_report">실종신고</string>
+    <string name="report_title">신고하기</string>
+    <string name="upload_image_title">사진을 등록해주세요!</string>
 </resources>
