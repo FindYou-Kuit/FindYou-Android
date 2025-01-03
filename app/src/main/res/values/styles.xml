@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemHorizontalTranslationEnabled">false</item>
         <item name="itemIconSize">21dp</item>
@@ -11,5 +12,22 @@
         <item name="android:lineHeight">12sp</item>
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="SearchFilterChipStyle" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@color/gray5</item>
+        <item name="android:textColor">@color/gray1</item>
+        <item name="closeIconVisible">true</item>
+        <item name="chipMinHeight">47dp</item>
+        <item name="closeIconSize">8dp</item>
+        <item name="closeIconTint">@color/gray3</item>
+        <item name="android:paddingHorizontal">8dp</item>
+        <item name="closeIcon">@drawable/ic_search_filters_chip_close</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedChipShape</item>
+    </style>
+
+    <style name="RoundedChipShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 </resources>
