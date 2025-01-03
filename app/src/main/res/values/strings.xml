@@ -19,6 +19,7 @@
     <string name="report_species_extra">기타</string>
     <string name="report_breed_title">어떤 품종인가요?</string>
     <string name="report_breed_input_hint">품종을 선택해주세요.</string>
+    <string name="report_gender_title">어떤 성별인가요?</string>
     <string name="report_color_title">반려동물의 털색을 표시해 주세요!.</string>
 
     <!--  colors  -->
@@ -31,5 +32,10 @@
     <string name="gray_color">회색</string>
     <string name="red_color">적색</string>
     <string name="etc_color">기타</string>
+
+    <!--  genders  -->
+    <string name="male_gender">남자</string>
+    <string name="female_gender">여자</string>
+    <string name="unknown_gender">모르겠어요</string>
 
 </resources>
