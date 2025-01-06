@@ -41,5 +41,9 @@
     <string name="report_physical_feature">신체적 특징</string>
     <string name="report_external_feature">외적 특징</string>
     <string name="report_character_feature">성격</string>
+    <string name="report_additional_description">추가 설명 작성하기</string>
+    <string name="report_option">(옵션)</string>
+    <string name="report_description_hint">자유롭게 추가 설명을 작성해주세요!\n\n\n</string>
+    <string name="report_found_date">발견 날짜</string>
 
 </resources>

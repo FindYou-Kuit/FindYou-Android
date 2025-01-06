@@ -80,7 +80,7 @@
                     android:id="@+id/rg_report_species"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     app:layout_constraintTop_toBottomOf="@id/tv_report_species_title">
 
@@ -142,7 +142,7 @@
                     android:id="@+id/et_report_breed_field"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/bg_edit_text_breed"
                     android:drawableEnd="@drawable/img_report_arrow_down_16_g5"
                     android:enabled="false"
@@ -173,71 +173,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_report_gender_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@id/cl_report_breed_container">
-
-                <TextView
-                    android:id="@+id/tv_report_gender_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/report_gender_title"
-                    android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioGroup
-                    android:id="@+id/rg_report_genders"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/tv_report_gender_title">
-
-                    <RadioButton
-                        android:id="@+id/rb_report_male_button"
-                        android:layout_width="105dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/bg_radio_button_left"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:text="@string/male_gender"
-                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
-
-                    <RadioButton
-                        android:id="@+id/rb_report_female_button"
-                        android:layout_width="110dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/bg_radio_button_center"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:text="@string/female_gender"
-                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
-
-                    <RadioButton
-                        android:id="@+id/rb_report_unknown_button"
-                        android:layout_width="105dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/bg_radio_button_right"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:text="@string/unknown_gender"
-                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
-
-                </RadioGroup>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_report_color_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@id/cl_report_gender_container">
+                app:layout_constraintTop_toBottomOf="@id/cl_report_breed_container">
 
                 <TextView
                     android:id="@+id/tv_report_color_title"
@@ -252,7 +193,7 @@
                     android:id="@+id/rv_report_colors"
                     android:layout_width="wrap_content"
                     android:layout_height="83dp"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="10dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_report_color_title"
@@ -280,6 +221,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:baselineAligned="false"
                     app:layout_constraintTop_toBottomOf="@id/tv_report_feature_title"
                     android:layout_marginTop="10dp"
                     android:layout_height="wrap_content">
@@ -290,7 +232,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="105"
-                        android:layout_marginTop="10dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_report_feature_title">
 
@@ -326,7 +267,6 @@
                         android:layout_width="0dp"
                         android:layout_weight="116"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         app:layout_constraintStart_toEndOf="@id/cl_report_physical_feature_container"
                         app:layout_constraintTop_toBottomOf="@id/tv_report_feature_title">
 
@@ -362,7 +302,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="108"
-                        android:layout_marginTop="10dp"
                         app:layout_constraintStart_toEndOf="@id/cl_report_external_feature_container"
                         app:layout_constraintTop_toBottomOf="@id/tv_report_feature_title">
 
@@ -410,7 +349,7 @@
                     android:id="@+id/tv_report_description_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="추가 설명 작성하기"
+                    android:text="@string/report_additional_description"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -420,7 +359,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:text="(옵션)"
+                    android:text="@string/report_option"
                     android:textAppearance="@style/TextAppearance.FindU.caption_12"
                     android:textColor="@color/gray3"
                     app:layout_constraintBottom_toBottomOf="@id/tv_report_description_title"
@@ -431,7 +370,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_edit_text_description"
-                    android:hint="자유롭게 추가 설명을 작성해주세요!\n\n\n"
+                    android:hint="@string/report_description_hint"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="10dp"
                     android:textAppearance="@style/TextAppearance.FindU.caption_12"
@@ -452,7 +391,7 @@
                     android:id="@+id/tv_report_date_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="발견 날짜"
+                    android:text="@string/report_found_date"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
