@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@id/cl_report_species_container">
 
                 <TextView
@@ -174,7 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@id/cl_report_breed_container">
 
                 <TextView
@@ -233,7 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@id/cl_report_gender_container">
 
                 <TextView
@@ -261,7 +261,7 @@
                 android:id="@+id/cl_report_feature_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="20dp"
                 android:paddingHorizontal="15dp"
                 app:layout_constraintTop_toBottomOf="@id/cl_report_color_container">
 
@@ -300,7 +300,7 @@
                         android:id="@+id/rv_report_physical_features"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:orientation="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintTop_toBottomOf="@id/tv_report_physical_feature_title"
@@ -334,7 +334,7 @@
                         android:id="@+id/rv_report_external_features"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:orientation="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintTop_toBottomOf="@id/tv_report_external_feature_title"
@@ -367,7 +367,7 @@
                         android:id="@+id/rv_report_character_features"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:orientation="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintTop_toBottomOf="@id/tv_report_character_feature_title"
@@ -376,15 +376,52 @@
 
                     <!-- end of character features -->
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <!--  end of feature container  -->
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_report_description_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/cl_report_feature_container">
+
+                <TextView
+                    android:id="@+id/tv_report_description_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="추가 설명 작성하기"
+                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_report_description_title2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(옵션)"
+                    android:layout_marginStart="5dp"
+                    app:layout_constraintStart_toEndOf="@id/tv_report_description_title"
+                    android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                    android:textColor="@color/gray3"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_report_description_title"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="자유롭게 추가 설명을 작성해주세요!\n\n\n"
+                    android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="10dp"
+                    android:background="@drawable/bg_edit_text_description"
+                    app:layout_constraintTop_toBottomOf="@id/tv_report_description_title" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
