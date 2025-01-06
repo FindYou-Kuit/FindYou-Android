@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.findu.R
 import com.example.findu.databinding.FragmentHomeBinding
+import com.example.findu.databinding.FragmentMissingRepostBinding
 import com.example.findu.databinding.FragmentWitnessReportBinding
 import com.example.findu.presentation.ui.home.HomeViewModel
 
-class WitnessReportFragment : Fragment() {
-    private var _binding: FragmentWitnessReportBinding? = null
+class MissingReportFragment : Fragment() {
+    private var _binding: FragmentMissingRepostBinding? = null
     private val binding get() = _binding!!
     private val reportViewModel by viewModels<ReportViewModel>()
 
@@ -20,7 +21,7 @@ class WitnessReportFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentWitnessReportBinding.inflate(inflater, container, false)
+        _binding = FragmentMissingRepostBinding.inflate(inflater, container, false)
         return binding.root
     }
 
