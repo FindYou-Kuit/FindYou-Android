@@ -164,7 +164,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="248dp"
                     android:layout_marginTop="-6dp"
-                    android:background="@drawable/bg_white_bottom_radius_8"
+                    android:background="@drawable/bg_bottom_radius_8_white"
                     app:layout_constraintTop_toBottomOf="@id/et_missing_report_breed_field">
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -480,5 +480,77 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_missing_report_location_container"
+        android:layout_width="match_parent"
+        android:layout_height="154dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="-1dp"
+        android:background="@drawable/bg_top_radius_20_main_color"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tv_missing_report_location_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="21dp"
+            android:text="@string/report_location_title"
+            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_missing_report_location_select_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_missing_report_location_title">
+
+            <ImageView
+                android:id="@+id/iv_miising_report_location_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_report_location_map_orange" />
+
+            <TextView
+                android:id="@+id/tv_missing_report_location_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/dummy_location_address"
+                android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+                android:textColor="@color/gray4" />
+
+            <ImageView
+                android:id="@+id/iv_miising_report_location_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:src="@drawable/img_report_arrow_right_13" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_missing_report_okay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="26dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_button_report_okay"
+            android:textColor="@color/text_okay_color"
+            android:enabled="true"
+            android:stateListAnimator="@null"
+            android:text="@string/report_okay"
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+            app:layout_constraintTop_toBottomOf="@id/ll_missing_report_location_select_container" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

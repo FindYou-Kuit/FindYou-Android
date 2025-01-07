@@ -9,6 +9,7 @@
     <string name="four">4</string>
     <string name="five">5</string>
     <string name="Maltese">말티즈</string>
+    <string name="dummy_location_address">서울특별시 광진구 화양동 000–0</string>
 
     <!-- bottom navigation-->
     <string name="bottom_nav_home">홈</string>
@@ -55,6 +56,8 @@
     <string name="report_description_hint">자유롭게 추가 설명을 작성해주세요!\n\n\n</string>
     <string name="report_found_date">발견 날짜</string>
     <string name="report_ai_distinction">AI 판별</string>
+    <string name="report_location_title">위치가 맞는지 확인해주세요!</string>
+    <string name="report_okay">확인</string>
 
 
 </resources>
