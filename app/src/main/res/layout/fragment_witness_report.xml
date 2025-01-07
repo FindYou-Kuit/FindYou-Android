@@ -153,8 +153,8 @@
                     android:layout_height="35dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_edit_text_breed"
-                    android:drawableEnd="@drawable/img_report_arrow_down_16_g5"
                     android:clickable="true"
+                    android:drawableEnd="@drawable/img_report_arrow_down_16_g5"
                     android:hint="@string/report_breed_input_hint"
                     android:paddingStart="12dp"
                     android:paddingEnd="10dp"
@@ -166,16 +166,15 @@
                     android:id="@+id/cl_witness_report_breeds_recycler_container"
                     android:layout_width="match_parent"
                     android:layout_height="248dp"
+                    android:layout_marginTop="-6dp"
                     android:background="@drawable/bg_white_bottom_radius_8"
-                    android:visibility="gone"
-                    android:layout_marginTop="-8dp"
                     app:layout_constraintTop_toBottomOf="@id/et_witness_report_breed_field">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_witness_report_breeds"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:listitem="item"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <!--end of rv container-->

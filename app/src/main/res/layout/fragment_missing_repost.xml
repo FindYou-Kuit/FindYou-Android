@@ -163,14 +163,15 @@
                     android:id="@+id/cl_missing_report_breeds_recycler_container"
                     android:layout_width="match_parent"
                     android:layout_height="248dp"
+                    android:layout_marginTop="-6dp"
                     android:background="@drawable/bg_white_bottom_radius_8"
-                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/et_missing_report_breed_field">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_missing_report_breeds"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <!--end of rv container-->
