@@ -1,9 +1,8 @@
-package com.example.findu.adapter
+package com.example.findu.presentation.ui.search
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.findu.presentation.ui.search.SearchAllFragment
 import com.example.findu.presentation.ui.home.HomeFragment
 
 class SearchVPAdapter(fragmentActivity :FragmentActivity): FragmentStateAdapter(fragmentActivity){

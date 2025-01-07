@@ -62,12 +62,24 @@
     </HorizontalScrollView>
 
     <ImageButton
+        android:id="@+id/ib_search_horizontal_sort"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="15dp"
         android:background="@null"
         android:src="@drawable/ic_search_horizontal_sort"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hs_search_filters" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_horizontal_content"
+        android:layout_width="320dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hs_search_filters" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
