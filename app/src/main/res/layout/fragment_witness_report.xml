@@ -438,7 +438,7 @@
             android:layout_marginStart="27dp"
             android:layout_marginTop="21dp"
             android:text="@string/report_location_title"
-            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
