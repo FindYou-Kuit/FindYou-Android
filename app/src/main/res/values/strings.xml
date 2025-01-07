@@ -28,5 +28,9 @@
     <string name="home_rv_type">보호중</string>
     <string name="home_rv_date">2024-11-23</string>
     <string name="home_rv_location">서울특별시 광진구 화양동</string>
+    <string name="home_bottom">유기동물에 대해 더 알고 싶다면?</string>
+    <string name="home_bottom_protect">유기동물\n보호소 조회</string>
+    <string name="home_bottom_center">동물보호\n센터 조회</string>
+    <string name="home_bottom_part">동물보호\n부서 조회</string>
 
 </resources>
