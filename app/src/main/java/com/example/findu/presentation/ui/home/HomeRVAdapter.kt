@@ -8,9 +8,9 @@ import com.example.findu.databinding.ItemHomeRvBinding
 import com.example.findu.presentation.model.HomeRv
 import com.example.findu.presentation.type.AnimalStateType
 
-class HomeProtectAdapter(
+class HomeRVAdapter(
     private val items: List<HomeRv>
-) : RecyclerView.Adapter<HomeProtectAdapter.HomeViewHolder>() {
+) : RecyclerView.Adapter<HomeRVAdapter.HomeViewHolder>() {
 
     inner class HomeViewHolder(private val binding: ItemHomeRvBinding) :
         RecyclerView.ViewHolder(binding.root) {

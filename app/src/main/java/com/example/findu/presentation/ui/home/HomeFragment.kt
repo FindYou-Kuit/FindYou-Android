@@ -1,15 +1,12 @@
 package com.example.findu.presentation.ui.home
 
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.databinding.FragmentHomeBinding
@@ -21,7 +18,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val homeViewModel by viewModels<HomeViewModel>()
     private lateinit var homeProtectList: List<HomeRv>
-    private lateinit var homeProtectAdapter: HomeProtectAdapter
+    private lateinit var homeProtectAdapter: HomeRVAdapter
+    private lateinit var homeMissingList: List<HomeRv>
+    private lateinit var homeMissingAdapter: HomeRVAdapter
 
     private val dummyImageUrls = listOf(
         "data:image/jpeg;base64,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",
@@ -38,12 +37,12 @@ class HomeFragment : Fragment() {
 
         setupTodayData()
         setupBanner()
-        setupProtectRV()
+        setupRV()
 
         return binding.root
     }
 
-    private fun setupProtectRV() {
+    private fun setupRV() {
         homeProtectList = listOf( // dummy 값
             HomeRv(
                 imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
@@ -68,17 +67,49 @@ class HomeFragment : Fragment() {
             )
         )
 
-        homeProtectAdapter = HomeProtectAdapter(homeProtectList)
+        homeMissingList = listOf( // dummy 값
+            HomeRv(
+                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
+                name = "말티즈",
+                type = AnimalStateType.Find.state,
+                date = "2025-01-01",
+                location = "서울특별시 광진구 화양동"
+            ),
+            HomeRv(
+                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
+                name = "사모예드",
+                type = AnimalStateType.Missing.state,
+                date = "2025-01-01",
+                location = "서울특별시 광진구 자양동"
+            ),
+            HomeRv(
+                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
+                name = "푸들",
+                type = AnimalStateType.Find.state,
+                date = "2025-01-01",
+                location = "서울특별시 광진구 화양동"
+            )
+        )
+
+        homeProtectAdapter = HomeRVAdapter(homeProtectList)
+        homeMissingAdapter = HomeRVAdapter(homeMissingList)
         binding.rvHomeProtect.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
+        binding.rvHomeMissing.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         binding.rvHomeProtect.adapter = homeProtectAdapter
+        binding.rvHomeMissing.adapter = homeMissingAdapter
         val size = resources.getDimensionPixelSize(R.dimen.MY_SIZE)
         val m_size = resources.getDimensionPixelSize(R.dimen.MY_EDGE_MARGIN)
         val deco = SpaceDecoration(size, m_size)
         binding.rvHomeProtect.addItemDecoration(deco)
+        binding.rvHomeMissing.addItemDecoration(deco)
     }
 
     private fun setupTodayData() {

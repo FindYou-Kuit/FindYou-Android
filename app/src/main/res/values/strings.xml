@@ -22,7 +22,7 @@
     <string name="home_btn_report">신고하러 가기</string>
     <string name="home_btn_find">찾으러 가기</string>
     <string name="home_protect_title">주변 보호소에서 보호 중이에요!</string>
-    <string name="home_find_title">주인이 애타게 찾고 있어요!</string>
+    <string name="home_missing_title">주인이 애타게 찾고 있어요!</string>
     <string name="home_more">더보기</string>
     <string name="home_rv_name">말티즈</string>
     <string name="home_rv_type">보호중</string>
