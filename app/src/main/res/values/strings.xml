@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">FindU</string>
 
+    <!--  common -->
+    <string name="slash">/</string>
+    <string name="one">1</string>
+    <string name="five">5</string>
+
     <!-- bottom navigation-->
     <string name="bottom_nav_home">홈</string>
     <string name="bottom_nav_search">조회</string>
@@ -46,5 +51,6 @@
     <string name="report_description_hint">자유롭게 추가 설명을 작성해주세요!\n\n\n</string>
     <string name="report_found_date">발견 날짜</string>
     <string name="report_ai_distinction">AI 판별</string>
+
 
 </resources>
