@@ -5,7 +5,7 @@
     android:layout_height="119dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_witness_report_uploaded_image"
+        android:id="@+id/iv_report_uploaded_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="9dp"
@@ -16,14 +16,15 @@
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
     <ImageView
-        android:id="@+id/iv_witness_report_uploaded_image_close"
+        android:id="@+id/iv_report_uploaded_image_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/icon_report_close_18"
-        app:layout_constraintEnd_toEndOf="@id/iv_witness_report_uploaded_image"
+        app:layout_constraintEnd_toEndOf="@id/iv_report_uploaded_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_report_uploaded_ai_distinction"
         android:layout_width="59dp"
         android:layout_height="21dp"
         android:background="@drawable/bg_button_ai"
@@ -32,7 +33,7 @@
         android:textAppearance="@style/TextAppearance.FindU.caption_12"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/iv_witness_report_uploaded_image"
-        app:layout_constraintStart_toStartOf="@id/iv_witness_report_uploaded_image" />
+        app:layout_constraintEnd_toEndOf="@id/iv_report_uploaded_image"
+        app:layout_constraintStart_toStartOf="@id/iv_report_uploaded_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
