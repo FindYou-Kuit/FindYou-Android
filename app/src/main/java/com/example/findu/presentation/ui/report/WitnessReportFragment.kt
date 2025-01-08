@@ -6,15 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.findu.R
-import com.example.findu.databinding.FragmentHomeBinding
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentWitnessReportBinding
-import com.example.findu.presentation.ui.home.HomeViewModel
+import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
+import com.example.findu.presentation.ui.report.model.DummyImages
+import com.example.findu.presentation.ui.report.model.ReportType
 
 class WitnessReportFragment : Fragment() {
     private var _binding: FragmentWitnessReportBinding? = null
     private val binding get() = _binding!!
     private val reportViewModel by viewModels<ReportViewModel>()
+
+    private lateinit var reportImageAdapter: ReportImageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,6 +25,22 @@ class WitnessReportFragment : Fragment() {
     ): View? {
         _binding = FragmentWitnessReportBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupUploadImageRecyclerView()
+
+    }
+
+    private fun setupUploadImageRecyclerView() {
+        reportImageAdapter = ReportImageAdapter(ReportType.WITNESS).apply {
+            submitList(DummyImages.dummyImageUris)
+        }
+        with(binding.rvWitnessReportImages) {
+            adapter = reportImageAdapter
+            layoutManager = LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     override fun onDestroyView() {
