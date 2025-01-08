@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="47dp"
-        android:src="@drawable/img_report_camera"
+        android:src="@drawable/icon_report_camera"
         app:layout_constraintEnd_toEndOf="@id/iv_report_default_image"
         app:layout_constraintStart_toStartOf="@id/iv_report_default_image"
         app:layout_constraintTop_toTopOf="parent" />

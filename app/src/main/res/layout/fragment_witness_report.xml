@@ -154,7 +154,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_edit_text_breed"
                     android:clickable="true"
-                    android:drawableEnd="@drawable/img_report_arrow_down_16_g5"
+                    android:drawableEnd="@drawable/icon_report_arrow_down_16_g5"
                     android:hint="@string/report_breed_input_hint"
                     android:paddingStart="12dp"
                     android:paddingEnd="10dp"
@@ -458,7 +458,7 @@
                 android:id="@+id/iv_miising_report_location_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_report_location_map_orange" />
+                android:src="@drawable/icon_report_location_map_orange" />
 
             <TextView
                 android:id="@+id/tv_witness_report_location_address"
@@ -474,7 +474,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:src="@drawable/img_report_arrow_right_13" />
+                android:src="@drawable/icon_report_arrow_right_13" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton

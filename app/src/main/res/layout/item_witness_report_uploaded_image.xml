@@ -19,7 +19,7 @@
         android:id="@+id/iv_witness_report_uploaded_image_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/img_report_close_18"
+        android:src="@drawable/icon_report_close_18"
         app:layout_constraintEnd_toEndOf="@id/iv_witness_report_uploaded_image"
         app:layout_constraintTop_toTopOf="parent" />
 
