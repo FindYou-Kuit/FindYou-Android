@@ -12,6 +12,9 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentHomeBinding
 import com.example.findu.presentation.model.HomeRv
 import com.example.findu.presentation.type.AnimalStateType
+import com.example.findu.presentation.ui.home.adapter.HomeBannerAdapter
+import com.example.findu.presentation.ui.home.adapter.HomeRVAdapter
+import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null

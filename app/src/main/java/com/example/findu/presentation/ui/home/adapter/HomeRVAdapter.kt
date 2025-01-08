@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.home
+package com.example.findu.presentation.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
