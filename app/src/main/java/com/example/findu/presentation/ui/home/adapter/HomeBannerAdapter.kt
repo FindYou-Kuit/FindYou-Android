@@ -12,12 +12,10 @@ class HomeBannerAdapter(
 
     inner class ViewHolder(private val binding: ItemHomeVpBannerBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(imageUrl: String, position: Int, totalCount: Int) {
+        fun bind(imageUrl: String) {
             Glide.with(binding.root)
                 .load(imageUrl)
                 .into(binding.ivHomeVpImg)
-
-            binding.tvHomeBannerNum.text = String.format("%d/%d +", position + 1, totalCount)
         }
     }
 
@@ -29,7 +27,7 @@ class HomeBannerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentPosition = position % imageUrls.size
-        holder.bind(imageUrls[currentPosition], currentPosition, imageUrls.size)
+        holder.bind(imageUrls[currentPosition])
     }
 
     override fun getItemCount(): Int {
