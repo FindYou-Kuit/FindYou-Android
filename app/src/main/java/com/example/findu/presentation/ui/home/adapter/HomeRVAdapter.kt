@@ -20,14 +20,13 @@ class HomeRVAdapter(
             binding.tvHomeLocation.text = item.location
 
             binding.chipHomeAnimalState.text = item.type
-            val stateType = AnimalStateType.entries.find { it.state == item.type }
-            if (stateType != null) {
-                binding.chipHomeAnimalState.setTextColor(
-                    binding.root.context.getColor(stateType.textColor)
-                )
-                binding.chipHomeAnimalState.chipBackgroundColor =
-                    binding.root.context.getColorStateList(stateType.backgroundChipColor)
-            }
+            val stateType = AnimalStateType.entries.first { it.state == item.type }
+            binding.chipHomeAnimalState.setTextColor(
+                binding.root.context.getColor(stateType.textColor)
+            )
+            binding.chipHomeAnimalState.chipBackgroundColor =
+                binding.root.context.getColorStateList(stateType.backgroundChipColor)
+
 
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
