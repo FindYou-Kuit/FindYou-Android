@@ -2,7 +2,7 @@ package com.example.findu.presentation.ui.report.model
 
 import androidx.core.net.toUri
 
-object DummyImages {
+object ReportDummys {
 
     // 더미 uri
     val dummyImageUrls = listOf(
@@ -15,4 +15,19 @@ object DummyImages {
     val dummyImageUris = dummyImageUrls.map {
         it.toUri()
     }
+
+    val dummyBreeds = listOf(
+        "말티즈",
+        "푸들",
+        "시츄",
+        "포메라니안",
+        "요크셔테리어",
+        "비숑프리제",
+        "치와와",
+        "닥스훈트",
+        "믹스견",
+        "기타",
+        "리트리버",
+        "보더콜리"
+    )
 }
