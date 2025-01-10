@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:paddingVertical="1dp"
     android:layout_height="30dp">
 
     <TextView
@@ -18,7 +19,7 @@
     <View
         android:id="@+id/v_item_breed_divider"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="2dp"
+        android:layout_marginHorizontal="5dp"
         android:layout_height="1dp"
         android:background="@color/gray2"
         app:layout_constraintTop_toTopOf="parent" />
