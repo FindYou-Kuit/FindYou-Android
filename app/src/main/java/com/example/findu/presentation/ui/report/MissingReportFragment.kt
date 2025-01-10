@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMissingRepostBinding
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.model.DummyImages
-import com.example.findu.presentation.ui.report.model.ReportType
+import com.example.findu.presentation.type.report.ReportType
 
 class MissingReportFragment : Fragment() {
     private var _binding: FragmentMissingRepostBinding? = null

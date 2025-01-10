@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
 import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemReportDefaultImageBinding
 import com.example.findu.databinding.ItemReportUploadedImageBinding
-import com.example.findu.presentation.type.report.SpeciesType
-import com.example.findu.presentation.ui.report.model.ReportType
+import com.example.findu.presentation.type.report.ReportType
 
 class ReportImageAdapter(
     val reportType: ReportType

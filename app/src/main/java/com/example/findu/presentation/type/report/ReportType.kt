@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.model
+package com.example.findu.presentation.type.report
 
 enum class ReportType(
     val type: String
