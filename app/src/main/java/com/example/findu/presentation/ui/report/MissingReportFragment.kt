@@ -26,6 +26,8 @@ import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.util.ViewUtils.dpToPx
+import com.example.findu.presentation.util.ViewUtils.hideKeyboard
+import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class MissingReportFragment : Fragment() {
@@ -42,6 +44,9 @@ class MissingReportFragment : Fragment() {
     ): View? {
         _binding = FragmentMissingRepostBinding.inflate(inflater, container, false)
 
+        binding.root.setKeyboardVisibilityListener {
+            binding.clMissingReportLocationContainer.visibility = if (it) View.GONE else View.VISIBLE
+        }
 
         return binding.root
     }
@@ -49,12 +54,12 @@ class MissingReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUploadImageRecyclerView()
-        setUpBreedsAdapter(requireContext())
+        setUpBreedsAdapter()
 
     }
 
 
-    private fun setUpBreedsAdapter(context: Context) {
+    private fun setUpBreedsAdapter() {
         breedAdapter = ReportBreedAdapter(
             requireContext(),
             ReportDummys.dummyBreeds
@@ -64,7 +69,43 @@ class MissingReportFragment : Fragment() {
             setAdapter(breedAdapter)
             setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
 
-
+            // 클릭하면 드랍다운이 생김
+            setOnClickListener {
+                dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                this.showDropDown()
+                binding.svMissingReportContainer.post {
+                    binding.svMissingReportContainer.scrollTo(
+                        0, requireContext().dpToPx(SCROLL_OFFSET)
+                    )
+                }
+            }
+            // 드랍다운 아이템이 선택되면 소프트 키보드가 사라지고, 하단 레이아웃이 보임
+            setOnItemClickListener { _, _, _, _ ->
+                requireContext().hideKeyboard(windowToken)
+                clearFocus()
+            }
+            // text 가 변경되면 드랍다운의 크기를 줄임
+            addTextChangedListener { text ->
+                ReportDummys.dummyBreeds
+                    .filter { it.contains(text.toString()) }
+                    .let { matches ->
+                        val matchCount = matches.size
+                        dropDownHeight = if (matchCount > DROP_DOWN_MAX_COUNT) {
+                            requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                        } else ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+            }
+            // focus 가 생기면 품종을 화면 상단으로 이동시킴
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    showDropDown()
+                    binding.svMissingReportContainer.post {
+                        binding.svMissingReportContainer.scrollTo(
+                            0, requireContext().dpToPx(SCROLL_OFFSET)
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -81,6 +122,10 @@ class MissingReportFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        binding.root.viewTreeObserver.removeOnGlobalLayoutListener {  }
+
+
         _binding = null
     }
 

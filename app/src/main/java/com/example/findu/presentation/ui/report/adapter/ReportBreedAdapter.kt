@@ -18,6 +18,7 @@ class ReportBreedAdapter(
     R.id.tv_item_breed,
     items
 ) {
+    // TODO: 작동 안되는 듯함. 수정 필요
     override fun getDropDownView(
         position: Int,
         convertView: View?,
