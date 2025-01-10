@@ -148,41 +148,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <EditText
-                    android:id="@+id/et_witness_report_breed_field"
+                <Spinner
+                    android:id="@+id/spn_witness_report_breed_field"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_edit_text_breed"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/icon_report_arrow_down_16_g5"
-                    android:hint="@string/report_breed_input_hint"
                     android:paddingStart="12dp"
                     android:paddingEnd="10dp"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintTop_toBottomOf="@id/tv_witness_report_breed_title" />
 
-                <!--  breed list container  -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_witness_report_breeds_recycler_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="248dp"
-                    android:layout_marginTop="-6dp"
-                    android:background="@drawable/bg_bottom_radius_8_white"
-                    app:layout_constraintTop_toBottomOf="@id/et_witness_report_breed_field">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_witness_report_breeds"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@layout/item_breeds"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <!--end of rv container-->
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!--end of breed container-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -485,11 +461,11 @@
             android:layout_marginHorizontal="26dp"
             android:layout_marginTop="14dp"
             android:background="@drawable/bg_button_report_okay"
-            android:textColor="@color/text_okay_color"
             android:enabled="true"
             android:stateListAnimator="@null"
             android:text="@string/report_okay"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+            android:textColor="@color/text_okay_color"
             app:layout_constraintTop_toBottomOf="@id/ll_witness_report_location_select_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

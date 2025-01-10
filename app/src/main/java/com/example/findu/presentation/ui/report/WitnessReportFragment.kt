@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentWitnessReportBinding
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
-import com.example.findu.presentation.ui.report.model.DummyImages
+import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.type.report.ReportType
 
 class WitnessReportFragment : Fragment() {
@@ -35,7 +35,7 @@ class WitnessReportFragment : Fragment() {
 
     private fun setupUploadImageRecyclerView() {
         reportImageAdapter = ReportImageAdapter(ReportType.WITNESS).apply {
-            submitList(DummyImages.dummyImageUris)
+            submitList(ReportDummys.dummyImageUris)
         }
         with(binding.rvWitnessReportImages) {
             adapter = reportImageAdapter
