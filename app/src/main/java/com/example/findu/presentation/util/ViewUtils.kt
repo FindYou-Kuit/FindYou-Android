@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
+import android.widget.ScrollView
 
 object ViewUtils {
     fun Context.dpToPx(dp: Float): Int {
@@ -38,6 +39,12 @@ object ViewUtils {
                 isKeyboardVisible = isVisible
                 onKeyboardVisibilityChanged(isVisible)
             }
+        }
+    }
+
+    fun ScrollView.verticalScrollToYPosition(y: Int) {
+        this.post {
+            this.smoothScrollTo(0, y)
         }
     }
 

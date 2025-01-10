@@ -28,6 +28,7 @@ import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
+import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class MissingReportFragment : Fragment() {
@@ -45,7 +46,8 @@ class MissingReportFragment : Fragment() {
         _binding = FragmentMissingRepostBinding.inflate(inflater, container, false)
 
         binding.root.setKeyboardVisibilityListener {
-            binding.clMissingReportLocationContainer.visibility = if (it) View.GONE else View.VISIBLE
+            binding.clMissingReportLocationContainer.visibility =
+                if (it) View.GONE else View.VISIBLE
         }
 
         return binding.root
@@ -72,12 +74,8 @@ class MissingReportFragment : Fragment() {
             // 클릭하면 드랍다운이 생김
             setOnClickListener {
                 dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
-                this.showDropDown()
-                binding.svMissingReportContainer.post {
-                    binding.svMissingReportContainer.scrollTo(
-                        0, requireContext().dpToPx(SCROLL_OFFSET)
-                    )
-                }
+                showDropDown()
+                binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
             }
             // 드랍다운 아이템이 선택되면 소프트 키보드가 사라지고, 하단 레이아웃이 보임
             setOnItemClickListener { _, _, _, _ ->
@@ -89,8 +87,7 @@ class MissingReportFragment : Fragment() {
                 ReportDummys.dummyBreeds
                     .filter { it.contains(text.toString()) }
                     .let { matches ->
-                        val matchCount = matches.size
-                        dropDownHeight = if (matchCount > DROP_DOWN_MAX_COUNT) {
+                        dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
                             requireContext().dpToPx(DROP_DOWN_HEIGHT)
                         } else ViewGroup.LayoutParams.WRAP_CONTENT
                     }
@@ -99,11 +96,7 @@ class MissingReportFragment : Fragment() {
             setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     showDropDown()
-                    binding.svMissingReportContainer.post {
-                        binding.svMissingReportContainer.scrollTo(
-                            0, requireContext().dpToPx(SCROLL_OFFSET)
-                        )
-                    }
+                    binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
                 }
             }
         }
@@ -123,15 +116,14 @@ class MissingReportFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        binding.root.viewTreeObserver.removeOnGlobalLayoutListener {  }
-
+        binding.root.viewTreeObserver.removeOnGlobalLayoutListener { }
 
         _binding = null
     }
 
     companion object {
-        private const val SCROLL_OFFSET = 258
-        private const val DROP_DOWN_HEIGHT = 248
-        private const val DROP_DOWN_MAX_COUNT = 8
+        const val SCROLL_OFFSET = 258
+        const val DROP_DOWN_HEIGHT = 248
+        const val DROP_DOWN_MAX_COUNT = 8
     }
 }
