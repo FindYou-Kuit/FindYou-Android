@@ -148,14 +148,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Spinner
-                    android:id="@+id/spn_witness_report_breed_field"
+                <AutoCompleteTextView
+                    android:id="@+id/actv_witness_report_breed"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_edit_text_breed"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_actv_breed"
+                    android:drawableEnd="@drawable/icon_report_arrow_down_16_g5"
+                    android:dropDownHeight="248dp"
+                    android:completionThreshold="1"
+                    android:hint="@string/report_breed_input_hint"
+                    android:inputType="text"
+                    android:paddingHorizontal="12dp"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintTop_toBottomOf="@id/tv_witness_report_breed_title" />
 
