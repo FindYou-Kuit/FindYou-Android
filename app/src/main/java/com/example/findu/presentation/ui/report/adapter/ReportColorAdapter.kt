@@ -1,20 +1,19 @@
 package com.example.findu.presentation.ui.report.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.databinding.ItemReportColorsBinding
 import com.example.findu.presentation.type.report.FurColorType
 
-class ReportColorAdapter : ListAdapter<FurColorType, ReportColorAdapter.ViewHolder>(diffUtil) {
+class ReportColorAdapter() : RecyclerView.Adapter<ReportColorAdapter.ViewHolder>() {
+
+    private val colorList = FurColorType.entries.toList()
 
     inner class ViewHolder(private val binding: ItemReportColorsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(color: FurColorType) {
-            binding.tvReportColorsName.text = color.color
+        fun bind(furColor: FurColorType) {
+            binding.tvReportColorsName.text = furColor.color
         }
     }
 
@@ -28,26 +27,8 @@ class ReportColorAdapter : ListAdapter<FurColorType, ReportColorAdapter.ViewHold
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(colorList[position])
     }
 
-    companion object {
-
-        val diffUtil = object : DiffUtil.ItemCallback<FurColorType>() {
-
-            override fun areItemsTheSame(
-                oldItem: FurColorType,
-                newItem: FurColorType
-            ): Boolean {
-                return oldItem.color == newItem.color
-            }
-
-            override fun areContentsTheSame(
-                oldItem: FurColorType,
-                newItem: FurColorType
-            ): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
+    override fun getItemCount(): Int = colorList.size
 }
