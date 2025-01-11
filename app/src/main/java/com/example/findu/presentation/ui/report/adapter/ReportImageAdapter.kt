@@ -15,7 +15,7 @@ import com.example.findu.databinding.ItemReportUploadedImageBinding
 import com.example.findu.presentation.type.report.ReportType
 
 class ReportImageAdapter(
-    val reportType: ReportType
+    val reportType: ReportType,
 ) : ListAdapter<Uri, RecyclerView.ViewHolder>(diffUtil) {
 
     inner class DefaultImageViewHolder(private val binding: ItemReportDefaultImageBinding) :
@@ -48,6 +48,10 @@ class ReportImageAdapter(
                 }
             }
 
+            binding.ivReportUploadedImageClose.setOnClickListener {
+                removeItem(uri)
+            }
+
             Glide.with(binding.root)
                 .load(uri)
                 .into(binding.ivReportUploadedImage)
@@ -67,8 +71,6 @@ class ReportImageAdapter(
         when (viewType) {
             // 0 번째 아이템
             DEFAULT_VIEW_TYPE -> {
-                Log.d("ReportImageAdapter", "viewType: $viewType")
-
                 DefaultImageViewHolder(
                     ItemReportDefaultImageBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -80,8 +82,6 @@ class ReportImageAdapter(
 
             // IMAGE_VIEW_TYPE, 정상적으로 업로드될 이미지
             else -> {
-                Log.d("ReportImageAdapter", "viewType: $viewType")
-
                 ImageViewHolder(
                     ItemReportUploadedImageBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -92,6 +92,13 @@ class ReportImageAdapter(
             }
 
         }
+
+    fun removeItem(uri: Uri) {
+        val list = currentList.toMutableList()
+        list.remove(uri)
+        submitList(list)
+//        notifyItemChanged(0)
+    }
 
     override fun getItemViewType(position: Int): Int =
         if (position == 0) DEFAULT_VIEW_TYPE // 0번째 아이템은 DefaultImageViewHolder
