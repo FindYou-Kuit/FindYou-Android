@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentWitnessReportBinding
@@ -18,6 +19,7 @@ import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_MAX_COUNT
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
+import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
@@ -30,6 +32,7 @@ class WitnessReportFragment : Fragment() {
 
     private lateinit var reportImageAdapter: ReportImageAdapter
     private lateinit var breedAdapter: ArrayAdapter<String>
+    private lateinit var colorAdapter: ReportColorAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +52,16 @@ class WitnessReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUploadImageRecyclerView()
         setUpBreedsAdapter()
+        setUpColorAdapter()
 
+    }
+
+    private fun setUpColorAdapter() {
+        colorAdapter = ReportColorAdapter()
+        with(binding.rvWitnessReportColors) {
+            adapter = colorAdapter
+            layoutManager = GridLayoutManager(context, 3)
+        }
     }
 
     private fun setUpBreedsAdapter() {

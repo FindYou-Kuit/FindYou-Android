@@ -16,6 +16,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
@@ -25,6 +26,7 @@ import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
+import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
@@ -38,6 +40,7 @@ class MissingReportFragment : Fragment() {
 
     private lateinit var reportImageAdapter: ReportImageAdapter
     private lateinit var breedAdapter: ArrayAdapter<String>
+    private lateinit var colorAdapter: ReportColorAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +60,16 @@ class MissingReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUploadImageRecyclerView()
         setUpBreedsAdapter()
+        setUpColorAdapter()
 
+    }
+
+    private fun setUpColorAdapter() {
+        colorAdapter = ReportColorAdapter()
+        with(binding.rvMissingReportColors) {
+            adapter = colorAdapter
+            layoutManager = GridLayoutManager(context, 3)
+        }
     }
 
 
