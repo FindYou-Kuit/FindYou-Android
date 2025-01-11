@@ -1,12 +1,12 @@
 package com.example.findu.presentation.ui.report
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,8 +14,6 @@ import com.example.findu.databinding.FragmentWitnessReportBinding
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
-import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
-import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_HEIGHT
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_MAX_COUNT
@@ -23,10 +21,14 @@ import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
+import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
+import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
+import java.time.LocalDateTime
+import java.util.Calendar
 
 class WitnessReportFragment : Fragment() {
     private var _binding: FragmentWitnessReportBinding? = null
@@ -57,6 +59,26 @@ class WitnessReportFragment : Fragment() {
         setUpBreedsAdapter()
         setUpColorAdapter()
         setUpFeatureAdapter()
+        setUpCalender()
+    }
+
+    private fun setUpCalender() {
+        val startMonth: Calendar = Calendar.getInstance().apply {
+            set(2022, Calendar.JANUARY, 1)
+        }
+        val endMonth: Calendar = Calendar.getInstance().apply {
+            set(
+                LocalDateTime.now().year,
+                LocalDateTime.now().monthValue - 1,
+                LocalDateTime.now().dayOfMonth
+            )
+        }
+
+        with(binding.cvWitnessReportCalendar) {
+            setVisibleMonthRange(startMonth, endMonth)
+            setCurrentMonth(endMonth)
+            setSelectableDateRange(startMonth, endMonth)
+        }
     }
 
     private fun setUpFeatureAdapter() {

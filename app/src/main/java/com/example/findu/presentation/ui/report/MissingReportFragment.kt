@@ -25,6 +25,8 @@ import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
+import java.time.LocalDateTime
+import java.util.Calendar
 
 class MissingReportFragment : Fragment() {
     private var _binding: FragmentMissingRepostBinding? = null
@@ -55,7 +57,28 @@ class MissingReportFragment : Fragment() {
         setUpBreedsAdapter()
         setUpColorAdapter()
         setUpFeatureAdapter()
+        setUpCalender()
     }
+
+    private fun setUpCalender() {
+        val startMonth: Calendar = Calendar.getInstance().apply {
+            set(2022, Calendar.JANUARY, 1)
+        }
+        val endMonth: Calendar = Calendar.getInstance().apply {
+            set(
+                LocalDateTime.now().year,
+                LocalDateTime.now().monthValue - 1,
+                LocalDateTime.now().dayOfMonth
+            )
+        }
+
+        with(binding.cvMissingReportCalendar) {
+            setVisibleMonthRange(startMonth, endMonth)
+            setCurrentMonth(endMonth)
+            setSelectableDateRange(startMonth, endMonth)
+        }
+    }
+
 
     private fun setUpFeatureAdapter() {
         binding.rvMissingReportPhysicalFeatures.adapter =
