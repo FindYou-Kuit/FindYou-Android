@@ -1,37 +1,30 @@
 package com.example.findu.presentation.ui.report
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnScrollChangedListener
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import androidx.annotation.LayoutRes
-import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMissingRepostBinding
-import com.example.findu.databinding.ItemReportBreedsBinding
+import com.example.findu.presentation.type.report.CharacterFeatureType
+import com.example.findu.presentation.type.report.ExternalFeatureType
+import com.example.findu.presentation.type.report.PhysicalFeatureType
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
+import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 class MissingReportFragment : Fragment() {
     private var _binding: FragmentMissingRepostBinding? = null
@@ -61,7 +54,16 @@ class MissingReportFragment : Fragment() {
         setupUploadImageRecyclerView()
         setUpBreedsAdapter()
         setUpColorAdapter()
+        setUpFeatureAdapter()
+    }
 
+    private fun setUpFeatureAdapter() {
+        binding.rvMissingReportPhysicalFeatures.adapter =
+            ReportFeatureAdapter(PhysicalFeatureType.entries.toList().map { it.feature })
+        binding.rvMissingReportExternalFeatures.adapter =
+            ReportFeatureAdapter(ExternalFeatureType.entries.toList().map { it.feature })
+        binding.rvMissingReportCharacterFeatures.adapter =
+            ReportFeatureAdapter(CharacterFeatureType.entries.toList().map { it.feature })
     }
 
     private fun setUpColorAdapter() {
