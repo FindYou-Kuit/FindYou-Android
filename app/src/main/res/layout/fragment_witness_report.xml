@@ -153,7 +153,7 @@
                     android:id="@+id/actv_witness_report_breed"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/bg_actv_breed"
                     android:drawableEnd="@drawable/icon_report_arrow_down_16_g5"
                     android:dropDownHeight="248dp"
