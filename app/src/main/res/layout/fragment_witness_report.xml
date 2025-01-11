@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -155,9 +156,9 @@
                     android:layout_height="35dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_actv_breed"
+                    android:completionThreshold="1"
                     android:drawableEnd="@drawable/icon_report_arrow_down_16_g5"
                     android:dropDownHeight="248dp"
-                    android:completionThreshold="1"
                     android:hint="@string/report_breed_input_hint"
                     android:inputType="text"
                     android:paddingHorizontal="12dp"
@@ -386,17 +387,31 @@
                     android:id="@+id/tv_witness_report_date_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/report_found_date"
+                    android:text="@string/report_witness_date"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- TODO : 날짜 선택 컴포넌트 구현 -->
-                <View
+
+                <com.archit.calendardaterangepicker.customviews.DateRangeCalendarView
+                    android:id="@+id/cv_witness_report_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="254dp"
                     android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_witness_report_date_title" />
+                    android:background="@drawable/bg_radius_8_g3"
+                    android:paddingHorizontal="2dp"
+                    android:paddingTop="3dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_witness_report_date_title"
+                    custom:default_date_color="@color/gray6"
+                    custom:header_bg="@color/white"
+                    custom:range_color="@color/main_color"
+                    custom:range_date_color="@color/white"
+                    custom:selected_date_circle_color="@color/main_color"
+                    custom:selected_date_color="@color/white"
+                    custom:text_size_date="11sp"
+                    custom:text_size_title="14sp"
+                    custom:text_size_week="11sp"
+                    custom:title_color="@color/gray6" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
