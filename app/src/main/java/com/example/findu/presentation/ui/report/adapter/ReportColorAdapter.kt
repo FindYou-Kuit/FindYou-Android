@@ -14,6 +14,9 @@ class ReportColorAdapter() : RecyclerView.Adapter<ReportColorAdapter.ViewHolder>
         RecyclerView.ViewHolder(binding.root) {
         fun bind(furColor: FurColorType) {
             binding.tvReportColorsName.text = furColor.color
+            binding.root.setOnClickListener {
+                binding.cbReportColors.isChecked = !binding.cbReportColors.isChecked
+            }
         }
     }
 
