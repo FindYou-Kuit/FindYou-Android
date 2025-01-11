@@ -5,12 +5,13 @@
     android:layout_height="45dp">
 
     <com.google.android.material.chip.Chip
+        android:id="@+id/chip_report_feature"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:checkable="true"
-        android:elevation="1dp"
-        android:text="feature"
         android:layout_marginHorizontal="5dp"
+        android:checkable="true"
+        android:elevation="2dp"
+        android:text="feature"
         android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
         app:chipBackgroundColor="@color/chip_color"
         app:chipCornerRadius="8dp"
