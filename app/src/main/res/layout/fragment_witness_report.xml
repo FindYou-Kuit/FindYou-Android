@@ -441,8 +441,8 @@
             android:id="@+id/tv_witness_report_location_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="27dp"
-            android:layout_marginTop="21dp"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="20dp"
             android:text="@string/report_location_title"
             android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
             app:layout_constraintStart_toStartOf="parent"
@@ -454,7 +454,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="26dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="3dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
@@ -470,7 +470,7 @@
                 android:id="@+id/tv_witness_report_location_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="3dp"
                 android:text="@string/dummy_location_address"
                 android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
                 android:textColor="@color/gray4" />
@@ -479,7 +479,7 @@
                 android:id="@+id/iv_miising_report_location_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="3dp"
                 android:src="@drawable/icon_report_arrow_right_13" />
         </LinearLayout>
 
@@ -490,7 +490,7 @@
             android:layout_marginHorizontal="26dp"
             android:layout_marginTop="14dp"
             android:background="@drawable/bg_button_report_okay"
-            android:enabled="true"
+            android:enabled="false"
             android:stateListAnimator="@null"
             android:text="@string/report_okay"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
