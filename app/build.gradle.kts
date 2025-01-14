@@ -75,4 +75,9 @@ dependencies {
     // Jetpack Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    // Glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    // Calender
+    implementation("io.github.architshah248.calendar:awesome-calendar:2.0.0")
 }
