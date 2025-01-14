@@ -132,6 +132,7 @@ class MissingReportFragment : Fragment() {
             // focus 가 생기면 품종을 화면 상단으로 이동시킴
             setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
+                    dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
                     showDropDown()
                     binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
                 }
