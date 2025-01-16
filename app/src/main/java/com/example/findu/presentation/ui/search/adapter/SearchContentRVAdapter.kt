@@ -1,10 +1,12 @@
-package com.example.findu.presentation.ui.search
+package com.example.findu.presentation.ui.search.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.databinding.SearchHorizontalContentItemBinding
 import com.example.findu.databinding.SearchGridContentItemBinding // 그리드 아이템의 바인딩 추가
+import com.example.findu.presentation.ui.search.model.SearchData
 
 class SearchContentRVAdapter(
     private val items: ArrayList<SearchData>
@@ -17,9 +19,10 @@ class SearchContentRVAdapter(
 
     private var isGridMode = false
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setGridMode(enabled: Boolean) {
         isGridMode = enabled
-        notifyDataSetChanged() // 모드 변경 시 데이터 갱신
+        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -59,7 +62,6 @@ class SearchContentRVAdapter(
         }
     }
 
-    // 수평 레이아웃 ViewHolder
     inner class HorizontalViewHolder(private val binding: SearchHorizontalContentItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: SearchData) {
@@ -71,8 +73,6 @@ class SearchContentRVAdapter(
             }
         }
     }
-
-    // 그리드 레이아웃 ViewHolder
     inner class GridViewHolder(private val binding: SearchGridContentItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: SearchData) {
