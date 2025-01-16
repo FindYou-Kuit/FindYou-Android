@@ -7,6 +7,7 @@
     android:paddingStart="20dp"
     android:paddingTop="20dp"
     android:paddingEnd="20dp"
+    android:id="@+id/fragment_search_all"
     tools:context=".presentation.ui.search.SearchAllFragment">
 
     <HorizontalScrollView

@@ -7,4 +7,5 @@ data class SearchData(
     val name : String,
     val date : String,
     val address : String,
+    var isBookmark : Boolean,
 ) : Serializable

@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ib_search_detail_back"
+            android:id="@+id/iv_search_detail_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="21dp"
@@ -23,26 +23,52 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_search_detail_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="21dp"
+            android:layout_marginBottom="17dp"
+            android:src="@drawable/ic_search_content_blank_bookmark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:id="@+id/sv_search_detail"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_search_detail_top">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_search_detail_img"
-                android:layout_width="match_parent"
-                android:layout_height="467dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/vp_search_detail_dots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="149dp"
+                app:dotsColor="@color/white"
+                app:dotsCornerRadius="4dp"
+                app:dotsSize="6dp"
+                app:dotsSpacing="5dp"
+                app:layout_constraintBottom_toBottomOf="@id/vp_search_detail_img"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cv_search_detail_info"
@@ -53,7 +79,6 @@
                 app:cardCornerRadius="0dp"
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/vp_search_detail_img">
 
@@ -500,7 +525,7 @@
                                 android:layout_marginTop="5dp"
                                 android:backgroundTint="@android:color/transparent"
                                 android:paddingHorizontal="11dp"
-                                android:text="구조 장소"
+                                android:text="위치 보기"
                                 android:textColor="@color/main_color"
                                 app:cornerRadius="10dp"
                                 app:icon="@drawable/ic_search_detail_location"
