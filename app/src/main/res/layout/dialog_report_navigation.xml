@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="신고"
+        android:text="@string/report_dialog_report"
         android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
-                android:text="전화로 신고 하기"
+                android:text="@string/report_dialog_call_report"
                 android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
             <ImageView
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
-                android:text="목격 신고글 작성"
+                android:text="@string/report_dialog_witness_report"
                 android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
             <ImageView
@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
-                android:text="실종 신고글 작성"
+                android:text="@string/report_dialog_missing_report"
                 android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
             <ImageView

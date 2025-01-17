@@ -28,15 +28,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="신고가 완료되었어요!"
+            android:text="@string/report_dialog_finished"
             android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24"
             android:textColor="@color/gray6" />
 
         <TextView
+            android:id="@+id/tv_report_finish_dialog_mention"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="당신의 가족을 저희가 열심히 찾아드릴게요!"
+            android:text="@string/report_dialog_missing_mention"
             android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
             android:textColor="@color/gray4"
             app:layout_constraintStart_toStartOf="@id/ll_report_image_dialog_mention"
@@ -47,10 +48,10 @@
     <LinearLayout
         android:layout_width="248dp"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="24dp"
         android:orientation="vertical"
+        android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_report_finish_dialog_mention">
@@ -61,7 +62,7 @@
             android:layout_height="45dp"
             android:background="@drawable/bg_button_report_dialog"
             android:backgroundTint="@null"
-            android:text="나의 신고내역 보기"
+            android:text="@string/report_dialog_see_history"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -71,7 +72,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_button_report_dialog"
             android:backgroundTint="@null"
-            android:text="홈 화면으로 가기"
+            android:text="@string/report_dialog_go_home"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
     </LinearLayout>
