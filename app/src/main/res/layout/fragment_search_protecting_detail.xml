@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_search_protect"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".presentation.ui.search.SearchProtectingDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,7 +46,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants">
+            >
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_search_detail_img"
@@ -131,7 +131,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cv_search_detail_three_info"
                     android:layout_width="318dp"
-                    android:layout_height="93dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="22dp"
@@ -141,13 +141,14 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="93dp"
                         android:orientation="horizontal"
                         android:paddingStart="15dp"
                         android:paddingTop="14dp"
                         android:paddingEnd="15dp"
                         android:paddingBottom="14dp"
-                        android:weightSum="3">
+                        android:weightSum="3"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -599,8 +600,9 @@
                             android:id="@+id/cl_search_content_detail_jurisdiction"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="100dp"
                             android:layout_marginTop="30dp"
-                            android:layout_marginEnd="30dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_protect_center">
 
@@ -647,7 +649,6 @@
 
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
