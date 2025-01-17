@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="288dp"
-    android:layout_height="225dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@drawable/bg_report_dialog_rd8">
 
     <ImageView
@@ -53,16 +53,19 @@
         app:layout_constraintTop_toBottomOf="@id/ll_report_image_dialog_mention" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="15dp"
         android:orientation="vertical"
+        android:layout_marginHorizontal="20dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_report_image_dialog_mention2">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_report_image_dialog_capture"
-            android:layout_width="match_parent"
+            android:layout_width="248dp"
             android:layout_height="45dp"
             android:background="@drawable/bg_button_report_dialog"
             android:backgroundTint="@null"
@@ -71,7 +74,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_report_image_dialog_upload"
-            android:layout_width="match_parent"
+            android:layout_width="248dp"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_button_report_dialog"
