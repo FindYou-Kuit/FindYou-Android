@@ -16,7 +16,7 @@ class SearchVPAdapter(fragmentActivity :FragmentActivity): FragmentStateAdapter(
        return when(position){
            0 -> SearchAllFragment()
            else -> {
-               SearchProtectingDetailFragment()
+               HomeFragment()
            }
        }
     }
