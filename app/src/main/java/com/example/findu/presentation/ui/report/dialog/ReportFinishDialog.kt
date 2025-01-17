@@ -6,13 +6,18 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.annotation.StringRes
+import com.example.findu.R
 import com.example.findu.databinding.DialogReportFinishedBinding
+import com.example.findu.presentation.type.report.ReportType
+import kotlinx.serialization.StringFormat
 
 class ReportFinishDialog(
-    context: Context
+    context: Context,
+    private val reportType: ReportType
 ) : Dialog(context) {
 
-    private var _binding : DialogReportFinishedBinding? = null
+    private var _binding: DialogReportFinishedBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,12 +28,24 @@ class ReportFinishDialog(
 
         setContentView(binding.root)
 
+        when (reportType) {
+            ReportType.MISSING -> {
+                binding.tvReportFinishDialogMention.text =
+                    context.getString(R.string.report_dialog_missing_mention)
+            }
+
+            ReportType.WITNESS -> {
+                binding.tvReportFinishDialogMention.text =
+                    context.getString(R.string.report_dialog_witness_mention)
+            }
+        }
+
         initListener()
     }
 
     private fun initListener() {
-        binding.btnReportFinishDialogGoHistory.setOnClickListener {  }
+        binding.btnReportFinishDialogGoHistory.setOnClickListener { }
 
-        binding.btnReportFinishDialogGoHome.setOnClickListener {  }
+        binding.btnReportFinishDialogGoHome.setOnClickListener { }
     }
 }
