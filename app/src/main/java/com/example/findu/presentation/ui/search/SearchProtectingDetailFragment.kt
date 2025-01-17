@@ -8,14 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchProtectingDetailBinding
-import com.example.findu.presentation.ui.main.MainActivity
 import com.example.findu.presentation.ui.search.model.SearchDetailData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.presentation.ui.search.model.SearchData
 
 class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchProtectingDetailBinding
     private var isBookmark = false
+    private var isDetailVisible = false
     private val imageList = listOf(
         SearchDetailData(R.drawable.img_search_detail),
         SearchDetailData(R.drawable.img_search_detail),
@@ -54,7 +53,7 @@ class SearchProtectingDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBookmark()
-
+        setContentVisibility()
         binding.ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -62,6 +61,35 @@ class SearchProtectingDetailFragment : Fragment() {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailDots.attachTo(binding.vpSearchDetailImg)
+
+    }
+
+    private fun setContentVisibility() {
+        binding.clSearchShowMore.setOnClickListener(){
+            binding.clSearchContentDetail.visibility = View.VISIBLE
+            binding.clSearchShowMore.visibility = View.GONE
+        }
+
+        binding.clSearchDetailSpecialNoteBtn.setOnClickListener {
+            isDetailVisible = !isDetailVisible
+            binding.clSearchDetailSpecialNoteDescription.visibility = if (isDetailVisible) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
+            binding.tvSearchDetailSpecialNote.text = if (isDetailVisible) {
+                "접기"
+            } else {
+                "보기"
+            }
+
+            binding.ivSearchDetailSpecialNoteIcon.rotation = if (isDetailVisible) {
+                180f
+            } else {
+                0f
+            }
+        }
 
     }
 }

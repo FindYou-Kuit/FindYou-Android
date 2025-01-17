@@ -30,6 +30,9 @@ class SearchAllFragment : Fragment() {
         return binding.root
     }
 
+
+
+
     private fun initDummyItems() {
         items.addAll(
             arrayListOf(

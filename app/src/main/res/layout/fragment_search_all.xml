@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_search_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="20dp"
     android:paddingTop="20dp"
     android:paddingEnd="20dp"
-    android:id="@+id/fragment_search_all"
     tools:context=".presentation.ui.search.SearchAllFragment">
 
     <HorizontalScrollView
@@ -67,8 +67,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="15dp"
-        android:minHeight="0dp"
         android:background="@null"
+        android:minHeight="0dp"
         android:src="@drawable/ic_search_horizontal_sort"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hs_search_filters" />
