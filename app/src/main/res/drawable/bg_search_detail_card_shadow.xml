@@ -1,0 +1,18 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 더 자연스러운 그림자 효과 -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="20dp"/> <!-- 둥근 모서리 -->
+            <solid android:color="#0DA0A0A0"/> <!-- rgba(160, 160, 160, 0.10) -->
+        </shape>
+    </item>
+
+    <item android:top="2dp" android:bottom="4dp" android:start="2dp" android:end="2dp"> <!-- 그림자 위치 조정 -->
+        <shape android:shape="rectangle">
+            <corners android:radius="20dp"/> <!-- 둥근 모서리 -->
+            <solid android:color="#FFFFFF"/> <!-- 흰색 배경 -->
+        </shape>
+    </item>
+
+</layer-list>

@@ -68,7 +68,7 @@ class SearchProtectingDetailFragment : Fragment() {
     private fun setContentVisibility() {
         binding.clSearchShowMore.setOnClickListener(){
             binding.clSearchContentDetail.visibility = View.VISIBLE
-            binding.clSearchShowMore.visibility = View.GONE
+            binding.clSearchShowMore.visibility = View.INVISIBLE
         }
 
         binding.clSearchDetailSpecialNoteBtn.setOnClickListener {

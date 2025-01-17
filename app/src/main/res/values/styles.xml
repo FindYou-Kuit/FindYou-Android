@@ -51,4 +51,13 @@
         <item name="android:gravity">center</item>
         <item name="shapeAppearanceOverlay">@style/RoundedChipShape30</item>
     </style>
+
+    <style name="SearchDetailWitnessFeature" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@color/main_color2</item>
+        <item name="android:textColor">@color/main_color</item>
+        <item name="chipMinHeight">34dp</item>
+        <item name="closeIconSize">8dp</item>
+        <item name="android:paddingHorizontal">14dp</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedChipShape</item>
+    </style>
 </resources>

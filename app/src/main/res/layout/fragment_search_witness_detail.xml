@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_search_protect"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".presentation.ui.search.SearchProtectingDetailFragment">
+    android:layout_height="match_parent"
+    tools:context=".presentation.ui.search.SearchWitnessDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_detail_top"
@@ -31,6 +30,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginEnd="21dp"
             android:layout_marginBottom="17dp"
+            android:background="@drawable/bg_search_rounded_box"
             android:src="@drawable/ic_search_content_blank_bookmark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,8 +45,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_search_detail_img"
@@ -91,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="31dp"
-                    android:text="말티즈"
+                    android:text="웰시코기"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,9 +100,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/bg_search_protecting_tag"
-                    android:text="보호중"
-                    android:textColor="@color/green1"
+                    android:background="@drawable/bg_search_report_tag"
+                    android:text="목격신고"
+                    android:textColor="@color/blue1"
                     app:layout_constraintBottom_toBottomOf="@id/tv_search_detail_name"
                     app:layout_constraintStart_toEndOf="@id/tv_search_detail_name"
                     app:layout_constraintTop_toTopOf="@id/tv_search_detail_name" />
@@ -117,7 +116,7 @@
                     android:layout_marginTop="16dp"
                     android:backgroundTint="@android:color/transparent"
                     android:paddingHorizontal="11dp"
-                    android:text="보호소 위치 보기"
+                    android:text="발견 장소 보기"
                     android:textColor="@color/main_color"
                     app:cornerRadius="10dp"
                     app:icon="@drawable/ic_search_detail_location"
@@ -129,104 +128,39 @@
                     app:strokeWidth="1dp" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cv_search_detail_three_info"
+                    android:id="@+id/cv_search_detail_found_date"
                     android:layout_width="318dp"
-                    android:background="@drawable/bg_search_detail_card_shadow"
-                    android:layout_height="wrap_content"
+                    android:layout_height="93dp"
                     android:layout_marginStart="20dp"
+                    android:elevation="40dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="22dp"
+                    android:background="@drawable/bg_search_detail_card_shadow"
+                    app:cardCornerRadius="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btn_view_location">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="93dp"
-                        android:orientation="horizontal"
-                        android:paddingStart="15dp"
-                        android:paddingTop="14dp"
-                        android:paddingEnd="15dp"
-                        android:paddingBottom="14dp"
-                        android:weightSum="3"
-                        app:layout_constraintTop_toTopOf="parent">
+                    <TextView
+                        style="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="발견 날짜"
+                        android:textColor="@color/main_color"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                    <TextView
+                        style="@style/TextAppearance.FindU.Body1_SB_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="37dp"
+                        android:text="2024-11-24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="나이"
-                                android:textColor="@color/main_color" />
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body1_SB_16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="2024, 1살"
-                                android:textColor="@color/gray6" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray2" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="몸무게"
-                                android:textColor="@color/main_color" />
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body1_SB_16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="2kg"
-                                android:textColor="@color/gray6" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray2" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="성별"
-                                android:textColor="@color/main_color" />
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body1_SB_16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="수컷"
-                                android:textColor="@color/black" />
-                        </LinearLayout>
-
-                    </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -234,7 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cv_search_detail_three_info">
+                    app:layout_constraintTop_toBottomOf="@id/cv_search_detail_found_date">
 
                     <TextView
                         android:id="@+id/tv_search_content_show_more"
@@ -294,7 +228,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_upload_date"
+                            android:id="@+id/cl_search_content_detail_breed"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
@@ -305,7 +239,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="게시 날짜"
+                                android:text="품종"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -314,7 +248,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2024-11-23"
+                                android:text="[개]웰시코기"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -326,7 +260,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_upload_date">
+                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_breed">
 
                             <TextView
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
@@ -348,7 +282,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_neuter"
+                            android:id="@+id/cl_search_content_witness_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
@@ -359,7 +293,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="중성화"
+                                android:text="목격자 정보"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -368,94 +302,53 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="아니요"
+                                android:text="닉네임"
+                                android:textColor="@color/gray6"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_search_content_detail_write_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_witness_info">
+
+                            <TextView
+                                style="@style/TextAppearance.FindU.Body2_SB_14"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="작성 날짜"
+                                android:textColor="@color/gray5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                style="@style/TextAppearance.FindU.Body2_SB_14"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2024-11-05"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_special_note"
+                            android:id="@+id/cl_search_content_detail_found_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_neuter">
+                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_write_date">
 
                             <TextView
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="특이사항"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/cl_search_detail_special_note_btn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
-
-                                <TextView
-                                    android:id="@+id/tv_search_detail_special_note"
-                                    style="@style/TextAppearance.FindU.Body2_R_14"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="18dp"
-                                    android:text="보기"
-                                    android:textColor="@color/gray4"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <ImageView
-                                    android:id="@+id/iv_search_detail_special_note_icon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_search_content_show_more_drop"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/cl_search_detail_special_note_description"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:background="@drawable/bg_search_rounded_box"
-                                android:visibility="gone"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/cl_search_detail_special_note_btn">
-
-                                <TextView
-                                    style="@style/TextAppearance.FindU.Tag1_SB_12"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:padding="11dp"
-                                    android:text="멀티푸주청 갑옷을 입고 있어서 미용함. 귀병 조금 있음(치료중). 브라백토투여. 사람 엄청 좋아하는 아이\n\n"
-                                    android:textColor="@color/gray4"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_noti_num"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_special_note">
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="공고 번호"
+                                android:text="발견 날짜"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -464,52 +357,25 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="경남-창원1-2024-00545"
+                                android:text="2024-11-04"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_noti_date"
+                            android:id="@+id/cl_search_content_detail_found_location"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_noti_num">
+                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_found_date">
 
                             <TextView
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="공고 기간"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="2024.11.23 ~ 2024.12.03"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_rescue_location"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_noti_date">
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="구조 장소"
+                                android:text="발견 장소"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -519,7 +385,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="성산구 내동"
+                                android:text="광진구 화양동"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -544,111 +410,61 @@
                                 app:strokeWidth="1dp" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_protect_center"
-                            android:layout_width="match_parent"
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/cg_search_group_feature"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
+                            app:singleLine="false"
+                            app:chipSpacingVertical="1dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_rescue_location">
+                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_found_location">
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
+                            <com.google.android.material.chip.Chip
+                                style="@style/SearchDetailWitnessFeature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="보호 센터"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                android:text="새끼 강아지에요"
+                                android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
 
-                            <TextView
-                                android:id="@+id/tv_search_content_detail_protect_center"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
+                            <com.google.android.material.chip.Chip
+                                style="@style/SearchDetailWitnessFeature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="태민동물병원"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                android:text="털이 복슬복슬해요"
+                                android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
 
-                            <TextView
-                                android:id="@+id/tv_protect_center_phone_number"
-                                style="@style/TextAppearance.FindU.Body2_R_14"
+                            <com.google.android.material.chip.Chip
+                                style="@style/SearchDetailWitnessFeature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:autoLink="phone"
-                                android:linksClickable="true"
-                                android:text="010-2868-2108"
-                                android:textColor="@color/main_color"
-                                app:layout_constraintEnd_toEndOf="@id/tv_search_content_detail_protect_center"
-                                app:layout_constraintTop_toBottomOf="@id/tv_search_content_detail_protect_center" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="102dp"
-                                android:src="@drawable/ic_search_call"
-                                app:layout_constraintBottom_toBottomOf="@id/tv_protect_center_phone_number"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@id/tv_protect_center_phone_number" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                                android:text="겁이 많아요"
+                                android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
+                        </com.google.android.material.chip.ChipGroup>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_jurisdiction"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="100dp"
+                            android:background="@drawable/bg_search_card_stroke"
+                            android:padding="16dp"
+                            app:cardCornerRadius="10dp"
                             android:layout_marginTop="30dp"
+                            app:cardElevation="4dp"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginBottom="100dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_protect_center">
+                            app:layout_constraintTop_toBottomOf="@id/cg_search_group_feature">
 
                             <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="관할 기관"
-                                android:textColor="@color/gray5"
+                                app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_search_content_detail_jurisdiction"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
+                                style="@style/TextAppearance.FindU.Tag1_SB_12"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="창원유기동물보호소"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_jurisdiction_phone_number"
-                                style="@style/TextAppearance.FindU.Body2_R_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:autoLink="phone"
-                                android:linksClickable="true"
-                                android:text="055-930-3562"
-                                android:textColor="@color/main_color"
-                                app:layout_constraintEnd_toEndOf="@id/tv_search_content_detail_jurisdiction"
-                                app:layout_constraintTop_toBottomOf="@id/tv_search_content_detail_jurisdiction" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="102dp"
-                                android:src="@drawable/ic_search_call"
-                                app:layout_constraintBottom_toBottomOf="@id/tv_jurisdiction_phone_number"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@id/tv_jurisdiction_phone_number" />
-
-
+                                android:padding="10dp"
+                                android:text="사람과 컨택하는 거는 무서워 하는 것 같지만, 무작정 도망치지 않고, 사람을 거리 두고 쳐다봄.\n\n또한 목에 빨간 목줄이 있고, 3~5세 정도 나이로 보임.\n\n오른쪽 앞다리에 얇은 상처가 있고, 피가 살짝 묻어있음." />
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

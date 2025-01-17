@@ -78,4 +78,6 @@ dependencies {
 
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
     implementation("com.tbuonomo:dotsindicator:5.0")
+    implementation("com.google.android.material:material:1.9.0")
+
 }

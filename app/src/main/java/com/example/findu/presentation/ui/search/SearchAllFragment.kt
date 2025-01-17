@@ -89,6 +89,7 @@ class SearchAllFragment : Fragment() {
             while (binding.rvSearchHorizontalContent.itemDecorationCount > 0) {
                 binding.rvSearchHorizontalContent.removeItemDecorationAt(0)
             }
+
             binding.rvSearchHorizontalContent.addItemDecoration(SpacingItemDecoration(10))
             binding.rvSearchHorizontalContent.layoutManager = GridLayoutManager(requireContext(), 2)
             rvAdapter.setGridMode(true)
