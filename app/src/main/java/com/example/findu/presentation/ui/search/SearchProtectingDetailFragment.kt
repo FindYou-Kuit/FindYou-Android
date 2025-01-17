@@ -18,6 +18,7 @@ class SearchProtectingDetailFragment : Fragment() {
     private val imageList = listOf(
         SearchDetailData(R.drawable.img_search_detail),
         SearchDetailData(R.drawable.img_search_detail),
+        SearchDetailData(R.drawable.img_search_detail),
         SearchDetailData(R.drawable.img_search_detail)
     )
 
