@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.findu.R
+import com.example.findu.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
 import com.example.findu.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fcv_main, SearchWitnessDetailFragment()) // `fcv_main`은 MainActivity의 FragmentContainerView ID
+                .replace(R.id.fcv_main, SearchDisappearDetailFragment()) // `fcv_main`은 MainActivity의 FragmentContainerView ID
                 .commit()
         }
         setupBottomNavigation()
