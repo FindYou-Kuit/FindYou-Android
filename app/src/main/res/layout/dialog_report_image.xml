@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="288dp"
+    android:layout_height="225dp"
+    android:background="@drawable/bg_report_dialog_rd8">
+
+    <ImageView
+        android:id="@+id/iv_report_image_dialog_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="23dp"
+        android:src="@drawable/ic_report_dialog_close_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_report_image_dialog_mention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_report_upload_20" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="이런 사진이면 좋아요"
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+            android:textColor="@color/main_color" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_report_image_dialog_mention2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="얼굴이 드러나 있는 사진은 AI 판별이 쉬워요!"
+        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+        android:textColor="@color/gray4"
+        app:layout_constraintStart_toStartOf="@id/ll_report_image_dialog_mention"
+        app:layout_constraintTop_toBottomOf="@id/ll_report_image_dialog_mention" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/tv_report_image_dialog_mention2">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_report_image_dialog_capture"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_button_report_dialog"
+            android:backgroundTint="@null"
+            android:text="사진 촬영"
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_report_image_dialog_upload"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_button_report_dialog"
+            android:backgroundTint="@null"
+            android:text="사진 업로드"
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
