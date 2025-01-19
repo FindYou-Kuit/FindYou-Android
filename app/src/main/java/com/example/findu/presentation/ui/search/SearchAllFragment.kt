@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.search
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,18 @@ class SearchAllFragment : Fragment() {
         initRVAdapter()
         initToggleButton()
         return binding.root
+    }
+
+    private fun openDetailFragment(selectedItem: SearchData) {
+        val detailFragment = SearchProtectingDetailFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("selectedItem", selectedItem)
+            }
+        }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fcv_main, detailFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun initDummyItems() {
@@ -69,7 +82,7 @@ class SearchAllFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(items) { item ->
-
+            openDetailFragment(item)
         }
         binding.rvSearchHorizontalContent.adapter = rvAdapter
         binding.rvSearchHorizontalContent.layoutManager =
@@ -100,17 +113,21 @@ class SearchAllFragment : Fragment() {
         }
     }
 }
+
 class SpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         super.getItemOffsets(outRect, view, parent, state)
 
         val layoutManager = parent.layoutManager
-
         if (layoutManager is GridLayoutManager) {
             val layoutParams = view.layoutParams as GridLayoutManager.LayoutParams
             val index = layoutParams.spanIndex
-
             if (index == 0) {
                 outRect.right = spacing / 2
             } else {

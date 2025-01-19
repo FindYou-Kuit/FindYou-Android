@@ -67,11 +67,22 @@ class SearchReportFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(items) { item ->
-
+            openDetailFragment(item)
         }
         binding.rvSearchHorizontalContent.adapter = rvAdapter
         binding.rvSearchHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    }
+    private fun openDetailFragment(selectedItem: SearchData) {
+        val detailFragment = SearchProtectingDetailFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("selectedItem", selectedItem)
+            }
+        }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fcv_main, detailFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun initToggleButton() {

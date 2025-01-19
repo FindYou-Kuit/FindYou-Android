@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
+import com.example.findu.presentation.ui.search.model.SearchData
 import com.example.findu.presentation.ui.search.model.SearchDetailData
 
 class SearchDisappearDetailFragment : Fragment() {
@@ -30,7 +31,23 @@ class SearchDisappearDetailFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initBookmark()
+        val item = arguments?.getSerializable("selectedItem") as? SearchData
+        if (item == null) {
+            requireActivity().supportFragmentManager.popBackStack() // 데이터 없으면 뒤로가기
+            return
+        }
+        item.let {
+            binding.tvSearchDetailName.text = it.name
+            binding.tvSearchContentDetailReportDate.text = it.date
+            binding.tvSearchContentDetailRescueLocation.text = it.address
+        }
+
+        updateBookmarkUI(item.isBookmark)
+        binding.ivSearchDetailBookmark.setOnClickListener {
+            item.isBookmark = !item.isBookmark
+            updateBookmarkUI(item.isBookmark)
+        }
+
         setContentVisibility()
         binding.ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
@@ -41,6 +58,14 @@ class SearchDisappearDetailFragment : Fragment() {
         binding.vpSearchDetailDots.attachTo(binding.vpSearchDetailImg)
 
     }
+
+    private fun updateBookmarkUI(bookmark: Boolean) {
+        binding.ivSearchDetailBookmark.setImageResource(
+            if (bookmark) R.drawable.ic_search_content_fill_bookmark
+            else R.drawable.ic_search_content_blank_bookmark
+        )
+    }
+
     private fun setContentVisibility() {
         binding.clSearchShowMore.setOnClickListener(){
             binding.clSearchContentDetail.visibility = View.VISIBLE
