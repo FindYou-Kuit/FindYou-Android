@@ -7,8 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.findu.R
-import com.example.findu.SearchDisappearDetailFragment
-import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
 import com.example.findu.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

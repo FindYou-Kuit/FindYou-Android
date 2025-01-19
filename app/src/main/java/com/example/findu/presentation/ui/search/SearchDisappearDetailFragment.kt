@@ -1,4 +1,4 @@
-package com.example.findu
+package com.example.findu.presentation.ui.search
 
 import android.content.Context
 import android.os.Bundle
@@ -6,14 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.findu.databinding.FragmentSearchDisappearDetailBinding
-import com.example.findu.databinding.FragmentSearchProtectingDetailBinding
+import com.example.findu.R
+import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.model.SearchDetailData
 
 class SearchDisappearDetailFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchDisappearDetailBinding
+    private lateinit var binding: FragmentSearchDetailDisappearBinding
     private var isBookmark = false
     private val imageList = listOf(
         SearchDetailData(R.drawable.img_search_detail),
@@ -25,7 +25,7 @@ class SearchDisappearDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchDisappearDetailBinding.inflate(layoutInflater)
+        binding = FragmentSearchDetailDisappearBinding.inflate(layoutInflater)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

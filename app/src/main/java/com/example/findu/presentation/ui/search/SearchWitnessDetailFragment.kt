@@ -7,14 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.findu.R
-import com.example.findu.databinding.FragmentSearchProtectingDetailBinding
-import com.example.findu.databinding.FragmentSearchWitnessDetailBinding
+import com.example.findu.databinding.FragmentSearchDetailWitnessBinding
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.model.SearchDetailData
 
 
 class SearchWitnessDetailFragment : Fragment() {
-    private lateinit var binding: FragmentSearchWitnessDetailBinding
+    private lateinit var binding: FragmentSearchDetailWitnessBinding
     private var isBookmark = false
     private val imageList = listOf(
         SearchDetailData(R.drawable.img_search_detail_witness_content),
@@ -27,7 +26,7 @@ class SearchWitnessDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchWitnessDetailBinding.inflate(layoutInflater)
+        binding = FragmentSearchDetailWitnessBinding.inflate(layoutInflater)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

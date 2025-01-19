@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.findu.R
-import com.example.findu.databinding.FragmentSearchProtectingDetailBinding
+import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
 import com.example.findu.presentation.ui.search.model.SearchDetailData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 
 class SearchProtectingDetailFragment : Fragment() {
-    private lateinit var binding: FragmentSearchProtectingDetailBinding
+    private lateinit var binding: FragmentSearchDetailProtectingBinding
     private var isBookmark = false
     private var isDetailVisible = false
     private val imageList = listOf(
@@ -26,7 +26,7 @@ class SearchProtectingDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchProtectingDetailBinding.inflate(layoutInflater)
+        binding = FragmentSearchDetailProtectingBinding.inflate(layoutInflater)
         return binding.root
     }
 

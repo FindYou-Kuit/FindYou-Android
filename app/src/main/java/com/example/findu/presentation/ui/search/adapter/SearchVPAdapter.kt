@@ -6,6 +6,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.findu.presentation.ui.home.HomeFragment
 import com.example.findu.presentation.ui.search.SearchAllFragment
 import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.SearchReportFragment
+import com.example.findu.presentation.ui.search.SearchRescueFragment
 
 class SearchVPAdapter(fragmentActivity :FragmentActivity): FragmentStateAdapter(fragmentActivity){
     override fun getItemCount(): Int {
@@ -15,9 +17,9 @@ class SearchVPAdapter(fragmentActivity :FragmentActivity): FragmentStateAdapter(
     override fun createFragment(position: Int): Fragment {
        return when(position){
            0 -> SearchAllFragment()
-           else -> {
-               HomeFragment()
-           }
+           1-> SearchRescueFragment()
+           2 -> SearchReportFragment()
+           else -> throw IllegalArgumentException("Invalid position: $position")
        }
     }
 }
