@@ -632,7 +632,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:autoLink="phone"
                                 android:linksClickable="true"
                                 android:text="055-930-3562"
                                 android:textColor="@color/main_color"

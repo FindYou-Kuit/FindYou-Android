@@ -1,6 +1,8 @@
 package com.example.findu.presentation.ui.search
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -60,7 +62,25 @@ class SearchProtectingDetailFragment : Fragment() {
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailDots.attachTo(binding.vpSearchDetailImg)
 
+        binding.tvProtectCenterPhoneNumber.setOnClickListener {
+            call(binding.tvProtectCenterPhoneNumber.text.toString())
+        }
+
+        binding.tvJurisdictionPhoneNumber.setOnClickListener {
+            call(binding.tvJurisdictionPhoneNumber.text.toString())
+        }
+
     }
+
+    private fun call(phoneNumber: String) {
+        if (phoneNumber.isNotEmpty()) {
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:$phoneNumber")
+            }
+            startActivity(intent)
+        }
+    }
+
 
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
