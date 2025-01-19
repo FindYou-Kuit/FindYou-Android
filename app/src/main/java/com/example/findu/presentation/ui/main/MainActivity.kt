@@ -20,11 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fcv_main, SearchDisappearDetailFragment()) // `fcv_main`은 MainActivity의 FragmentContainerView ID
-                .commit()
-        }
+
         setupBottomNavigation()
     }
 

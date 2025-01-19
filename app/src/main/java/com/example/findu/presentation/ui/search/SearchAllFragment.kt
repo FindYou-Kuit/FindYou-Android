@@ -105,13 +105,20 @@ class SpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecorat
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
 
-        val layoutParams = view.layoutParams as GridLayoutManager.LayoutParams
-        val index = layoutParams.spanIndex
+        val layoutManager = parent.layoutManager
 
-        if (index == 0) {
-            outRect.right = spacing / 2
+        if (layoutManager is GridLayoutManager) {
+            val layoutParams = view.layoutParams as GridLayoutManager.LayoutParams
+            val index = layoutParams.spanIndex
+
+            if (index == 0) {
+                outRect.right = spacing / 2
+            } else {
+                outRect.left = spacing / 2
+            }
         } else {
-            outRect.left = spacing / 2
+            outRect.top = spacing / 2
+            outRect.bottom = spacing / 2
         }
     }
 }
