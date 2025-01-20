@@ -1,19 +1,20 @@
 package com.example.findu.presentation.ui.report
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewAssetLoader.AssetsPathHandler
 import androidx.webkit.WebViewClientCompat
 import com.example.findu.databinding.ActivityReportLocationBinding
-import com.example.findu.presentation.ui.home.HomeFragment
-import com.example.findu.presentation.ui.home.HomeFragment.Companion
+import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog.Companion.POST_TAG
 
 class ReportLocationActivity : AppCompatActivity() {
 
@@ -35,10 +36,8 @@ class ReportLocationActivity : AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = LocalContentWebViewClient(assetLoader)
 
-        // JavaScript 인터페이스 추가
         webView.addJavascriptInterface(BridgeInterface(), ANDROID)
 
-        // HTML 파일 로드
         webView.loadUrl(ASSETS_URL)
     }
 
@@ -51,7 +50,6 @@ class ReportLocationActivity : AppCompatActivity() {
             return assetLoader.shouldInterceptRequest(request.url)
         }
 
-        // To support API < 21.
         @Deprecated("Deprecated in Java")
         override fun shouldInterceptRequest(
             view: WebView,
@@ -69,6 +67,10 @@ class ReportLocationActivity : AppCompatActivity() {
     inner class BridgeInterface() {
         @JavascriptInterface
         fun processData(postData: String) {
+//            reportViewModel.updateData(postData)
+            val intent = Intent()
+            intent.putExtra(POST_TAG, postData)
+            setResult(RESULT_OK, intent)
             finish()
         }
     }
