@@ -20,6 +20,10 @@
         android:theme="@style/Theme.FindU"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".presentation.ui.report.ReportLocationActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${naverClientId}" />

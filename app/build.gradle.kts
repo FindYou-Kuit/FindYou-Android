@@ -79,4 +79,7 @@ dependencies {
 
     // Naver Map
     implementation(libs.map.sdk)
+
+    // Web View
+    implementation(libs.androidx.webkit)
 }
