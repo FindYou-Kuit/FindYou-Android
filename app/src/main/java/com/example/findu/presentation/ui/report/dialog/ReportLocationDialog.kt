@@ -3,12 +3,14 @@ package com.example.findu.presentation.ui.report.dialog
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.SearchEvent
 import com.example.findu.databinding.DialogReportLocationBinding
+import com.example.findu.presentation.ui.report.ReportLocationActivity
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -42,7 +44,11 @@ class ReportLocationDialog(
     }
 
     private fun initListener() {
-        binding.ivReportLocationDialogLocation.setOnClickListener { }
+        binding.tvReportLocationDialogLocation.setOnClickListener {
+            val intent = Intent(context, ReportLocationActivity::class.java)
+            context.startActivity(intent)
+
+        }
 
         binding.btnReportLocationDialogSet.setOnClickListener { }
     }
