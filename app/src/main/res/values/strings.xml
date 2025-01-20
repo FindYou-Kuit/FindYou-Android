@@ -22,4 +22,7 @@
     <string name="report_dialog_call_report">전화로 신고 하기</string>
     <string name="report_dialog_witness_report">목격 신고글 작성</string>
     <string name="report_dialog_missing_report">실종 신고글 작성</string>
+    <string name="report_dialog_set_location">현 위치로 설정하기</string>
+    <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000-0ddd 광진구 건국대학교 000-00 202호</string>
+    <string name="report_dialog_find_location">지도에서 위치 찾기</string>
 </resources>

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="28dp"
         android:src="@drawable/ic_report_dialog_close_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,36 +29,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:text="지도에서 위치 찾기"
+        android:text="@string/report_dialog_find_location"
         android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
         android:textColor="@color/main_color"
         app:layout_constraintBottom_toBottomOf="@id/iv_report_location_dialog_location"
         app:layout_constraintStart_toEndOf="@id/iv_report_location_dialog_location"
         app:layout_constraintTop_toTopOf="@id/iv_report_location_dialog_location" />
 
-    <TextView
-        android:id="@+id/tv_report_location_dialog_location"
-        android:layout_width="205dp"
+    <LinearLayout
+        android:id="@+id/ll_report_location_dialog_location"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:text="서울특별시 광진구 화양동 000-0ddd
-광진구 건국대학교 000-00 202호"
-        android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
-        android:textColor="@color/gray4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_report_location_dialog_location" />
+        app:layout_constraintTop_toBottomOf="@id/iv_report_location_dialog_location">
 
-    <ImageView
-        android:id="@+id/iv_report_location_dialog_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/ic_report_arrow_right_14"
-        app:layout_constraintStart_toEndOf="@id/tv_report_location_dialog_location"
-        app:layout_constraintTop_toTopOf="@id/tv_report_location_dialog_location"
-        app:tint="@color/gray4" />
+        <TextView
+            android:id="@+id/tv_report_location_dialog_location"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:text="@string/report_dialog_default_location_address"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+            android:textColor="@color/gray4" />
+
+        <ImageView
+            android:id="@+id/iv_report_location_dialog_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/ic_report_arrow_right_14"
+            app:layout_constraintStart_toEndOf="@id/tv_report_location_dialog_location"
+            app:layout_constraintTop_toTopOf="@id/tv_report_location_dialog_location"
+            app:tint="@color/gray4" />
+
+    </LinearLayout>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_report_location_dialog_map_container"
@@ -69,7 +75,7 @@
         app:cardCornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_report_location_dialog_location">
+        app:layout_constraintTop_toBottomOf="@id/ll_report_location_dialog_location">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -95,7 +101,7 @@
         android:layout_marginBottom="12dp"
         android:background="@drawable/bg_button_report_dialog"
         android:backgroundTint="@null"
-        android:text="현 위치로 설정하기"
+        android:text="@string/report_dialog_set_location"
         android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
