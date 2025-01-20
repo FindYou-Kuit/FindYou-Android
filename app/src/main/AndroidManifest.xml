@@ -16,6 +16,10 @@
         android:theme="@style/Theme.FindU"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID}"
+            android:value="${naverClientId}" />
+
         <activity
             android:name=".presentation.ui.home.HomeActivity"
             android:exported="false" />
@@ -29,5 +33,6 @@
             </intent-filter>
         </activity>
     </application>
+
 
 </manifest>
