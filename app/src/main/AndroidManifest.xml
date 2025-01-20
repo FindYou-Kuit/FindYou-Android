@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
         android:name=".FindUApp"
@@ -17,12 +21,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <meta-data
-            android:name="com.naver.maps.map.CLIENT_ID}"
+            android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${naverClientId}" />
 
-        <activity
-            android:name=".presentation.ui.home.HomeActivity"
-            android:exported="false" />
         <activity
             android:name=".presentation.ui.main.MainActivity"
             android:exported="true">

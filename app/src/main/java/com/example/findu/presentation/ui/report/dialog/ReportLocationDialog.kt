@@ -3,6 +3,7 @@ package com.example.findu.presentation.ui.report.dialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,8 @@ class ReportLocationDialog(
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         setContentView(binding.root)
+
+        binding.tvReportLocationDialogLocation.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         initListener()
     }
