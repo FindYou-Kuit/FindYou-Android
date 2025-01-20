@@ -5,52 +5,80 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.SearchEvent
+import android.view.View
+import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import com.example.findu.databinding.DialogReportLocationBinding
 import com.example.findu.presentation.ui.report.ReportLocationActivity
-import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.util.FusedLocationSource
 
 class ReportLocationDialog(
-    context: Context
-) : Dialog(context), OnMapReadyCallback {
+) : DialogFragment(), OnMapReadyCallback {
 
     private var _binding: DialogReportLocationBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var naverMap: NaverMap
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         super.onCreate(savedInstanceState)
 
-        _binding = DialogReportLocationBinding.inflate(LayoutInflater.from(context))
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        _binding = DialogReportLocationBinding.inflate(layoutInflater)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        setContentView(binding.root)
+        setUpMapView()
+        setUpLocationTextView()
+        setUpListener()
 
-        initMapView()
-        initListener()
+        return binding.root
     }
 
-    private fun initMapView() {
+    private fun setUpLocationTextView() {
 
+        with(binding.tvReportLocationDialogLocation) {
+            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+
+            val resultLauncher =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                    if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                        val data = result.data?.getStringExtra(POST_TAG)
+                        text = data // 결과를 TextView에 표시
+                    }
+                }
+
+            setOnClickListener {
+                val intent = Intent(context, ReportLocationActivity::class.java)
+                resultLauncher.launch(intent)
+            }
+        }
+    }
+
+
+    private fun setUpMapView() {
         val mapView = binding.mvReportLocationDialogMap
         mapView.getMapAsync(this)
     }
 
-    private fun initListener() {
-        binding.tvReportLocationDialogLocation.setOnClickListener {
-            val intent = Intent(context, ReportLocationActivity::class.java)
-            context.startActivity(intent)
+    private fun setUpListener() {
+        binding.btnReportLocationDialogSet.setOnClickListener {
 
         }
 
-        binding.btnReportLocationDialogSet.setOnClickListener { }
+        binding.ivReportLocationDialogClose.setOnClickListener {
+
+        }
     }
 
     override fun onMapReady(p0: NaverMap) {
@@ -61,4 +89,9 @@ class ReportLocationDialog(
             isLocationButtonEnabled = true
         }
     }
+
+    companion object {
+        const val POST_TAG = "postData"
+    }
+
 }
