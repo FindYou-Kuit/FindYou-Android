@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
+import com.example.findu.SearchFilterBottomSheet
 import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.presentation.ui.search.model.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
@@ -28,6 +29,7 @@ class SearchRescueFragment : Fragment() {
         initDummyItems()
         initRVAdapter()
         initToggleButton()
+        setupFilterButton()
         return binding.root
     }
 
@@ -40,6 +42,12 @@ class SearchRescueFragment : Fragment() {
             chip?.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
             }
+        }
+    }
+    private fun setupFilterButton() {
+        binding.ibSearchFilter.setOnClickListener {
+            val bottomSheet = SearchFilterBottomSheet()
+            bottomSheet.show(parentFragmentManager, bottomSheet.tag)
         }
     }
 

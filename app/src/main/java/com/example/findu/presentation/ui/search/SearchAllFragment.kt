@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
+import com.example.findu.SearchFilterBottomSheet
 import com.example.findu.databinding.FragmentSearchAllBinding
 import com.example.findu.presentation.ui.search.model.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
@@ -32,7 +33,15 @@ class SearchAllFragment : Fragment() {
         initDummyItems()
         initRVAdapter()
         initToggleButton()
+        setupFilterButton()
         return binding.root
+    }
+
+    private fun setupFilterButton() {
+        binding.ibSearchFilter.setOnClickListener {
+            val bottomSheet = SearchFilterBottomSheet()
+            bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

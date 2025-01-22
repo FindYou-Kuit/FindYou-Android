@@ -60,4 +60,25 @@
         <item name="android:paddingHorizontal">14dp</item>
         <item name="shapeAppearanceOverlay">@style/RoundedChipShape</item>
     </style>
+
+    <style name="searchCustomRadioButtonBase" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="searchCustomRadioButtonLeft" parent="searchCustomRadioButtonBase">
+        <item name="android:background">@drawable/bg_search_filter_button_left</item>
+    </style>
+
+    <style name="searchCustomRadioButtonMiddle" parent="searchCustomRadioButtonBase">
+        <item name="android:background">@drawable/bg_search_filter_button_middle</item>
+    </style>
+
+    <style name="searchCustomRadioButtonRight" parent="searchCustomRadioButtonBase">
+        <item name="android:background">@drawable/bg_search_filter_button_right</item>
+    </style>
+
+
 </resources>
