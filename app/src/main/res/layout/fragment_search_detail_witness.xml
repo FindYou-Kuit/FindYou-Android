@@ -132,10 +132,10 @@
                     android:layout_width="318dp"
                     android:layout_height="93dp"
                     android:layout_marginStart="20dp"
-                    android:elevation="40dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="22dp"
                     android:background="@drawable/bg_search_detail_card_shadow"
+                    android:elevation="40dp"
                     app:cardCornerRadius="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btn_view_location">
@@ -197,7 +197,7 @@
                     android:id="@+id/cl_search_content_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cl_search_show_more">
 
@@ -414,11 +414,11 @@
                             android:id="@+id/cg_search_group_feature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:singleLine="false"
-                            app:chipSpacingVertical="1dp"
+                            android:layout_marginTop="20dp"
+                            app:chipSpacingVertical="2dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_found_location">
+                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_found_location"
+                            app:singleLine="false">
 
                             <com.google.android.material.chip.Chip
                                 style="@style/SearchDetailWitnessFeature"
@@ -445,24 +445,23 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="100dp"
                             android:background="@drawable/bg_search_card_stroke"
-                            android:padding="16dp"
                             app:cardCornerRadius="10dp"
-                            android:layout_marginTop="30dp"
                             app:cardElevation="4dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_marginBottom="100dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/cg_search_group_feature">
 
                             <TextView
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
                                 style="@style/TextAppearance.FindU.Tag1_SB_12"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="10dp"
-                                android:text="사람과 컨택하는 거는 무서워 하는 것 같지만, 무작정 도망치지 않고, 사람을 거리 두고 쳐다봄.\n\n또한 목에 빨간 목줄이 있고, 3~5세 정도 나이로 보임.\n\n오른쪽 앞다리에 얇은 상처가 있고, 피가 살짝 묻어있음." />
+                                android:text="사람과 컨택하는 거는 무서워 하는 것 같지만, 무작정 도망치지 않고, 사람을 거리 두고 쳐다봄.\n\n또한 목에 빨간 목줄이 있고, 3~5세 정도 나이로 보임.\n\n오른쪽 앞다리에 얇은 상처가 있고, 피가 살짝 묻어있음."
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
