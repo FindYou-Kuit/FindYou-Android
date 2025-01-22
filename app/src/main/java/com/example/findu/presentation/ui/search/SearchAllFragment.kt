@@ -34,7 +34,7 @@ class SearchAllFragment : Fragment() {
     }
 
     private fun openDetailFragment(selectedItem: SearchData) {
-        val detailFragment = SearchProtectingDetailFragment().apply {
+        val detailFragment = SearchDisappearDetailFragment().apply {
             arguments = Bundle().apply {
                 putSerializable("selectedItem", selectedItem)
             }
@@ -57,21 +57,21 @@ class SearchAllFragment : Fragment() {
                 ),
                 SearchData(
                     name = "믹스견",
-                    image = R.drawable.img_search_content,
+                    image = R.drawable.img_search_content_mix_dog,
                     date = "2024-11-24",
                     address = "성신구 내동 628-1",
                     isBookmark = false
                 ),
                 SearchData(
                     name = "웰시코기",
-                    image = R.drawable.img_search_content,
+                    image = R.drawable.img_search_content_welshicorgi,
                     date = "2024-11-25",
                     address = "성신구 내동 628-1",
                     isBookmark = false
                 ),
                 SearchData(
                     name = "믹스견",
-                    image = R.drawable.img_search_content,
+                    image = R.drawable.img_search_content_mix_dog2,
                     date = "2024-11-25",
                     address = "성신구 내동 628-1",
                     isBookmark = false

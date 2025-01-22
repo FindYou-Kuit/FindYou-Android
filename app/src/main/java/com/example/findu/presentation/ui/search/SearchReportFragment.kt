@@ -74,7 +74,7 @@ class SearchReportFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
     private fun openDetailFragment(selectedItem: SearchData) {
-        val detailFragment = SearchProtectingDetailFragment().apply {
+        val detailFragment = SearchWitnessDetailFragment().apply {
             arguments = Bundle().apply {
                 putSerializable("selectedItem", selectedItem)
             }

@@ -64,4 +64,6 @@
     <string name="search_detail_shelter_phone_num_value">관할 기관</string>
     <string name="search_detail_jurisdiction">창원유기동물보호소</string>
     <string name="search_detail_jurisdiction_value">055-930-3562</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
