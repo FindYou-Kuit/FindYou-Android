@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="31dp"
-                    android:text="웰시코기"
+                    android:text="@string/search_name_welshcorgi"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/bg_search_report_tag"
-                    android:text="목격신고"
+                    android:text="@string/search_witness_title"
                     android:textColor="@color/blue1"
                     app:layout_constraintBottom_toBottomOf="@id/tv_search_detail_name"
                     app:layout_constraintStart_toEndOf="@id/tv_search_detail_name"
@@ -116,7 +116,7 @@
                     android:layout_marginTop="16dp"
                     android:backgroundTint="@android:color/transparent"
                     android:paddingHorizontal="11dp"
-                    android:text="발견 장소 보기"
+                    android:text="@string/search_detail_see_found_location"
                     android:textColor="@color/main_color"
                     app:cornerRadius="10dp"
                     app:icon="@drawable/ic_search_detail_location"
@@ -145,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:text="발견 날짜"
+                        android:text="@string/search_detail_found_date"
                         android:textColor="@color/main_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -156,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="37dp"
-                        android:text="2024-11-24"
+                        android:text="@string/search_detail_found_date_value"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -177,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="155dp"
                         android:layout_marginTop="15dp"
-                        android:text="더보기"
+                        android:text="@string/search_see_more"
                         android:textColor="@color/gray4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -223,7 +223,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
-                            android:text="상세정보"
+                            android:text="@string/search_detail_detail_info"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -239,7 +239,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="품종"
+                                android:text="@string/search_detail_breed"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -248,7 +248,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="[개]웰시코기"
+                                android:text="@string/search_detail_breed_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -266,7 +266,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="털색"
+                                android:text="@string/search_detail_hair_color"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -275,7 +275,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="갈색, 흰색"
+                                android:text="@string/search_detail_hair_color_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -293,7 +293,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="목격자 정보"
+                                android:text="@string/search_detail_witness_info"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -302,7 +302,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="닉네임"
+                                android:text="@string/search_detail_witness_info_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -321,7 +321,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="작성 날짜"
+                                android:text="@string/search_detail_write_date"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -330,7 +330,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2024-11-05"
+                                android:text="@string/search_detail_write_date_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -348,7 +348,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="발견 날짜"
+                                android:text="@string/search_detail_found_date"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -357,7 +357,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2024-11-04"
+                                android:text="@string/search_detail_found_date_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -375,7 +375,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="발견 장소"
+                                android:text="@string/search_detail_found_location"
                                 android:textColor="@color/gray5"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -385,7 +385,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="광진구 화양동"
+                                android:text="@string/search_detail_found_location_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -398,7 +398,7 @@
                                 android:layout_marginTop="5dp"
                                 android:backgroundTint="@android:color/transparent"
                                 android:paddingHorizontal="11dp"
-                                android:text="위치 보기"
+                                android:text="@string/search_detail_see_location"
                                 android:textColor="@color/main_color"
                                 app:cornerRadius="10dp"
                                 app:icon="@drawable/ic_search_detail_location"
@@ -424,21 +424,21 @@
                                 style="@style/SearchDetailWitnessFeature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="새끼 강아지에요"
+                                android:text="@string/search_detail_feature_chip1"
                                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
 
                             <com.google.android.material.chip.Chip
                                 style="@style/SearchDetailWitnessFeature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="털이 복슬복슬해요"
+                                android:text="@string/search_detail_feature_chip2"
                                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
 
                             <com.google.android.material.chip.Chip
                                 style="@style/SearchDetailWitnessFeature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="겁이 많아요"
+                                android:text="@string/search_detail_feature_chip3"
                                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
                         </com.google.android.material.chip.ChipGroup>
 
@@ -459,7 +459,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="10dp"
-                                android:text="사람과 컨택하는 거는 무서워 하는 것 같지만, 무작정 도망치지 않고, 사람을 거리 두고 쳐다봄.\n\n또한 목에 빨간 목줄이 있고, 3~5세 정도 나이로 보임.\n\n오른쪽 앞다리에 얇은 상처가 있고, 피가 살짝 묻어있음."
+                                android:text="@string/search_detail_detailed_description"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
