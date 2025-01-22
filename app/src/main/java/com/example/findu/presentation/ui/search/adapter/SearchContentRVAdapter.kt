@@ -74,6 +74,7 @@ class SearchContentRVAdapter(
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
                 tvSearchContentAddress.text = item.address
+                tvSearchContentStatus.text = item.status
                 ivSearchContent.setImageResource(item.image)
                 root.setOnClickListener() {
                     onItemClick(item)
@@ -103,6 +104,7 @@ class SearchContentRVAdapter(
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
                 tvSearchContentAddress.text = item.address
+                tvSearchContentStatus.text = item.status
                 ivSearchContent.setImageResource(item.image)
                 root.setOnClickListener() {
                     onItemClick(item)

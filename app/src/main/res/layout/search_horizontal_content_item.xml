@@ -36,6 +36,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tv_search_content_status"
                 style="@style/TextAppearance.FindU.Tag1_SB_12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

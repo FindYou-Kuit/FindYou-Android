@@ -38,28 +38,32 @@ class SearchRescueFragment : Fragment() {
                     image = R.drawable.img_search_content,
                     date = "2024-11-23",
                     address = "성신구 내동 628-1",
-                    isBookmark = true
+                    isBookmark = true,
+                    status = "보호중"
                 ),
                 SearchData(
                     name = "믹스견",
                     image = R.drawable.img_search_content,
                     date = "2024-11-24",
                     address = "성신구 내동 628-1",
-                    isBookmark = false
+                    isBookmark = false,
+                    status = "보호중"
                 ),
                 SearchData(
                     name = "웰시코기",
                     image = R.drawable.img_search_content,
                     date = "2024-11-25",
                     address = "성신구 내동 628-1",
-                    isBookmark = false
+                    isBookmark = false,
+                    status = "보호중"
                 ),
                 SearchData(
                     name = "믹스견",
                     image = R.drawable.img_search_content,
                     date = "2024-11-25",
                     address = "성신구 내동 628-1",
-                    isBookmark = false
+                    isBookmark = false,
+                    status = "보호중"
                 )
             )
         )
