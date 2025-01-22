@@ -354,6 +354,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_search_detail_found_date"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

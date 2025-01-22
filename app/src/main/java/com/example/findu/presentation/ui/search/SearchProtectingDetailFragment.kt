@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.search
 
-import android.content.Context
+import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,7 +17,6 @@ import com.example.findu.presentation.ui.search.model.SearchData
 
 class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailProtectingBinding
-    private var isBookmark = false
     private var isDetailVisible = false
     private val imageList = listOf(
         SearchDetailData(R.drawable.img_search_detail),
@@ -70,7 +70,38 @@ class SearchProtectingDetailFragment : Fragment() {
             call(binding.tvJurisdictionPhoneNumber.text.toString())
         }
 
+        binding.btnViewLocation.setOnClickListener {
+            openNaverMap(item.address)
+        }
+        binding.btnShowFoundPlace.setOnClickListener{
+            openNaverMap(item.address)
+        }
+
     }
+    @SuppressLint("QueryPermissionsNeeded")
+    private fun openNaverMap(address: String) {
+        if (address.isNotEmpty()) {
+            val encodedAddress = Uri.encode(address)
+            val uri = Uri.parse("nmap://search?query=$encodedAddress&appname=${requireContext().packageName}")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+
+            // 네이버 지도 앱이 설치되어 있는지
+            if (intent.resolveActivity(requireContext().packageManager) != null) {
+                startActivity(intent)
+            } else {
+                // 플레이스토어 앱이 없을 경우
+                try {
+                    val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap"))
+                    startActivity(playStoreIntent)
+                } catch (e: ActivityNotFoundException) {
+                    // 웹 브라우저에서 네이버 지도 다운로드 페이지로
+                    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.nhn.android.nmap"))
+                    startActivity(webIntent)
+                }
+            }
+        }
+    }
+
 
     private fun call(phoneNumber: String) {
         if (phoneNumber.isNotEmpty()) {
