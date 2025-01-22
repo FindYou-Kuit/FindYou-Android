@@ -11,6 +11,7 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchReportBinding
 import com.example.findu.presentation.ui.search.model.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
+import com.google.android.material.chip.Chip
 
 class SearchReportFragment : Fragment() {
 
@@ -28,6 +29,17 @@ class SearchReportFragment : Fragment() {
         initRVAdapter()
         initToggleButton()
         return binding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val chipGroup = binding.cgSearchGroupFilters
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            chip?.setOnCloseIconClickListener {
+                chipGroup.removeView(chip)
+            }
+        }
     }
 
     private fun initDummyItems() {

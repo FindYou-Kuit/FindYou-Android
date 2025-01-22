@@ -14,6 +14,8 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchAllBinding
 import com.example.findu.presentation.ui.search.model.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 
 class SearchAllFragment : Fragment() {
 
@@ -33,6 +35,17 @@ class SearchAllFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val chipGroup = binding.cgSearchGroupFilters
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            chip?.setOnCloseIconClickListener {
+                chipGroup.removeView(chip)
+            }
+        }
+    }
     private fun openDetailFragment(selectedItem: SearchData) {
         val detailFragment = SearchDisappearDetailFragment().apply {
             arguments = Bundle().apply {
