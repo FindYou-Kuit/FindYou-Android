@@ -185,7 +185,7 @@
             android:completionThreshold="1"
             android:drawableEnd="@drawable/ic_search_filter_drop"
             android:dropDownHeight="248dp"
-            android:hint="리트리버, 말티즈"
+            android:hint="품종을 선택해주세요."
             android:inputType="text"
             android:paddingHorizontal="12dp"
             android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
@@ -200,6 +200,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
+        android:paddingBottom="57dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_search_filter_breed">
 
