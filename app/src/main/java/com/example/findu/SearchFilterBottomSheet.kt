@@ -18,6 +18,9 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSearchFilterBottomSheetBinding.inflate(layoutInflater)
+        binding.ivSearchFilterCloseBtn.setOnClickListener {
+            dismiss()
+        }
         setCalender()
         return binding.root
     }
