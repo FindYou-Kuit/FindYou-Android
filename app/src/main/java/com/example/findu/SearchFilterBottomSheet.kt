@@ -3,6 +3,7 @@ package com.example.findu
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
 import com.archit.calendardaterangepicker.customviews.CalendarListener
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -63,14 +64,39 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
             @SuppressLint("SetTextI18n")
             override fun onFirstDateSelected(startDate: Calendar) {
                 binding.tvSearchFilterDateInput.text =
-                    "${startDate.get(Calendar.YEAR)}.${startDate.get(Calendar.MONTH) + 1}.${startDate.get(Calendar.DAY_OF_MONTH)} ~ " // ✅ 시작 날짜 표시
+                    "${startDate.get(Calendar.YEAR)}.${startDate.get(Calendar.MONTH) + 1}.${
+                        startDate.get(
+                            Calendar.DAY_OF_MONTH
+                        )
+                    } ~ "
+                binding.tvSearchFilterDateInput.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.gray6
+                    )
+                )
+
             }
 
             @SuppressLint("SetTextI18n")
             override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
                 binding.tvSearchFilterDateInput.text =
-                    "${startDate.get(Calendar.YEAR)}.${startDate.get(Calendar.MONTH) + 1}.${startDate.get(Calendar.DAY_OF_MONTH)} ~ " +
-                            "${endDate.get(Calendar.YEAR)}.${endDate.get(Calendar.MONTH) + 1}.${endDate.get(Calendar.DAY_OF_MONTH)}" // ✅ 시작~종료 날짜 범위 표시
+                    "${startDate.get(Calendar.YEAR)}.${startDate.get(Calendar.MONTH) + 1}.${
+                        startDate.get(
+                            Calendar.DAY_OF_MONTH
+                        )
+                    } ~ " +
+                            "${endDate.get(Calendar.YEAR)}.${endDate.get(Calendar.MONTH) + 1}.${
+                                endDate.get(
+                                    Calendar.DAY_OF_MONTH
+                                )
+                            }"
+                binding.tvSearchFilterDateInput.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.gray6
+                    )
+                )
 
             }
         })
