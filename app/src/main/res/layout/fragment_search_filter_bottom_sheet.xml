@@ -70,7 +70,7 @@
                 android:id="@+id/iv_search_filter_date_drop_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="14dp"
+                android:layout_marginEnd="12dp"
                 android:src="@drawable/ic_search_filter_drop"
                 app:layout_constraintBottom_toBottomOf="@id/tv_search_filter_date_input"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -159,6 +159,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_filter_breed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -175,39 +176,74 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_breed_selector"
+        <AutoCompleteTextView
+            android:id="@+id/actv_search_filter_breed"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/bg_search_filter_spinner_close"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_search_filter_breed">
-
-            <TextView
-                android:id="@+id/tv_search_filter_breed_input"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="리트리버, 말티즈"
-                android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
-                android:textColor="@color/gray4"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_breed_dropdown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_filter_drop"
-                app:layout_constraintBottom_toBottomOf="@id/tv_search_filter_breed_input"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_search_filter_breed_input" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:completionThreshold="1"
+            android:drawableEnd="@drawable/ic_search_filter_drop"
+            android:dropDownHeight="248dp"
+            android:hint="리트리버, 말티즈"
+            android:inputType="text"
+            android:paddingHorizontal="12dp"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+            app:layout_constraintTop_toBottomOf="@id/tv_search_filter_breed" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_filter_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_search_filter_breed">
+
+        <TextView
+            android:id="@+id/tv_search_filter_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_filter_location"
+            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <AutoCompleteTextView
+            android:id="@+id/actv_search_filter_city"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search_filter_spinner_close"
+            android:completionThreshold="1"
+            android:drawableEnd="@drawable/ic_search_filter_drop"
+            android:dropDownHeight="248dp"
+            android:hint="@string/search_filter_location_city"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="parent"
+            android:paddingHorizontal="12dp"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+            app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location" />
+        <AutoCompleteTextView
+            android:id="@+id/actv_search_filter_gu"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search_filter_spinner_close"
+            android:completionThreshold="1"
+            android:drawableEnd="@drawable/ic_search_filter_drop"
+            android:dropDownHeight="248dp"
+            android:hint="@string/search_filter_location_gu"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingHorizontal="12dp"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+            app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
