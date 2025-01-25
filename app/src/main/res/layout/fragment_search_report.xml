@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="20dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="20dp"
+    tools:context=".presentation.ui.search.SearchReportFragment">
+
+    <HorizontalScrollView
+        android:id="@+id/hs_search_filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:scrollbars="none"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/ib_search_filter"
+                android:layout_width="39dp"
+                android:layout_height="34dp"
+                android:background="@null"
+                android:src="@drawable/ic_search_filters"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_search_group_filters"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                app:chipSpacingHorizontal="5dp"
+                app:layout_constraintStart_toEndOf="@id/ib_search_filter"
+                app:layout_constraintTop_toTopOf="parent"
+                app:singleLine="true">
+
+                <com.google.android.material.chip.Chip
+                    style="@style/SearchFilterChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="말티즈"
+                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/SearchFilterChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="세종자치특별시 세종자치특별시"
+                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
+            </com.google.android.material.chip.ChipGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
+
+    <ImageButton
+        android:id="@+id/ib_search_horizontal_sort"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="15dp"
+        android:background="@null"
+        android:minHeight="0dp"
+        android:src="@drawable/ic_search_horizontal_sort"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hs_search_filters" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_horizontal_content"
+        android:layout_width="320dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hs_search_filters" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
