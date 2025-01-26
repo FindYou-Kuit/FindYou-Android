@@ -1,11 +1,16 @@
 package com.example.findu
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.graphics.Outline
 import android.os.Bundle
 import android.view.*
+import androidx.constraintlayout.widget.Constraints
 import androidx.core.content.ContextCompat
 import com.archit.calendardaterangepicker.customviews.CalendarListener
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -18,13 +23,15 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchFilterBottomSheetBinding.inflate(layoutInflater)
+        binding = FragmentSearchFilterBottomSheetBinding.inflate(inflater, container, false)
         binding.ivSearchFilterCloseBtn.setOnClickListener {
             dismiss()
         }
         setCalender()
+
         return binding.root
     }
+    override fun getTheme(): Int = R.style.searchFilterBottomSheetDialogTheme
 
     private fun setCalender() {
         binding.tvSearchFilterDateInput.setOnClickListener {
@@ -77,7 +84,6 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                 )
 
             }
-
             @SuppressLint("SetTextI18n")
             override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
                 binding.tvSearchFilterDateInput.text =

@@ -80,5 +80,16 @@
         <item name="android:background">@drawable/bg_search_filter_button_right</item>
     </style>
 
+    <style name="searchFilterBottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_search_filter_bottom_sheet_rounded</item>
+    </style>
+
+    <style name="searchFilterBaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/searchFilterBottomSheet</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="searchFilterBottomSheetDialogTheme" parent="searchFilterBaseBottomSheetDialog" />
 
 </resources>
