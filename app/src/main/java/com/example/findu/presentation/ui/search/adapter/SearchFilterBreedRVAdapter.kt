@@ -17,7 +17,7 @@ class SearchFilterBreedRVAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BreedViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.search_breeds_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_search_breeds, parent, false)
         return BreedViewHolder(view)
     }
 

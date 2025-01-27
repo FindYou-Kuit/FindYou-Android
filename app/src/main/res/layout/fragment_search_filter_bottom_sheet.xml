@@ -211,7 +211,7 @@
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/actv_search_filter_breed"
-                    tools:listitem="@layout/search_breeds_item" />
+                    tools:listitem="@layout/item_search_breeds" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
