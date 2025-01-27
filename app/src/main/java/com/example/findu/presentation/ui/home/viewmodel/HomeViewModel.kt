@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.home
+package com.example.findu.presentation.ui.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.findu.domain.usecase.DummyUseCase
