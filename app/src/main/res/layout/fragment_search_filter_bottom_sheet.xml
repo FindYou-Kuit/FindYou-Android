@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="506dp"
     android:background="@drawable/bg_search_filter_bottom_sheet_rounded"
-    tools:context=".SearchFilterBottomSheet">
+    tools:context=".presentation.ui.search.SearchFilterBottomSheet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_filter_top"
@@ -69,7 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_search_filter_spinner_close"
+                        android:background="@drawable/bg_search_radius_8"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_vertical"
@@ -92,7 +92,7 @@
                         android:id="@+id/cv_search_filter_calender"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:background="@drawable/bg_search_calendar_radius"
+                        android:background="@drawable/bg_search_radius_8_down"
                         android:paddingHorizontal="2dp"
                         android:paddingTop="3dp"
                         android:visibility="gone"
@@ -193,16 +193,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_search_filter_spinner_close"
+                    android:background="@drawable/bg_search_radius_8"
                     android:completionThreshold="1"
                     android:drawableEnd="@drawable/ic_search_filter_drop"
                     android:dropDownHeight="248dp"
-                    android:hint="품종을 선택해주세요."
+                    android:hint="@string/search_filter_breed_hint"
                     android:inputType="text"
                     android:paddingHorizontal="12dp"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintTop_toBottomOf="@id/tv_search_filter_breed" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_search_filter_breeds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_search_radius_8_down"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/actv_search_filter_breed"
+                    tools:listitem="@layout/search_breeds_item" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -230,7 +239,7 @@
                     android:layout_width="150dp"
                     android:layout_height="35dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_search_filter_spinner_close"
+                    android:background="@drawable/bg_search_radius_8"
                     android:completionThreshold="1"
                     android:drawableEnd="@drawable/ic_search_filter_drop"
                     android:dropDownHeight="248dp"
@@ -246,7 +255,7 @@
                     android:layout_width="150dp"
                     android:layout_height="35dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_search_filter_spinner_close"
+                    android:background="@drawable/bg_search_radius_8"
                     android:completionThreshold="1"
                     android:drawableEnd="@drawable/ic_search_filter_drop"
                     android:dropDownHeight="248dp"

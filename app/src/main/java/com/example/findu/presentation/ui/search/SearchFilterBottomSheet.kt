@@ -1,16 +1,14 @@
-package com.example.findu
+package com.example.findu.presentation.ui.search
 
 import android.annotation.SuppressLint
-import android.app.Dialog
-import android.graphics.Outline
 import android.os.Bundle
 import android.view.*
-import androidx.constraintlayout.widget.Constraints
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.archit.calendardaterangepicker.customviews.CalendarListener
+import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.example.findu.presentation.ui.search.adapter.SearchFilterBreedRVAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -18,6 +16,10 @@ import java.util.Calendar
 class SearchFilterBottomSheet : BottomSheetDialogFragment() {
 
     lateinit var binding: FragmentSearchFilterBottomSheetBinding
+    private lateinit var breedAdapter: SearchFilterBreedRVAdapter
+    private val breeds = listOf("리트리버", "말티즈", "불독", "사모예드", "시츄", "요크셔 테리어", "치와와", "포메라니안", "웰시코기")
+
+    private val selectedBreeds = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,22 +29,47 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         binding.ivSearchFilterCloseBtn.setOnClickListener {
             dismiss()
         }
+        binding.btnSearchFilterConfirm.setOnClickListener{
+            dismiss()
+        }
         setCalender()
-
+        setBreedSelector()
         return binding.root
     }
     override fun getTheme(): Int = R.style.searchFilterBottomSheetDialogTheme
+
+    private fun setBreedSelector() {
+        breedAdapter = SearchFilterBreedRVAdapter(breeds, selectedBreeds) { updateSelectedBreeds() }
+        binding.rvSearchFilterBreeds.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvSearchFilterBreeds.adapter = breedAdapter
+
+        binding.actvSearchFilterBreed.setOnClickListener {
+            if (binding.rvSearchFilterBreeds.visibility == View.GONE) {
+                binding.rvSearchFilterBreeds.visibility = View.VISIBLE
+                binding.actvSearchFilterBreed.setBackgroundResource(R.drawable.bg_search_radius_8_up)
+
+            } else {
+                binding.rvSearchFilterBreeds.visibility = View.GONE
+                binding.actvSearchFilterBreed.setBackgroundResource(R.drawable.bg_search_radius_8)
+            }
+        }
+    }
+
+    private fun updateSelectedBreeds() {
+        binding.actvSearchFilterBreed.setText(selectedBreeds.joinToString(", "))
+    }
+
 
     private fun setCalender() {
         binding.tvSearchFilterDateInput.setOnClickListener {
             if (binding.cvSearchFilterCalender.visibility == View.GONE) {
                 binding.cvSearchFilterCalender.visibility = View.VISIBLE
                 binding.ivSearchFilterDateDropBtn.setImageResource(R.drawable.ic_search_filter_drop_up)
-                binding.tvSearchFilterDateInput.setBackgroundResource(R.drawable.bg_search_filter_spinner_open)
+                binding.tvSearchFilterDateInput.setBackgroundResource(R.drawable.bg_search_radius_8_up)
             } else {
                 binding.cvSearchFilterCalender.visibility = View.GONE
                 binding.ivSearchFilterDateDropBtn.setImageResource(R.drawable.ic_search_filter_drop)
-                binding.tvSearchFilterDateInput.setBackgroundResource(R.drawable.bg_search_filter_spinner_close)
+                binding.tvSearchFilterDateInput.setBackgroundResource(R.drawable.bg_search_radius_8)
             }
         }
 

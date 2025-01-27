@@ -71,4 +71,7 @@
     <string name="search_filter_location">위치</string>
     <string name="search_filter_location_city">시/구</string>
     <string name="search_filter_location_gu">시/구/군</string>
+    <string name="search_filter_breed_hint">품종을 입력하세요</string>
+
+
 </resources>
