@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.search.model
 
-import com.google.android.material.chip.Chip
 import java.io.Serializable
 
 data class SearchData(
@@ -9,5 +8,5 @@ data class SearchData(
     val date : String,
     val address : String,
     var isBookmark : Boolean,
-    var status : String,
+    var status : SearchStatus,
 ) : Serializable

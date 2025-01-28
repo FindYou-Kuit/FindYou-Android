@@ -11,6 +11,7 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchReportBinding
 import com.example.findu.presentation.ui.search.model.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
+import com.example.findu.presentation.ui.search.model.SearchStatus
 import com.google.android.material.chip.Chip
 
 class SearchReportFragment : Fragment() {
@@ -58,7 +59,7 @@ class SearchReportFragment : Fragment() {
                     date = "2024-11-23",
                     address = "성신구 내동 628-1",
                     isBookmark = true,
-                    status = "목격신고"
+                    status = SearchStatus.WITNESS
                 ),
                 SearchData(
                     name = "믹스견",
@@ -66,7 +67,7 @@ class SearchReportFragment : Fragment() {
                     date = "2024-11-24",
                     address = "성신구 내동 628-1",
                     isBookmark = false,
-                    status = "목격신고"
+                    status = SearchStatus.WITNESS
                 ),
                 SearchData(
                     name = "웰시코기",
@@ -74,7 +75,7 @@ class SearchReportFragment : Fragment() {
                     date = "2024-11-25",
                     address = "성신구 내동 628-1",
                     isBookmark = false,
-                    status = "실종신고"
+                    status = SearchStatus.MISSING
                 ),
                 SearchData(
                     name = "믹스견",
@@ -82,7 +83,7 @@ class SearchReportFragment : Fragment() {
                     date = "2024-11-25",
                     address = "성신구 내동 628-1",
                     isBookmark = false,
-                    status = "목격신고"
+                    status = SearchStatus.WITNESS
                 )
             )
         )

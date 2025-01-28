@@ -72,7 +72,6 @@ class SearchContentRVAdapter(
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
                 tvSearchContentAddress.text = item.address
-                tvSearchContentStatus.text = item.status
                 ivSearchContent.setImageResource(item.image)
 
                 updateBookmark(item.isBookmark)
@@ -80,6 +79,9 @@ class SearchContentRVAdapter(
                     item.isBookmark = !item.isBookmark
                     updateBookmark(item.isBookmark)
                 }
+                tvSearchContentStatus.text = item.status.text
+                tvSearchContentStatus.setTextColor(itemView.context.getColor(item.status.textColor))
+                tvSearchContentStatus.setBackgroundResource(item.status.backgroundRes)
 
                 root.setOnClickListener {
                     onItemClick(item)
@@ -105,7 +107,6 @@ class SearchContentRVAdapter(
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
                 tvSearchContentAddress.text = item.address
-                tvSearchContentStatus.text = item.status
                 ivSearchContent.setImageResource(item.image)
 
                 updateBookmark(item.isBookmark)
@@ -113,6 +114,10 @@ class SearchContentRVAdapter(
                     item.isBookmark = !item.isBookmark
                     updateBookmark(item.isBookmark)
                 }
+
+                tvSearchContentStatus.text = item.status.text
+                tvSearchContentStatus.setTextColor(itemView.context.getColor(item.status.textColor))
+                tvSearchContentStatus.setBackgroundResource(item.status.backgroundRes)
                 root.setOnClickListener {
                     onItemClick(item)
                 }
