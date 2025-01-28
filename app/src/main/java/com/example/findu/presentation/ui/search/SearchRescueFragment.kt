@@ -126,10 +126,14 @@ class SearchRescueFragment : Fragment() {
             binding.rvSearchHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
             binding.rvSearchHorizontalContent.layoutManager = GridLayoutManager(requireContext(), 2)
             rvAdapter.setGridMode(true)
+            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
+
         } else {
             binding.rvSearchHorizontalContent.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rvAdapter.setGridMode(false)
+            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
+
         }
     }
 }
