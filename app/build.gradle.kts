@@ -82,4 +82,10 @@ dependencies {
 
     // Web View
     implementation(libs.androidx.webkit)
+    
+    // Glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    
+    // Calender
+    implementation("io.github.architshah248.calendar:awesome-calendar:2.0.0")
 }
