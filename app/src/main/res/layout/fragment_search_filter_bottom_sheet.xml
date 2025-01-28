@@ -142,6 +142,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_search_filter_type">
 
                     <RadioButton
+                        android:id="@+id/rb_dog"
                         style="@style/searchCustomRadioButtonLeft"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -151,6 +152,7 @@
                         android:text="@string/search_species_dog" />
 
                     <RadioButton
+                        android:id="@+id/rb_cat"
                         style="@style/searchCustomRadioButtonMiddle"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -160,6 +162,7 @@
                         android:text="@string/search_species_cat" />
 
                     <RadioButton
+                        android:id="@+id/rb_etc"
                         style="@style/searchCustomRadioButtonRight"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"

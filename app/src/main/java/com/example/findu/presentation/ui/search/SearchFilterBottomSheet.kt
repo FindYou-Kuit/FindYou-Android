@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,14 +22,16 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     private lateinit var cityAdapter: SearchFilterLocationRVAdapter
     private lateinit var guAdapter: SearchFilterLocationRVAdapter
 
-    private val breeds = listOf("리트리버", "말티즈", "불독", "사모예드", "시츄", "요크셔 테리어", "치와와", "포메라니안", "웰시코기")
+    private val breeds =
+        listOf("리트리버", "말티즈", "불독", "사모예드", "시츄", "요크셔 테리어", "치와와", "포메라니안", "웰시코기")
     private val selectedBreeds = mutableListOf<String>()
 
-    private val locations = listOf("서울특별시", "인천광역시", "세종특별자치시", "울산광역시", "강원특별자치도", "충청남도", "전라남도", "경상남도", "부산광역시")
-    private var selectedLocation: String? = null
+    private val locations =
+        listOf("서울특별시", "인천광역시", "세종특별자치시", "울산광역시", "강원특별자치도", "충청남도", "전라남도", "경상남도", "부산광역시")
+    private var city: String? = null
 
     private val gus = listOf("강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
-    private var selectedGu: String? = null
+    private var gu: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,24 +41,70 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         binding.ivSearchFilterCloseBtn.setOnClickListener {
             dismiss()
         }
-        binding.btnSearchFilterConfirm.setOnClickListener{
-            dismiss()
+        binding.btnSearchFilterConfirm.setOnClickListener {
+            applyFilters()
         }
         setCalender()
         setBreedSelector()
         setLocationSelector()
         return binding.root
     }
+
+    private fun applyFilters() {
+        val filters = mutableListOf<String>()
+
+        val date = binding.tvSearchFilterDateInput.text.toString()
+        if (date.isNotEmpty() && date != getString(R.string.search_filter_date_input)) {
+            filters.add(date)
+        }
+
+        val species = listOf(
+            binding.rbDog,
+            binding.rbCat,
+            binding.rbEtc
+        ).find { it.isChecked }?.text.toString()
+
+        if (species.isNotBlank()) {
+            filters.add(species)
+        }
+        if (filters.contains("null"))
+            filters.remove("null")
+
+        val breed = selectedBreeds.toList()
+        if(selectedBreeds.isNotEmpty()){
+            filters.addAll(breed)
+
+        }
+
+
+        city?.let { if (it.isNotEmpty()) filters.add(it) }
+        gu?.let { if (it.isNotEmpty()) filters.add(it) }
+
+        if (filters.isEmpty()) {
+            dismiss()
+            return
+        }
+
+        val bundle = Bundle().apply {
+            putStringArrayList("selectedFilters", ArrayList(filters))
+        }
+        parentFragmentManager.setFragmentResult("filterResults", bundle)
+
+        dismiss()
+    }
+
+
+
     override fun getTheme(): Int = R.style.searchFilterBottomSheetDialogTheme
 
     private fun setLocationSelector() {
-        cityAdapter = SearchFilterLocationRVAdapter(locations, selectedLocation) { newLocation ->
-            selectedLocation = newLocation
+        cityAdapter = SearchFilterLocationRVAdapter(locations, city) { newLocation ->
+            city = newLocation
             updateSelectedLocation()
         }
 
-        guAdapter = SearchFilterLocationRVAdapter(gus, selectedGu) { newGu ->
-            selectedGu = newGu
+        guAdapter = SearchFilterLocationRVAdapter(gus, gu) { newGu ->
+            gu = newGu
             updateSelectedLocation()
         }
 
@@ -86,11 +135,11 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun updateSelectedLocation() {
-        binding.actvSearchFilterCity.setText(selectedLocation ?: "")
+        binding.actvSearchFilterCity.setText(city ?: "")
         binding.rvSearchFilterCity.visibility = View.GONE
         binding.actvSearchFilterCity.setBackgroundResource(R.drawable.bg_search_radius_8)
 
-        binding.actvSearchFilterGu.setText(selectedGu ?: "")
+        binding.actvSearchFilterGu.setText(gu ?: "")
         binding.rvSearchFilterGu.visibility = View.GONE
         binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8)
     }
@@ -168,6 +217,7 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                 )
 
             }
+
             @SuppressLint("SetTextI18n")
             override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
                 binding.tvSearchFilterDateInput.text =

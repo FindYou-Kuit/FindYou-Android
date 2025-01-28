@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.search
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,13 +39,20 @@ class SearchAllFragment : Fragment() {
     private fun setupFilterButton() {
         binding.ibSearchFilter.setOnClickListener {
             val bottomSheet = SearchFilterBottomSheet()
-            bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+            bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        childFragmentManager.setFragmentResultListener("filterResults", this) { _, bundle ->
+            val selectedFilters =
+                bundle.getStringArrayList("selectedFilters") ?: return@setFragmentResultListener
 
+            binding.cgSearchGroupFilters.removeAllViews()
+            updateFilterChips(selectedFilters)
+
+        }
         val chipGroup = binding.cgSearchGroupFilters
         for (i in 0 until chipGroup.childCount) {
             val chip = chipGroup.getChildAt(i) as? Chip
@@ -53,6 +61,27 @@ class SearchAllFragment : Fragment() {
             }
         }
     }
+
+
+
+    private fun updateFilterChips(filters: List<String>?) {
+        val chipGroup = binding.cgSearchGroupFilters
+        chipGroup.removeAllViews()
+
+        if (filters.isNullOrEmpty() || filters.all { it.isBlank() }) {
+            return
+        }
+        filters.forEach { filterText ->
+            val chip =
+                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
+            chip.text = filterText
+            chip.setOnCloseIconClickListener {
+                chipGroup.removeView(chip)
+            }
+            chipGroup.addView(chip)
+        }
+    }
+
     private fun openDetailFragment(selectedItem: SearchData) {
         val detailFragment = SearchDisappearDetailFragment().apply {
             arguments = Bundle().apply {
