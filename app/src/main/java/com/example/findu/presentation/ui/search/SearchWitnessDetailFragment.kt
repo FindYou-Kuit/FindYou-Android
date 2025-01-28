@@ -19,7 +19,6 @@ import com.example.findu.presentation.ui.search.model.SearchDetailData
 
 class SearchWitnessDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailWitnessBinding
-    private var isBookmark = false
     private val imageList = listOf(
         SearchDetailData(R.drawable.img_search_detail_witness_content),
         SearchDetailData(R.drawable.img_search_detail_witness_content),
@@ -39,7 +38,7 @@ class SearchWitnessDetailFragment : Fragment() {
 
         val item = arguments?.getSerializable("selectedItem") as? SearchData
         if (item == null) {
-            requireActivity().supportFragmentManager.popBackStack() // 데이터 없으면 뒤로가기
+            requireActivity().supportFragmentManager.popBackStack()
             return
         }
         item.let {
@@ -78,16 +77,13 @@ class SearchWitnessDetailFragment : Fragment() {
             val uri = Uri.parse("nmap://search?query=$encodedAddress&appname=${requireContext().packageName}")
             val intent = Intent(Intent.ACTION_VIEW, uri)
 
-            // 네이버 지도 앱이 설치되어 있는지
             if (intent.resolveActivity(requireContext().packageManager) != null) {
                 startActivity(intent)
             } else {
-                // 플레이스토어 앱이 없을 경우
                 try {
                     val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap"))
                     startActivity(playStoreIntent)
                 } catch (e: ActivityNotFoundException) {
-                    // 웹 브라우저에서 네이버 지도 다운로드 페이지로
                     val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.nhn.android.nmap"))
                     startActivity(webIntent)
                 }
