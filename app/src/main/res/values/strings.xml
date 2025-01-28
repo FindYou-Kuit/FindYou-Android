@@ -61,5 +61,29 @@
     <string name="report_missing_date_title">실종 날짜</string>
     <string name="report_write_additional_description">추가 설명 작성하기</string>
 
+    <!-- home-->
+    <string name="home_top_bar_logo">홈 탑바 로고</string>
+    <string name="home_top_bar_profile">홈 탑바 프로필</string>
+    <string name="home_banner">홈 배너</string>
+    <string name="home_today_bar_rescue">오늘 구조된 동물</string>
+    <string name="home_today_bar_rescue_num">%d</string>
+    <string name="home_today_bar_report">오늘 신고된 동물</string>
+    <string name="home_today_bar_report_num">%d</string>
+    <string name="home_banner_num">%d/%d +</string>
+    <string name="home_text_report">유기동물을\n목격 하셨나요?</string>
+    <string name="home_text_find">반려동물을\n찾고 계신가요?</string>
+    <string name="home_btn_report">신고하러 가기</string>
+    <string name="home_btn_find">찾으러 가기</string>
+    <string name="home_protect_title">주변 보호소에서 보호 중이에요!</string>
+    <string name="home_missing_title">주인이 애타게 찾고 있어요!</string>
+    <string name="home_more">더보기</string>
+    <string name="home_rv_name">말티즈</string>
+    <string name="home_rv_type">보호중</string>
+    <string name="home_rv_date">2024-11-23</string>
+    <string name="home_rv_location">서울특별시 광진구 화양동</string>
+    <string name="home_bottom">유기동물에 대해 더 알고 싶다면?</string>
+    <string name="home_bottom_protect">유기동물\n보호소 조회</string>
+    <string name="home_bottom_center">동물보호\n센터 조회</string>
+    <string name="home_bottom_part">동물보호\n부서 조회</string>
 
 </resources>
