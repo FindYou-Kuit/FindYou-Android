@@ -9,6 +9,7 @@ import com.archit.calendardaterangepicker.customviews.CalendarListener
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
 import com.example.findu.presentation.ui.search.adapter.SearchFilterBreedRVAdapter
+import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -17,9 +18,17 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
 
     lateinit var binding: FragmentSearchFilterBottomSheetBinding
     private lateinit var breedAdapter: SearchFilterBreedRVAdapter
-    private val breeds = listOf("리트리버", "말티즈", "불독", "사모예드", "시츄", "요크셔 테리어", "치와와", "포메라니안", "웰시코기")
+    private lateinit var cityAdapter: SearchFilterLocationRVAdapter
+    private lateinit var guAdapter: SearchFilterLocationRVAdapter
 
+    private val breeds = listOf("리트리버", "말티즈", "불독", "사모예드", "시츄", "요크셔 테리어", "치와와", "포메라니안", "웰시코기")
     private val selectedBreeds = mutableListOf<String>()
+
+    private val locations = listOf("서울특별시", "인천광역시", "세종특별자치시", "울산광역시", "강원특별자치도", "충청남도", "전라남도", "경상남도", "부산광역시")
+    private var selectedLocation: String? = null
+
+    private val gus = listOf("강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
+    private var selectedGu: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,9 +43,57 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         }
         setCalender()
         setBreedSelector()
+        setLocationSelector()
         return binding.root
     }
     override fun getTheme(): Int = R.style.searchFilterBottomSheetDialogTheme
+
+    private fun setLocationSelector() {
+        cityAdapter = SearchFilterLocationRVAdapter(locations, selectedLocation) { newLocation ->
+            selectedLocation = newLocation
+            updateSelectedLocation()
+        }
+
+        guAdapter = SearchFilterLocationRVAdapter(gus, selectedGu) { newGu ->
+            selectedGu = newGu
+            updateSelectedLocation()
+        }
+
+        binding.rvSearchFilterCity.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvSearchFilterCity.adapter = cityAdapter
+
+        binding.actvSearchFilterCity.setOnClickListener {
+            if (binding.rvSearchFilterCity.visibility == View.GONE) {
+                binding.rvSearchFilterCity.visibility = View.VISIBLE
+                binding.actvSearchFilterCity.setBackgroundResource(R.drawable.bg_search_radius_8_up)
+            } else {
+                binding.rvSearchFilterCity.visibility = View.GONE
+                binding.actvSearchFilterCity.setBackgroundResource(R.drawable.bg_search_radius_8)
+            }
+        }
+        binding.rvSearchFilterGu.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvSearchFilterGu.adapter = guAdapter
+
+        binding.actvSearchFilterGu.setOnClickListener {
+            if (binding.rvSearchFilterGu.visibility == View.GONE) {
+                binding.rvSearchFilterGu.visibility = View.VISIBLE
+                binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8_up)
+            } else {
+                binding.rvSearchFilterGu.visibility = View.GONE
+                binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8)
+            }
+        }
+    }
+
+    private fun updateSelectedLocation() {
+        binding.actvSearchFilterCity.setText(selectedLocation ?: "")
+        binding.rvSearchFilterCity.visibility = View.GONE
+        binding.actvSearchFilterCity.setBackgroundResource(R.drawable.bg_search_radius_8)
+
+        binding.actvSearchFilterGu.setText(selectedGu ?: "")
+        binding.rvSearchFilterGu.visibility = View.GONE
+        binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8)
+    }
 
     private fun setBreedSelector() {
         breedAdapter = SearchFilterBreedRVAdapter(breeds, selectedBreeds) { updateSelectedBreeds() }

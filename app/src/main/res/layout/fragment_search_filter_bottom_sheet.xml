@@ -4,7 +4,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="506dp"
+    android:layout_height="match_parent"
     android:background="@drawable/bg_search_filter_bottom_sheet_rounded"
     tools:context=".presentation.ui.search.SearchFilterBottomSheet">
 
@@ -234,37 +234,73 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/actv_search_filter_city"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="150dp"
-                    android:layout_height="35dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_search_radius_8"
-                    android:completionThreshold="1"
-                    android:drawableEnd="@drawable/ic_search_filter_drop"
-                    android:dropDownHeight="248dp"
-                    android:hint="@string/search_filter_location_city"
-                    android:inputType="text"
-                    android:paddingHorizontal="12dp"
-                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location">
 
-                <AutoCompleteTextView
-                    android:id="@+id/actv_search_filter_gu"
+                    <AutoCompleteTextView
+                        android:id="@+id/actv_search_filter_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="@drawable/bg_search_radius_8"
+                        android:completionThreshold="1"
+                        android:drawableEnd="@drawable/ic_search_filter_drop"
+                        android:dropDownHeight="248dp"
+                        android:hint="@string/search_filter_location_city"
+                        android:inputType="text"
+                        android:paddingHorizontal="12dp"
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_search_filter_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_search_radius_8_down"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/actv_search_filter_city"
+                        tools:listitem="@layout/item_search_location" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="150dp"
-                    android:layout_height="35dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_search_radius_8"
-                    android:completionThreshold="1"
-                    android:drawableEnd="@drawable/ic_search_filter_drop"
-                    android:dropDownHeight="248dp"
-                    android:hint="@string/search_filter_location_gu"
-                    android:inputType="text"
-                    android:paddingHorizontal="12dp"
-                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actv_search_filter_gu"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="@drawable/bg_search_radius_8"
+                        android:completionThreshold="1"
+                        android:drawableEnd="@drawable/ic_search_filter_drop"
+                        android:dropDownHeight="248dp"
+                        android:hint="@string/search_filter_location_gu"
+                        android:inputType="text"
+                        android:paddingHorizontal="12dp"
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_search_filter_gu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_search_radius_8_down"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/actv_search_filter_gu"
+                    tools:listitem="@layout/item_search_location" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
 import com.example.findu.databinding.SearchHorizontalContentItemBinding
-import com.example.findu.databinding.SearchGridContentItemBinding // 그리드 아이템의 바인딩 추가
+import com.example.findu.databinding.ItemSearchGridContentBinding
 import com.example.findu.presentation.ui.search.model.SearchData
 
 class SearchContentRVAdapter(
@@ -35,7 +35,7 @@ class SearchContentRVAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_GRID -> {
-                val binding = SearchGridContentItemBinding.inflate(
+                val binding = ItemSearchGridContentBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -96,7 +96,7 @@ class SearchContentRVAdapter(
         }
     }
 
-    inner class GridViewHolder(private val binding: SearchGridContentItemBinding) :
+    inner class GridViewHolder(private val binding: ItemSearchGridContentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val bookmark: ImageView = itemView.findViewById(R.id.iv_search_content_bookmark)
         fun bind(item: SearchData) {
