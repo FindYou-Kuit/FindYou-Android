@@ -24,6 +24,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+        manifestPlaceholders["naverClientId"] = properties["NAVER_CLIENT_ID"].toString()
     }
 
     buildTypes {
@@ -76,6 +77,12 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
+    // Naver Map
+    implementation(libs.map.sdk)
+
+    // Web View
+    implementation(libs.androidx.webkit)
+    
     // Glide
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     

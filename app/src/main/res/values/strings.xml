@@ -18,6 +18,24 @@
     <string name="bottom_nav_info">정보</string>
     <string name="bottom_nav_my">마이</string>
 
+    <!-- report dialog -->
+    <string name="report_dialog_finished">신고가 완료되었어요!</string>
+    <string name="report_dialog_missing_mention">당신의 가족을 저희가 열심히 찾아드릴게요!</string>
+    <string name="report_dialog_witness_mention">당신의 관심이 오늘도 한 생명을 지켜냈어요 :)</string>
+    <string name="report_dialog_see_history">나의 신고내역 보기</string>
+    <string name="report_dialog_go_home">홈 화면으로 가기</string>
+    <string name="report_dialog_good_image">이런 사진이면 좋아요</string>
+    <string name="report_dialog_ai_tip">얼굴이 드러나 있는 사진은 AI 판별이 쉬워요!</string>
+    <string name="report_dialog_capture">사진 촬영</string>
+    <string name="report_dialog_upload">사진 업로드</string>
+    <string name="report_dialog_report">신고</string>
+    <string name="report_dialog_call_report">전화로 신고 하기</string>
+    <string name="report_dialog_witness_report">목격 신고글 작성</string>
+    <string name="report_dialog_missing_report">실종 신고글 작성</string>
+    <string name="report_dialog_set_location">현 위치로 설정하기</string>
+    <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000-0ddd 광진구 건국대학교 000-00 202호</string>
+    <string name="report_dialog_find_location">지도에서 위치 찾기</string>
+  
     <!--  witness report  -->
     <string name="report_witness">목격신고</string>
     <string name="report_missing">실종신고</string>
