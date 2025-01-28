@@ -2,12 +2,11 @@ package com.example.findu.presentation.ui.search.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
+import com.example.findu.databinding.ItemSearchBreedsBinding
 
 class SearchFilterBreedRVAdapter(
     private val breeds: List<String>,
@@ -16,9 +15,8 @@ class SearchFilterBreedRVAdapter(
 ) : RecyclerView.Adapter<SearchFilterBreedRVAdapter.BreedViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BreedViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_search_breeds, parent, false)
-        return BreedViewHolder(view)
+        val binding = ItemSearchBreedsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return BreedViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BreedViewHolder, position: Int) {
@@ -28,29 +26,30 @@ class SearchFilterBreedRVAdapter(
 
     override fun getItemCount(): Int = breeds.size
 
-    inner class BreedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val breedText: TextView = itemView.findViewById(R.id.tv_breed_name)
+    inner class BreedViewHolder(private val binding: ItemSearchBreedsBinding) : RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("NotifyDataSetChanged")
         fun bind(breed: String, isSelected: Boolean) {
-            breedText.text = breed
-            if (isSelected) {
-                breedText.setTextColor(ContextCompat.getColor(itemView.context, R.color.main_color))
-                breedText.setTextAppearance(R.style.TextAppearance_FindU_Tag1_SB_12)
-            } else {
-                breedText.setTextColor(ContextCompat.getColor(itemView.context, R.color.gray6))
-                breedText.setTextAppearance(R.style.TextAppearance_FindU_caption_12)
+            with(binding){
+                tvBreedName.text = breed
+                if (isSelected) {
+                    tvBreedName.setTextColor(ContextCompat.getColor(root.context, R.color.main_color))
+                    tvBreedName.setTextAppearance(R.style.TextAppearance_FindU_Tag1_SB_12)
+                } else {
+                    tvBreedName.setTextColor(ContextCompat.getColor(root.context, R.color.gray6))
+                    tvBreedName.setTextAppearance(R.style.TextAppearance_FindU_caption_12)
+                }
+                root.setOnClickListener {
+                    if (selectedBreeds.contains(breed)) {
+                        selectedBreeds.remove(breed)
+                    } else {
+                        selectedBreeds.add(breed)
+                    }
+                    onBreedSelected(selectedBreeds)
+                    notifyDataSetChanged()
+                }
             }
 
-            itemView.setOnClickListener {
-                if (selectedBreeds.contains(breed)) {
-                    selectedBreeds.remove(breed)
-                } else {
-                    selectedBreeds.add(breed)
-                }
-                onBreedSelected(selectedBreeds)
-                notifyDataSetChanged()
-            }
         }
     }
 }

@@ -3,7 +3,6 @@ package com.example.findu.presentation.ui.search.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
 import com.example.findu.databinding.SearchHorizontalContentItemBinding
@@ -68,7 +67,6 @@ class SearchContentRVAdapter(
 
     inner class HorizontalViewHolder(private val binding: SearchHorizontalContentItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val bookmark: ImageView = itemView.findViewById(R.id.iv_search_content_bookmark)
         fun bind(item: SearchData) {
             with(binding) {
                 tvSearchContentName.text = item.name
@@ -76,29 +74,32 @@ class SearchContentRVAdapter(
                 tvSearchContentAddress.text = item.address
                 tvSearchContentStatus.text = item.status
                 ivSearchContent.setImageResource(item.image)
-                root.setOnClickListener() {
+
+                updateBookmark(item.isBookmark)
+                ivSearchContentBookmark.setOnClickListener {
+                    item.isBookmark = !item.isBookmark
+                    updateBookmark(item.isBookmark)
+                }
+
+                root.setOnClickListener {
                     onItemClick(item)
                 }
             }
-            updateBookmark(item.isBookmark)
-            bookmark.setOnClickListener {
-                item.isBookmark = !item.isBookmark
-                updateBookmark(item.isBookmark)
-            }
+
         }
 
         private fun updateBookmark(isBookmark: Boolean) {
-            if (isBookmark) {
-                bookmark.setImageResource(R.drawable.ic_search_content_fill_bookmark)
-            } else {
-                bookmark.setImageResource(R.drawable.ic_search_content_blank_bookmark)
+            with(binding) {
+                ivSearchContentBookmark.setImageResource(
+                    if (isBookmark) R.drawable.ic_search_content_fill_bookmark
+                    else R.drawable.ic_search_content_blank_bookmark
+                )
             }
         }
     }
 
     inner class GridViewHolder(private val binding: ItemSearchGridContentBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val bookmark: ImageView = itemView.findViewById(R.id.iv_search_content_bookmark)
         fun bind(item: SearchData) {
             with(binding) {
                 tvSearchContentName.text = item.name
@@ -106,22 +107,25 @@ class SearchContentRVAdapter(
                 tvSearchContentAddress.text = item.address
                 tvSearchContentStatus.text = item.status
                 ivSearchContent.setImageResource(item.image)
-                root.setOnClickListener() {
+
+                updateBookmark(item.isBookmark)
+                ivSearchContentBookmark.setOnClickListener {
+                    item.isBookmark = !item.isBookmark
+                    updateBookmark(item.isBookmark)
+                }
+                root.setOnClickListener {
                     onItemClick(item)
                 }
             }
-            updateBookmark(item.isBookmark)
-            bookmark.setOnClickListener {
-                item.isBookmark = !item.isBookmark
-                updateBookmark(item.isBookmark)
-            }
+
         }
 
         private fun updateBookmark(isBookmark: Boolean) {
-            if (isBookmark) {
-                bookmark.setImageResource(R.drawable.ic_search_content_fill_bookmark)
-            } else {
-                bookmark.setImageResource(R.drawable.ic_search_content_blank_bookmark)
+            with(binding) {
+                ivSearchContentBookmark.setImageResource(
+                    if (isBookmark) R.drawable.ic_search_content_fill_bookmark
+                    else R.drawable.ic_search_content_blank_bookmark
+                )
             }
         }
 
