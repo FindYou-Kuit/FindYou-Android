@@ -42,6 +42,10 @@ class SearchWitnessDetailFragment : Fragment() {
             return
         }
         item.let {
+            binding.tvSearchDetailTag.text = item.status.text
+            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
+            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
+
             binding.tvSearchDetailName.text = it.name
             binding.tvSearchDetailFoundDate.text = it.date
             binding.tvSearchContentDetailRescueLocationContent.text = it.address

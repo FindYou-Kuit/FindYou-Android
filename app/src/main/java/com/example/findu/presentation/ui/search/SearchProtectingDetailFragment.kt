@@ -42,6 +42,10 @@ class SearchProtectingDetailFragment : Fragment() {
             return
         }
         item.let {
+            binding.tvSearchDetailTag.text = item.status.text
+            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
+            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
+
             binding.tvSearchDetailName.text = it.name
             binding.tvSearchContentPostDate.text = it.date
             binding.tvSearchContentDetailRescueLocation.text = it.address
