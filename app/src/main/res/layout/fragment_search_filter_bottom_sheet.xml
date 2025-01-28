@@ -4,7 +4,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="506dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/bg_search_filter_bottom_sheet_rounded"
     tools:context=".presentation.ui.search.SearchFilterBottomSheet">
 
@@ -27,7 +27,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
-        android:id="@+id/nsv_search_filter"
+        android:id="@+id/sv_search_filter"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -50,7 +50,7 @@
 
                 <TextView
                     android:id="@+id/tv_search_filter_date"
-                    style="@style/TextAppearance.FindU.Body1_SB_16"
+                    android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/search_filter_date"
@@ -125,7 +125,7 @@
 
                 <TextView
                     android:id="@+id/tv_search_filter_type"
-                    style="@style/TextAppearance.FindU.Body1_SB_16"
+                    android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/search_filter_type"
@@ -221,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                android:paddingBottom="57dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_search_filter_breed">
 
@@ -291,14 +291,14 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_search_filter_gu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_search_radius_8_down"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/actv_search_filter_gu"
-                    tools:listitem="@layout/item_search_location" />
+                        android:id="@+id/rv_search_filter_gu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_search_radius_8_down"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/actv_search_filter_gu"
+                        tools:listitem="@layout/item_search_location" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -312,16 +312,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_filter_confirm"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:paddingTop="57dp"
+        android:paddingBottom="32dp"
+        app:layout_constraintTop_toBottomOf="@id/sv_search_filter">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btn_search_filter_confirm"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:background="@drawable/bg_search_filter_check"
             android:textColor="@color/gray6"
             app:layout_constraintStart_toStartOf="parent"
