@@ -148,7 +148,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:tag="first"
-                        android:text="강아지" />
+                        android:text="@string/search_species_dog" />
 
                     <RadioButton
                         style="@style/searchCustomRadioButtonMiddle"
@@ -157,7 +157,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:tag="middle"
-                        android:text="고양이" />
+                        android:text="@string/search_species_cat" />
 
                     <RadioButton
                         style="@style/searchCustomRadioButtonRight"
@@ -166,7 +166,7 @@
                         android:layout_weight="1"
                         android:padding="0dp"
                         android:tag="last"
-                        android:text="기타" />
+                        android:text="@string/search_species_etc" />
                 </RadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -330,7 +330,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="확인"
+                android:text="@string/search_filter_check"
                 android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -72,6 +72,10 @@
     <string name="search_filter_location_city">시/구</string>
     <string name="search_filter_location_gu">시/구/군</string>
     <string name="search_filter_breed_hint">품종을 입력하세요</string>
+    <string name="search_species_dog">강아지</string>
+    <string name="search_species_cat">고양이</string>
+    <string name="search_species_etc">기타</string>
+    <string name="search_filter_check">확인</string>
 
 
 </resources>

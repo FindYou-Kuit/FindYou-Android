@@ -14,7 +14,9 @@ import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class SearchFragment : Fragment() {
-    private val tabTextList = listOf("전체 보기", "구조 동물 조회", "신고 동물 조회")
+    companion object {
+        val TAB_LIST = listOf("전체 보기", "구조 동물 조회", "신고 동물 조회")
+    }
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -33,8 +35,8 @@ class SearchFragment : Fragment() {
     private fun initViewPager() {
         binding.vpSearchContent.adapter = SearchVPAdapter(requireActivity())
         TabLayoutMediator(binding.tlSearchTab, binding.vpSearchContent) { tab, position ->
-            tab.text = tabTextList[position]
-            tab.contentDescription = tabTextList[position]
+            tab.text = TAB_LIST[position]
+            tab.contentDescription = TAB_LIST[position]
         }.attach()
     }
 

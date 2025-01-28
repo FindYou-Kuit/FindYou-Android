@@ -127,39 +127,13 @@ class SearchAllFragment : Fragment() {
                 binding.rvSearchHorizontalContent.removeItemDecorationAt(0)
             }
 
-            binding.rvSearchHorizontalContent.addItemDecoration(SpacingItemDecoration(10))
+            binding.rvSearchHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
             binding.rvSearchHorizontalContent.layoutManager = GridLayoutManager(requireContext(), 2)
             rvAdapter.setGridMode(true)
         } else {
             binding.rvSearchHorizontalContent.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rvAdapter.setGridMode(false)
-        }
-    }
-}
-
-class SpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
-
-    override fun getItemOffsets(
-        outRect: Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
-    ) {
-        super.getItemOffsets(outRect, view, parent, state)
-
-        val layoutManager = parent.layoutManager
-        if (layoutManager is GridLayoutManager) {
-            val layoutParams = view.layoutParams as GridLayoutManager.LayoutParams
-            val index = layoutParams.spanIndex
-            if (index == 0) {
-                outRect.right = spacing / 2
-            } else {
-                outRect.left = spacing / 2
-            }
-        } else {
-            outRect.top = spacing / 2
-            outRect.bottom = spacing / 2
         }
     }
 }

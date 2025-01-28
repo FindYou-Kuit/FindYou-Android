@@ -76,9 +76,13 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
+    // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
+    // Indicator
     implementation("com.tbuonomo:dotsindicator:5.0")
+    // Material Components
     implementation("com.google.android.material:material:1.9.0")
+    // Calendar 라이브러리
     implementation("io.github.architshah248.calendar:awesome-calendar:2.0.0")
 
 }
