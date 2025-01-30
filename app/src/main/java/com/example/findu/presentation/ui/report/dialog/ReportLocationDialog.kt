@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import com.example.findu.databinding.DialogReportLocationBinding
-import com.example.findu.presentation.ui.report.ReportLocationActivity
 import com.example.findu.presentation.util.PermissionUtils.REQUEST_CODE_LOCATION_PERMISSION
 import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
 import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
