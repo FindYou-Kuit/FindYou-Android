@@ -18,6 +18,7 @@ import com.example.findu.presentation.model.HomeRv
 import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.ui.home.adapter.HomeBannerAdapter
 import com.example.findu.presentation.ui.home.adapter.HomeRVAdapter
+import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
@@ -41,8 +42,16 @@ class HomeFragment : Fragment() {
         setupTodayData()
         setupBanner()
         setupRV()
+        setupReportDialog()
 
         return binding.root
+    }
+
+    private fun setupReportDialog() {
+        binding.cvHomeReport.setOnClickListener {
+            val dialog = HomeReportDialog(requireContext())
+            dialog.show()
+        }
     }
 
     private fun setupRV() {
