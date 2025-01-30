@@ -98,7 +98,7 @@
         android:layout_height="45dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/bg_button_report_dialog"
         android:backgroundTint="@null"
         android:text="@string/report_dialog_set_location"
