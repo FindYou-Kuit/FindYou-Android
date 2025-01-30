@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
-import com.example.findu.databinding.FragmentMissingRepostBinding
+import com.example.findu.databinding.FragmentMissingReportBinding
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
@@ -21,6 +21,7 @@ import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
+import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
@@ -29,7 +30,7 @@ import java.time.LocalDateTime
 import java.util.Calendar
 
 class MissingReportFragment : Fragment() {
-    private var _binding: FragmentMissingRepostBinding? = null
+    private var _binding: FragmentMissingReportBinding? = null
     private val binding get() = _binding!!
     private val reportViewModel by viewModels<ReportViewModel>()
 
@@ -41,7 +42,8 @@ class MissingReportFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMissingRepostBinding.inflate(inflater, container, false)
+        _binding = FragmentMissingReportBinding.inflate(inflater, container, false)
+
 
         binding.root.setKeyboardVisibilityListener {
             binding.clMissingReportLocationContainer.visibility =
