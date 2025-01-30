@@ -15,16 +15,17 @@ class ReportNavigationDialog(
     private val onMissingClick: () -> Unit = {}
 ) : Dialog(context) {
 
-    private var _binding: DialogReportNavigationBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { DialogReportNavigationBinding.inflate(LayoutInflater.from(context)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        _binding = DialogReportNavigationBinding.inflate(LayoutInflater.from(context))
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         setContentView(binding.root)
+
+        setCancelable(false)
+        setCanceledOnTouchOutside(false)
 
         initListener()
     }
