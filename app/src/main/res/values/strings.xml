@@ -104,4 +104,9 @@
     <string name="home_bottom_center">동물보호\n센터 조회</string>
     <string name="home_bottom_part">동물보호\n부서 조회</string>
 
+    <!--dialog home-->
+    <string name="dialog_home_report_report">목격 신고</string>
+    <string name="dialog_home_report_report_phone">전화로 신고</string>
+    <string name="dialog_home_report_report_write">신고글 작성</string>
+
 </resources>
