@@ -1,6 +1,8 @@
 package com.example.findu.presentation.ui.report.dialog
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
@@ -11,9 +13,14 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.marginStart
 import androidx.fragment.app.DialogFragment
 import com.example.findu.databinding.DialogReportLocationBinding
 import com.example.findu.presentation.ui.report.ReportLocationActivity
+import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
+import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 
@@ -35,12 +42,18 @@ class ReportLocationDialog(
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        setUpMapView()
+        if (!hasLocationPermission(requireContext())) {
+            requestLocationPermission(requireActivity())
+        } else {
+            setUpMapView()
+
+        }
         setUpLocationTextView()
         setUpListener()
 
         return binding.root
     }
+
 
     private fun setUpLocationTextView() {
 
@@ -56,6 +69,7 @@ class ReportLocationDialog(
                     }
                 }
         }
+
 
         with(binding.llReportLocationDialogLocation) {
             layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -94,6 +108,8 @@ class ReportLocationDialog(
 
     companion object {
         const val POST_TAG = "postData"
+
+
     }
 
 }
