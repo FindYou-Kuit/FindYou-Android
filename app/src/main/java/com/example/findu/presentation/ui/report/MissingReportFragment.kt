@@ -25,6 +25,7 @@ import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
+import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
@@ -68,7 +69,7 @@ class MissingReportFragment : Fragment() {
         }
 
         with(binding.tvMissingReportLocationAddress) {
-            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            addUnderLine()
 
             setOnClickListener {
                 ReportLocationDialog(

@@ -30,6 +30,7 @@ import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.ui.report.model.ReportDummys
+import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
@@ -73,7 +74,7 @@ class WitnessReportFragment : Fragment() {
         }
 
         with(binding.tvWitnessReportLocationAddress) {
-            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            addUnderLine()
 
             setOnClickListener {
                 ReportLocationDialog(
