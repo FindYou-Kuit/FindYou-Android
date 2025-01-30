@@ -1,17 +1,14 @@
 package com.example.findu.presentation.ui.report.dialog
 
-import android.app.Activity
-import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -20,11 +17,14 @@ import com.example.findu.presentation.ui.report.ReportLocationActivity
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 
-class ReportLocationDialog: DialogFragment(), OnMapReadyCallback {
+class ReportLocationDialog(
+    private val address: String,
+    private val onSetClickListener: (String) -> Unit = {},
+) : DialogFragment(), OnMapReadyCallback {
 
     private val binding by lazy { DialogReportLocationBinding.inflate(layoutInflater) }
 
-    private lateinit var naverMap: NaverMap
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,17 +44,21 @@ class ReportLocationDialog: DialogFragment(), OnMapReadyCallback {
 
     private fun setUpLocationTextView() {
 
-        with(binding.tvReportLocationDialogLocation) {
+        with(binding.tvReportLocationDialogAddress) {
+            text = address
             paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
-            val resultLauncher =
+            resultLauncher =
                 registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                     if (result.resultCode == AppCompatActivity.RESULT_OK) {
                         val data = result.data?.getStringExtra(POST_TAG)
-                        text = data // 결과를 TextView에 표시
+                        binding.tvReportLocationDialogAddress.text = data // 결과를 TextView에 표시
                     }
                 }
+        }
 
+        with(binding.llReportLocationDialogLocation) {
+            layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
             setOnClickListener {
                 val intent = Intent(context, ReportLocationActivity::class.java)
                 resultLauncher.launch(intent)
@@ -70,16 +74,17 @@ class ReportLocationDialog: DialogFragment(), OnMapReadyCallback {
 
     private fun setUpListener() {
         binding.btnReportLocationDialogSet.setOnClickListener {
-
+            val newAddress = binding.tvReportLocationDialogAddress.text.toString()
+            onSetClickListener(newAddress)
+            dismiss()
         }
 
         binding.ivReportLocationDialogClose.setOnClickListener {
-
+            dismiss()
         }
     }
 
-    override fun onMapReady(p0: NaverMap) {
-        naverMap = p0
+    override fun onMapReady(naverMap: NaverMap) {
         with(naverMap.uiSettings) {
             isZoomControlEnabled = false
             isScaleBarEnabled = false

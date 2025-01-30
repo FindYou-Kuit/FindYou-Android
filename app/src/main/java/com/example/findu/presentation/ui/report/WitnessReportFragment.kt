@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.report
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,12 +21,14 @@ import com.example.findu.presentation.type.report.PhysicalFeatureType
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_HEIGHT
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_MAX_COUNT
+import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.LOCATION_TAG
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
+import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
@@ -67,6 +70,19 @@ class WitnessReportFragment : Fragment() {
                 onGoHistoryClick = ::navigateToHistory,
                 onGoHomeClick = ::navigateToHome
             ).show()
+        }
+
+        with(binding.tvWitnessReportLocationAddress) {
+            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+
+            setOnClickListener {
+                ReportLocationDialog(
+                    text.toString(),
+                    onSetClickListener = { newAddress ->
+                        text = newAddress
+                    }
+                ).show(childFragmentManager, LOCATION_TAG)
+            }
         }
     }
 

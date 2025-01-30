@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.report
 
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
+import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
@@ -64,6 +66,19 @@ class MissingReportFragment : Fragment() {
                 onGoHomeClick = ::navigateToHome
             ).show()
         }
+
+        with(binding.tvMissingReportLocationAddress) {
+            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+
+            setOnClickListener {
+                ReportLocationDialog(
+                    text.toString(),
+                    onSetClickListener = { newAddress ->
+                        text = newAddress
+                    }
+                ).show(childFragmentManager, LOCATION_TAG)
+            }
+        }
     }
 
     private fun navigateToHistory() {
@@ -102,7 +117,6 @@ class MissingReportFragment : Fragment() {
         }
     }
 
-
     private fun setUpFeatureAdapter() {
         binding.rvMissingReportPhysicalFeatures.adapter =
             ReportFeatureAdapter(PhysicalFeatureType.entries.toList().map { it.feature })
@@ -119,7 +133,6 @@ class MissingReportFragment : Fragment() {
             layoutManager = GridLayoutManager(context, 3)
         }
     }
-
 
     private fun setUpBreedsAdapter() {
         breedAdapter = ReportBreedAdapter(
@@ -186,5 +199,6 @@ class MissingReportFragment : Fragment() {
         const val SCROLL_OFFSET = 258
         const val DROP_DOWN_HEIGHT = 248
         const val DROP_DOWN_MAX_COUNT = 8
+        const val LOCATION_TAG = "Report Location Dialog"
     }
 }

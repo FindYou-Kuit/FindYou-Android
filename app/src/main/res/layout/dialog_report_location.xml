@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@id/iv_report_location_dialog_location">
 
         <TextView
-            android:id="@+id/tv_report_location_dialog_location"
+            android:id="@+id/tv_report_location_dialog_address"
             android:layout_width="205dp"
             android:layout_height="wrap_content"
             android:text="@string/report_dialog_default_location_address"
@@ -59,8 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:src="@drawable/ic_report_arrow_right_14"
-            app:layout_constraintStart_toEndOf="@id/tv_report_location_dialog_location"
-            app:layout_constraintTop_toTopOf="@id/tv_report_location_dialog_location"
+            app:layout_constraintStart_toEndOf="@id/tv_report_location_dialog_address"
+            app:layout_constraintTop_toTopOf="@id/tv_report_location_dialog_address"
             app:tint="@color/gray4" />
 
     </LinearLayout>
