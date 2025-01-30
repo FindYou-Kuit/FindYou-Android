@@ -9,10 +9,13 @@ import android.view.LayoutInflater
 import com.example.findu.databinding.DialogReportNavigationBinding
 
 class ReportNavigationDialog(
-    context: Context
+    context: Context,
+    private val onCallClick: () -> Unit = {},
+    private val onWitnessClick: () -> Unit = {},
+    private val onMissingClick: () -> Unit = {}
 ) : Dialog(context) {
 
-    private var _binding : DialogReportNavigationBinding? = null
+    private var _binding: DialogReportNavigationBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,10 +30,18 @@ class ReportNavigationDialog(
     }
 
     private fun initListener() {
-        binding.llReportNavigationCallContainer.setOnClickListener {  }
+        binding.llReportNavigationCallContainer.setOnClickListener {
+            onCallClick()
+        }
 
-        binding.llReportNavigationWitnessContainer.setOnClickListener {  }
+        binding.llReportNavigationWitnessContainer.setOnClickListener {
+            onWitnessClick()
+            dismiss()
+        }
 
-        binding.llReportNavigationMissingContainer.setOnClickListener {  }
+        binding.llReportNavigationMissingContainer.setOnClickListener {
+            onMissingClick()
+            dismiss()
+        }
     }
 }
