@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.archit.calendardaterangepicker.customviews.CalendarListener
@@ -11,6 +12,7 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
 import com.example.findu.presentation.ui.search.adapter.SearchFilterBreedRVAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
+import com.example.findu.presentation.ui.search.data.LocationData
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -27,11 +29,30 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     private val selectedBreeds = mutableListOf<String>()
 
     private val locations =
-        listOf("서울특별시", "인천광역시", "세종특별자치시", "울산광역시", "강원특별자치도", "충청남도", "전라남도", "경상남도", "부산광역시")
+        listOf(
+            "전체",
+            "서울특별시",
+            "부산광역시",
+            "인천광역시",
+            "세종특별자치시",
+            "대전광역시",
+            "울산광역시",
+            "경기도",
+            "강원특별자치도",
+            "충청북도",
+            "충청남도",
+            "전북특별자치도",
+            "전라남도",
+            "경상북도",
+            "경상남도",
+            "제주특별자치도",
+        )
     private var city: String? = null
 
-    private val gus = listOf("강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
+    private val gus = listOf("전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
     private var gu: String? = null
+
+    private val locationMap = LocationData.locationMap
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +70,7 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         setLocationSelector()
         return binding.root
     }
+
 
     private fun applyFilters() {
         val filters = mutableListOf<String>()
@@ -71,7 +93,7 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
             filters.remove("null")
 
         val breed = selectedBreeds.toList()
-        if(selectedBreeds.isNotEmpty()){
+        if (selectedBreeds.isNotEmpty()) {
             filters.addAll(breed)
 
         }
@@ -94,15 +116,31 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
 
-
     override fun getTheme(): Int = R.style.searchFilterBottomSheetDialogTheme
 
     private fun setLocationSelector() {
+        binding.actvSearchFilterGu.isEnabled = false
+
         cityAdapter = SearchFilterLocationRVAdapter(locations, city) { newLocation ->
             city = newLocation
             updateSelectedLocation()
-        }
 
+            if (newLocation == "전체") {
+                binding.actvSearchFilterGu.isEnabled = false
+                binding.actvSearchFilterGu.setText("")
+                gu = null
+            } else {
+                binding.actvSearchFilterGu.isEnabled = true
+                val guList = locationMap[newLocation] ?: listOf("")
+                guAdapter = SearchFilterLocationRVAdapter(guList, gu) { newGu ->
+                    gu = newGu
+                    updateSelectedLocation()
+                }
+                binding.rvSearchFilterGu.adapter = guAdapter
+                binding.actvSearchFilterGu.setText("")
+            }
+
+        }
         guAdapter = SearchFilterLocationRVAdapter(gus, gu) { newGu ->
             gu = newGu
             updateSelectedLocation()
@@ -124,12 +162,14 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         binding.rvSearchFilterGu.adapter = guAdapter
 
         binding.actvSearchFilterGu.setOnClickListener {
-            if (binding.rvSearchFilterGu.visibility == View.GONE) {
-                binding.rvSearchFilterGu.visibility = View.VISIBLE
-                binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8_up)
-            } else {
-                binding.rvSearchFilterGu.visibility = View.GONE
-                binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8)
+            if (binding.actvSearchFilterGu.isEnabled) {
+                if (binding.rvSearchFilterGu.visibility == View.GONE) {
+                    binding.rvSearchFilterGu.visibility = View.VISIBLE
+                    binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8_up)
+                } else {
+                    binding.rvSearchFilterGu.visibility = View.GONE
+                    binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8)
+                }
             }
         }
     }
@@ -145,7 +185,8 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setBreedSelector() {
-        breedAdapter = SearchFilterBreedRVAdapter(breeds, selectedBreeds) { updateSelectedBreeds() }
+        breedAdapter =
+            SearchFilterBreedRVAdapter(breeds, selectedBreeds) { updateSelectedBreeds() }
         binding.rvSearchFilterBreeds.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSearchFilterBreeds.adapter = breedAdapter
 

@@ -266,7 +266,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_search_filter_city"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="273dp"
                         android:background="@drawable/bg_search_radius_8_down"
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
@@ -302,7 +302,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_search_filter_gu"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="273dp"
                         android:background="@drawable/bg_search_radius_8_down"
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
