@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
@@ -62,7 +64,47 @@ class SearchDisappearDetailFragment : Fragment() {
 
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
-        binding.vpSearchDetailDots.attachTo(binding.vpSearchDetailImg)
+        binding.vpSearchDetailImg.setCurrentItem(1, false)
+        val dotsCount = imageList.size
+        val dots = Array(dotsCount) { View(requireContext()) }
+        val dotsContainer = binding.llDotsContainer
+
+        dotsContainer.removeAllViews()
+        for (i in dots.indices) {
+            val dot = View(requireContext()).apply {
+                layoutParams = LinearLayout.LayoutParams(6, 6).apply {
+                    marginStart = 3
+                    marginEnd = 3
+                }
+                setBackgroundResource(R.drawable.ic_search_indicator_inactive)
+            }
+            dotsContainer.addView(dot)
+            dots[i] = dot
+        }
+        dots[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
+
+        binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                val realPosition = when (position) {
+                    0 -> imageList.size - 1
+                    imageList.size + 1 -> 0
+                    else -> position - 1
+                }
+
+                dots.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
+                dots[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
+
+                binding.vpSearchDetailImg.postDelayed({
+                    when (position) {
+                        0 -> binding.vpSearchDetailImg.setCurrentItem(imageList.size, false)
+                        imageList.size + 1 -> binding.vpSearchDetailImg.setCurrentItem(1, false)
+                    }
+                }, 200)
+            }
+        })
 
         binding.btnViewLocation.setOnClickListener(){
             openNaverMap(item.address)

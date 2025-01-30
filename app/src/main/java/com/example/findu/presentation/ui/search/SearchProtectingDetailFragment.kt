@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
 import com.example.findu.presentation.ui.search.model.SearchDetailData
@@ -19,10 +21,10 @@ class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailProtectingBinding
     private var isDetailVisible = false
     private val imageList = listOf(
+        SearchDetailData(R.drawable.img_search_detail_witness_content),
         SearchDetailData(R.drawable.img_search_detail),
         SearchDetailData(R.drawable.img_search_detail),
-        SearchDetailData(R.drawable.img_search_detail),
-        SearchDetailData(R.drawable.img_search_detail)
+        SearchDetailData(R.drawable.img_search_detail_witness_content)
     )
 
     override fun onCreateView(
@@ -64,7 +66,48 @@ class SearchProtectingDetailFragment : Fragment() {
 
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
-        binding.vpSearchDetailDots.attachTo(binding.vpSearchDetailImg)
+        binding.vpSearchDetailImg.setCurrentItem(1, false)
+        val dotsCount = imageList.size
+        val dots = Array(dotsCount) { View(requireContext()) }
+        val dotsContainer = binding.llDotsContainer
+
+        dotsContainer.removeAllViews()
+        for (i in dots.indices) {
+            val dot = View(requireContext()).apply {
+                layoutParams = LinearLayout.LayoutParams(6, 6).apply {
+                    marginStart = 3
+                    marginEnd = 3
+                }
+                setBackgroundResource(R.drawable.ic_search_indicator_inactive)
+            }
+            dotsContainer.addView(dot)
+            dots[i] = dot
+        }
+        dots[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
+
+        binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                val realPosition = when (position) {
+                    0 -> imageList.size - 1
+                    imageList.size + 1 -> 0
+                    else -> position - 1
+                }
+
+                dots.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
+                dots[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
+
+                binding.vpSearchDetailImg.postDelayed({
+                    when (position) {
+                        0 -> binding.vpSearchDetailImg.setCurrentItem(imageList.size, false)
+                        imageList.size + 1 -> binding.vpSearchDetailImg.setCurrentItem(1, false)
+                    }
+                }, 200)
+            }
+        })
+
 
         binding.tvProtectCenterPhoneNumber.setOnClickListener {
             call(binding.tvProtectCenterPhoneNumber.text.toString())
@@ -77,26 +120,34 @@ class SearchProtectingDetailFragment : Fragment() {
         binding.btnViewLocation.setOnClickListener {
             openNaverMap(item.address)
         }
-        binding.btnShowFoundPlace.setOnClickListener{
+        binding.btnShowFoundPlace.setOnClickListener {
             openNaverMap(item.address)
         }
 
     }
+
     @SuppressLint("QueryPermissionsNeeded")
     private fun openNaverMap(address: String) {
         if (address.isNotEmpty()) {
             val encodedAddress = Uri.encode(address)
-            val uri = Uri.parse("nmap://search?query=$encodedAddress&appname=${requireContext().packageName}")
+            val uri =
+                Uri.parse("nmap://search?query=$encodedAddress&appname=${requireContext().packageName}")
             val intent = Intent(Intent.ACTION_VIEW, uri)
 
             if (intent.resolveActivity(requireContext().packageManager) != null) {
                 startActivity(intent)
             } else {
                 try {
-                    val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap"))
+                    val playStoreIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=com.nhn.android.nmap")
+                    )
                     startActivity(playStoreIntent)
                 } catch (e: ActivityNotFoundException) {
-                    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.nhn.android.nmap"))
+                    val webIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.nhn.android.nmap")
+                    )
                     startActivity(webIntent)
                 }
             }
