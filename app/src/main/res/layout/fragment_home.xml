@@ -188,6 +188,7 @@
                             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_home_report"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_home_rounded_button">
@@ -211,7 +212,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cl_home_find"
+                    android:id="@+id/cv_home_find"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
@@ -248,6 +249,7 @@
                             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_home_find"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_home_rounded_button">
