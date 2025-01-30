@@ -35,7 +35,8 @@ class HomeReportDialog(
         }
 
         binding.llDialogHomeReportPhone.setOnClickListener {
-
+            val dialog = HomeReportDetailDialog(context, this)
+            dialog.show()
         }
 
         binding.llDialogHomeReportWrite.setOnClickListener {
