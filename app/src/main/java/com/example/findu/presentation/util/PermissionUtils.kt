@@ -24,7 +24,7 @@ object PermissionUtils {
     fun hasLocationPermission(
         context: Context
     ): Boolean {
-        for (permission in PERMISSIONS) {
+        for (permission in LOCATION_PERMISSIONS) {
             if (ContextCompat.checkSelfPermission(context, permission)
                 != PackageManager.PERMISSION_GRANTED
             ) return false
@@ -32,8 +32,8 @@ object PermissionUtils {
         return true
     }
 
-    private const val REQUEST_CODE_LOCATION_PERMISSION = 1
-    private val PERMISSIONS = arrayOf(
+    const val REQUEST_CODE_LOCATION_PERMISSION = 1
+    private val LOCATION_PERMISSIONS = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
