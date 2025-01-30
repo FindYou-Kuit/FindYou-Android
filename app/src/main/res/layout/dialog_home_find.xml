@@ -6,18 +6,7 @@
     android:background="@drawable/bg_report_dialog_rd12">
 
     <ImageView
-        android:id="@+id/iv_dialog_home_report_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_dialog_back"
-        app:layout_constraintBottom_toBottomOf="@id/iv_dialog_home_report_close"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_dialog_home_report_close" />
-
-    <ImageView
-        android:id="@+id/iv_dialog_home_report_close"
+        android:id="@+id/iv_dialog_home_find_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -28,11 +17,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_dialog_home_report"
+        android:id="@+id/tv_dialog_find_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="@string/dialog_home_report"
+        android:text="@string/dialog_home_find"
         android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,13 +35,43 @@
         android:paddingVertical="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_dialog_home_report">
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_find_report">
 
         <LinearLayout
-            android:id="@+id/ll_dialog_home_report_phone"
+            android:id="@+id/ll_dialog_home_find_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_container_report_nav"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="11dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_report_dialog_write_red"
+                app:shapeAppearanceOverlay="@style/DialogRoundedImageView"
+                app:strokeColor="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:text="@string/dialog_home_find_report"
+                android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_dialog_home_find_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_container_report_nav"
             android:elevation="2dp"
             android:gravity="center"
@@ -74,37 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
-                android:text="@string/dialog_home_report_phone"
-                android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_dialog_home_report_write"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_container_report_nav"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="11dp"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img_dialog_bell_yellow"
-                app:shapeAppearanceOverlay="@style/DialogRoundedImageView"
-                app:strokeColor="@null" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:text="@string/dialog_home_report_write"
+                android:text="@string/dialog_home_find_search"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16" />
 
         </LinearLayout>
