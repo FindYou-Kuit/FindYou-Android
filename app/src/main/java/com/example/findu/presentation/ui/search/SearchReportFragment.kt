@@ -51,6 +51,10 @@ class SearchReportFragment : Fragment() {
             }
         }
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.cgSearchGroupFilters.removeAllViews()
+    }
 
 
     private fun updateFilterChips(filters: List<String>?) {
