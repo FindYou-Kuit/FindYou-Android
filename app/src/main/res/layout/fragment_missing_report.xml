@@ -534,7 +534,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:text="@string/dummy_location_address"
+                android:text="@string/report_location"
                 android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
                 android:textColor="@color/gray4" />
 
