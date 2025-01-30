@@ -3,10 +3,13 @@ package com.example.findu.presentation.util
 import android.content.Context
 import android.graphics.Rect
 import android.os.IBinder
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.ScrollView
+import android.widget.TextView
 
 object ViewUtils {
     fun Context.dpToPx(dp: Float): Int {
@@ -48,4 +51,10 @@ object ViewUtils {
         }
     }
 
+    fun TextView.addUnderLine() {
+        val content = SpannableString(this.text.toString())
+        content.setSpan(UnderlineSpan(), 0, text.length, 0)
+        this.text = content
+
+    }
 }

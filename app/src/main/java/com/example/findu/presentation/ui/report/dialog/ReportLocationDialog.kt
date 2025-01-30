@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,7 @@ import com.example.findu.databinding.DialogReportLocationBinding
 import com.example.findu.presentation.ui.report.ReportLocationActivity
 import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
 import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
+import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 
@@ -59,7 +62,7 @@ class ReportLocationDialog(
 
         with(binding.tvReportLocationDialogAddress) {
             text = address
-            paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            addUnderLine()
 
             resultLauncher =
                 registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -70,14 +73,15 @@ class ReportLocationDialog(
                 }
         }
 
-
-        with(binding.llReportLocationDialogLocation) {
+        with(binding.clReportLocationDialogLocation) {
             layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+
             setOnClickListener {
                 val intent = Intent(context, ReportLocationActivity::class.java)
                 resultLauncher.launch(intent)
             }
         }
+
     }
 
 
