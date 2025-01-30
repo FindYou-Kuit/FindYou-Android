@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import com.example.findu.R
@@ -14,7 +15,9 @@ import kotlinx.serialization.StringFormat
 
 class ReportFinishDialog(
     context: Context,
-    private val reportType: ReportType
+    private val reportType: ReportType,
+    private val onGoHistoryClick: () -> Unit = {},
+    private val onGoHomeClick: () -> Unit = {}
 ) : Dialog(context) {
 
     private var _binding: DialogReportFinishedBinding? = null
@@ -44,8 +47,13 @@ class ReportFinishDialog(
     }
 
     private fun initListener() {
-        binding.btnReportFinishDialogGoHistory.setOnClickListener { }
+        binding.btnReportFinishDialogGoHistory.setOnClickListener {
+            onGoHistoryClick()
+        }
 
-        binding.btnReportFinishDialogGoHome.setOnClickListener { }
+        binding.btnReportFinishDialogGoHome.setOnClickListener {
+            onGoHomeClick()
+            dismiss()
+        }
     }
 }

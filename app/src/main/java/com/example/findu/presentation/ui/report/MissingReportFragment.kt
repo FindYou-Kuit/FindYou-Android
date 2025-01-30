@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
@@ -41,16 +42,36 @@ class MissingReportFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMissingReportBinding.inflate(inflater, container, false)
 
+        initListener()
 
+        return binding.root
+    }
+
+    private fun initListener() {
         binding.root.setKeyboardVisibilityListener {
             binding.clMissingReportLocationContainer.visibility =
                 if (it) View.GONE else View.VISIBLE
         }
 
-        return binding.root
+        binding.btnMissingReportOkay.setOnClickListener {
+            ReportFinishDialog(
+                requireContext(),
+                ReportType.MISSING,
+                onGoHistoryClick = ::navigateToHistory,
+                onGoHomeClick = ::navigateToHome
+            ).show()
+        }
+    }
+
+    private fun navigateToHistory() {
+        // TODO : 신고 내역으로 이동하는 기능 추가
+    }
+
+    private fun navigateToHome() {
+        findNavController().popBackStack()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

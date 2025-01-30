@@ -50,12 +50,22 @@
         android:id="@+id/fragment_witness_report"
         android:name="com.example.findu.presentation.ui.report.WitnessReportFragment"
         android:label="Witness Report"
-        tools:layout="@layout/fragment_witness_report" />
+        tools:layout="@layout/fragment_witness_report" >
+        <action
+            android:id="@+id/action_fragment_witness_report_to_fragment_home"
+            app:popUpToInclusive="true"
+            app:destination="@id/fragment_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_missing_report"
         android:name="com.example.findu.presentation.ui.report.MissingReportFragment"
         android:label="Missing Report"
-        tools:layout="@layout/fragment_missing_report" />
+        tools:layout="@layout/fragment_missing_report" >
+        <action
+            android:id="@+id/action_fragment_missing_report_to_fragment_home"
+            app:popUpToInclusive="true"
+            app:destination="@id/fragment_home" />
+    </fragment>
 
 </navigation>
