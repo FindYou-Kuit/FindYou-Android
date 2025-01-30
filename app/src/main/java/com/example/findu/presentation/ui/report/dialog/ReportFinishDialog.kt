@@ -20,16 +20,17 @@ class ReportFinishDialog(
     private val onGoHomeClick: () -> Unit = {}
 ) : Dialog(context) {
 
-    private var _binding: DialogReportFinishedBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { DialogReportFinishedBinding.inflate(LayoutInflater.from(context)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        _binding = DialogReportFinishedBinding.inflate(LayoutInflater.from(context))
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         setContentView(binding.root)
+
+        setCancelable(false)
+        setCanceledOnTouchOutside(false)
 
         when (reportType) {
             ReportType.MISSING -> {

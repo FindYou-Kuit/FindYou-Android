@@ -20,11 +20,9 @@ import com.example.findu.presentation.ui.report.ReportLocationActivity
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 
-class ReportLocationDialog(
-) : DialogFragment(), OnMapReadyCallback {
+class ReportLocationDialog: DialogFragment(), OnMapReadyCallback {
 
-    private var _binding: DialogReportLocationBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { DialogReportLocationBinding.inflate(layoutInflater) }
 
     private lateinit var naverMap: NaverMap
 
@@ -35,7 +33,6 @@ class ReportLocationDialog(
     ): View {
         super.onCreate(savedInstanceState)
 
-        _binding = DialogReportLocationBinding.inflate(layoutInflater)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         setUpMapView()
