@@ -51,7 +51,7 @@
                 android:id="@+id/iv_search_content_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_content_blank_bookmark"
+                android:src="@drawable/ic_search_blank_bookmark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

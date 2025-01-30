@@ -93,8 +93,8 @@ class SearchContentRVAdapter(
         private fun updateBookmark(isBookmark: Boolean) {
             with(binding) {
                 ivSearchContentBookmark.setImageResource(
-                    if (isBookmark) R.drawable.ic_search_content_fill_bookmark
-                    else R.drawable.ic_search_content_blank_bookmark
+                    if (isBookmark) R.drawable.ic_search_fill_bookmark
+                    else R.drawable.ic_search_blank_bookmark
                 )
             }
         }
@@ -128,11 +128,12 @@ class SearchContentRVAdapter(
         private fun updateBookmark(isBookmark: Boolean) {
             with(binding) {
                 ivSearchContentBookmark.setImageResource(
-                    if (isBookmark) R.drawable.ic_search_content_fill_bookmark
-                    else R.drawable.ic_search_content_blank_bookmark
+                    if (isBookmark) R.drawable.ic_search_fill_bookmark
+                    else R.drawable.ic_search_blank_bookmark_grid
                 )
             }
         }
+
 
     }
 }

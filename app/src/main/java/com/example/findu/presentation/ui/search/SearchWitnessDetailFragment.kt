@@ -2,7 +2,6 @@ package com.example.findu.presentation.ui.search
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -103,8 +102,8 @@ class SearchWitnessDetailFragment : Fragment() {
     }
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
-            if (bookmark) R.drawable.ic_search_content_fill_bookmark
-            else R.drawable.ic_search_content_blank_bookmark
+            if (bookmark) R.drawable.ic_search_fill_bookmark
+            else R.drawable.ic_search_blank_bookmark
         )
     }
 
