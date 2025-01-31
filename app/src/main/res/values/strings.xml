@@ -50,6 +50,7 @@
     <string name="report_gender_title">어떤 성별인가요?</string>
     <string name="report_color_title">반려동물의 털색을 표시해 주세요!</string>
     <string name="report_feature_title">특징을 체크해주세요!</string>
+    <string name="report_location">주소를 입력해주세요</string>
 
     <!--  colors  -->
     <string name="black_color">검정색</string>

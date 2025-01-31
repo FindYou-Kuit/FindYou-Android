@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report
+package com.example.findu.presentation.ui.report.dialog
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,7 +8,6 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewAssetLoader.AssetsPathHandler

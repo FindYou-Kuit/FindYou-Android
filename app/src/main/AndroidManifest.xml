@@ -20,7 +20,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.report.ReportLocationActivity"
+            android:name=".presentation.ui.report.dialog.ReportLocationActivity"
             android:exported="false" />
 
         <meta-data

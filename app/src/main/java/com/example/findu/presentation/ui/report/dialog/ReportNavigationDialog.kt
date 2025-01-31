@@ -9,28 +9,40 @@ import android.view.LayoutInflater
 import com.example.findu.databinding.DialogReportNavigationBinding
 
 class ReportNavigationDialog(
-    context: Context
+    context: Context,
+    private val onCallClick: () -> Unit = {},
+    private val onWitnessClick: () -> Unit = {},
+    private val onMissingClick: () -> Unit = {}
 ) : Dialog(context) {
 
-    private var _binding : DialogReportNavigationBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { DialogReportNavigationBinding.inflate(LayoutInflater.from(context)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        _binding = DialogReportNavigationBinding.inflate(LayoutInflater.from(context))
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         setContentView(binding.root)
+
+        setCancelable(false)
+        setCanceledOnTouchOutside(false)
 
         initListener()
     }
 
     private fun initListener() {
-        binding.llReportNavigationCallContainer.setOnClickListener {  }
+        binding.llReportNavigationCallContainer.setOnClickListener {
+            onCallClick()
+        }
 
-        binding.llReportNavigationWitnessContainer.setOnClickListener {  }
+        binding.llReportNavigationWitnessContainer.setOnClickListener {
+            onWitnessClick()
+            dismiss()
+        }
 
-        binding.llReportNavigationMissingContainer.setOnClickListener {  }
+        binding.llReportNavigationMissingContainer.setOnClickListener {
+            onMissingClick()
+            dismiss()
+        }
     }
 }

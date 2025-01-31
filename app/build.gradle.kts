@@ -80,6 +80,9 @@ dependencies {
     // Naver Map
     implementation(libs.map.sdk)
 
+    // Location Provider Client
+    implementation(libs.play.services.location)
+
     // Web View
     implementation(libs.androidx.webkit)
     
