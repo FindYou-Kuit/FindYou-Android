@@ -42,47 +42,34 @@ class SearchWitnessDetailFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
-        item.let {
-            binding.tvSearchDetailTag.text = item.status.text
-            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
-            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
+        initTagView(item)
+        initBookmarkUI(item)
+        initListener()
+        initMapButtons(item)
+        initViewPager()
 
-            binding.tvSearchDetailName.text = it.name
-            binding.tvSearchDetailFoundDate.text = it.date
-            binding.tvSearchContentDetailRescueLocationContent.text = it.address
-        }
-
-        updateBookmarkUI(item.isBookmark)
-        binding.ivSearchDetailBookmark.setOnClickListener {
-            item.isBookmark = !item.isBookmark
-            updateBookmarkUI(item.isBookmark)
-        }
-
-        setContentVisibility()
-        binding.ivSearchDetailBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
-
+    }
+    private fun initViewPager(){
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailImg.setCurrentItem(1, false)
-        val dotsCount = imageList.size
-        val dots = Array(dotsCount) { View(requireContext()) }
-        val dotsContainer = binding.llDotsContainer
+        val indicatorCount = imageList.size
+        val pageIndicators = Array(indicatorCount) { View(requireContext()) }
+        val indicatorContainer = binding.llDotsContainer
 
-        dotsContainer.removeAllViews()
-        for (i in dots.indices) {
-            val dot = View(requireContext()).apply {
+        indicatorContainer.removeAllViews()
+        for (i in pageIndicators.indices) {
+            val indicator = View(requireContext()).apply {
                 layoutParams = LinearLayout.LayoutParams(6, 6).apply {
                     marginStart = 3
                     marginEnd = 3
                 }
                 setBackgroundResource(R.drawable.ic_search_indicator_inactive)
             }
-            dotsContainer.addView(dot)
-            dots[i] = dot
+            indicatorContainer.addView(indicator)
+            pageIndicators[i] = indicator
         }
-        dots[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
+        pageIndicators[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
 
         binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -95,8 +82,8 @@ class SearchWitnessDetailFragment : Fragment() {
                     else -> position - 1
                 }
 
-                dots.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
-                dots[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
+                pageIndicators.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
+                pageIndicators[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
 
                 binding.vpSearchDetailImg.postDelayed({
                     when (position) {
@@ -106,16 +93,47 @@ class SearchWitnessDetailFragment : Fragment() {
                 }, 200)
             }
         })
-
-
-        binding.btnViewLocation.setOnClickListener(){
-            openNaverMap(item.address)
-        }
-        binding.btnShowFoundPlace.setOnClickListener(){
-            openNaverMap(item.address)
-        }
-
     }
+
+    private fun initMapButtons(item: SearchData) {
+        binding.btnViewLocation.setOnClickListener{
+            openNaverMap(item.address)
+        }
+        binding.btnShowFoundPlace.setOnClickListener{
+            openNaverMap(item.address)
+        }
+    }
+
+    private fun initListener() {
+        binding.clSearchShowMore.setOnClickListener{
+            binding.clSearchContentDetail.visibility = View.VISIBLE
+            binding.clSearchShowMore.visibility = View.INVISIBLE
+        }
+        binding.ivSearchDetailBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+
+    private fun initBookmarkUI(item: SearchData) {
+        updateBookmarkUI(item.isBookmark)
+        binding.ivSearchDetailBookmark.setOnClickListener {
+            item.isBookmark = !item.isBookmark
+            updateBookmarkUI(item.isBookmark)
+        }
+    }
+
+    private fun initTagView(item: SearchData) {
+        item.let {
+            binding.tvSearchDetailTag.text = item.status.text
+            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
+            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
+
+            binding.tvSearchDetailName.text = it.name
+            binding.tvSearchDetailFoundDate.text = it.date
+            binding.tvSearchContentDetailRescueLocationContent.text = it.address
+        }
+    }
+
     @SuppressLint("QueryPermissionsNeeded")
     private fun openNaverMap(address: String) {
         if (address.isNotEmpty()) {
@@ -136,21 +154,12 @@ class SearchWitnessDetailFragment : Fragment() {
             }
         }
     }
-    private fun setContentVisibility() {
-        binding.clSearchShowMore.setOnClickListener(){
-            binding.clSearchContentDetail.visibility = View.VISIBLE
-            binding.clSearchShowMore.visibility = View.INVISIBLE
-        }
 
-    }
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
             if (bookmark) R.drawable.ic_search_fill_bookmark
             else R.drawable.ic_search_blank_bookmark
         )
     }
-
-
-
 
 }

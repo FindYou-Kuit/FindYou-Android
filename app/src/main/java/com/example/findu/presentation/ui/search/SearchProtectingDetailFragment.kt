@@ -43,47 +43,37 @@ class SearchProtectingDetailFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
-        item.let {
-            binding.tvSearchDetailTag.text = item.status.text
-            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
-            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
-
-            binding.tvSearchDetailName.text = it.name
-            binding.tvSearchContentPostDate.text = it.date
-            binding.tvSearchContentDetailRescueLocation.text = it.address
-        }
-
-        updateBookmarkUI(item.isBookmark)
-        binding.ivSearchDetailBookmark.setOnClickListener {
-            item.isBookmark = !item.isBookmark
-            updateBookmarkUI(item.isBookmark)
-        }
-
+        initTagView(item)
+        initBookmarkUI(item)
         setContentVisibility()
-        binding.ivSearchDetailBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+        initBackButton()
+        initMapButtons(item)
+        initCallButtons()
+        initViewPager()
 
+    }
+
+    private fun initViewPager() {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailImg.setCurrentItem(1, false)
-        val dotsCount = imageList.size
-        val dots = Array(dotsCount) { View(requireContext()) }
-        val dotsContainer = binding.llDotsContainer
+        val indicatorCount = imageList.size
+        val pageIndicators = Array(indicatorCount) { View(requireContext()) }
+        val indicatorContainer = binding.llDotsContainer
 
-        dotsContainer.removeAllViews()
-        for (i in dots.indices) {
-            val dot = View(requireContext()).apply {
+        indicatorContainer.removeAllViews()
+        for (i in pageIndicators.indices) {
+            val indicator = View(requireContext()).apply {
                 layoutParams = LinearLayout.LayoutParams(6, 6).apply {
                     marginStart = 3
                     marginEnd = 3
                 }
                 setBackgroundResource(R.drawable.ic_search_indicator_inactive)
             }
-            dotsContainer.addView(dot)
-            dots[i] = dot
+            indicatorContainer.addView(indicator)
+            pageIndicators[i] = indicator
         }
-        dots[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
+        pageIndicators[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
 
         binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -96,8 +86,8 @@ class SearchProtectingDetailFragment : Fragment() {
                     else -> position - 1
                 }
 
-                dots.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
-                dots[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
+                pageIndicators.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
+                pageIndicators[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
 
                 binding.vpSearchDetailImg.postDelayed({
                     when (position) {
@@ -108,7 +98,15 @@ class SearchProtectingDetailFragment : Fragment() {
             }
         })
 
+    }
 
+    private fun initBackButton() {
+        binding.ivSearchDetailBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+
+    private fun initCallButtons() {
         binding.tvProtectCenterPhoneNumber.setOnClickListener {
             call(binding.tvProtectCenterPhoneNumber.text.toString())
         }
@@ -116,14 +114,43 @@ class SearchProtectingDetailFragment : Fragment() {
         binding.tvJurisdictionPhoneNumber.setOnClickListener {
             call(binding.tvJurisdictionPhoneNumber.text.toString())
         }
+    }
 
+    private fun call(phoneNumber: String) {
+        if (phoneNumber.isNotEmpty()) {
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:$phoneNumber")
+            }
+            startActivity(intent)
+        }
+    }
+
+    private fun initMapButtons(item: SearchData) {
         binding.btnViewLocation.setOnClickListener {
             openNaverMap(item.address)
         }
         binding.btnShowFoundPlace.setOnClickListener {
             openNaverMap(item.address)
         }
+    }
 
+    private fun initBookmarkUI(item: SearchData) {
+        updateBookmarkUI(item.isBookmark)
+        binding.ivSearchDetailBookmark.setOnClickListener {
+            item.isBookmark = !item.isBookmark
+            updateBookmarkUI(item.isBookmark)
+        }
+    }
+
+    private fun initTagView(item: SearchData) {
+        item.let {
+            binding.tvSearchDetailTag.text = item.status.text
+            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
+            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
+            binding.tvSearchDetailName.text = it.name
+            binding.tvSearchContentPostDate.text = it.date
+            binding.tvSearchContentDetailRescueLocation.text = it.address
+        }
     }
 
     @SuppressLint("QueryPermissionsNeeded")
@@ -151,16 +178,6 @@ class SearchProtectingDetailFragment : Fragment() {
                     startActivity(webIntent)
                 }
             }
-        }
-    }
-
-
-    private fun call(phoneNumber: String) {
-        if (phoneNumber.isNotEmpty()) {
-            val intent = Intent(Intent.ACTION_DIAL).apply {
-                data = Uri.parse("tel:$phoneNumber")
-            }
-            startActivity(intent)
         }
     }
 
