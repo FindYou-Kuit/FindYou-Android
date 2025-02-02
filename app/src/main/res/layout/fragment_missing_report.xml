@@ -552,12 +552,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="26dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/bg_button_report_okay"
+            android:background="@drawable/bg_button_report_confirm"
             android:enabled="false"
             android:stateListAnimator="@null"
-            android:text="@string/report_okay"
+            android:text="@string/report_confirm"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
-            android:textColor="@color/text_okay_color"
+            android:textColor="@color/text_confirm_color"
             app:layout_constraintTop_toBottomOf="@id/ll_missing_report_location_select_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
