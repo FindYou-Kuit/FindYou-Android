@@ -232,43 +232,33 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         endSelectionDate.add(Calendar.DATE, 40)
 
         binding.cvSearchFilterCalender.setCalendarListener(object : CalendarListener {
-            @SuppressLint("SetTextI18n")
             override fun onFirstDateSelected(startDate: Calendar) {
-                binding.tvSearchFilterDateInput.text =
-                    "${startDate.get(Calendar.YEAR)}.${startDate.get(Calendar.MONTH) + 1}.${
-                        startDate.get(
-                            Calendar.DAY_OF_MONTH
-                        )
-                    } ~ "
+                binding.tvSearchFilterDateInput.text = getString(
+                    R.string.date_single,
+                    startDate.get(Calendar.YEAR),
+                    startDate.get(Calendar.MONTH) + 1,
+                    startDate.get(Calendar.DAY_OF_MONTH)
+                )
                 binding.tvSearchFilterDateInput.setTextColor(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.gray6
                     )
                 )
-
             }
 
-            @SuppressLint("SetTextI18n")
             override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
-                binding.tvSearchFilterDateInput.text =
-                    "${startDate.get(Calendar.YEAR)}.${startDate.get(Calendar.MONTH) + 1}.${
-                        startDate.get(
-                            Calendar.DAY_OF_MONTH
-                        )
-                    } ~ " +
-                            "${endDate.get(Calendar.YEAR)}.${endDate.get(Calendar.MONTH) + 1}.${
-                                endDate.get(
-                                    Calendar.DAY_OF_MONTH
-                                )
-                            }"
+                binding.tvSearchFilterDateInput.text = getString(
+                    R.string.date_range,
+                    startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH) + 1, startDate.get(Calendar.DAY_OF_MONTH),
+                    endDate.get(Calendar.YEAR), endDate.get(Calendar.MONTH) + 1, endDate.get(Calendar.DAY_OF_MONTH)
+                )
                 binding.tvSearchFilterDateInput.setTextColor(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.gray6
                     )
                 )
-
             }
         })
 
