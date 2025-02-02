@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.search.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -21,10 +20,8 @@ class SearchContentRVAdapter(
 
     private var isGridMode = false
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setGridMode(enabled: Boolean) {
         isGridMode = enabled
-        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
