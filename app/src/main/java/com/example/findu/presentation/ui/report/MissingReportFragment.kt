@@ -59,7 +59,7 @@ class MissingReportFragment : Fragment() {
                 if (it) View.GONE else View.VISIBLE
         }
 
-        binding.btnMissingReportOkay.setOnClickListener {
+        binding.btnMissingReportConfirm.setOnClickListener {
             ReportFinishDialog(
                 requireContext(),
                 ReportType.MISSING,

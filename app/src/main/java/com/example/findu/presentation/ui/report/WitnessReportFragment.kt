@@ -64,7 +64,7 @@ class WitnessReportFragment : Fragment() {
                 if (it) View.GONE else View.VISIBLE
         }
 
-        binding.btnWitnessReportOkay.setOnClickListener {
+        binding.btnWitnessReportConfirm.setOnClickListener {
             ReportFinishDialog(
                 requireContext(),
                 ReportType.MISSING,
