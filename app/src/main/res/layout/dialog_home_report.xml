@@ -8,17 +8,6 @@
     android:clipToPadding="false">
 
     <ImageView
-        android:id="@+id/iv_dialog_home_report_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_dialog_back"
-        app:layout_constraintBottom_toBottomOf="@id/iv_dialog_home_report_close"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_dialog_home_report_close" />
-
-    <ImageView
         android:id="@+id/iv_dialog_home_report_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
