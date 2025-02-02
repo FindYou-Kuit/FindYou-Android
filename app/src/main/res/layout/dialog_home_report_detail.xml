@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_report_dialog_rd12"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <ImageView
+        android:id="@+id/iv_dialog_home_report_detail_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_dialog_back"
+        app:layout_constraintBottom_toBottomOf="@id/iv_dialog_home_report_detail_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_dialog_home_report_detail_close" />
+
+    <ImageView
+        android:id="@+id/iv_dialog_home_report_detail_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="23dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_report_dialog_close_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_dialog_home_report_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/dialog_home_report_detail"
+        android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="248dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_home_report_detail">
+
+        <LinearLayout
+            android:id="@+id/dialog_home_report_detail_part"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_container_report_nav"
+            android:elevation="2dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="19dp"
+                android:contentDescription="@string/dialog_home_report_detail_part"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_dialog_search_blue"
+                app:shapeAppearanceOverlay="@style/DialogRoundedImageView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:text="@string/dialog_home_report_detail_part"
+                android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="17dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_report_arrow_right_14" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_home_report_detail_center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/bg_container_report_nav"
+            android:elevation="2dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="19dp"
+                android:contentDescription="@string/dialog_home_report_detail_center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_dialog_phone_green"
+                app:shapeAppearanceOverlay="@style/DialogRoundedImageView" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/dialog_home_report_detail_center"
+                    android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_home_report_detail_center_num"
+                    android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                    android:textColor="@color/blue1" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="17dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_report_arrow_right_14" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_home_report_detail_call_center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_container_report_nav"
+            android:elevation="2dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="19dp"
+                android:contentDescription="@string/dialog_home_report_detail_call_center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_dialog_phone_green"
+                app:shapeAppearanceOverlay="@style/DialogRoundedImageView" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/dialog_home_report_detail_call_center"
+                    android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_home_report_detail_call_center_num"
+                    android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                    android:textColor="@color/blue1" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="62dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_report_arrow_right_14" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

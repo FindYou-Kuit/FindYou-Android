@@ -35,7 +35,7 @@
     <string name="report_dialog_set_location">현 위치로 설정하기</string>
     <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000-0ddd 광진구 건국대학교 000-00 202호</string>
     <string name="report_dialog_find_location">지도에서 위치 찾기</string>
-  
+
     <!--  witness report  -->
     <string name="report_witness">목격신고</string>
     <string name="report_missing">실종신고</string>
@@ -97,11 +97,25 @@
     <string name="home_more">더보기</string>
     <string name="home_rv_name">말티즈</string>
     <string name="home_rv_type">보호중</string>
-    <string name="home_rv_date">2024-11-23</string>
+    <string name="home_rv_date">2024–11–23</string>
     <string name="home_rv_location">서울특별시 광진구 화양동</string>
     <string name="home_bottom">유기동물에 대해 더 알고 싶다면?</string>
     <string name="home_bottom_protect">유기동물\n보호소 조회</string>
     <string name="home_bottom_center">동물보호\n센터 조회</string>
     <string name="home_bottom_part">동물보호\n부서 조회</string>
+
+    <!--dialog home-->
+    <string name="dialog_home_report">목격 신고</string>
+    <string name="dialog_home_report_phone">전화로 신고</string>
+    <string name="dialog_home_report_write">신고글 작성</string>
+    <string name="dialog_home_find">반려동물 조회 / 실종 신고</string>
+    <string name="dialog_home_find_report">실종신고</string>
+    <string name="dialog_home_find_search">조회</string>
+    <string name="dialog_home_report_detail">전화로 신고</string>
+    <string name="dialog_home_report_detail_part">관할 동물보호부서</string>
+    <string name="dialog_home_report_detail_center">동물보호 상담센터</string>
+    <string name="dialog_home_report_detail_center_num">Tel) 1577–0954</string>
+    <string name="dialog_home_report_detail_call_center">다산 콜센터</string>
+    <string name="dialog_home_report_detail_call_center_num">Tel) 120</string>
 
 </resources>

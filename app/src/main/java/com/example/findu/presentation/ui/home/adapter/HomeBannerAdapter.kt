@@ -3,19 +3,16 @@ package com.example.findu.presentation.ui.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemHomeVpBannerBinding
 
 class HomeBannerAdapter(
-    private val imageUrls: List<String>
+    private val imageUrls: List<Int>
 ) : RecyclerView.Adapter<HomeBannerAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemHomeVpBannerBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(imageUrl: String) {
-            Glide.with(binding.root)
-                .load(imageUrl)
-                .into(binding.ivHomeVpImg)
+        fun bind(imageResId: Int) {
+            binding.ivHomeVpImg.setImageResource(imageResId)
         }
     }
 
