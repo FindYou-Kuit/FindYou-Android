@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_report_dialog_rd12">
+
+    <ImageView
+        android:id="@+id/iv_report_location_dialog_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="28dp"
+        android:src="@drawable/ic_report_dialog_close_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_report_location_dialog_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/ic_report_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/report_dialog_find_location"
+        android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+        android:textColor="@color/main_color"
+        app:layout_constraintBottom_toBottomOf="@id/iv_report_location_dialog_location"
+        app:layout_constraintStart_toEndOf="@id/iv_report_location_dialog_location"
+        app:layout_constraintTop_toTopOf="@id/iv_report_location_dialog_location" />
+
+    <LinearLayout
+        android:id="@+id/ll_report_location_dialog_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_report_location_dialog_location">
+
+        <TextView
+            android:id="@+id/tv_report_location_dialog_location"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:text="@string/report_dialog_default_location_address"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+            android:textColor="@color/gray4" />
+
+        <ImageView
+            android:id="@+id/iv_report_location_dialog_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/ic_report_arrow_right_14"
+            app:layout_constraintStart_toEndOf="@id/tv_report_location_dialog_location"
+            app:layout_constraintTop_toTopOf="@id/tv_report_location_dialog_location"
+            app:tint="@color/gray4" />
+
+    </LinearLayout>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_report_location_dialog_map_container"
+        android:layout_width="248dp"
+        android:layout_height="214dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="14dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_report_location_dialog_location">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_location_pin" />
+
+        <com.naver.maps.map.MapView
+            android:id="@+id/mv_report_location_dialog_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_report_location_dialog_set"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bg_button_report_dialog"
+        android:backgroundTint="@null"
+        android:text="@string/report_dialog_set_location"
+        android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_report_location_dialog_map_container" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

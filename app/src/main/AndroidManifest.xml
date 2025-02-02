@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
         android:name=".FindUApp"
@@ -20,8 +23,13 @@
             android:name=".SearchProtectingDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.home.HomeActivity"
+            android:name=".presentation.ui.report.ReportLocationActivity"
             android:exported="false" />
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="${naverClientId}" />
+
         <activity
             android:name=".presentation.ui.main.MainActivity"
             android:exported="true" >
@@ -35,5 +43,6 @@
     <queries>
         <package android:name="com.nhn.android.nmap" />
     </queries>
+
 
 </manifest>

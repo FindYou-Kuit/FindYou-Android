@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_home_rv"
+    android:layout_width="165dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_home_rv"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="20dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_home"
+        android:layout_width="133dp"
+        android:layout_height="133dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/HomeRVRoundedImageView"
+        app:strokeColor="@null" />
+
+    <TextView
+        android:id="@+id/tv_home_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/home_rv_name"
+        android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_home" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_home_animal_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
+        app:chipCornerRadius="10dp"
+        app:chipEndPadding="2dp"
+        app:chipIconVisible="false"
+        app:chipStartPadding="2dp"
+        app:chipStrokeWidth="0dp"
+        app:chipMinHeight="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_home_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_home_name" />
+
+    <TextView
+        android:id="@+id/tv_home_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/home_rv_date"
+        android:textAppearance="@style/TextAppearance.FindU.caption_12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_name" />
+
+    <ImageView
+        android:id="@+id/iv_home_location"
+        android:layout_width="8dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="3dp"
+        android:contentDescription="@string/home_rv_location"
+        android:src="@drawable/icon_home_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_date" />
+
+    <TextView
+        android:id="@+id/tv_home_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:text="@string/home_rv_location"
+        android:textAppearance="@style/TextAppearance.FindU.caption_12"
+        app:layout_constraintBottom_toBottomOf="@id/iv_home_location"
+        app:layout_constraintStart_toEndOf="@id/iv_home_location"
+        app:layout_constraintTop_toTopOf="@id/iv_home_location" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

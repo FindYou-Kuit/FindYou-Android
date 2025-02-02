@@ -24,6 +24,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+        manifestPlaceholders["naverClientId"] = properties["NAVER_CLIENT_ID"].toString()
     }
 
     buildTypes {
@@ -78,11 +79,23 @@ dependencies {
 
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
+    
     // Indicator
     implementation("com.tbuonomo:dotsindicator:5.0")
+    
     // Material Components
     implementation("com.google.android.material:material:1.9.0")
-    // Calendar 라이브러리
-    implementation("io.github.architshah248.calendar:awesome-calendar:2.0.0")
+ 
 
+    // Naver Map
+    implementation(libs.map.sdk)
+
+    // Web View
+    implementation(libs.androidx.webkit)
+    
+    // Glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    
+    // Calender
+    implementation("io.github.architshah248.calendar:awesome-calendar:2.0.0")
 }

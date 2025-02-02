@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_report_dialog_rd12">
+
+    <ImageView
+        android:id="@+id/iv_report_finish_dialog_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="21dp"
+        android:src="@drawable/ic_report_dialog_close_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_report_finish_dialog_mention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_dialog_finished"
+            android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24"
+            android:textColor="@color/gray6" />
+
+        <TextView
+            android:id="@+id/tv_report_finish_dialog_mention"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/report_dialog_missing_mention"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+            android:textColor="@color/gray4"
+            app:layout_constraintStart_toStartOf="@id/ll_report_image_dialog_mention"
+            app:layout_constraintTop_toBottomOf="@id/ll_report_image_dialog_mention" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="248dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_report_finish_dialog_mention">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_report_finish_dialog_go_history"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_button_report_dialog"
+            android:backgroundTint="@null"
+            android:text="@string/report_dialog_see_history"
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_report_finish_dialog_go_home"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_button_report_dialog"
+            android:backgroundTint="@null"
+            android:text="@string/report_dialog_go_home"
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
