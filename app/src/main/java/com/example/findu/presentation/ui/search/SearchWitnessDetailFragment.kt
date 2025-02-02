@@ -48,6 +48,7 @@ class SearchWitnessDetailFragment : Fragment() {
         initViewPager()
 
     }
+
     private fun initViewPager(){
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter

@@ -131,6 +131,7 @@ class SearchDisappearDetailFragment : Fragment() {
             binding.tvSearchContentDetailRescueLocation.text = it.address
         }
     }
+
     private fun openNaverMap(address: String) {
         if (address.isNotEmpty()) {
             val encodedAddress = Uri.encode(address)

@@ -1,8 +1,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/white" /> <!-- 카드 배경 색 -->
-            <corners android:topLeftRadius="24dp" android:topRightRadius="24dp" /> <!-- 상단만 둥글게 -->
+            <solid android:color="@color/white" />
+            <corners android:topLeftRadius="24dp" android:topRightRadius="24dp" />
         </shape>
     </item>
 </layer-list>

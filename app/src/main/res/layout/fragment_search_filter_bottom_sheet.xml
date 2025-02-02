@@ -283,7 +283,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location">
 
                     <AutoCompleteTextView
-                        android:id="@+id/actv_search_filter_gu"
+                        android:id="@+id/actv_search_filter_district"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:background="@drawable/bg_search_radius_8"
@@ -300,13 +300,13 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_search_filter_gu"
+                        android:id="@+id/rv_search_filter_district"
                         android:layout_width="match_parent"
                         android:layout_height="273dp"
                         android:background="@drawable/bg_search_radius_8_down"
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/actv_search_filter_gu"
+                        app:layout_constraintTop_toBottomOf="@id/actv_search_filter_district"
                         tools:listitem="@layout/item_search_location" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

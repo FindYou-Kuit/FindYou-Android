@@ -47,7 +47,8 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         )
     private var selectedCity: String? = null
 
-    private val districtsList = listOf("전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
+    private val districtsList =
+        listOf("전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
     private var selectedDistrict: String? = null
 
     private val locationMap = LocationData.locationMap
@@ -63,6 +64,7 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         setLocationSelector()
         return binding.root
     }
+
     private fun initListeners() {
         binding.ivSearchFilterCloseBtn.setOnClickListener { dismiss() }
         binding.btnSearchFilterConfirm.setOnClickListener { applyFilters() }
@@ -70,7 +72,6 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
 
     private fun applyFilters() {
         val filterList = mutableListOf<String>()
-
         val selectedDate = binding.tvSearchFilterDateInput.text.toString()
         if (selectedDate.isNotEmpty() && selectedDate != getString(R.string.search_filter_date_input)) {
             filterList.add(selectedDate)
@@ -112,32 +113,34 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     override fun getTheme(): Int = R.style.searchFilterBottomSheetDialogTheme
 
     private fun setLocationSelector() {
-        binding.actvSearchFilterGu.isEnabled = false
+        binding.actvSearchFilterDistrict.isEnabled = false
 
         cityAdapter = SearchFilterLocationRVAdapter(cityList, selectedCity) { newCity ->
             selectedCity = newCity
             updateSelectedLocation()
 
             if (newCity == "전체") {
-                binding.actvSearchFilterGu.isEnabled = false
-                binding.actvSearchFilterGu.setText("")
+                binding.actvSearchFilterDistrict.isEnabled = false
+                binding.actvSearchFilterDistrict.setText("")
                 selectedDistrict = null
             } else {
-                binding.actvSearchFilterGu.isEnabled = true
+                binding.actvSearchFilterDistrict.isEnabled = true
                 val districtList = locationMap[newCity] ?: listOf("")
-                districtAdapter = SearchFilterLocationRVAdapter(districtList, selectedDistrict) { newDistrict ->
-                    selectedDistrict = newDistrict
-                    updateSelectedLocation()
-                }
-                binding.rvSearchFilterGu.adapter = districtAdapter
-                binding.actvSearchFilterGu.setText("")
+                districtAdapter =
+                    SearchFilterLocationRVAdapter(districtList, selectedDistrict) { newDistrict ->
+                        selectedDistrict = newDistrict
+                        updateSelectedLocation()
+                    }
+                binding.rvSearchFilterDistrict.adapter = districtAdapter
+                binding.actvSearchFilterDistrict.setText("")
             }
 
         }
-        districtAdapter = SearchFilterLocationRVAdapter(districtsList, selectedDistrict) { newDistrict ->
-            selectedDistrict = newDistrict
-            updateSelectedLocation()
-        }
+        districtAdapter =
+            SearchFilterLocationRVAdapter(districtsList, selectedDistrict) { newDistrict ->
+                selectedDistrict = newDistrict
+                updateSelectedLocation()
+            }
 
         binding.rvSearchFilterCity.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSearchFilterCity.adapter = cityAdapter
@@ -148,16 +151,17 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                 binding.actvSearchFilterCity
             )
         }
-        binding.rvSearchFilterGu.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvSearchFilterGu.adapter = districtAdapter
+        binding.rvSearchFilterDistrict.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvSearchFilterDistrict.adapter = districtAdapter
 
-        binding.actvSearchFilterGu.setOnClickListener {
+        binding.actvSearchFilterDistrict.setOnClickListener {
             toggleRecyclerViewVisibility(
-                binding.rvSearchFilterGu,
-                binding.actvSearchFilterGu
+                binding.rvSearchFilterDistrict,
+                binding.actvSearchFilterDistrict
             )
         }
     }
+
     private fun toggleRecyclerViewVisibility(recyclerView: View, triggerView: View) {
         if (recyclerView.visibility == View.GONE) {
             recyclerView.visibility = View.VISIBLE
@@ -173,9 +177,9 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         binding.rvSearchFilterCity.visibility = View.GONE
         binding.actvSearchFilterCity.setBackgroundResource(R.drawable.bg_search_radius_8)
 
-        binding.actvSearchFilterGu.setText(selectedDistrict ?: "")
-        binding.rvSearchFilterGu.visibility = View.GONE
-        binding.actvSearchFilterGu.setBackgroundResource(R.drawable.bg_search_radius_8)
+        binding.actvSearchFilterDistrict.setText(selectedDistrict ?: "")
+        binding.rvSearchFilterDistrict.visibility = View.GONE
+        binding.actvSearchFilterDistrict.setBackgroundResource(R.drawable.bg_search_radius_8)
     }
 
     private fun setBreedSelector() {
@@ -250,8 +254,12 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
             override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
                 binding.tvSearchFilterDateInput.text = getString(
                     R.string.date_range,
-                    startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH) + 1, startDate.get(Calendar.DAY_OF_MONTH),
-                    endDate.get(Calendar.YEAR), endDate.get(Calendar.MONTH) + 1, endDate.get(Calendar.DAY_OF_MONTH)
+                    startDate.get(Calendar.YEAR),
+                    startDate.get(Calendar.MONTH) + 1,
+                    startDate.get(Calendar.DAY_OF_MONTH),
+                    endDate.get(Calendar.YEAR),
+                    endDate.get(Calendar.MONTH) + 1,
+                    endDate.get(Calendar.DAY_OF_MONTH)
                 )
                 binding.tvSearchFilterDateInput.setTextColor(
                     ContextCompat.getColor(

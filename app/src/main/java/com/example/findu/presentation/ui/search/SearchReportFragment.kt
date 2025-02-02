@@ -164,8 +164,10 @@ class SearchReportFragment : Fragment() {
 
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding.cgSearchGroupFilters.removeAllViews()
     }
+
 }
