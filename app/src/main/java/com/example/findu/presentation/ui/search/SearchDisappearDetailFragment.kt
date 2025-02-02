@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.search
 
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -132,7 +131,6 @@ class SearchDisappearDetailFragment : Fragment() {
             binding.tvSearchContentDetailRescueLocation.text = it.address
         }
     }
-    @SuppressLint("QueryPermissionsNeeded")
     private fun openNaverMap(address: String) {
         if (address.isNotEmpty()) {
             val encodedAddress = Uri.encode(address)

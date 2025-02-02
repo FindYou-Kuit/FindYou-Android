@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.search
 
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -30,7 +29,7 @@ class SearchProtectingDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSearchDetailProtectingBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -153,7 +152,6 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     private fun openNaverMap(address: String) {
         if (address.isNotEmpty()) {
             val encodedAddress = Uri.encode(address)
@@ -190,7 +188,7 @@ class SearchProtectingDetailFragment : Fragment() {
     }
 
     private fun setContentVisibility() {
-        binding.clSearchShowMore.setOnClickListener() {
+        binding.clSearchShowMore.setOnClickListener {
             binding.clSearchContentDetail.visibility = View.VISIBLE
             binding.clSearchShowMore.visibility = View.INVISIBLE
         }
