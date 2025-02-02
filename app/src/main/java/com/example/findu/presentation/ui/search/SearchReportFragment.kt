@@ -29,7 +29,7 @@ class SearchReportFragment : Fragment() {
         initDummyItems()
         initRVAdapter()
         initToggleButton()
-        setupFilterButton()
+        initFilterButton()
         return binding.root
     }
 
@@ -51,11 +51,6 @@ class SearchReportFragment : Fragment() {
             }
         }
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding.cgSearchGroupFilters.removeAllViews()
-    }
-
 
     private fun updateFilterChips(filters: List<String>?) {
         val chipGroup = binding.cgSearchGroupFilters
@@ -75,7 +70,7 @@ class SearchReportFragment : Fragment() {
         }
     }
 
-    private fun setupFilterButton() {
+    private fun initFilterButton() {
         binding.ibSearchFilter.setOnClickListener {
             val bottomSheet = SearchFilterBottomSheet()
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
@@ -168,5 +163,9 @@ class SearchReportFragment : Fragment() {
             binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
 
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.cgSearchGroupFilters.removeAllViews()
     }
 }

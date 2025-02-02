@@ -29,7 +29,7 @@ class SearchRescueFragment : Fragment() {
         initDummyItems()
         initRVAdapter()
         initToggleButton()
-        setupFilterButton()
+        initFilterButton()
         return binding.root
     }
 
@@ -51,10 +51,6 @@ class SearchRescueFragment : Fragment() {
             }
         }
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding.cgSearchGroupFilters.removeAllViews()
-    }
 
     private fun updateFilterChips(filters: List<String>?) {
         val chipGroup = binding.cgSearchGroupFilters
@@ -73,7 +69,8 @@ class SearchRescueFragment : Fragment() {
             chipGroup.addView(chip)
         }
     }
-    private fun setupFilterButton() {
+
+    private fun initFilterButton() {
         binding.ibSearchFilter.setOnClickListener {
             val bottomSheet = SearchFilterBottomSheet()
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
@@ -127,6 +124,7 @@ class SearchRescueFragment : Fragment() {
         binding.rvSearchHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
+
     private fun openDetailFragment(selectedItem: SearchData) {
         val detailFragment = SearchProtectingDetailFragment().apply {
             arguments = Bundle().apply {
@@ -163,7 +161,12 @@ class SearchRescueFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rvAdapter.setGridMode(false)
             binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
-
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.cgSearchGroupFilters.removeAllViews()
+    }
+
 }
