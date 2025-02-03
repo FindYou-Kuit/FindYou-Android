@@ -151,20 +151,17 @@ class WitnessReportFragment : Fragment() {
             setAdapter(breedAdapter)
             setDropDownBackgroundResource(com.example.findu.R.drawable.bg_bottom_radius_8_g4)
 
-            // 클릭하면 드랍다운이 생김
             setOnClickListener {
                 dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 showDropDown()
                 binding.svWitnessReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
             }
-            // 드랍다운 아이템이 선택되면 소프트 키보드가 사라지고, 하단 레이아웃이 보임
             setOnItemClickListener { _, _, _, _ ->
                 requireContext().hideKeyboard(windowToken)
                 clearFocus()
             }
-            // text 가 변경되면 드랍다운의 크기를 줄임
             addTextChangedListener { text ->
-                com.example.findu.presentation.ui.report.model.ReportDummys.dummyBreeds
+                ReportDummys.dummyBreeds
                     .filter { it.contains(text.toString()) }
                     .let { matches ->
                         dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
@@ -172,7 +169,6 @@ class WitnessReportFragment : Fragment() {
                         } else ViewGroup.LayoutParams.WRAP_CONTENT
                     }
             }
-            // focus 가 생기면 품종을 화면 상단으로 이동시킴
             setOnFocusChangeListener { _, hasFocus ->
                 dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 if (hasFocus) {
@@ -191,7 +187,7 @@ class WitnessReportFragment : Fragment() {
             adapter = reportImageAdapter
             layoutManager = LinearLayoutManager(
                 context,
-                androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,
+                LinearLayoutManager.HORIZONTAL,
                 false
             )
         }

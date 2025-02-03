@@ -145,18 +145,15 @@ class MissingReportFragment : Fragment() {
             setAdapter(breedAdapter)
             setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
 
-            // 클릭하면 드랍다운이 생김
             setOnClickListener {
                 dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 showDropDown()
                 binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
             }
-            // 드랍다운 아이템이 선택되면 소프트 키보드가 사라지고, 하단 레이아웃이 보임
             setOnItemClickListener { _, _, _, _ ->
                 requireContext().hideKeyboard(windowToken)
                 clearFocus()
             }
-            // text 가 변경되면 드랍다운의 크기를 줄임
             addTextChangedListener { text ->
                 ReportDummys.dummyBreeds
                     .filter { it.contains(text.toString()) }
@@ -166,7 +163,6 @@ class MissingReportFragment : Fragment() {
                         } else ViewGroup.LayoutParams.WRAP_CONTENT
                     }
             }
-            // focus 가 생기면 품종을 화면 상단으로 이동시킴
             setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
