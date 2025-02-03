@@ -10,7 +10,7 @@ import com.example.findu.databinding.DialogReportNavigationBinding
 
 class ReportNavigationDialog(
     context: Context,
-    private val onCallClick: () -> Unit = {},
+    private val onCallClick: (Dialog) -> Unit = {},
     private val onWitnessClick: () -> Unit = {},
     private val onMissingClick: () -> Unit = {}
 ) : Dialog(context) {
@@ -32,7 +32,7 @@ class ReportNavigationDialog(
 
     private fun initListener() {
         binding.llReportNavigationCallContainer.setOnClickListener {
-            onCallClick()
+            onCallClick(this)
         }
 
         binding.llReportNavigationWitnessContainer.setOnClickListener {
