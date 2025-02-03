@@ -18,6 +18,77 @@
     <string name="bottom_nav_info">정보</string>
     <string name="bottom_nav_my">마이</string>
 
+    <!-- search-->
+    <string name="search_main_title">조회하기</string>
+    <string name="search_name_welshcorgi">웰시코기</string>
+    <string name="search_disappear_title">실종신고</string>
+    <string name="search_detail_found_date">발견날짜</string>
+    <string name="search_detail_found_date_value">2024-11-04</string>
+    <string name="search_detail_gender">성별</string>
+    <string name="search_detail_gender_value">암컷</string>
+    <string name="search_see_more">더보기</string>
+    <string name="search_detail_detail_info">상세정보</string>
+    <string name="search_detail_breed">품종</string>
+    <string name="search_detail_breed_value">[개]웰시코기</string>
+    <string name="search_detail_hair_color">털색</string>
+    <string name="search_detail_hair_color_value">갈색, 흰색</string>
+    <string name="search_detail_reporter_info">신고자 정보</string>
+    <string name="search_detail_reporter_info_value">닉네임</string>
+    <string name="search_detail_report_date">신고 날짜</string>
+    <string name="search_detail_report_date_value">2024-11-05</string>
+    <string name="search_detail_found_location">발견 장소</string>
+    <string name="search_detail_found_location_value">광진구 화양동</string>
+    <string name="search_detail_see_location">위치 보기</string>
+    <string name="search_detail_feature_chip1">새끼 강아지에요</string>
+    <string name="search_detail_feature_chip2">털이 복슬복슬해요</string>
+    <string name="search_detail_feature_chip3">겁이 많아요</string>
+    <string name="search_detail_detailed_description">사람과 컨택하는 거는 무서워 하는 것 같지만, 무작정 도망치지 않고, 사람을 거리 두고 쳐다봄.\n\n또한 목에 빨간 목줄이 있고, 3~5세 정도 나이로 보임.\n\n오른쪽 앞다리에 얇은 상처가 있고, 피가 살짝 묻어있음.</string>
+    <string name="search_witness_title">목격신고</string>
+    <string name="search_detail_see_disappear_location">실종 장소 보기</string>
+    <string name="search_detail_see_found_location">발견 장소 보기</string>
+    <string name="search_detail_witness_info">목격자 정보</string>
+    <string name="search_detail_witness_info_value">닉네임</string>
+    <string name="search_detail_write_date">작성 날짜</string>
+    <string name="search_detail_write_date_value">2024-11-05</string>
+    <string name="search_detail_see_shelter_location">보호소 위치 보기</string>
+    <string name="search_detail_age">나이</string>
+    <string name="search_detail_age_value">2024, 1살</string>
+    <string name="search_detail_weight">몸무게</string>
+    <string name="search_detail_weight_value">2kg</string>
+    <string name="search_detail_post_date">게시 날짜</string>
+    <string name="search_detail_post_date_value">2024-11-23</string>
+    <string name="search_detail_neuter">중성화</string>
+    <string name="search_detail_neuter_value">아니요</string>
+    <string name="search_detail_special_note">특이사항</string>
+    <string name="search_detail_see">보기</string>
+    <string name="search_detail_special_note_value">멀티푸주청 갑옷을 입고 있어서 미용함. 귀병 조금 있음(치료중). 브라백토투여. 사람 엄청 좋아하는 아이\n\n</string>
+    <string name="search_detail_noti_num">공고 번호</string>
+    <string name="search_detail_noti_num_value">경남-창원1-2024-00545</string>
+    <string name="search_detail_noti_date">공고 기간</string>
+    <string name="search_detail_noti_date_value">2024.11.23 ~ 2024.12.03</string>
+    <string name="search_detail_rescue_location">구조 장소</string>
+    <string name="search_detail_rescue_location_value">성산구 내동</string>
+    <string name="search_detail_shelter">보호 센터</string>
+    <string name="search_detail_shelter_value">태민동물병원</string>
+    <string name="search_detail_shelter_phone_num">010-2868-2108</string>
+    <string name="search_detail_shelter_phone_num_value">관할 기관</string>
+    <string name="search_detail_jurisdiction">창원유기동물보호소</string>
+    <string name="search_detail_jurisdiction_value">055-930-3562</string>
+    <string name="search_filter_date">날짜</string>
+    <string name="search_filter_date_input">날짜 입력</string>
+    <string name="search_filter_type">축종</string>
+    <string name="search_filter_breed">품종</string>
+    <string name="search_filter_location">위치</string>
+    <string name="search_filter_location_city">시/구</string>
+    <string name="search_filter_location_gu">시/구/군</string>
+    <string name="search_filter_breed_hint">품종을 입력하세요</string>
+    <string name="search_species_dog">강아지</string>
+    <string name="search_species_cat">고양이</string>
+    <string name="search_species_etc">기타</string>
+    <string name="search_filter_check">확인</string>
+    <string name="date_single">%d.%d.%d ~</string>
+    <string name="date_range">%1$d.%2$d.%3$d ~ %4$d.%5$d.%6$d</string>
+  
     <!-- report dialog -->
     <string name="report_dialog_finished">신고가 완료되었어요!</string>
     <string name="report_dialog_missing_mention">당신의 가족을 저희가 열심히 찾아드릴게요!</string>
@@ -35,7 +106,7 @@
     <string name="report_dialog_set_location">현 위치로 설정하기</string>
     <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000-0ddd 광진구 건국대학교 000-00 202호</string>
     <string name="report_dialog_find_location">지도에서 위치 찾기</string>
-  
+
     <!--  witness report  -->
     <string name="report_witness">목격신고</string>
     <string name="report_missing">실종신고</string>
@@ -98,11 +169,25 @@
     <string name="home_more">더보기</string>
     <string name="home_rv_name">말티즈</string>
     <string name="home_rv_type">보호중</string>
-    <string name="home_rv_date">2024-11-23</string>
+    <string name="home_rv_date">2024–11–23</string>
     <string name="home_rv_location">서울특별시 광진구 화양동</string>
     <string name="home_bottom">유기동물에 대해 더 알고 싶다면?</string>
     <string name="home_bottom_protect">유기동물\n보호소 조회</string>
     <string name="home_bottom_center">동물보호\n센터 조회</string>
     <string name="home_bottom_part">동물보호\n부서 조회</string>
+
+    <!--dialog home-->
+    <string name="dialog_home_report">목격 신고</string>
+    <string name="dialog_home_report_phone">전화로 신고</string>
+    <string name="dialog_home_report_write">신고글 작성</string>
+    <string name="dialog_home_find">반려동물 조회 / 실종 신고</string>
+    <string name="dialog_home_find_report">실종신고</string>
+    <string name="dialog_home_find_search">조회</string>
+    <string name="dialog_home_report_detail">전화로 신고</string>
+    <string name="dialog_home_report_detail_part">관할 동물보호부서</string>
+    <string name="dialog_home_report_detail_center">동물보호 상담센터</string>
+    <string name="dialog_home_report_detail_center_num">Tel) 1577–0954</string>
+    <string name="dialog_home_report_detail_call_center">다산 콜센터</string>
+    <string name="dialog_home_report_detail_call_center_num">Tel) 120</string>
 
 </resources>

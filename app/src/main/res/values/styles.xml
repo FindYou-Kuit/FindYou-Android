@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemHorizontalTranslationEnabled">false</item>
         <item name="itemIconSize">21dp</item>
@@ -12,4 +13,83 @@
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">0dp</item>
     </style>
+
+    <style name="SearchFilterChipStyle" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@color/gray5</item>
+        <item name="android:textColor">@color/gray1</item>
+        <item name="closeIconVisible">true</item>
+        <item name="chipMinHeight">47dp</item>
+        <item name="closeIconSize">8dp</item>
+        <item name="closeIconTint">@color/gray3</item>
+        <item name="android:paddingHorizontal">8dp</item>
+        <item name="closeIcon">@drawable/ic_search_filters_chip_close</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedChipShape</item>
+    </style>
+
+    <style name="RoundedChipShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    <style name="RoundedChipShape30" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30%</item>
+    </style>
+
+    <style name="SearchDetailFoundLocationBtn" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="strokeColor">@color/main_color</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:paddingTop">7dp</item>
+        <item name="android:paddingBottom">9dp</item>
+        <item name="android:textColor">@color/main_color</item>
+        <item name="android:drawableStart">@drawable/ic_search_content_location</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:gravity">center</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedChipShape30</item>
+    </style>
+
+    <style name="SearchDetailWitnessFeature" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@color/main_color2</item>
+        <item name="android:textColor">@color/main_color</item>
+        <item name="chipMinHeight">34dp</item>
+        <item name="closeIconSize">8dp</item>
+        <item name="android:paddingHorizontal">14dp</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedChipShape</item>
+    </style>
+
+    <style name="searchCustomRadioButtonBase" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="searchCustomRadioButtonLeft" parent="searchCustomRadioButtonBase">
+        <item name="android:background">@drawable/bg_search_filter_button_left</item>
+    </style>
+
+    <style name="searchCustomRadioButtonMiddle" parent="searchCustomRadioButtonBase">
+        <item name="android:background">@drawable/bg_search_filter_button_middle</item>
+    </style>
+
+    <style name="searchCustomRadioButtonRight" parent="searchCustomRadioButtonBase">
+        <item name="android:background">@drawable/bg_search_filter_button_right</item>
+    </style>
+
+    <style name="searchFilterBottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_search_filter_bottom_sheet_rounded</item>
+    </style>
+
+    <style name="searchFilterBaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/searchFilterBottomSheet</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="searchFilterBottomSheetDialogTheme" parent="searchFilterBaseBottomSheetDialog" />
+
 </resources>

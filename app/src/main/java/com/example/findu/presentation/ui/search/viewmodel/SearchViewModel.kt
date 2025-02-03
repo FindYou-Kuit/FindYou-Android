@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.search
+package com.example.findu.presentation.ui.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.findu.domain.usecase.DummyUseCase
