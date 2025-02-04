@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.report.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -24,13 +25,16 @@ class ReportNavigationDialog(
 
         setContentView(binding.root)
 
-        setCancelable(false)
         setCanceledOnTouchOutside(false)
 
         initListener()
     }
 
     private fun initListener() {
+        binding.ivReportNavigationDialogClose.setOnClickListener {
+            dismiss()
+        }
+
         binding.llReportNavigationCallContainer.setOnClickListener {
             onCallClick(this)
         }
