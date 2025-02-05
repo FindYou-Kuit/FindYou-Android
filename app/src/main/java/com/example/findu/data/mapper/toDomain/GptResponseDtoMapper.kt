@@ -1,7 +1,7 @@
 package com.example.findu.data.mapper.toDomain
 
 import com.example.findu.data.dataremote.model.response.GptResponseDto
-import com.example.findu.domain.model.GptData
+import com.example.findu.domain.model.report.GptData
 import kotlinx.serialization.json.Json
 
 fun GptResponseDto.toDomain(): GptData {
