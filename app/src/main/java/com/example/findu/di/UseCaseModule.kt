@@ -1,3 +1,5 @@
+package com.example.findu.di
+
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import dagger.Module
