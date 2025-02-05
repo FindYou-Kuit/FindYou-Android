@@ -1,78 +1,78 @@
 package com.example.findu.data.dataremote.model.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GptResponseDto(
-    @SerializedName("choices")
+    @SerialName("choices")
     val choices: List<Choice>,
-    @SerializedName("created")
+    @SerialName("created")
     val created: Int,
-    @SerializedName("id")
+    @SerialName("id")
     val id: String,
-    @SerializedName("model")
+    @SerialName("model")
     val model: String,
-    @SerializedName("object")
+    @SerialName("object")
     val `object`: String,
-    @SerializedName("system_fingerprint")
+    @SerialName("system_fingerprint")
     val systemFingerprint: String,
-    @SerializedName("usage")
+    @SerialName("usage")
     val usage: Usage
 )
 
 @Serializable
 data class Choice(
-    @SerializedName("finish_reason")
+    @SerialName("finish_reason")
     val finishReason: String,
-    @SerializedName("index")
+    @SerialName("index")
     val index: Int,
-    @SerializedName("logprobs")
+    @SerialName("logprobs")
     val logprobs: String?,
-    @SerializedName("message")
+    @SerialName("message")
     val message: ResponseMessage
 )
 
 @Serializable
 data class Usage(
-    @SerializedName("completion_tokens")
+    @SerialName("completion_tokens")
     val completionTokens: Int,
-    @SerializedName("completion_tokens_details")
+    @SerialName("completion_tokens_details")
     val completionTokensDetails: CompletionTokensDetails,
-    @SerializedName("prompt_tokens")
+    @SerialName("prompt_tokens")
     val promptTokens: Int,
-    @SerializedName("prompt_tokens_details")
+    @SerialName("prompt_tokens_details")
     val promptTokensDetails: PromptTokensDetails,
-    @SerializedName("total_tokens")
+    @SerialName("total_tokens")
     val totalTokens: Int
 )
 
 @Serializable
 data class CompletionTokensDetails(
-    @SerializedName("accepted_prediction_tokens")
+    @SerialName("accepted_prediction_tokens")
     val acceptedPredictionTokens: Int,
-    @SerializedName("audio_tokens")
+    @SerialName("audio_tokens")
     val audioTokens: Int,
-    @SerializedName("average_ppl")
+    @SerialName("reasoning_tokens")
     val reasoningTokens: Int,
-    @SerializedName("cached_tokens")
+    @SerialName("rejected_prediction_tokens")
     val rejectedPredictionTokens: Int
 )
 
 @Serializable
 data class ResponseMessage(
-    @SerializedName("content")
+    @SerialName("content")
     val content: String,
-    @SerializedName("refusal")
+    @SerialName("refusal")
     val refusal: String?,
-    @SerializedName("role")
+    @SerialName("role")
     val role: String
 )
 
 @Serializable
 data class PromptTokensDetails(
-    @SerializedName("accepted_tokens")
+    @SerialName("audio_tokens")
     val audioTokens: Int,
-    @SerializedName("rejected_tokens")
+    @SerialName("cached_tokens")
     val cachedTokens: Int
 )
