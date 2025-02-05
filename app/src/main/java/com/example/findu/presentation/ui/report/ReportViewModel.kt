@@ -26,15 +26,17 @@ class ReportViewModel @Inject constructor(
 
     fun getGptData(imageUri: Uri) {
         viewModelScope.launch {
-            val encodeString = imageUri.uriToBase64(context) ?: ""
-
-            analysisImageWithGptUseCase(encodeString).fold(
-                onSuccess = {
-                    _gptData.value = it
-                },
-                onFailure = {
-                    _errorMessage.value = it.message.toString()
-                })
+            imageUri.uriToBase64(context)?.let { encodeString ->
+                analysisImageWithGptUseCase(encodeString).fold(
+                    onSuccess = { value ->
+                        _gptData.value = value
+                    },
+                    onFailure = { exception ->
+                        _errorMessage.value = exception.message.toString()
+                    })
+            } ?: run {
+                _errorMessage.value = "Failed to convert image to base64"
+            }
         }
     }
 }
