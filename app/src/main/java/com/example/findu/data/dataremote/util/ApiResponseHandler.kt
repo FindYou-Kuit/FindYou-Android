@@ -24,7 +24,7 @@ fun <T> BaseResponse<T>.handleBaseResponse(): Result<T> =
 
 fun <T> NullableBaseResponse<T>.handleBaseResponse(): Result<T?> =
     when (this.code) {
-        in 2000..2999 -> {
+        in 20000..29999 -> {
             Result.success(this.data)
         }
 
