@@ -7,6 +7,6 @@ import com.example.findu.domain.repository.report.ReportRepository
 class AnalysisImageWithGptUseCase(
     private val reportRepository: ReportRepository
 ) {
-    suspend operator fun invoke(imageUri: Uri): Result<GptData> =
-        reportRepository.postImageAnalysis(imageUri)
+    suspend operator fun invoke(encodeString: String): Result<GptData> =
+        reportRepository.postImageAnalysis(encodeString)
 }

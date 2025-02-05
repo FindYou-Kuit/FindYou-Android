@@ -4,5 +4,5 @@ import android.net.Uri
 import com.example.findu.domain.model.report.GptData
 
 interface ReportRepository {
-    suspend fun postImageAnalysis(imageUri: Uri) : Result<GptData>
+    suspend fun postImageAnalysis(encodeString: String) : Result<GptData>
 }

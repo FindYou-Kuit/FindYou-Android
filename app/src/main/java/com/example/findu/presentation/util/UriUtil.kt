@@ -1,13 +1,11 @@
-package com.example.findu.data.util
+package com.example.findu.presentation.util
 
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Base64
-import androidx.core.content.res.ResourcesCompat
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
@@ -28,7 +26,7 @@ object UriUtil {
                 outputStream.close()
 
                 // ByteArray를 Base64로 변환
-                "\"data:image/jpeg;base64,${Base64.encodeToString(byteArray, Base64.NO_WRAP)}"
+                "data:image/jpeg;base64,${Base64.encodeToString(byteArray, Base64.NO_WRAP)}"
             }
         } catch (e: Exception) {
             e.printStackTrace()
