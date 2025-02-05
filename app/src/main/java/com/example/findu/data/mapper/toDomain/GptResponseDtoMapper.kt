@@ -31,20 +31,6 @@ fun GptResponseDto.toDomain(): GptData {
                     else -> FurColorType.OTHER
                 }
             }
-//            split.forEachIndexed { index, color ->
-//                if (index < 2) return@forEachIndexed
-//                when (color) {
-//                    "검은색" -> FurColorType.BLACK
-//                    "하얀색" -> FurColorType.WHITE
-//                    "갈색" -> FurColorType.BROWN
-//                    "회색" -> FurColorType.GRAY
-//                    "적색" -> FurColorType.RED
-//                    "노란색" -> FurColorType.YELLOW
-//                    "점박이" -> FurColorType.SPOTTED
-//                    "줄무늬" -> FurColorType.STRIPED
-//                    else -> FurColorType.OTHER
-//                }
-//            }.toList()
         )
     } ?: GptData()
 }

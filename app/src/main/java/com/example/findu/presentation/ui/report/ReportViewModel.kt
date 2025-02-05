@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.report.GptData
-import com.example.findu.domain.usecase.DummyUseCase
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.presentation.util.UriUtil.uriToBase64
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +34,6 @@ class ReportViewModel @Inject constructor(
                 },
                 onFailure = {
                     _errorMessage.value = it.message.toString()
-
                 })
         }
     }
