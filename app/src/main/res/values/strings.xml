@@ -88,7 +88,7 @@
     <string name="search_filter_check">확인</string>
     <string name="date_single">%d.%d.%d ~</string>
     <string name="date_range">%1$d.%2$d.%3$d ~ %4$d.%5$d.%6$d</string>
-  
+
     <!-- report dialog -->
     <string name="report_dialog_finished">신고가 완료되었어요!</string>
     <string name="report_dialog_missing_mention">당신의 가족을 저희가 열심히 찾아드릴게요!</string>
@@ -189,5 +189,10 @@
     <string name="dialog_home_report_detail_center_num">Tel) 1577–0954</string>
     <string name="dialog_home_report_detail_call_center">다산 콜센터</string>
     <string name="dialog_home_report_detail_call_center_num">Tel) 120</string>
+
+    <!--info-->
+    <string name="info_top_bar">정보</string>
+    <string name="info_title">신고 매뉴얼 보러가기</string>
+    <string name="info_description">길거리에 돌아다니는 유기동물을 발견했을 때!\n어떻게 대응하면 좋을 지 알아봅시다!</string>
 
 </resources>
