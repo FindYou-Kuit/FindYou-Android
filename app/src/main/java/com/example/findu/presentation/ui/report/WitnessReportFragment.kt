@@ -68,6 +68,7 @@ class WitnessReportFragment : Fragment() {
     ): View {
         _binding = FragmentWitnessReportBinding.inflate(inflater, container, false)
 
+        initListener()
         getCapturedUri()
         getUploadedUri()
 
@@ -232,7 +233,9 @@ class WitnessReportFragment : Fragment() {
             onCapture = {
                 findNavController().navigate(R.id.action_fragment_witness_report_to_fragment_report_camera)
             },
-            onUpload = {}
+            onUpload = {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
         )
 
         reportImageAdapter = ReportImageAdapter(
