@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.databinding.ItemReportColorsBinding
-import com.example.findu.presentation.type.report.FurColorType
+import com.example.findu.domain.model.report.FurColorType
 
 class ReportColorAdapter() : RecyclerView.Adapter<ReportColorAdapter.ViewHolder>() {
 

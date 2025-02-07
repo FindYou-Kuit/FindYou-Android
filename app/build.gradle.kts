@@ -24,6 +24,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+        buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
         manifestPlaceholders["naverClientId"] = properties["NAVER_CLIENT_ID"].toString()
     }
 
