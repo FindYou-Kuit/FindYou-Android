@@ -37,7 +37,7 @@ class ReportImageDialog(
         }
 
         binding.btnReportImageDialogUpload.setOnClickListener {
-
+            onUpload()
             dismiss()
         }
     }

@@ -7,6 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -51,6 +55,8 @@ class MissingReportFragment : Fragment() {
     private lateinit var breedAdapter: ArrayAdapter<String>
     private lateinit var colorAdapter: ReportColorAdapter
 
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,13 +64,29 @@ class MissingReportFragment : Fragment() {
         _binding = FragmentMissingReportBinding.inflate(inflater, container, false)
 
         initListener()
+        getCapturedUri()
+        getUploadedUri()
 
+        return binding.root
+    }
+
+    private fun getUploadedUri() {
+        pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    reportViewModel.addImageUri(uri)
+                } else {
+                    Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun getCapturedUri() {
         setFragmentResultListener(IMAGE_URI) { _, result ->
             val imageUri = result.getString(IMAGE_RESULT_KEY)
             imageUri?.let { reportViewModel.addImageUri(Uri.parse(imageUri)) }
         }
 
-        return binding.root
     }
 
     private fun initListener() {
@@ -206,7 +228,9 @@ class MissingReportFragment : Fragment() {
             onCapture = {
                 findNavController().navigate(R.id.action_fragment_missing_report_to_fragment_report_camera)
             },
-            onUpload = {}
+            onUpload = {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
         )
 
         reportImageAdapter = ReportImageAdapter(
