@@ -12,13 +12,11 @@ class ReportImageDialog(
     context: Context
 ) : Dialog(context) {
 
-    private var _binding : DialogReportImageBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { DialogReportImageBinding.inflate(LayoutInflater.from(context)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        _binding = DialogReportImageBinding.inflate(LayoutInflater.from(context))
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         setContentView(binding.root)
