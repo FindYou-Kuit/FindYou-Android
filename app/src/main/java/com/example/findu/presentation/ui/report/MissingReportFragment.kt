@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.report
 
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,10 +9,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
-import com.example.findu.databinding.FragmentMissingRepostBinding
+import com.example.findu.databinding.FragmentMissingReportBinding
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
@@ -21,6 +23,9 @@ import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
+import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
+import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
+import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
@@ -29,7 +34,7 @@ import java.time.LocalDateTime
 import java.util.Calendar
 
 class MissingReportFragment : Fragment() {
-    private var _binding: FragmentMissingRepostBinding? = null
+    private var _binding: FragmentMissingReportBinding? = null
     private val binding get() = _binding!!
     private val reportViewModel by viewModels<ReportViewModel>()
 
@@ -40,15 +45,49 @@ class MissingReportFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentMissingRepostBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentMissingReportBinding.inflate(inflater, container, false)
 
+        initListener()
+
+        return binding.root
+    }
+
+    private fun initListener() {
         binding.root.setKeyboardVisibilityListener {
             binding.clMissingReportLocationContainer.visibility =
                 if (it) View.GONE else View.VISIBLE
         }
 
-        return binding.root
+        binding.btnMissingReportConfirm.setOnClickListener {
+            ReportFinishDialog(
+                requireContext(),
+                ReportType.MISSING,
+                onGoHistoryClick = ::navigateToHistory,
+                onGoHomeClick = ::navigateToHome
+            ).show()
+        }
+
+        with(binding.tvMissingReportLocationAddress) {
+            addUnderLine()
+
+            setOnClickListener {
+                ReportLocationDialog(
+                    text.toString(),
+                    onSetClickListener = { newAddress ->
+                        text = newAddress
+                    }
+                ).show(childFragmentManager, LOCATION_TAG)
+            }
+        }
+    }
+
+    private fun navigateToHistory() {
+        // TODO : 신고 내역으로 이동하는 기능 추가
+    }
+
+    private fun navigateToHome() {
+        findNavController().popBackStack()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +118,6 @@ class MissingReportFragment : Fragment() {
         }
     }
 
-
     private fun setUpFeatureAdapter() {
         binding.rvMissingReportPhysicalFeatures.adapter =
             ReportFeatureAdapter(PhysicalFeatureType.entries.toList().map { it.feature })
@@ -97,7 +135,6 @@ class MissingReportFragment : Fragment() {
         }
     }
 
-
     private fun setUpBreedsAdapter() {
         breedAdapter = ReportBreedAdapter(
             requireContext(),
@@ -108,18 +145,15 @@ class MissingReportFragment : Fragment() {
             setAdapter(breedAdapter)
             setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
 
-            // 클릭하면 드랍다운이 생김
             setOnClickListener {
                 dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 showDropDown()
                 binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
             }
-            // 드랍다운 아이템이 선택되면 소프트 키보드가 사라지고, 하단 레이아웃이 보임
             setOnItemClickListener { _, _, _, _ ->
                 requireContext().hideKeyboard(windowToken)
                 clearFocus()
             }
-            // text 가 변경되면 드랍다운의 크기를 줄임
             addTextChangedListener { text ->
                 ReportDummys.dummyBreeds
                     .filter { it.contains(text.toString()) }
@@ -129,7 +163,6 @@ class MissingReportFragment : Fragment() {
                         } else ViewGroup.LayoutParams.WRAP_CONTENT
                     }
             }
-            // focus 가 생기면 품종을 화면 상단으로 이동시킴
             setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
@@ -163,5 +196,6 @@ class MissingReportFragment : Fragment() {
         const val SCROLL_OFFSET = 258
         const val DROP_DOWN_HEIGHT = 248
         const val DROP_DOWN_MAX_COUNT = 8
+        const val LOCATION_TAG = "Report Location Dialog"
     }
 }

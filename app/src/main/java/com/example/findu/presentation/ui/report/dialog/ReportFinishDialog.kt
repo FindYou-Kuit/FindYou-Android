@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import com.example.findu.R
@@ -14,19 +15,22 @@ import kotlinx.serialization.StringFormat
 
 class ReportFinishDialog(
     context: Context,
-    private val reportType: ReportType
+    private val reportType: ReportType,
+    private val onGoHistoryClick: () -> Unit = {},
+    private val onGoHomeClick: () -> Unit = {}
 ) : Dialog(context) {
 
-    private var _binding: DialogReportFinishedBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { DialogReportFinishedBinding.inflate(LayoutInflater.from(context)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        _binding = DialogReportFinishedBinding.inflate(LayoutInflater.from(context))
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         setContentView(binding.root)
+
+        setCancelable(false)
+        setCanceledOnTouchOutside(false)
 
         when (reportType) {
             ReportType.MISSING -> {
@@ -44,8 +48,13 @@ class ReportFinishDialog(
     }
 
     private fun initListener() {
-        binding.btnReportFinishDialogGoHistory.setOnClickListener { }
+        binding.btnReportFinishDialogGoHistory.setOnClickListener {
+            onGoHistoryClick()
+        }
 
-        binding.btnReportFinishDialogGoHome.setOnClickListener { }
+        binding.btnReportFinishDialogGoHome.setOnClickListener {
+            onGoHomeClick()
+            dismiss()
+        }
     }
 }

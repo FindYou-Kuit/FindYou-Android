@@ -36,8 +36,8 @@
         app:layout_constraintStart_toEndOf="@id/iv_report_location_dialog_location"
         app:layout_constraintTop_toTopOf="@id/iv_report_location_dialog_location" />
 
-    <LinearLayout
-        android:id="@+id/ll_report_location_dialog_location"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_report_location_dialog_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -46,12 +46,15 @@
         app:layout_constraintTop_toBottomOf="@id/iv_report_location_dialog_location">
 
         <TextView
-            android:id="@+id/tv_report_location_dialog_location"
-            android:layout_width="205dp"
+            android:id="@+id/tv_report_location_dialog_address"
+            android:layout_width="wrap_content"
+            android:maxWidth="204dp"
             android:layout_height="wrap_content"
             android:text="@string/report_dialog_default_location_address"
             android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
-            android:textColor="@color/gray4" />
+            android:textColor="@color/gray4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_report_location_dialog_arrow"
@@ -59,11 +62,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:src="@drawable/ic_report_arrow_right_14"
-            app:layout_constraintStart_toEndOf="@id/tv_report_location_dialog_location"
-            app:layout_constraintTop_toTopOf="@id/tv_report_location_dialog_location"
+            app:layout_constraintStart_toEndOf="@id/tv_report_location_dialog_address"
+            app:layout_constraintTop_toTopOf="@id/tv_report_location_dialog_address"
             app:tint="@color/gray4" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.cardview.widget.CardView
@@ -75,7 +78,12 @@
         app:cardCornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_report_location_dialog_location">
+        app:layout_constraintTop_toBottomOf="@id/cl_report_location_dialog_location">
+
+        <com.naver.maps.map.MapView
+            android:id="@+id/mv_report_location_dialog_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -83,11 +91,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:src="@drawable/ic_location_pin" />
-
-        <com.naver.maps.map.MapView
-            android:id="@+id/mv_report_location_dialog_map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
     </androidx.cardview.widget.CardView>
 

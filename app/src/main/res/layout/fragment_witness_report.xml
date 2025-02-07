@@ -474,7 +474,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:text="@string/dummy_location_address"
+                android:text="@string/report_location"
                 android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
                 android:textColor="@color/gray4" />
 
@@ -487,17 +487,17 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_witness_report_okay"
+            android:id="@+id/btn_witness_report_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="26dp"
             android:layout_marginTop="14dp"
-            android:background="@drawable/bg_button_report_okay"
+            android:background="@drawable/bg_button_report_confirm"
             android:enabled="false"
             android:stateListAnimator="@null"
-            android:text="@string/report_okay"
+            android:text="@string/report_confirm"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
-            android:textColor="@color/text_okay_color"
+            android:textColor="@color/text_confirm_color"
             app:layout_constraintTop_toBottomOf="@id/ll_witness_report_location_select_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
