@@ -1,7 +1,9 @@
 package com.example.findu.presentation.ui.report
 
 import android.Manifest
+import android.content.ContentValues
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +13,17 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentReportCameraBinding
 import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.ExecutorService
 
 class ReportCameraFragment : Fragment() {
 
@@ -31,6 +38,11 @@ class ReportCameraFragment : Fragment() {
             }
         }
     }
+    private val reportViewModel: ReportViewModel by viewModels()
+
+    private var imageCapture: ImageCapture? = null
+
+    private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +56,52 @@ class ReportCameraFragment : Fragment() {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
+        binding.btnReportCameraCaptureImage.setOnClickListener {
+            takePhoto()
+            findNavController().popBackStack()
+        }
+
 
         return binding.root
+    }
+
+    private fun takePhoto() {
+        // Get a stable reference of the modifiable image capture use case
+        val imageCapture = imageCapture ?: return
+
+        // Create time stamped name and MediaStore entry.
+        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+            .format(System.currentTimeMillis())
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/FindU-Image")
+        }
+
+        // Create output options object which contains file + metadata
+        val outputOptions = ImageCapture.OutputFileOptions
+            .Builder(
+                requireActivity().contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                contentValues
+            )
+            .build()
+
+        // Set up image capture listener, which is triggered after photo has
+        // been taken
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(requireContext()),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(exc: ImageCaptureException) {
+                    Toast.makeText(requireContext(), "Photo capture failed: ${exc.message}", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+
+                }
+            }
+        )
     }
 
     private fun startCamera() {
@@ -86,6 +142,16 @@ class ReportCameraFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireActivity()))
     }
 
+
+    companion object {
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.CAMERA,
+            ).apply {
+            }.toTypedArray()
+    }
 
 }
 
