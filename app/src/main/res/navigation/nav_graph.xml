@@ -32,9 +32,7 @@
             app:destination="@id/fragment_missing_report"
             app:popUpTo="@id/fragment_report"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_fragment_report_to_fragment_report_camera"
-            app:destination="@id/fragment_report_camera" />
+
     </fragment>
 
     <fragment
@@ -58,6 +56,9 @@
             android:id="@+id/action_fragment_witness_report_to_fragment_home"
             app:destination="@id/fragment_home"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_witness_report_to_fragment_report_camera"
+            app:destination="@id/fragment_report_camera" />
     </fragment>
 
     <fragment
@@ -69,6 +70,9 @@
             android:id="@+id/action_fragment_missing_report_to_fragment_home"
             app:destination="@id/fragment_home"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_missing_report_to_fragment_report_camera"
+            app:destination="@id/fragment_report_camera" />
     </fragment>
 
     <fragment
