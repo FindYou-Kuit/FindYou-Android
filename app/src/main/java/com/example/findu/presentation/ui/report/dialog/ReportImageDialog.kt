@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import com.example.findu.databinding.DialogReportImageBinding
 
 class ReportImageDialog(
-    context: Context
+    context: Context,
+    private val onCapture: () -> Unit,
+    private val onUpload: () -> Unit
 ) : Dialog(context) {
 
     private val binding by lazy { DialogReportImageBinding.inflate(LayoutInflater.from(context)) }
@@ -25,8 +27,18 @@ class ReportImageDialog(
     }
 
     private fun initListener() {
-        binding.btnReportImageDialogCapture.setOnClickListener {  }
+        binding.ivReportImageDialogClose.setOnClickListener {
+            dismiss()
+        }
 
-        binding.btnReportImageDialogUpload.setOnClickListener {  }
+        binding.btnReportImageDialogCapture.setOnClickListener {
+            onCapture()
+            dismiss()
+        }
+
+        binding.btnReportImageDialogUpload.setOnClickListener {
+            onUpload()
+            dismiss()
+        }
     }
 }
