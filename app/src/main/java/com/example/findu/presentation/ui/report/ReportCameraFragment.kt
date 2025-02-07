@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.report
 
 import android.Manifest
 import android.content.ContentValues
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
@@ -17,13 +18,15 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentReportCameraBinding
+import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_RESULT_KEY
+import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_URI
 import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class ReportCameraFragment : Fragment() {
 
@@ -38,9 +41,8 @@ class ReportCameraFragment : Fragment() {
             }
         }
     }
-    private val reportViewModel: ReportViewModel by viewModels()
-
     private var imageCapture: ImageCapture? = null
+    private var imageUri: Uri? = null
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -58,9 +60,13 @@ class ReportCameraFragment : Fragment() {
 
         binding.btnReportCameraCaptureImage.setOnClickListener {
             takePhoto()
+            parentFragmentManager.setFragmentResult(IMAGE_RESULT_KEY, Bundle().apply {
+                putString(IMAGE_URI, imageUri.toString())
+            })
             findNavController().popBackStack()
         }
 
+        cameraExecutor = Executors.newSingleThreadExecutor()
 
         return binding.root
     }
@@ -94,11 +100,15 @@ class ReportCameraFragment : Fragment() {
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Toast.makeText(requireContext(), "Photo capture failed: ${exc.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Photo capture failed: ${exc.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-
+                    imageUri = output.savedUri
                 }
             }
         )
