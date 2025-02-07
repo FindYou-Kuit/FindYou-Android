@@ -33,8 +33,12 @@ class ReportImageDialog(
 
         binding.btnReportImageDialogCapture.setOnClickListener {
             onCapture()
+            dismiss()
         }
 
-        binding.btnReportImageDialogUpload.setOnClickListener { }
+        binding.btnReportImageDialogUpload.setOnClickListener {
+
+            dismiss()
+        }
     }
 }
