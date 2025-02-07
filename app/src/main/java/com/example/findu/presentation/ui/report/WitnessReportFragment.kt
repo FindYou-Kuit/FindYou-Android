@@ -147,7 +147,11 @@ class WitnessReportFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(lifecycle.currentState) {
                 reportViewModel.imageUriList.collectLatest { imageUriList ->
-                    reportImageAdapter.submitList(imageUriList)
+                    with(reportImageAdapter) {
+                        submitList(imageUriList) {
+                            notifyItemChanged(0)
+                        }
+                    }
                 }
             }
         }
@@ -241,6 +245,7 @@ class WitnessReportFragment : Fragment() {
         reportImageAdapter = ReportImageAdapter(
             context = requireContext(),
             reportType = ReportType.WITNESS,
+            onRemoveClickListener = { position -> reportViewModel.removeImageUriPostion(position) },
             onUploadClickListener = { dialog.show() }
         ).apply {
             submitList(reportViewModel.imageUriList.value)

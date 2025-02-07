@@ -14,12 +14,19 @@ class ReportViewModel @Inject constructor(
     private val dummyDataUseCase: DummyUseCase
 ) : ViewModel() {
 
-    private val _imageUriList: MutableStateFlow<List<Uri>> = MutableStateFlow(emptyList())
+    private val _imageUriList: MutableStateFlow<List<Uri>> =
+        MutableStateFlow(mutableListOf(Uri.EMPTY))
     val imageUriList: StateFlow<List<Uri>> get() = _imageUriList
 
     fun addImageUri(uri: Uri) {
         val list = _imageUriList.value.toMutableList()
         list.add(uri)
+        _imageUriList.value = list
+    }
+
+    fun removeImageUriPostion(position: Int) {
+        val list = _imageUriList.value.toMutableList()
+        list.removeAt(position)
         _imageUriList.value = list
     }
 

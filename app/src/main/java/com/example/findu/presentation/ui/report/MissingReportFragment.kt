@@ -139,14 +139,17 @@ class MissingReportFragment : Fragment() {
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(lifecycle.currentState) {
                 reportViewModel.imageUriList.collectLatest { imageUriList ->
-                    reportImageAdapter.submitList(imageUriList)
+                    with(reportImageAdapter) {
+                        submitList(imageUriList) {
+                            notifyItemChanged(0)
+                        }
+                    }
                 }
             }
         }
     }
-
 
     private fun setUpCalender() {
         val startMonth: Calendar = Calendar.getInstance().apply {
@@ -236,7 +239,8 @@ class MissingReportFragment : Fragment() {
         reportImageAdapter = ReportImageAdapter(
             context = requireContext(),
             reportType = ReportType.MISSING,
-            onUploadClickListener = { dialog.show() }
+            onUploadClickListener = { dialog.show() },
+            onRemoveClickListener = { position -> reportViewModel.removeImageUriPostion(position) }
         ).apply {
             submitList(reportViewModel.imageUriList.value)
         }

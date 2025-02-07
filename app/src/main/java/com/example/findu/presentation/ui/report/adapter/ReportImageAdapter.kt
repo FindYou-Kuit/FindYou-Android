@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.report.adapter
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.example.findu.presentation.type.report.ReportType
 class ReportImageAdapter(
     val context: Context,
     val reportType: ReportType,
+    private val onRemoveClickListener: (Int) -> Unit,
     private val onUploadClickListener: () -> Unit
 ) : ListAdapter<Uri, RecyclerView.ViewHolder>(diffUtil) {
 
@@ -24,8 +26,9 @@ class ReportImageAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             binding.tvReportDefaultCount.text = context.getString(
-                R.string.report_image_count, currentList.size
+                R.string.report_image_count, currentList.size - 1
             )
+            Log.d("ReportImageAdapteras", currentList.size.toString())
 
             binding.root.setOnClickListener {
                 onUploadClickListener()
@@ -51,7 +54,7 @@ class ReportImageAdapter(
             }
 
             binding.ivReportUploadedImageClose.setOnClickListener {
-                removeItem(uri)
+                onRemoveClickListener(layoutPosition)
             }
 
             Glide.with(binding.root)
@@ -64,7 +67,7 @@ class ReportImageAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is DefaultImageViewHolder -> holder.bind()
-            is ImageViewHolder -> holder.bind(currentList[position - 1])
+            is ImageViewHolder -> holder.bind(currentList[position])
         }
     }
 
@@ -93,14 +96,6 @@ class ReportImageAdapter(
             }
 
         }
-
-    override fun getItemCount(): Int = currentList.size + 1
-
-    fun removeItem(uri: Uri) {
-        val list = currentList.toMutableList()
-        list.remove(uri)
-        submitList(list)
-    }
 
     override fun getItemViewType(position: Int): Int =
         if (position == 0) DEFAULT_VIEW_TYPE // 0번째 아이템은 DefaultImageViewHolder
