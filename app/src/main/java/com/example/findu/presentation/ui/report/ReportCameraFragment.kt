@@ -18,29 +18,25 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentReportCameraBinding
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_RESULT_KEY
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_URI
 import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@AndroidEntryPoint
 class ReportCameraFragment : Fragment() {
 
     private var _binding: FragmentReportCameraBinding? = null
     private val binding get() = _binding!!
-    private val requestPermissionLauncher: ActivityResultLauncher<String> by lazy {
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                startCamera()
-            } else {
-                findNavController().popBackStack()
-            }
-        }
-    }
+
     private var imageCapture: ImageCapture? = null
     private var imageUri: Uri? = null
 
@@ -55,15 +51,20 @@ class ReportCameraFragment : Fragment() {
         if (hasCameraPermission(requireContext())) {
             startCamera()
         } else {
+            val requestPermissionLauncher: ActivityResultLauncher<String> by lazy {
+                registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                    if (isGranted) {
+                        startCamera()
+                    } else {
+                        findNavController().popBackStack()
+                    }
+                }
+            }
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
         binding.btnReportCameraCaptureImage.setOnClickListener {
             takePhoto()
-            parentFragmentManager.setFragmentResult(IMAGE_RESULT_KEY, Bundle().apply {
-                putString(IMAGE_URI, imageUri.toString())
-            })
-            findNavController().popBackStack()
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -73,7 +74,10 @@ class ReportCameraFragment : Fragment() {
 
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
-        val imageCapture = imageCapture ?: return
+        imageCapture ?: let {
+            Toast.makeText(requireContext(), "Failed to take photo", Toast.LENGTH_SHORT).show()
+            return@takePhoto
+        }
 
         // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
@@ -95,9 +99,9 @@ class ReportCameraFragment : Fragment() {
 
         // Set up image capture listener, which is triggered after photo has
         // been taken
-        imageCapture.takePicture(
+        imageCapture?.takePicture(
             outputOptions,
-            ContextCompat.getMainExecutor(requireContext()),
+            ContextCompat.getMainExecutor(requireActivity()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(
@@ -109,6 +113,8 @@ class ReportCameraFragment : Fragment() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     imageUri = output.savedUri
+                    setFragmentResult(IMAGE_URI, bundleOf(IMAGE_RESULT_KEY to imageUri.toString()))
+                    findNavController().navigateUp()
                 }
             }
         )
@@ -128,7 +134,7 @@ class ReportCameraFragment : Fragment() {
                     it.setSurfaceProvider(binding.pvReportCameraViewFinder.surfaceProvider)
                 }
 
-            val imageCapture = ImageCapture.Builder()
+            imageCapture = ImageCapture.Builder()
                 .build()
 
             // Select back camera as a default
