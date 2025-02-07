@@ -1,6 +1,6 @@
 package com.example.findu.presentation.ui.report
 
-import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,15 +28,20 @@ import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
+import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Calendar
 
+@AndroidEntryPoint
 class MissingReportFragment : Fragment() {
     private var _binding: FragmentMissingReportBinding? = null
     private val binding get() = _binding!!
@@ -49,6 +58,11 @@ class MissingReportFragment : Fragment() {
         _binding = FragmentMissingReportBinding.inflate(inflater, container, false)
 
         initListener()
+
+        setFragmentResultListener(IMAGE_URI) { _, result ->
+            val imageUri = result.getString(IMAGE_RESULT_KEY)
+            imageUri?.let { reportViewModel.addImageUri(Uri.parse(imageUri)) }
+        }
 
         return binding.root
     }
@@ -97,7 +111,20 @@ class MissingReportFragment : Fragment() {
         setUpColorAdapter()
         setUpFeatureAdapter()
         setUpCalender()
+
+        observeViewModel()
     }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                reportViewModel.imageUriList.collectLatest { imageUriList ->
+                    reportImageAdapter.submitList(imageUriList)
+                }
+            }
+        }
+    }
+
 
     private fun setUpCalender() {
         val startMonth: Calendar = Calendar.getInstance().apply {
@@ -174,8 +201,20 @@ class MissingReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
-        reportImageAdapter = ReportImageAdapter(ReportType.MISSING).apply {
-            submitList(ReportDummys.dummyImageUris)
+        val dialog = ReportImageDialog(
+            requireContext(),
+            onCapture = {
+                findNavController().navigate(R.id.action_fragment_missing_report_to_fragment_report_camera)
+            },
+            onUpload = {}
+        )
+
+        reportImageAdapter = ReportImageAdapter(
+            context = requireContext(),
+            reportType = ReportType.MISSING,
+            onUploadClickListener = { dialog.show() }
+        ).apply {
+            submitList(reportViewModel.imageUriList.value)
         }
         with(binding.rvMissingReportImages) {
             adapter = reportImageAdapter
@@ -197,5 +236,8 @@ class MissingReportFragment : Fragment() {
         const val DROP_DOWN_HEIGHT = 248
         const val DROP_DOWN_MAX_COUNT = 8
         const val LOCATION_TAG = "Report Location Dialog"
+
+        const val IMAGE_RESULT_KEY = "result_key"
+        const val IMAGE_URI = "image_uri"
     }
 }

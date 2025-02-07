@@ -1,8 +1,7 @@
 package com.example.findu.presentation.ui.report.adapter
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,27 +9,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.findu.R
 import com.example.findu.databinding.ItemReportDefaultImageBinding
 import com.example.findu.databinding.ItemReportUploadedImageBinding
 import com.example.findu.presentation.type.report.ReportType
 
 class ReportImageAdapter(
+    val context: Context,
     val reportType: ReportType,
     private val onUploadClickListener: () -> Unit
 ) : ListAdapter<Uri, RecyclerView.ViewHolder>(diffUtil) {
 
     inner class DefaultImageViewHolder(private val binding: ItemReportDefaultImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-        @SuppressLint("SetTextI18n")
-        fun bind(count: Int) {
-            // 사진 개수 카운트
-            binding.tvReportDefaultCount.text = (count - 1).toString()
+        fun bind() {
+            binding.tvReportDefaultCount.text = context.getString(
+                R.string.report_image_count, currentList.size
+            )
 
             binding.root.setOnClickListener {
                 onUploadClickListener()
             }
         }
+
     }
 
     inner class ImageViewHolder(private val binding: ItemReportUploadedImageBinding) :
@@ -60,11 +61,10 @@ class ReportImageAdapter(
         }
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is DefaultImageViewHolder -> holder.bind(currentList.size)
-            is ImageViewHolder -> holder.bind(currentList[position])
+            is DefaultImageViewHolder -> holder.bind()
+            is ImageViewHolder -> holder.bind(currentList[position - 1])
         }
     }
 
@@ -94,11 +94,12 @@ class ReportImageAdapter(
 
         }
 
+    override fun getItemCount(): Int = currentList.size + 1
+
     fun removeItem(uri: Uri) {
         val list = currentList.toMutableList()
         list.remove(uri)
         submitList(list)
-//        notifyItemChanged(0)
     }
 
     override fun getItemViewType(position: Int): Int =

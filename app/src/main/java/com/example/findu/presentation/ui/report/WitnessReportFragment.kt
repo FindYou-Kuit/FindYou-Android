@@ -1,15 +1,17 @@
 package com.example.findu.presentation.ui.report
 
-import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,12 +24,15 @@ import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_HEIGHT
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_MAX_COUNT
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.LOCATION_TAG
+import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_RESULT_KEY
+import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_URI
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
+import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
@@ -35,9 +40,13 @@ import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Calendar
 
+@AndroidEntryPoint
 class WitnessReportFragment : Fragment() {
     private var _binding: FragmentWitnessReportBinding? = null
     private val binding get() = _binding!!
@@ -54,6 +63,11 @@ class WitnessReportFragment : Fragment() {
         _binding = FragmentWitnessReportBinding.inflate(inflater, container, false)
 
         initListener()
+
+        setFragmentResultListener(IMAGE_URI) { _, result ->
+            val imageUri = result.getString(IMAGE_RESULT_KEY)
+            imageUri?.let { reportViewModel.addImageUri(Uri.parse(imageUri)) }
+        }
 
         return binding.root
     }
@@ -103,6 +117,18 @@ class WitnessReportFragment : Fragment() {
         setUpColorAdapter()
         setUpFeatureAdapter()
         setUpCalender()
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                reportViewModel.imageUriList.collectLatest { imageUriList ->
+                    reportImageAdapter.submitList(imageUriList)
+                }
+            }
+        }
     }
 
     private fun setUpCalender() {
@@ -149,7 +175,7 @@ class WitnessReportFragment : Fragment() {
 
         with(binding.actvWitnessReportBreed) {
             setAdapter(breedAdapter)
-            setDropDownBackgroundResource(com.example.findu.R.drawable.bg_bottom_radius_8_g4)
+            setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
 
             setOnClickListener {
                 dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
@@ -180,8 +206,20 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
-        reportImageAdapter = ReportImageAdapter(ReportType.WITNESS).apply {
-            submitList(ReportDummys.dummyImageUris)
+        val dialog = ReportImageDialog(
+            requireContext(),
+            onCapture = {
+                findNavController().navigate(R.id.action_fragment_witness_report_to_fragment_report_camera)
+            },
+            onUpload = {}
+        )
+
+        reportImageAdapter = ReportImageAdapter(
+            context = requireContext(),
+            reportType = ReportType.WITNESS,
+            onUploadClickListener = { dialog.show() }
+        ).apply {
+            submitList(reportViewModel.imageUriList.value)
         }
         with(binding.rvWitnessReportImages) {
             adapter = reportImageAdapter

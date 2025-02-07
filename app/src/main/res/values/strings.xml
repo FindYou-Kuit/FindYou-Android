@@ -107,7 +107,7 @@
     <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000-0ddd 광진구 건국대학교 000-00 202호</string>
     <string name="report_dialog_find_location">지도에서 위치 찾기</string>
 
-    <!--  witness report  -->
+    <!--  report  -->
     <string name="report_witness">목격신고</string>
     <string name="report_missing">실종신고</string>
     <string name="report_title">신고하기</string>
@@ -122,6 +122,7 @@
     <string name="report_color_title">반려동물의 털색을 표시해 주세요!</string>
     <string name="report_feature_title">특징을 체크해주세요!</string>
     <string name="report_location">주소를 입력해주세요</string>
+    <string name="report_image_count">%d</string>
 
     <!--  colors  -->
     <string name="black_color">검정색</string>
