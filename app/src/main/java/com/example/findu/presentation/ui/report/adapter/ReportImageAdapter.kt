@@ -16,6 +16,7 @@ import com.example.findu.presentation.type.report.ReportType
 
 class ReportImageAdapter(
     val reportType: ReportType,
+    private val onUploadClickListener: () -> Unit
 ) : ListAdapter<Uri, RecyclerView.ViewHolder>(diffUtil) {
 
     inner class DefaultImageViewHolder(private val binding: ItemReportDefaultImageBinding) :
@@ -27,7 +28,7 @@ class ReportImageAdapter(
             binding.tvReportDefaultCount.text = (count - 1).toString()
 
             binding.root.setOnClickListener {
-                // TODO : 사진 이미지 업로드 기능 설정
+                onUploadClickListener()
             }
         }
     }
