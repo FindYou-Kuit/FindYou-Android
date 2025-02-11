@@ -22,5 +22,15 @@ enum class AnimalStateType(
         state = "목격신고",
         textColor = R.color.blue1,
         backgroundChipColor = R.color.blue2
-    )
+    );
+
+    companion object {
+        fun fromTag(tag: String): AnimalStateType =
+            when (tag) {
+                "보호중" -> Protect
+                "실종 신고" -> Missing
+                "목격 신고" -> Find
+                else -> Protect
+            }
+    }
 }
