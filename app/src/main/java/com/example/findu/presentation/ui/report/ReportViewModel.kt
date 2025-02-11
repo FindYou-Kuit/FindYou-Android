@@ -15,8 +15,8 @@ import javax.inject.Inject
 class ReportViewModel @Inject constructor(
     private val getBreedDataUseCase: GetBreedDataUseCase
 ) : ViewModel() {
-    private val _breedData = MutableStateFlow(BreedData())
-    val breedData: StateFlow<BreedData> = _breedData
+    private val _breedData = MutableStateFlow<BreedData?>(null)
+    val breedData: StateFlow<BreedData?> = _breedData
 
     private val _errorMessage = MutableStateFlow<String?>(null)  // 오류 메시지 관리
     val errorMessage = _errorMessage.asStateFlow()
