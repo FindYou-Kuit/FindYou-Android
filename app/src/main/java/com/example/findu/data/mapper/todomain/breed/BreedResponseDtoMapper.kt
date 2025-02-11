@@ -1,8 +1,10 @@
 package com.example.findu.data.mapper.todomain.breed
 
 import com.example.findu.data.dataremote.model.response.breed.BreedResponseDto
+import com.example.findu.data.dataremote.model.response.breed.BreedValidationResponseDto
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.BreedData
+import com.example.findu.domain.model.breed.BreedValidationData
 import com.example.findu.domain.model.breed.SpeciesType
 
 fun List<BreedResponseDto>.toDomain(): BreedData {
@@ -57,4 +59,9 @@ private fun BreedResponseDto.toDomainSpecies() =
         else -> SpeciesType.ETC
     }
 
+fun BreedValidationResponseDto.toDomain() =
+    BreedValidationData(
+        breedId = breedId,
+        isExist = isExist
+    )
 
