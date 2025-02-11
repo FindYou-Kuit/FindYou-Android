@@ -7,10 +7,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface BreedService {
-    @GET("/api/v1/reports/breeds")
+    @GET("/api/v1/breeds")
     suspend fun getBreeds(): BaseResponse<List<BreedResponseDto>>
 
-    @GET("/api/v1/reports/breeds/validation")
+    @GET("/api/v1/breeds/validation")
     suspend fun getBreedValidation(
         @Query("breedName") breedName: String
     ): BaseResponse<BreedValidationResponseDto>
