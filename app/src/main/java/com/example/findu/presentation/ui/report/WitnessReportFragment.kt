@@ -139,8 +139,8 @@ class WitnessReportFragment : Fragment() {
             repeatOnLifecycle(lifecycle.currentState) {
                 launch {
                     reportViewModel.breedData.collectLatest { breedData ->
-                        breedData?.let { data ->
-                            setUpBreedsAdapter(data)
+                        breedData?.let {
+                            setUpBreedsAdapter()
                         }
                     }
                 }
@@ -199,7 +199,7 @@ class WitnessReportFragment : Fragment() {
         }
     }
 
-    private fun setUpBreedsAdapter(data: BreedData) {
+    private fun setUpBreedsAdapter() {
         with(binding.actvWitnessReportBreed) {
             setAdapter(breedAdapter)
             setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
