@@ -10,7 +10,8 @@ import com.example.findu.databinding.DialogHomeReportDetailBinding
 
 class HomeReportDetailDialog(
     context: Context,
-    private val parentDialog: HomeReportDialog
+    private val parentDialog: Dialog,
+    private val onCloseClick: () -> Unit = {}
 ) : Dialog(context) {
     private var _binding: DialogHomeReportDetailBinding? = null
     private val binding get() = _binding!!
@@ -34,6 +35,7 @@ class HomeReportDetailDialog(
         binding.ivDialogHomeReportDetailClose.setOnClickListener {
             parentDialog.dismiss()
             dismiss()
+            onCloseClick()
         }
 
         binding.dialogHomeReportDetailPart.setOnClickListener {

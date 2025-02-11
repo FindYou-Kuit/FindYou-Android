@@ -23,7 +23,7 @@
             android:name=".SearchProtectingDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.report.ReportLocationActivity"
+            android:name=".presentation.ui.report.dialog.ReportLocationActivity"
             android:exported="false" />
 
         <meta-data

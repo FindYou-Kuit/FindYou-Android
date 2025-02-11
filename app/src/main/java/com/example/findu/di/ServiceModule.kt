@@ -3,6 +3,7 @@ package com.example.findu.di
 import com.example.findu.data.dataremote.service.DummyService
 import com.example.findu.data.dataremote.service.GptService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.example.findu.data.dataremote.service.HomeService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +24,11 @@ object ServiceModule {
 
     @Provides
     @Singleton
+    fun provideHomeService(retrofit: Retrofit): HomeService =
+        retrofit.create(HomeService::class.java)
+
+    @Provides
+    @Singleton
     fun provideGptService(
         okHttpClient: OkHttpClient,
         json: Json
@@ -37,5 +43,4 @@ object ServiceModule {
 
         return gptRetrofit.create(GptService::class.java)
     }
-
 }

@@ -26,10 +26,6 @@ class HomeReportDialog(
     }
 
     private fun initListener() {
-        binding.ivDialogHomeReportBack.setOnClickListener {
-
-        }
-
         binding.ivDialogHomeReportClose.setOnClickListener {
             dismiss()
         }
