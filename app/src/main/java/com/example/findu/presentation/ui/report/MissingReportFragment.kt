@@ -1,12 +1,10 @@
 package com.example.findu.presentation.ui.report
 
-import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -25,12 +23,13 @@ import com.example.findu.presentation.type.report.PhysicalFeatureType
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.type.report.ReportType
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_HEIGHT
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_MAX_COUNT
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
+import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_HEIGHT
+import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
+import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
+import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
@@ -203,15 +202,15 @@ class MissingReportFragment : Fragment() {
     private fun setUpBreedsAdapter(data: BreedData) {
         with(binding.actvMissingReportBreed) {
             setAdapter(breedAdapter)
-            setDropDownBackgroundResource(com.example.findu.R.drawable.bg_bottom_radius_8_g4)
+            setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
 
             setOnClickListener {
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedNames.value.size < com.example.findu.presentation.ui.report.MissingReportFragment.DROP_DOWN_MAX_COUNT)
-                        android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-                    else requireContext().dpToPx(com.example.findu.presentation.ui.report.MissingReportFragment.DROP_DOWN_HEIGHT)
+                    if (reportViewModel.selectedBreedNames.value.size < DROP_DOWN_MAX_COUNT)
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 showDropDown()
-                binding.svMissingReportContainer.verticalScrollToYPosition(com.example.findu.presentation.ui.report.MissingReportFragment.SCROLL_OFFSET)
+                binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
             }
             setOnItemClickListener { _, _, _, _ ->
                 requireContext().hideKeyboard(windowToken)
@@ -228,12 +227,12 @@ class MissingReportFragment : Fragment() {
             }
             setOnFocusChangeListener { _, hasFocus ->
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedNames.value.size < com.example.findu.presentation.ui.report.MissingReportFragment.DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedNames.value.size < DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
-                    else requireContext().dpToPx(com.example.findu.presentation.ui.report.MissingReportFragment.DROP_DOWN_HEIGHT)
+                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 if (hasFocus) {
                     showDropDown()
-                    binding.svMissingReportContainer.verticalScrollToYPosition(com.example.findu.presentation.ui.report.MissingReportFragment.SCROLL_OFFSET)
+                    binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
                 }
             }
         }
@@ -256,12 +255,5 @@ class MissingReportFragment : Fragment() {
         binding.root.viewTreeObserver.removeOnGlobalLayoutListener { }
 
         _binding = null
-    }
-
-    companion object {
-        const val SCROLL_OFFSET = 258
-        const val DROP_DOWN_HEIGHT = 248
-        const val DROP_DOWN_MAX_COUNT = 8
-        const val LOCATION_TAG = "Report Location Dialog"
     }
 }
