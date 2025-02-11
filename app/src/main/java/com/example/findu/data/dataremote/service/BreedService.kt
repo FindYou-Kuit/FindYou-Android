@@ -1,5 +1,6 @@
 package com.example.findu.data.dataremote.service
 
+import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.response.breed.BreedResponseDto
 import retrofit2.http.GET
 
