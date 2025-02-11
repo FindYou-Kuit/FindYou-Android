@@ -1,27 +1,30 @@
 package com.example.findu.domain.model.breed
 
 data class BreedData(
-    val dogBreedList : List<DogBreedData>,
-    val catBreedList : List<CatBreedData>,
-    val etcBreedList : List<EtcBreedData>
-) {
-    data class DogBreedData(
-        val breedId: Int,
-        val breedName: String,
-        val species: SpeciesType
-    )
+    val dogBreedList: List<Breed.DogBreed>,
+    val catBreedList: List<Breed.CatBreed>,
+    val etcBreedList: List<Breed.EtcBreed>
+)
 
-    data class CatBreedData(
-        val breedId: Int,
-        val breedName: String,
-        val species: SpeciesType
-    )
+sealed class Breed {
 
-    data class EtcBreedData(
+    data class DogBreed(
         val breedId: Int,
         val breedName: String,
         val species: SpeciesType
-    )
+    ) : Breed()
+
+    data class CatBreed(
+        val breedId: Int,
+        val breedName: String,
+        val species: SpeciesType
+    ): Breed()
+
+    data class EtcBreed(
+        val breedId: Int,
+        val breedName: String,
+        val species: SpeciesType
+    ): Breed()
 }
 
 

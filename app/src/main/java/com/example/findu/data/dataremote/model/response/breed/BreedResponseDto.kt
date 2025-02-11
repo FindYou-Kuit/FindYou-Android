@@ -12,3 +12,11 @@ data class BreedResponseDto(
     @SerialName("species")
     val species : String
 )
+
+@Serializable
+data class BreedValidationResponseDto(
+    @SerialName("breedId")
+    val breedId: Int,
+    @SerialName("isExist")
+    val isExist: Boolean
+)
