@@ -6,14 +6,18 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.databinding.FragmentHomeBinding
+import com.example.findu.domain.model.HomeData
 import com.example.findu.presentation.model.HomeRv
 import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.ui.home.adapter.HomeBannerAdapter
@@ -21,7 +25,11 @@ import com.example.findu.presentation.ui.home.adapter.HomeRVAdapter
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
 import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -40,13 +48,37 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        setupTodayData()
+        observeViewModel()
+        homeViewModel.getHomeData()
+
         setupBanner()
-        setupRV()
         setupReportDialog()
         setupFindDialog()
 
         return binding.root
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                launch {
+                    homeViewModel.homeData.collectLatest { homeData ->
+                        homeData?.let {
+                            setupTodayData(it)
+                            setupRV(it)
+                        }
+                    }
+                }
+
+                launch {
+                    homeViewModel.errorMessage.collectLatest { errorMessage ->
+                        errorMessage?.let {
+                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setupFindDialog() {
@@ -63,71 +95,44 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupRV() {
+    private fun setupRV(homeData: HomeData) {
         lateinit var homeProtectAdapter: HomeRVAdapter
         lateinit var homeMissingAdapter: HomeRVAdapter
-        val homeProtectList: List<HomeRv> = listOf( // dummy 값
+        val homeProtectList = homeData.protectAnimalCards.map {
             HomeRv(
                 imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
-                name = "말티즈",
-                type = AnimalStateType.Protect.state,
-                date = "2025-01-01",
-                location = "서울특별시 광진구 화양동"
-            ),
-            HomeRv(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
-                name = "사모예드",
-                type = AnimalStateType.Protect.state,
-                date = "2025-01-01",
-                location = "서울특별시 광진구 자양동"
-            ),
-            HomeRv(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
-                name = "푸들",
-                type = AnimalStateType.Protect.state,
-                date = "2025-01-01",
-                location = "서울특별시 광진구 화양동"
+                name = it.title,
+                type = AnimalStateType.fromTag(it.tag).state,
+                date = it.noticeStartDate,
+                location = it.careAddress
             )
-        )
+        }
 
-        val homeMissingList: List<HomeRv> = listOf( // dummy 값
+        val homeMissingList = homeData.reportAnimalCards.map {
             HomeRv(
                 imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
-                name = "말티즈",
-                type = AnimalStateType.Find.state,
-                date = "2025-01-01",
-                location = "서울특별시 광진구 화양동"
-            ),
-            HomeRv(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
-                name = "사모예드",
-                type = AnimalStateType.Missing.state,
-                date = "2025-01-01",
-                location = "서울특별시 광진구 자양동"
-            ),
-            HomeRv(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
-                name = "푸들",
-                type = AnimalStateType.Find.state,
-                date = "2025-01-01",
-                location = "서울특별시 광진구 화양동"
+                name = it.title,
+                type = AnimalStateType.fromTag(it.tag).state,
+                date = it.registerDate,
+                location = it.happenLocation
             )
-        )
+        }
 
         homeProtectAdapter = HomeRVAdapter(homeProtectList)
         homeMissingAdapter = HomeRVAdapter(homeMissingList)
-        binding.rvHomeProtect.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        binding.rvHomeMissing.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        binding.rvHomeProtect.adapter = homeProtectAdapter
-        binding.rvHomeMissing.adapter = homeMissingAdapter
+
+        binding.rvHomeProtect.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = homeProtectAdapter
+        }
+
+        binding.rvHomeMissing.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = homeMissingAdapter
+        }
+
         val size = resources.getDimensionPixelSize(R.dimen.MY_SIZE)
         val m_size = resources.getDimensionPixelSize(R.dimen.MY_EDGE_MARGIN)
         val deco = SpaceDecoration(size, m_size)
@@ -135,14 +140,12 @@ class HomeFragment : Fragment() {
         binding.rvHomeMissing.addItemDecoration(deco)
     }
 
-    private fun setupTodayData() {
-        val rescueCount = 2 // 오늘 구조된 동물 dummy 값
+    private fun setupTodayData(homeData: HomeData) {
         binding.tvHomeTodayRescueNum.text =
-            getString(R.string.home_today_bar_rescue_num, rescueCount)
+            getString(R.string.home_today_bar_rescue_num, homeData.todayRescuedAnimalCount)
 
-        val reportCount = 6 // 오늘 신고된 동물 dummy 값
         binding.tvHomeTodayReportNum.text =
-            getString(R.string.home_today_bar_report_num, reportCount)
+            getString(R.string.home_today_bar_report_num, homeData.todayReportAnimalCount)
     }
 
     private fun setupBanner() {
