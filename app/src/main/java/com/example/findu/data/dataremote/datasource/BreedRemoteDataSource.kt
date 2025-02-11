@@ -8,4 +8,5 @@ import com.example.findu.data.dataremote.model.response.breed.BreedValidationRes
 interface BreedRemoteDataSource {
     suspend fun getBreed(): BaseResponse<List<BreedResponseDto>>
 
+    suspend fun getBreedValidation(breedName: String): BaseResponse<BreedValidationResponseDto>
 }

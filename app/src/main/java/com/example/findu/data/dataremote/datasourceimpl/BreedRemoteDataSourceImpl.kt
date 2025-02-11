@@ -12,4 +12,8 @@ class BreedRemoteDataSourceImpl @Inject constructor(
 ) : BreedRemoteDataSource {
     override suspend fun getBreed(): BaseResponse<List<BreedResponseDto>> =
         service.getBreeds()
+
+    override suspend fun getBreedValidation(breedName: String): BaseResponse<BreedValidationResponseDto> =
+        service.getBreedValidation(breedName)
+
 }
