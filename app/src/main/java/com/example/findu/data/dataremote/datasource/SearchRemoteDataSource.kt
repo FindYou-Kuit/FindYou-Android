@@ -1,12 +1,8 @@
-package com.example.findu.data.dataremote.service
+package com.example.findu.data.dataremote.datasource
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.response.SearchResponseDto
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
 
-interface SearchService {
-    @GET("/api/v1/reports")
+interface SearchRemoteDataSource {
     suspend fun getSearch(): BaseResponse<SearchResponseDto>
 }
