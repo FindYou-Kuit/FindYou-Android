@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchRescueBinding
-import com.example.findu.presentation.ui.search.model.SearchData
+import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
-import com.example.findu.presentation.ui.search.model.SearchStatus
+import com.example.findu.domain.model.search.SearchStatus
 import com.google.android.material.chip.Chip
 
 class SearchRescueFragment : Fragment() {

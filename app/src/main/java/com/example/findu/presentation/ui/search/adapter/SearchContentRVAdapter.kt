@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
 import com.example.findu.databinding.SearchHorizontalContentItemBinding
 import com.example.findu.databinding.ItemSearchGridContentBinding
-import com.example.findu.presentation.ui.search.model.SearchData
+import com.example.findu.domain.model.search.SearchData
 
 class SearchContentRVAdapter(
     private val items: ArrayList<SearchData>,

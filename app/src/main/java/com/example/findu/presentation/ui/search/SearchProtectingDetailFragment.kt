@@ -14,7 +14,7 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
 import com.example.findu.presentation.ui.search.model.SearchDetailData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.presentation.ui.search.model.SearchData
+import com.example.findu.domain.model.search.SearchData
 
 class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailProtectingBinding

@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.search.model
+package com.example.findu.domain.model.search
 
 import java.io.Serializable
 

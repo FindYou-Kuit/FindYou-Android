@@ -13,7 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.presentation.ui.search.model.SearchData
+import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.model.SearchDetailData
 
 class SearchDisappearDetailFragment : Fragment() {
