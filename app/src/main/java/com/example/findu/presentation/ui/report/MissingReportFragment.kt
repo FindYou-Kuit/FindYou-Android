@@ -174,7 +174,12 @@ class MissingReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
-        reportImageAdapter = ReportImageAdapter(ReportType.MISSING).apply {
+        reportImageAdapter = ReportImageAdapter(
+            reportType = ReportType.MISSING,
+            onAIButtonClick = { uri ->
+                reportViewModel.getGptData(uri)
+            }
+        ).apply {
             submitList(ReportDummys.dummyImageUris)
         }
         with(binding.rvMissingReportImages) {
