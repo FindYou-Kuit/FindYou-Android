@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchResponseDto(
     @SerialName("cardId")
-    val cardId: Int,
+    val cardId: Long,
     @SerialName("thumbnailImageUrl")
     val thumbnailImageUrl: String,
     @SerialName("title")
