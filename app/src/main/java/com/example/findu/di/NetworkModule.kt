@@ -25,6 +25,7 @@ object NetworkModule {
         Json {
             isLenient = true
             prettyPrint = true
+            encodeDefaults = true
             explicitNulls = false
             ignoreUnknownKeys = true
         }

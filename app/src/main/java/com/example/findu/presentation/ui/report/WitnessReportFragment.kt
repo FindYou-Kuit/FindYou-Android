@@ -35,9 +35,11 @@ import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.util.Calendar
 
+@AndroidEntryPoint
 class WitnessReportFragment : Fragment() {
     private var _binding: FragmentWitnessReportBinding? = null
     private val binding get() = _binding!!
@@ -180,7 +182,11 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
-        reportImageAdapter = ReportImageAdapter(ReportType.WITNESS).apply {
+        reportImageAdapter = ReportImageAdapter(
+            reportType = ReportType.WITNESS,
+            onAIButtonClick = { uri ->
+                reportViewModel.getGptData(uri)
+            }).apply {
             submitList(ReportDummys.dummyImageUris)
         }
         with(binding.rvWitnessReportImages) {
