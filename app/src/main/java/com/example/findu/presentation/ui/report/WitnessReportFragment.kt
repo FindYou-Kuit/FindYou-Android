@@ -246,10 +246,14 @@ class WitnessReportFragment : Fragment() {
             context = requireContext(),
             reportType = ReportType.WITNESS,
             onRemoveClickListener = { position -> reportViewModel.removeImageUriPostion(position) },
-            onUploadClickListener = { dialog.show() }
+            onUploadClickListener = { dialog.show() },
+            onAIButtonClick = { uri ->
+                reportViewModel.getGptData(uri)
+            }
         ).apply {
             submitList(reportViewModel.imageUriList.value)
         }
+        
         with(binding.rvWitnessReportImages) {
             adapter = reportImageAdapter
             layoutManager = LinearLayoutManager(

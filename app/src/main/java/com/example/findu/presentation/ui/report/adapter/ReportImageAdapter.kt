@@ -20,6 +20,7 @@ class ReportImageAdapter(
     val reportType: ReportType,
     private val onRemoveClickListener: (Int) -> Unit,
     private val onUploadClickListener: () -> Unit
+    val onAIButtonClick : (Uri) -> Unit
 ) : ListAdapter<Uri, RecyclerView.ViewHolder>(diffUtil) {
 
     inner class DefaultImageViewHolder(private val binding: ItemReportDefaultImageBinding) :
@@ -28,7 +29,6 @@ class ReportImageAdapter(
             binding.tvReportDefaultCount.text = context.getString(
                 R.string.report_image_count, currentList.size - 1
             )
-            Log.d("ReportImageAdapteras", currentList.size.toString())
 
             binding.root.setOnClickListener {
                 onUploadClickListener()
@@ -44,7 +44,7 @@ class ReportImageAdapter(
                 // 목격 신고
                 ReportType.WITNESS -> {
                     binding.btnReportUploadedAiDistinction.setOnClickListener {
-                        // TODO : AI 버튼 클릭 이벤트 설정
+                        onAIButtonClick(uri)
                     }
                 }
                 // 실종 신고
@@ -60,7 +60,6 @@ class ReportImageAdapter(
             Glide.with(binding.root)
                 .load(uri)
                 .into(binding.ivReportUploadedImage)
-
         }
     }
 

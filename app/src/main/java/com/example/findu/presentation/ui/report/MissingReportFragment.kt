@@ -235,15 +235,18 @@ class MissingReportFragment : Fragment() {
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
         )
-
         reportImageAdapter = ReportImageAdapter(
             context = requireContext(),
-            reportType = ReportType.MISSING,
+            reportType = ReportType.WITNESS,
+            onRemoveClickListener = { position -> reportViewModel.removeImageUriPostion(position) },
             onUploadClickListener = { dialog.show() },
-            onRemoveClickListener = { position -> reportViewModel.removeImageUriPostion(position) }
+            onAIButtonClick = { uri ->
+                reportViewModel.getGptData(uri)
+            }
         ).apply {
             submitList(reportViewModel.imageUriList.value)
         }
+
         with(binding.rvMissingReportImages) {
             adapter = reportImageAdapter
             layoutManager =
