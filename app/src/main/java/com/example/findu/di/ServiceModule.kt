@@ -1,5 +1,6 @@
 package com.example.findu.di
 
+import com.example.findu.data.dataremote.service.BreedService
 import com.example.findu.data.dataremote.service.DummyService
 import com.example.findu.data.dataremote.service.GptService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -27,6 +28,11 @@ object ServiceModule {
     fun provideHomeService(retrofit: Retrofit): HomeService =
         retrofit.create(HomeService::class.java)
 
+    @Provides
+    @Singleton
+    fun provideBreedService(retrofit: Retrofit): BreedService =
+        retrofit.create(BreedService::class.java)
+        
     @Provides
     @Singleton
     fun provideGptService(
