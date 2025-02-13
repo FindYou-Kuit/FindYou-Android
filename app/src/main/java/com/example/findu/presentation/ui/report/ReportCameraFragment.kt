@@ -77,22 +77,19 @@ class ReportCameraFragment : Fragment() {
     }
 
     private fun takePhoto() {
-        // Get a stable reference of the modifiable image capture use case
         imageCapture ?: let {
-            Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), FAILED_TO_TAKE_PHOTO_MESSAGE, Toast.LENGTH_SHORT).show()
             return@takePhoto
         }
 
-        // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/FindU-Image")
+            put(MediaStore.MediaColumns.MIME_TYPE, TYPE_IMAGE_JPEG)
+            put(MediaStore.Images.Media.RELATIVE_PATH, PICTURE_ROUTE)
         }
 
-        // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(
                 requireActivity().contentResolver,
@@ -101,8 +98,6 @@ class ReportCameraFragment : Fragment() {
             )
             .build()
 
-        // Set up image capture listener, which is triggered after photo has
-        // been taken
         imageCapture?.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireActivity()),
@@ -110,7 +105,7 @@ class ReportCameraFragment : Fragment() {
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(
                         requireContext(),
-                        "Photo capture failed: ${exc.message}",
+                        FAILED_TO_TAKE_PHOTO_MESSAGE,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -128,10 +123,8 @@ class ReportCameraFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireActivity())
 
         cameraProviderFuture.addListener({
-            // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            // Preview
             val preview = Preview.Builder()
                 .build()
                 .also {
@@ -141,20 +134,17 @@ class ReportCameraFragment : Fragment() {
             imageCapture = ImageCapture.Builder()
                 .build()
 
-            // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
 
-                // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
                 )
 
             } catch (exc: Exception) {
-                Toast.makeText(requireContext(), "Failed to Start Camera", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), FAILED_TO_START_CAMERA_MESSAGE, Toast.LENGTH_SHORT)
                     .show()
                 findNavController().popBackStack()
             }
@@ -171,6 +161,12 @@ class ReportCameraFragment : Fragment() {
                 Manifest.permission.CAMERA,
             ).apply {
             }.toTypedArray()
+
+        private const val TYPE_IMAGE_JPEG = "image/jpeg"
+        private const val PICTURE_ROUTE = "Pictures/FindU-Image"
+
+        private const val FAILED_TO_TAKE_PHOTO_MESSAGE = "이미지 촬영에 실패했습니다."
+        private const val FAILED_TO_START_CAMERA_MESSAGE = "카메라를 시작할 수 없습니다."
     }
 
 }
