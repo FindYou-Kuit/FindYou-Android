@@ -12,10 +12,12 @@ import javax.inject.Inject
 class ReportRepositoryImpl @Inject constructor(
     private val gptRemoteDataSource: GptRemoteDataSource
 ) : ReportRepository {
-    override suspend fun postImageAnalysis(encodeString: String): Result<GptData> {
-        val request = GptRequestDto().apply {
-            imageContent.imageUrl = ImageUrl(url = encodeString)
+    override suspend fun postImageAnalysis(encodeString: String): Result<GptData> =
+        runCatching {
+            val request = GptRequestDto().apply {
+                imageContent.imageUrl = ImageUrl(url = encodeString)
+            }
+            gptRemoteDataSource.postImagePrompt(request).toDomain()
         }
-        return runCatching { gptRemoteDataSource.postImagePrompt(request).toDomain() }
-    }
+
 }
