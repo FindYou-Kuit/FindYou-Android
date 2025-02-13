@@ -51,16 +51,7 @@ class ReportCameraFragment : Fragment() {
         if (hasCameraPermission(requireContext())) {
             startCamera()
         } else {
-            val requestPermissionLauncher: ActivityResultLauncher<String> by lazy {
-                registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                    if (isGranted) {
-                        startCamera()
-                    } else {
-                        findNavController().popBackStack()
-                    }
-                }
-            }
-            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            launchRequestPermission()
         }
 
         binding.btnReportCameraCaptureImage.setOnClickListener {
@@ -72,10 +63,23 @@ class ReportCameraFragment : Fragment() {
         return binding.root
     }
 
+    private fun launchRequestPermission() {
+        val requestPermissionLauncher: ActivityResultLauncher<String> =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    startCamera()
+                } else {
+                    findNavController().popBackStack()
+                }
+
+            }
+        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+    }
+
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         imageCapture ?: let {
-            Toast.makeText(requireContext(), "Failed to take photo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT).show()
             return@takePhoto
         }
 
