@@ -34,7 +34,7 @@ object ServiceModule {
         json: Json
     ): GptService {
         val gptRetrofit = Retrofit.Builder()
-            .baseUrl("https://api.openai.com/v1")
+            .baseUrl("https://api.openai.com/")
             .client(okHttpClient)
             .addConverterFactory(
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull()))

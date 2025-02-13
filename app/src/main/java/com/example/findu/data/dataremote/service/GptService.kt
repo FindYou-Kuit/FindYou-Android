@@ -8,7 +8,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface GptService {
-    @POST("/chat/completions")
+    @POST("/v1/chat/completions")
     suspend fun recognizeImage(
         @Header("Content-Type") contentType: String = "application/json",
         @Header("Authorization") authorization: String = BuildConfig.GPT_KEY,
