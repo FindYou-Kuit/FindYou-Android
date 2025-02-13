@@ -10,6 +10,7 @@ import com.example.findu.presentation.util.UriUtil.uriToBase64
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,10 +20,10 @@ class ReportViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _gptData: MutableStateFlow<GptData> = MutableStateFlow(GptData())
-    val gptData = _gptData
+    val gptData = _gptData.asStateFlow()
 
     private val _errorMessage: MutableStateFlow<String> = MutableStateFlow("")
-    val errorMessage = _errorMessage
+    val errorMessage = _errorMessage.asStateFlow()
 
     fun getGptData(imageUri: Uri) {
         viewModelScope.launch {
