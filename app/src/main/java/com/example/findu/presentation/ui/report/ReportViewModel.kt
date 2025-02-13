@@ -1,7 +1,8 @@
 package com.example.findu.presentation.ui.report
 
-import android.content.Context
 import android.net.Uri
+import android.util.Log
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.report.GptData
@@ -19,12 +20,29 @@ class ReportViewModel @Inject constructor(
     private val analysisImageWithGptUseCase: AnalysisImageWithGptUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
+
+    private val _imageUriList: MutableStateFlow<List<Uri>> =
+        MutableStateFlow(mutableListOf(Uri.EMPTY))
+    val imageUriList: StateFlow<List<Uri>> get() = _imageUriList
+
     private val _gptData: MutableStateFlow<GptData> = MutableStateFlow(GptData())
     val gptData = _gptData.asStateFlow()
 
     private val _errorMessage: MutableStateFlow<String> = MutableStateFlow("")
     val errorMessage = _errorMessage.asStateFlow()
 
+    fun addImageUri(uri: Uri) {
+        val list = _imageUriList.value.toMutableList()
+        list.add(uri)
+        _imageUriList.value = list
+    }
+
+    fun removeImageUriPostion(position: Int) {
+        val list = _imageUriList.value.toMutableList()
+        list.removeAt(position)
+        _imageUriList.value = list
+    }
+    
     fun getGptData(imageUri: Uri) {
         viewModelScope.launch {
             imageUri.uriToBase64(context)?.let { encodeString ->

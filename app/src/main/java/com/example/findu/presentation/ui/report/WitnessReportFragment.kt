@@ -1,15 +1,21 @@
 package com.example.findu.presentation.ui.report
 
-import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,12 +28,15 @@ import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_HEIGHT
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_MAX_COUNT
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.LOCATION_TAG
+import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_RESULT_KEY
+import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_URI
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
+import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
@@ -36,6 +45,8 @@ import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Calendar
 
@@ -49,6 +60,8 @@ class WitnessReportFragment : Fragment() {
     private lateinit var breedAdapter: ArrayAdapter<String>
     private lateinit var colorAdapter: ReportColorAdapter
 
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,8 +69,29 @@ class WitnessReportFragment : Fragment() {
         _binding = FragmentWitnessReportBinding.inflate(inflater, container, false)
 
         initListener()
+        getCapturedUri()
+        getUploadedUri()
 
         return binding.root
+    }
+
+    private fun getUploadedUri() {
+        pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    reportViewModel.addImageUri(uri)
+                } else {
+                    Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun getCapturedUri() {
+        setFragmentResultListener(IMAGE_URI) { _, result ->
+            val imageUri = result.getString(IMAGE_RESULT_KEY)
+            imageUri?.let { reportViewModel.addImageUri(Uri.parse(imageUri)) }
+        }
+
     }
 
     private fun initListener() {
@@ -105,6 +139,22 @@ class WitnessReportFragment : Fragment() {
         setUpColorAdapter()
         setUpFeatureAdapter()
         setUpCalender()
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                reportViewModel.imageUriList.collectLatest { imageUriList ->
+                    with(reportImageAdapter) {
+                        submitList(imageUriList) {
+                            notifyItemChanged(0)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpCalender() {
@@ -151,7 +201,7 @@ class WitnessReportFragment : Fragment() {
 
         with(binding.actvWitnessReportBreed) {
             setAdapter(breedAdapter)
-            setDropDownBackgroundResource(com.example.findu.R.drawable.bg_bottom_radius_8_g4)
+            setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
 
             setOnClickListener {
                 dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
@@ -182,13 +232,28 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
+        val dialog = ReportImageDialog(
+            requireContext(),
+            onCapture = {
+                findNavController().navigate(R.id.action_fragment_witness_report_to_fragment_report_camera)
+            },
+            onUpload = {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+        )
+
         reportImageAdapter = ReportImageAdapter(
+            context = requireContext(),
             reportType = ReportType.WITNESS,
+            onRemoveClickListener = { position -> reportViewModel.removeImageUriPostion(position) },
+            onUploadClickListener = { dialog.show() },
             onAIButtonClick = { uri ->
                 reportViewModel.getGptData(uri)
-            }).apply {
-            submitList(ReportDummys.dummyImageUris)
+            }
+        ).apply {
+            submitList(reportViewModel.imageUriList.value)
         }
+        
         with(binding.rvWitnessReportImages) {
             adapter = reportImageAdapter
             layoutManager = LinearLayoutManager(
