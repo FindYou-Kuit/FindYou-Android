@@ -239,7 +239,11 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
-        reportImageAdapter = ReportImageAdapter(ReportType.WITNESS).apply {
+        reportImageAdapter = ReportImageAdapter(
+            reportType = ReportType.WITNESS,
+            onAIButtonClick = { uri ->
+                reportViewModel.getGptData(uri)
+            }).apply {
             submitList(ReportDummys.dummyImageUris)
         }
         with(binding.rvWitnessReportImages) {
