@@ -1,7 +1,6 @@
 package com.example.findu.presentation.ui.report
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMissingReportBinding
-import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
@@ -54,7 +52,7 @@ class MissingReportFragment : Fragment() {
     private val breedAdapter: ReportBreedAdapter by lazy {
         ReportBreedAdapter(
             requireContext(),
-            reportViewModel.selectedBreedNames.value.toMutableList()
+            reportViewModel.selectedBreedList.value.toMutableList()
         )
     }
     private lateinit var colorAdapter: ReportColorAdapter
@@ -126,7 +124,6 @@ class MissingReportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("MissingReportFragment", "onViewCreated")
         setupUploadImageRecyclerView()
         setUpColorAdapter()
         setUpFeatureAdapter()
@@ -156,7 +153,7 @@ class MissingReportFragment : Fragment() {
                 }
 
                 launch {
-                    reportViewModel.selectedBreedNames.collectLatest { selectedBreedNames ->
+                    reportViewModel.selectedBreedList.collectLatest { selectedBreedNames ->
                         if (selectedBreedNames.isNotEmpty())
                             breedAdapter.changeItems(selectedBreedNames)
                     }
@@ -209,7 +206,7 @@ class MissingReportFragment : Fragment() {
 
             setOnClickListener {
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedNames.value.size < DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 showDropDown()
@@ -220,7 +217,7 @@ class MissingReportFragment : Fragment() {
                 clearFocus()
             }
             addTextChangedListener { text ->
-                reportViewModel.selectedBreedNames.value
+                reportViewModel.selectedBreedList.value
                     .filter { it.contains(text.toString()) }
                     .let { matches ->
                         dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
@@ -230,7 +227,7 @@ class MissingReportFragment : Fragment() {
             }
             setOnFocusChangeListener { _, hasFocus ->
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedNames.value.size < DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 if (hasFocus) {

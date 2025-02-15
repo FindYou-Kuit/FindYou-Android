@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentWitnessReportBinding
-import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
@@ -53,7 +52,7 @@ class WitnessReportFragment : Fragment() {
     private val breedAdapter: ReportBreedAdapter by lazy {
         ReportBreedAdapter(
             requireContext(),
-            reportViewModel.selectedBreedNames.value.toMutableList()
+            reportViewModel.selectedBreedList.value.toMutableList()
         )
     }
     private lateinit var colorAdapter: ReportColorAdapter
@@ -154,11 +153,49 @@ class WitnessReportFragment : Fragment() {
                 }
 
                 launch {
-                    reportViewModel.selectedBreedNames.collectLatest { selectedBreedNames ->
+                    reportViewModel.selectedBreedList.collectLatest { selectedBreedNames ->
                         if (selectedBreedNames.isNotEmpty())
                             breedAdapter.changeItems(selectedBreedNames)
                     }
                 }
+
+                launch {
+                    reportViewModel.gptData.collectLatest { gptData ->
+                        setSpecies()
+                        setBreedName()
+                        setFurColors()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setFurColors() {
+        colorAdapter.updateSelectedColors(reportViewModel.gptData.value.furColors)
+    }
+
+    private fun setBreedName() {
+        if (reportViewModel.gptData.value.breed.isEmpty())
+            binding.actvWitnessReportBreed.setHint(R.string.report_cannot_distinction)
+        else
+            binding.actvWitnessReportBreed.setText(reportViewModel.gptData.value.breed)
+    }
+
+    private fun setSpecies() {
+        when (reportViewModel.gptData.value.species) {
+            SpeciesType.DOG -> {
+                binding.rbWitnessReportDogButton.isChecked = true
+                reportViewModel.selectSpeciesType(SpeciesType.DOG)
+            }
+
+            SpeciesType.CAT -> {
+                binding.rbWitnessReportCatButton.isChecked = true
+                reportViewModel.selectSpeciesType(SpeciesType.CAT)
+            }
+
+            SpeciesType.ETC, null -> {
+                binding.rbWitnessReportExtraButton.isChecked = true
+                reportViewModel.selectSpeciesType(SpeciesType.ETC)
             }
         }
     }
@@ -206,7 +243,7 @@ class WitnessReportFragment : Fragment() {
 
             setOnClickListener {
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedNames.value.size < DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 showDropDown()
@@ -217,7 +254,7 @@ class WitnessReportFragment : Fragment() {
                 clearFocus()
             }
             addTextChangedListener { text ->
-                reportViewModel.selectedBreedNames.value
+                reportViewModel.selectedBreedList.value
                     .filter { it.contains(text.toString()) }
                     .let { matches ->
                         dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
@@ -227,7 +264,7 @@ class WitnessReportFragment : Fragment() {
             }
             setOnFocusChangeListener { _, hasFocus ->
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedNames.value.size < DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 if (hasFocus) {

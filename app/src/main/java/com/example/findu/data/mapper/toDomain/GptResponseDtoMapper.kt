@@ -10,12 +10,12 @@ fun GptResponseDto.toDomain(): GptData =
         val parsedData = content.split(",")
 
         GptData(
-            breed = parsedData[0],
-            species = when (parsedData[1]) {
+            species = when (parsedData[0]) {
                 SpeciesType.DOG.species -> SpeciesType.DOG
                 SpeciesType.CAT.species -> SpeciesType.CAT
                 else -> SpeciesType.ETC
             },
+            breed = parsedData[1],
             furColors = parsedData.drop(2).map { color ->
                 when (color) {
                     FurColorType.BLACK.color -> FurColorType.BLACK
