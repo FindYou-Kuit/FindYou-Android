@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentWitnessReportBinding
 import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.presentation.model.GptUiState
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
@@ -166,6 +167,19 @@ class WitnessReportFragment : Fragment() {
                         setFurColors()
                     }
                 }
+
+                launch {
+                    reportViewModel.gptUiState.collectLatest { uiState ->
+                        when(uiState) {
+                            GptUiState.Loading -> {
+                                binding.pbReportLoading.visibility = View.VISIBLE
+                            }
+                            GptUiState.Default, GptUiState.Finished -> {
+                                binding.pbReportLoading.visibility = View.GONE
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -193,10 +207,12 @@ class WitnessReportFragment : Fragment() {
                 reportViewModel.selectSpeciesType(SpeciesType.CAT)
             }
 
-            SpeciesType.ETC, null -> {
+            SpeciesType.ETC -> {
                 binding.rbWitnessReportExtraButton.isChecked = true
                 reportViewModel.selectSpeciesType(SpeciesType.ETC)
             }
+
+            null -> {}
         }
     }
 
