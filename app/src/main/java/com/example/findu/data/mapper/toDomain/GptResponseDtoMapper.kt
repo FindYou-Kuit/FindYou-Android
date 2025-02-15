@@ -1,7 +1,6 @@
 package com.example.findu.data.mapper.todomain
 
 import com.example.findu.data.dataremote.model.response.GptResponseDto
-import com.example.findu.domain.model.report.Breed
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.GptData
 import com.example.findu.domain.model.report.SpeciesType
@@ -11,7 +10,7 @@ fun GptResponseDto.toDomain(): GptData =
         val parsedData = content.split(",")
 
         GptData(
-            breed = Breed(parsedData[0]),
+            breed = parsedData[0],
             species = when (parsedData[1]) {
                 SpeciesType.DOG.species -> SpeciesType.DOG
                 SpeciesType.CAT.species -> SpeciesType.CAT
