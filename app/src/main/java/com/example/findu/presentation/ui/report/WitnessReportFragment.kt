@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentWitnessReportBinding
 import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.domain.model.report.GptData
+import com.example.findu.presentation.model.GptUiState
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
@@ -161,28 +163,42 @@ class WitnessReportFragment : Fragment() {
 
                 launch {
                     reportViewModel.gptData.collectLatest { gptData ->
-                        setSpecies()
-                        setBreedName()
-                        setFurColors()
+                        setSpecies(gptData)
+                        setBreedName(gptData)
+                        setFurColors(gptData)
+                    }
+                }
+
+                launch {
+                    reportViewModel.gptUiState.collectLatest { uiState ->
+                        when (uiState) {
+                            GptUiState.Loading -> {
+                                binding.pbReportLoading.visibility = View.VISIBLE
+                            }
+
+                            GptUiState.Default, GptUiState.Finished -> {
+                                binding.pbReportLoading.visibility = View.GONE
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun setFurColors() {
-        colorAdapter.updateSelectedColors(reportViewModel.gptData.value.furColors)
+    private fun setFurColors(gptData: GptData) {
+        colorAdapter.updateSelectedColors(gptData.furColors)
     }
 
-    private fun setBreedName() {
-        if (reportViewModel.gptData.value.breed.isEmpty())
+    private fun setBreedName(gptData: GptData) {
+        if (gptData.breed.isEmpty())
             binding.actvWitnessReportBreed.setHint(R.string.report_cannot_distinction)
         else
-            binding.actvWitnessReportBreed.setText(reportViewModel.gptData.value.breed)
+            binding.actvWitnessReportBreed.setText(gptData.breed)
     }
 
-    private fun setSpecies() {
-        when (reportViewModel.gptData.value.species) {
+    private fun setSpecies(gptData: GptData) {
+        when (gptData.species) {
             SpeciesType.DOG -> {
                 binding.rbWitnessReportDogButton.isChecked = true
                 reportViewModel.selectSpeciesType(SpeciesType.DOG)
@@ -193,10 +209,12 @@ class WitnessReportFragment : Fragment() {
                 reportViewModel.selectSpeciesType(SpeciesType.CAT)
             }
 
-            SpeciesType.ETC, null -> {
+            SpeciesType.ETC -> {
                 binding.rbWitnessReportExtraButton.isChecked = true
                 reportViewModel.selectSpeciesType(SpeciesType.ETC)
             }
+
+            null -> {}
         }
     }
 
