@@ -3,7 +3,7 @@ package com.example.findu.data.mapper.todomain
 import com.example.findu.data.dataremote.model.response.GptResponseDto
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.GptData
-import com.example.findu.domain.model.report.SpeciesType
+import com.example.findu.domain.model.breed.SpeciesType
 
 fun GptResponseDto.toDomain(): GptData =
     this.choices.firstOrNull()?.message?.content?.let { content ->
