@@ -20,28 +20,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReportViewModel @Inject constructor(
-) : ViewModel() {
-    private val getBreedDataUseCase: GetBreedDataUseCase
+    private val getBreedDataUseCase: GetBreedDataUseCase,
     private val analysisImageWithGptUseCase: AnalysisImageWithGptUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
-  
+
     private val _gptData: MutableStateFlow<GptData> = MutableStateFlow(GptData())
     val gptData = _gptData.asStateFlow()
 
-    private val _errorMessage: MutableStateFlow<String> = MutableStateFlow("")
-    val errorMessage = _errorMessage.asStateFlow()
-    
     private val _breedData = MutableStateFlow<BreedData?>(null)
     val breedData: StateFlow<BreedData?> = _breedData
-
-    private val _errorMessage = MutableStateFlow<String?>(null)  // 오류 메시지 관리
-    val errorMessage = _errorMessage.asStateFlow()
 
     private val _speciesType = MutableStateFlow(SpeciesType.ETC)
 
     private val _selectedBreedNames = MutableStateFlow<List<String>>(emptyList())
     val selectedBreedNames: StateFlow<List<String>> = _selectedBreedNames
+
+    private val _errorMessage: MutableStateFlow<String?> = MutableStateFlow(null)
+    val errorMessage = _errorMessage.asStateFlow()
 
     init {
         getBreedData()
