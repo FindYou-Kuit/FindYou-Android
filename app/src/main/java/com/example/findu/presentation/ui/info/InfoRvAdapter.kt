@@ -8,7 +8,8 @@ import com.example.findu.databinding.ItemInfoRvBinding
 import com.example.findu.presentation.model.InfoRv
 
 class InfoRvAdapter(
-    private val items: List<InfoRv>
+    private val items: List<InfoRv>,
+    private val onItemClick: (InfoRv) -> Unit
 ) : RecyclerView.Adapter<InfoRvAdapter.InfoViewHolder>() {
     inner class InfoViewHolder(private val binding: ItemInfoRvBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -19,6 +20,10 @@ class InfoRvAdapter(
             Glide.with(binding.root.context)
                 .load(item.image)
                 .into(binding.ivInfoImage)
+
+            binding.root.setOnClickListener {
+                onItemClick(item)
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentInfoBinding
@@ -47,8 +48,19 @@ class InfoFragment : Fragment() {
                 description = R.string.info_description
             )
         )
-        infoAdapter = InfoRvAdapter(infoList)
-        binding.rvInfo.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        infoAdapter = InfoRvAdapter(infoList) { item ->
+            when (item.image) {
+                R.drawable.img_banner_green -> {
+                    findNavController().navigate(R.id.fragment_report_info)
+                }
+
+                else -> {
+                    findNavController().navigate(R.id.fragment_home)
+                }
+            }
+        }
+        binding.rvInfo.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvInfo.adapter = infoAdapter
     }
 
