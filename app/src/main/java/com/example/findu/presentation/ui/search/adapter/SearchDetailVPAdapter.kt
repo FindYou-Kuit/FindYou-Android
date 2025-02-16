@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.databinding.ItemSearchDetailImgBinding
-import com.example.findu.presentation.ui.search.model.SearchDetailData
+import com.example.findu.presentation.ui.search.model.DetailSearchRv
 
-class SearchDetailVPAdapter(private val images: List<SearchDetailData>) :
+class SearchDetailVPAdapter(private val images: List<DetailSearchRv>) :
     RecyclerView.Adapter<SearchDetailVPAdapter.ViewHolder>() {
 
     private val extendedImg = listOf(images.last()) + images + listOf(images.first())
 
     inner class ViewHolder(private val binding: ItemSearchDetailImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(imageData: SearchDetailData) {
+        fun bind(imageData: DetailSearchRv) {
             binding.ivSearchDetailContent.setImageResource(imageData.image)
         }
     }

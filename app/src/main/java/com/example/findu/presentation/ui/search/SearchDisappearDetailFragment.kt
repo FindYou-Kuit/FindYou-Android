@@ -13,18 +13,17 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.domain.model.search.SearchData
-import com.example.findu.presentation.ui.search.model.SearchDetailData
+import com.example.findu.presentation.ui.search.model.DetailSearchRv
 import com.example.findu.presentation.ui.search.model.SearchRv
 
 class SearchDisappearDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchDetailDisappearBinding
     private val imageList = listOf(
-        SearchDetailData(R.drawable.img_search_detail),
-        SearchDetailData(R.drawable.img_search_detail),
-        SearchDetailData(R.drawable.img_search_detail),
-        SearchDetailData(R.drawable.img_search_detail)
+        DetailSearchRv(R.drawable.img_search_detail),
+        DetailSearchRv(R.drawable.img_search_detail),
+        DetailSearchRv(R.drawable.img_search_detail),
+        DetailSearchRv(R.drawable.img_search_detail)
     )
 
     override fun onCreateView(

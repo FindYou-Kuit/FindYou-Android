@@ -1,5 +1,5 @@
 package com.example.findu.presentation.ui.search.model
 
-data class SearchDetailData(
+data class DetailSearchRv(
     val image : Int,
 )
