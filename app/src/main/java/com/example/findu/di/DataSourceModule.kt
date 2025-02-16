@@ -3,8 +3,10 @@ package com.example.findu.di
 import com.example.findu.data.datalocal.datasource.DummyLocalDataSource
 import com.example.findu.data.dataremote.datasource.DummyRemoteDataSource
 import com.example.findu.data.datalocal.datasourceimpl.DummyLocalDataSourceImpl
+import com.example.findu.data.dataremote.datasource.DetailSearchRemoteDataSource
 import com.example.findu.data.dataremote.datasource.HomeRemoteDataSource
 import com.example.findu.data.dataremote.datasource.SearchRemoteDataSource
+import com.example.findu.data.dataremote.datasourceimpl.DetailSearchRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.DummyRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.HomeRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.SearchRemoteDataSourceImpl
@@ -32,4 +34,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsSearchRemoteDataSource(searchRemoteDataSourceImpl: SearchRemoteDataSourceImpl): SearchRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsDetailSearchRemoteDataSource(detailSearchRemoteDataSourceImpl: DetailSearchRemoteDataSourceImpl): DetailSearchRemoteDataSource
 }
