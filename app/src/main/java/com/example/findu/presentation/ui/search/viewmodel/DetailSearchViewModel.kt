@@ -2,8 +2,8 @@ package com.example.findu.presentation.ui.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.findu.domain.model.search.SearchData
-import com.example.findu.domain.usecase.GetSearchUseCase
+import com.example.findu.domain.model.search.DetailSearchData
+import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,53 +11,37 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(
-    private val getSearchUseCase: GetSearchUseCase
+class DetailSearchViewModel @Inject constructor(
+    private val getDetailSearchUseCase: GetDetailSearchUseCase
 ) : ViewModel() {
 
-    private val _searchData = MutableStateFlow<List<SearchData>?>(null)
-    val searchData = _searchData.asStateFlow()
+    private val _detailSearchData = MutableStateFlow<DetailSearchData?>(null)
+    val detailSearchData = _detailSearchData.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
-    fun getSearchAllData(
-        lastProtectId: Long = Long.MAX_VALUE,
-        lastReportId: Long = Long.MAX_VALUE
-    ) {
+    fun getDetailSearchProtect() {
         viewModelScope.launch {
-            getSearchUseCase.getAllData(lastProtectId, lastReportId).fold(
+            getDetailSearchUseCase.getProtectData().fold(
                 onSuccess = { data ->
-                    _searchData.value = data
+                    _detailSearchData.value = data
                 },
                 onFailure = { error ->
-                    _errorMessage.value = error.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
+                    _errorMessage.value = error.message ?: "구조 동물 상세 정보를 불러오는 중 오류가 발생했습니다."
                 }
             )
         }
     }
 
-    fun getSearchReportData(lastReportId: Long = Long.MAX_VALUE) {
+    fun getDetailSearchReport() {
         viewModelScope.launch {
-            getSearchUseCase.getReportData(lastReportId).fold(
+            getDetailSearchUseCase.getReportData().fold(
                 onSuccess = { data ->
-                    _searchData.value = data
+                    _detailSearchData.value = data
                 },
                 onFailure = { error ->
-                    _errorMessage.value = error.message ?: "신고 동물 데이터를 불러오는 중 오류가 발생했습니다."
-                }
-            )
-        }
-    }
-
-    fun getSearchProtectData(lastProtectId: Long = Long.MAX_VALUE) {
-        viewModelScope.launch {
-            getSearchUseCase.getProtectData(lastProtectId).fold(
-                onSuccess = { data ->
-                    _searchData.value = data
-                },
-                onFailure = { error ->
-                    _errorMessage.value = error.message ?: "신고 동물 데이터를 불러오는 중 오류가 발생했습니다."
+                    _errorMessage.value = error.message ?: "신고 동물 상세 정보를 불러오는 중 오류가 발생했습니다."
                 }
             )
         }
