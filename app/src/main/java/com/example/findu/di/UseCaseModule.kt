@@ -1,7 +1,9 @@
 package com.example.findu.di
 
+import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.repository.SearchRepository
+import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
 import dagger.Module
@@ -24,4 +26,10 @@ object UseCaseModule {
     fun provideGetSearchUseCase(
         searchRepository: SearchRepository
     ): GetSearchUseCase = GetSearchUseCase(searchRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetDetailSearchUseCase(
+        detailSearchRepository: DetailSearchRepository
+    ): GetDetailSearchUseCase = GetDetailSearchUseCase(detailSearchRepository)
 }
