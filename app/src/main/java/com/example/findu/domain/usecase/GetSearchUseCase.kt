@@ -10,5 +10,5 @@ class GetSearchUseCase(
         lastProtectId: Long = Long.MAX_VALUE,
         lastReportId: Long =  Long.MAX_VALUE
     ): Result<List<SearchData>> =
-        searchRepository.getSearch(lastProtectId,lastReportId)
+        searchRepository.getSearchAll(lastProtectId,lastReportId)
 }

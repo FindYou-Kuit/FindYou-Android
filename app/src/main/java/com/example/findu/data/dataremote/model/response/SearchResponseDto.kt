@@ -5,6 +5,18 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SearchResponseDto(
+    @SerialName("cards")
+    val cards: List<SearchAnimalCard>,
+    @SerialName("lastProtectId")
+    val lastProtectId : Long,
+    @SerialName("lastReportId")
+    val lastReportId : Long,
+    @SerialName("isLast")
+    val isLast : Boolean
+)
+
+@Serializable
+data class SearchAnimalCard(
     @SerialName("cardId")
     val cardId: Long,
     @SerialName("thumbnailImageUrl")
@@ -18,11 +30,5 @@ data class SearchResponseDto(
     @SerialName("location")
     val location: String,
     @SerialName("interest")
-    val interest: Boolean,
-    @SerialName("lastProtectId")
-    val lastProtectId: Long,
-    @SerialName("lastReportId")
-    val lastReportId: Long,
-    @SerialName("isLast")
-    val isLast: Boolean,
+    val interest: Boolean = false
 )

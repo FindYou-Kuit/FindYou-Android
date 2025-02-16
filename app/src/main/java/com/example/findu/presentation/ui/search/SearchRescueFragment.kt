@@ -5,32 +5,77 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
+import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchRescueBinding
+import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.model.SearchRvTag
+import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import com.google.android.material.chip.Chip
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchRescueFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchRescueBinding
     private var items = ArrayList<SearchRv>()
     private lateinit var rvAdapter: SearchContentRVAdapter
     private var isGridMode = false
+    private val viewModel by viewModels<SearchViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSearchRescueBinding.inflate(layoutInflater)
-        initDummyItems()
         initRVAdapter()
+        observeViewModel()
+        viewModel.getSearchProtectData()
         initToggleButton()
         initFilterButton()
         return binding.root
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.searchData.collectLatest { searchResults ->
+                setupRV(searchResults ?: emptyList())
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest { errorMessage ->
+                errorMessage?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun setupRV(searchDataList: List<SearchData>) {
+        val searchList = searchDataList.flatMap { data ->
+            data.cards.map {
+                SearchRv(
+                    image = it.thumbnailImageUrl,
+                    name = it.title,
+                    date = it.date,
+                    address = it.location,
+                    isBookmark = it.interest,
+                    status = it.tag.toSearchRvTag()
+                )
+            }
+        }
+        rvAdapter.updateData(searchList)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,45 +120,6 @@ class SearchRescueFragment : Fragment() {
             val bottomSheet = SearchFilterBottomSheet()
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
-    }
-
-    private fun initDummyItems() {
-        items.addAll(
-            arrayListOf(
-                SearchRv(
-                    name = "말티즈",
-                    image = R.drawable.img_search_content.toString(),
-                    date = "2024-11-23",
-                    address = "성신구 내동 628-1",
-                    isBookmark = true,
-                    status = SearchRvTag.PROTECTING
-                ),
-                SearchRv(
-                    name = "믹스견",
-                    image = R.drawable.img_search_content.toString(),
-                    date = "2024-11-24",
-                    address = "성신구 내동 628-1",
-                    isBookmark = false,
-                    status = SearchRvTag.PROTECTING
-                ),
-                SearchRv(
-                    name = "웰시코기",
-                    image = R.drawable.img_search_content.toString(),
-                    date = "2024-11-25",
-                    address = "성신구 내동 628-1",
-                    isBookmark = false,
-                    status = SearchRvTag.PROTECTING
-                ),
-                SearchRv(
-                    name = "믹스견",
-                    image = R.drawable.img_search_content.toString(),
-                    date = "2024-11-25",
-                    address = "성신구 내동 628-1",
-                    isBookmark = false,
-                    status = SearchRvTag.PROTECTING
-                )
-            )
-        )
     }
 
     private fun initRVAdapter() {

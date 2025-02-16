@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 class SearchAllFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchAllBinding
-    private var items = ArrayList<SearchData>()
     private lateinit var rvAdapter: SearchContentRVAdapter
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
@@ -39,7 +38,7 @@ class SearchAllFragment : Fragment() {
         binding = FragmentSearchAllBinding.inflate(layoutInflater)
         initRVAdapter()
         observeViewModel()
-        viewModel.getSearchData()
+        viewModel.getSearchAllData()
         initToggleButton()
         initFilterButton()
         return binding.root
@@ -62,15 +61,17 @@ class SearchAllFragment : Fragment() {
     }
 
     private fun setupRV(searchDataList: List<SearchData>) {
-        val searchList = searchDataList.map {
-            SearchRv(
-                image = it.thumbnailImageUrl,
-                name = it.title,
-                date = it.date,
-                address = it.location,
-                isBookmark = it.interest,
-                status = it.tag.toSearchRvTag()
-            )
+        val searchList = searchDataList.flatMap { data ->
+            data.cards.map {
+                SearchRv(
+                    image = it.thumbnailImageUrl,
+                    name = it.title,
+                    date = it.date,
+                    address = it.location,
+                    isBookmark = it.interest,
+                    status = it.tag.toSearchRvTag()
+                )
+            }
         }
         rvAdapter.updateData(searchList)
 

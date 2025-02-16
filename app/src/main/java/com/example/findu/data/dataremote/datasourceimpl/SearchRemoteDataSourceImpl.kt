@@ -10,9 +10,19 @@ import javax.inject.Inject
 class SearchRemoteDataSourceImpl @Inject constructor(
 private val service: SearchService
 ) : SearchRemoteDataSource {
-    override suspend fun getSearch(
+    override suspend fun getSearchAll(
         @Query("lastProtectId") lastProtectId: Long,
         @Query("lastReportId") lastReportId: Long
     ): BaseResponse<SearchResponseDto> =
-        service.getSearch(lastProtectId, lastReportId)
+        service.getSearchAll(lastProtectId, lastReportId)
+
+    override suspend fun getSearchReport(
+        @Query("lastReportId") lastReportId: Long
+    ): BaseResponse<SearchResponseDto> =
+        service.getSearchReport(lastReportId)
+
+    override suspend fun getSearchProtect(
+        @Query("lastProtectId") lastProtectId: Long
+    ): BaseResponse<SearchResponseDto> =
+        service.getSearchProtect(lastProtectId)
 }

@@ -1,12 +1,23 @@
 package com.example.findu.data.mapper.todomain
 
+import com.example.findu.data.dataremote.model.response.SearchAnimalCard
 import com.example.findu.data.dataremote.model.response.SearchResponseDto
+import com.example.findu.domain.model.search.SearchAnimal
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.model.search.SearchStatus
 import com.example.findu.presentation.ui.search.model.SearchRvTag
 
 fun SearchResponseDto.toDomain(): SearchData {
     return SearchData(
+        cards = this.cards.map { it.toDomain() },
+        lastProtectId = this.lastProtectId,
+        lastReportId = this.lastReportId,
+        isLast = this.isLast
+    )
+}
+
+fun SearchAnimalCard.toDomain(): SearchAnimal {
+    return SearchAnimal(
         cardId = this.cardId,
         thumbnailImageUrl = this.thumbnailImageUrl ?: "",
         title = this.title,
@@ -14,11 +25,9 @@ fun SearchResponseDto.toDomain(): SearchData {
         date = this.date,
         location = this.location,
         interest = this.interest,
-        lastProtectId = this.lastProtectId,
-        lastReportId = this.lastReportId,
-        isLast = this.isLast
     )
 }
+
 
 fun String.toSearchStatus(): SearchStatus {
     return when (this) {

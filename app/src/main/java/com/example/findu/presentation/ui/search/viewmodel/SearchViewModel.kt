@@ -21,7 +21,7 @@ class SearchViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
-    fun getSearchData(
+    fun getSearchAllData(
         lastProtectId: Long = Long.MAX_VALUE,
         lastReportId: Long = Long.MAX_VALUE
     ) {
@@ -32,6 +32,32 @@ class SearchViewModel @Inject constructor(
                 },
                 onFailure = { error ->
                     _errorMessage.value = error.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    fun getSearchReportData(lastReportId: Long = Long.MAX_VALUE) {
+        viewModelScope.launch {
+            getSearchUseCase(Long.MAX_VALUE, lastReportId).fold(
+                onSuccess = { data ->
+                    _searchData.value = data
+                },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "신고 동물 데이터를 불러오는 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    fun getSearchProtectData(lastProtectId: Long = Long.MAX_VALUE) {
+        viewModelScope.launch {
+            getSearchUseCase(Long.MAX_VALUE, lastProtectId).fold(
+                onSuccess = { data ->
+                    _searchData.value = data
+                },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "신고 동물 데이터를 불러오는 중 오류가 발생했습니다."
                 }
             )
         }
