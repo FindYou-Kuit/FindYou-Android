@@ -28,6 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_search_title"
         app:tabGravity="fill"
+        android:background="@null"
         app:tabIndicatorColor="@color/gray6"
         app:tabIndicatorFullWidth="true"
         app:tabIndicatorHeight="2dp"
