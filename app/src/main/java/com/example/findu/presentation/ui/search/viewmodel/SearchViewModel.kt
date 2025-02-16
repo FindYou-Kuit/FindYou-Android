@@ -26,7 +26,7 @@ class SearchViewModel @Inject constructor(
         lastReportId: Long = Long.MAX_VALUE
     ) {
         viewModelScope.launch {
-            getSearchUseCase(lastProtectId, lastReportId).fold(
+            getSearchUseCase.getAllData(lastProtectId, lastReportId).fold(
                 onSuccess = { data ->
                     _searchData.value = data
                 },
@@ -39,7 +39,7 @@ class SearchViewModel @Inject constructor(
 
     fun getSearchReportData(lastReportId: Long = Long.MAX_VALUE) {
         viewModelScope.launch {
-            getSearchUseCase(Long.MAX_VALUE, lastReportId).fold(
+            getSearchUseCase.getReportData(lastReportId).fold(
                 onSuccess = { data ->
                     _searchData.value = data
                 },
@@ -52,7 +52,7 @@ class SearchViewModel @Inject constructor(
 
     fun getSearchProtectData(lastProtectId: Long = Long.MAX_VALUE) {
         viewModelScope.launch {
-            getSearchUseCase(Long.MAX_VALUE, lastProtectId).fold(
+            getSearchUseCase.getProtectData(lastProtectId).fold(
                 onSuccess = { data ->
                     _searchData.value = data
                 },

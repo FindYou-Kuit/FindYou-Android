@@ -6,6 +6,9 @@ import com.example.findu.domain.repository.DetailSearchRepository
 class GetDetailSearchUseCase(
     private val detailSearchRepository: DetailSearchRepository
 ) {
-    suspend operator fun invoke(): Result<DetailSearchData> =
+    suspend fun getReportData(): Result<DetailSearchData> =
         detailSearchRepository.getDetailSearchReport()
+
+    suspend fun getProtectData(): Result<DetailSearchData> =
+        detailSearchRepository.getDetailSearchProtect()
 }
