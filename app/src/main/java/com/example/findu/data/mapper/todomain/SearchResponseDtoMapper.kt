@@ -5,18 +5,20 @@ import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.model.search.SearchStatus
 import com.example.findu.presentation.ui.search.model.SearchRvTag
 
-fun SearchResponseDto.toDomain() = SearchData(
-    cardId = cardId,
-    thumbnailImageUrl = thumbnailImageUrl,
-    title = title,
-    tag = tag.toSearchStatus(),
-    date = date,
-    location = location,
-    interest = interest,
-    lastProtectId = lastProtectId,
-    lastReportId = lastReportId,
-    isLast = isLast
-)
+fun SearchResponseDto.toDomain(): SearchData {
+    return SearchData(
+        cardId = this.cardId,
+        thumbnailImageUrl = this.thumbnailImageUrl ?: "",
+        title = this.title,
+        tag = this.tag.toSearchStatus(),
+        date = this.date,
+        location = this.location,
+        interest = this.interest,
+        lastProtectId = this.lastProtectId,
+        lastReportId = this.lastReportId,
+        isLast = this.isLast
+    )
+}
 
 fun String.toSearchStatus(): SearchStatus {
     return when (this) {

@@ -6,6 +6,9 @@ import com.example.findu.domain.repository.SearchRepository
 class GetSearchUseCase(
     private val searchRepository: SearchRepository
 ) {
-    suspend operator fun invoke(): Result<List<SearchData>> =
-        searchRepository.getSearch()
+    suspend operator fun invoke(
+        lastProtectId: Long = Long.MAX_VALUE,
+        lastReportId: Long =  Long.MAX_VALUE
+    ): Result<List<SearchData>> =
+        searchRepository.getSearch(lastProtectId,lastReportId)
 }

@@ -21,9 +21,12 @@ class SearchViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
-    fun getSearchData() {
+    fun getSearchData(
+        lastProtectId: Long = Long.MAX_VALUE,
+        lastReportId: Long = Long.MAX_VALUE
+    ) {
         viewModelScope.launch {
-            getSearchUseCase().fold(
+            getSearchUseCase(lastProtectId, lastReportId).fold(
                 onSuccess = { data ->
                     _searchData.value = data
                 },
