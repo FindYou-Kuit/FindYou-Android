@@ -5,33 +5,77 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
+import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchAllBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
-import com.example.findu.domain.model.search.SearchStatus
+import com.example.findu.presentation.ui.search.model.SearchRv
+import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import com.google.android.material.chip.Chip
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchAllFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchAllBinding
     private var items = ArrayList<SearchData>()
     private lateinit var rvAdapter: SearchContentRVAdapter
     private var isGridMode = false
+    private val viewModel by viewModels<SearchViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSearchAllBinding.inflate(layoutInflater)
-        initDummyItems()
         initRVAdapter()
+        observeViewModel()
+        viewModel.getSearchData()
         initToggleButton()
         initFilterButton()
         return binding.root
     }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.searchData.collectLatest { searchResults ->
+                setupRV(searchResults ?: emptyList())
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest { errorMessage ->
+                errorMessage?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun setupRV(searchDataList: List<SearchData>) {
+        val searchList = searchDataList.map {
+            SearchRv(
+                image = it.thumbnailImageUrl,
+                name = it.title,
+                date = it.date,
+                address = it.location,
+                isBookmark = it.interest,
+                status = it.tag.toSearchRvTag()
+            )
+        }
+        rvAdapter.updateData(searchList)
+
+    }
+
 
     private fun initFilterButton() {
         binding.ibSearchFilter.setOnClickListener {
@@ -77,7 +121,7 @@ class SearchAllFragment : Fragment() {
         }
     }
 
-    private fun openDetailFragment(selectedItem: SearchData) {
+    private fun openDetailFragment(selectedItem: SearchRv) {
         val detailFragment = SearchDisappearDetailFragment().apply {
             arguments = Bundle().apply {
                 putSerializable("selectedItem", selectedItem)
@@ -89,53 +133,15 @@ class SearchAllFragment : Fragment() {
             .commit()
     }
 
-    private fun initDummyItems() {
-        items.addAll(
-            arrayListOf(
-                SearchData(
-                    name = "말티즈",
-                    image = R.drawable.img_search_content,
-                    date = "2024-11-23",
-                    address = "성신구 내동 628-1",
-                    isBookmark = true,
-                    status = SearchStatus.PROTECTING
-                ),
-                SearchData(
-                    name = "믹스견",
-                    image = R.drawable.img_search_content_mix_dog,
-                    date = "2024-11-24",
-                    address = "성신구 내동 628-1",
-                    isBookmark = false,
-                    status = SearchStatus.WITNESS
-                ),
-                SearchData(
-                    name = "웰시코기",
-                    image = R.drawable.img_search_content_welshicorgi,
-                    date = "2024-11-25",
-                    address = "성신구 내동 628-1",
-                    isBookmark = false,
-                    status = SearchStatus.MISSING
-
-                ),
-                SearchData(
-                    name = "믹스견",
-                    image = R.drawable.img_search_content_mix_dog2,
-                    date = "2024-11-25",
-                    address = "성신구 내동 628-1",
-                    isBookmark = false,
-                    status = SearchStatus.WITNESS
-                )
-            )
-        )
-    }
 
     private fun initRVAdapter() {
-        rvAdapter = SearchContentRVAdapter(items) { item ->
+        rvAdapter = SearchContentRVAdapter(emptyList()) { item ->
             openDetailFragment(item)
         }
-        binding.rvSearchHorizontalContent.adapter = rvAdapter
-        binding.rvSearchHorizontalContent.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvSearchHorizontalContent.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = rvAdapter
+        }
     }
 
     private fun initToggleButton() {

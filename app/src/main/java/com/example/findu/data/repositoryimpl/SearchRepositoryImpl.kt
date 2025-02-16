@@ -10,8 +10,8 @@ import javax.inject.Inject
 class SearchRepositoryImpl @Inject constructor(
     private val searchRemoteDataSource: SearchRemoteDataSource
 ) : SearchRepository {
-    override suspend fun getSearch(): Result<SearchData> =
+    override suspend fun getSearch(): Result<List<SearchData>> =
         runCatching {
-            searchRemoteDataSource.getSearch().handleBaseResponse().getOrThrow().toDomain()
+            listOf(searchRemoteDataSource.getSearch().handleBaseResponse().getOrThrow().toDomain())
         }
 }

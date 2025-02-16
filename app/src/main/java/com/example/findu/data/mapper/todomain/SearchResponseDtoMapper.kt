@@ -3,6 +3,7 @@ package com.example.findu.data.mapper.todomain
 import com.example.findu.data.dataremote.model.response.SearchResponseDto
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.model.search.SearchStatus
+import com.example.findu.presentation.ui.search.model.SearchRvTag
 
 fun SearchResponseDto.toDomain() = SearchData(
     cardId = cardId,
@@ -25,3 +26,12 @@ fun String.toSearchStatus(): SearchStatus {
         else -> throw IllegalArgumentException("Unknown tag value: $this")
     }
 }
+fun SearchStatus.toSearchRvTag(): SearchRvTag {
+    return when (this) {
+        SearchStatus.PROTECTING -> SearchRvTag.PROTECTING
+        SearchStatus.WITNESS -> SearchRvTag.WITNESS
+        SearchStatus.MISSING -> SearchRvTag.MISSING
+        SearchStatus.UNKNOWN -> SearchRvTag.UNKNOWN
+    }
+}
+

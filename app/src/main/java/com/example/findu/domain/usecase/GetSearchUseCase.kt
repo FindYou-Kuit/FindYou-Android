@@ -6,6 +6,6 @@ import com.example.findu.domain.repository.SearchRepository
 class GetSearchUseCase(
     private val searchRepository: SearchRepository
 ) {
-    suspend operator fun invoke(): Result<SearchData> =
+    suspend operator fun invoke(): Result<List<SearchData>> =
         searchRepository.getSearch()
 }
