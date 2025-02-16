@@ -15,6 +15,7 @@ import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.model.SearchDetailData
+import com.example.findu.presentation.ui.search.model.SearchRv
 
 class SearchDisappearDetailFragment : Fragment() {
 
@@ -36,7 +37,7 @@ class SearchDisappearDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val item = arguments?.getSerializable("selectedItem") as? SearchData
+        val item = arguments?.getSerializable("selectedItem") as? SearchRv
         if (item == null) {
             requireActivity().supportFragmentManager.popBackStack()
             return
@@ -49,7 +50,7 @@ class SearchDisappearDetailFragment : Fragment() {
         initViewPager()
     }
 
-    private fun initMapButtons(item: SearchData) {
+    private fun initMapButtons(item: SearchRv) {
         binding.btnViewLocation.setOnClickListener{
             openNaverMap(item.address)
         }
@@ -113,7 +114,7 @@ class SearchDisappearDetailFragment : Fragment() {
         }
     }
 
-    private fun initBookmarkUI(item: SearchData) {
+    private fun initBookmarkUI(item: SearchRv) {
         updateBookmarkUI(item.isBookmark)
         binding.ivSearchDetailBookmark.setOnClickListener {
             item.isBookmark = !item.isBookmark
@@ -121,7 +122,7 @@ class SearchDisappearDetailFragment : Fragment() {
         }
     }
 
-    private fun initTagView(item: SearchData){
+    private fun initTagView(item: SearchRv){
         item.let {
             binding.tvSearchDetailTag.text = item.status.text
             binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))

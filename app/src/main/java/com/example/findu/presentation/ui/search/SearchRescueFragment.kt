@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchRescueBinding
-import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
-import com.example.findu.domain.model.search.SearchStatus
+import com.example.findu.presentation.ui.search.model.SearchRv
+import com.example.findu.presentation.ui.search.model.SearchRvTag
 import com.google.android.material.chip.Chip
 
 class SearchRescueFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchRescueBinding
-    private var items = ArrayList<SearchData>()
+    private var items = ArrayList<SearchRv>()
     private lateinit var rvAdapter: SearchContentRVAdapter
     private var isGridMode = false
 
@@ -80,37 +80,37 @@ class SearchRescueFragment : Fragment() {
     private fun initDummyItems() {
         items.addAll(
             arrayListOf(
-                SearchData(
+                SearchRv(
                     name = "말티즈",
-                    image = R.drawable.img_search_content,
+                    image = R.drawable.img_search_content.toString(),
                     date = "2024-11-23",
                     address = "성신구 내동 628-1",
                     isBookmark = true,
-                    status = SearchStatus.PROTECTING
+                    status = SearchRvTag.PROTECTING
                 ),
-                SearchData(
+                SearchRv(
                     name = "믹스견",
-                    image = R.drawable.img_search_content,
+                    image = R.drawable.img_search_content.toString(),
                     date = "2024-11-24",
                     address = "성신구 내동 628-1",
                     isBookmark = false,
-                    status = SearchStatus.PROTECTING
+                    status = SearchRvTag.PROTECTING
                 ),
-                SearchData(
+                SearchRv(
                     name = "웰시코기",
-                    image = R.drawable.img_search_content,
+                    image = R.drawable.img_search_content.toString(),
                     date = "2024-11-25",
                     address = "성신구 내동 628-1",
                     isBookmark = false,
-                    status = SearchStatus.PROTECTING
+                    status = SearchRvTag.PROTECTING
                 ),
-                SearchData(
+                SearchRv(
                     name = "믹스견",
-                    image = R.drawable.img_search_content,
+                    image = R.drawable.img_search_content.toString(),
                     date = "2024-11-25",
                     address = "성신구 내동 628-1",
                     isBookmark = false,
-                    status = SearchStatus.PROTECTING
+                    status = SearchRvTag.PROTECTING
                 )
             )
         )
@@ -125,7 +125,7 @@ class SearchRescueFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
-    private fun openDetailFragment(selectedItem: SearchData) {
+    private fun openDetailFragment(selectedItem: SearchRv) {
         val detailFragment = SearchProtectingDetailFragment().apply {
             arguments = Bundle().apply {
                 putSerializable("selectedItem", selectedItem)
