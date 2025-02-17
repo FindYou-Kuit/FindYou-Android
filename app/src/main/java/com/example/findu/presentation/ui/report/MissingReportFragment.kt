@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.report
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +14,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.archit.calendardaterangepicker.customviews.CalendarListener
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMissingReportBinding
 import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.domain.model.report.SexType
+import com.example.findu.presentation.ui.report.model.ReportUiState
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
@@ -77,12 +81,9 @@ class MissingReportFragment : Fragment() {
         }
 
         binding.btnMissingReportConfirm.setOnClickListener {
-            ReportFinishDialog(
-                requireContext(),
-                ReportType.MISSING,
-                onGoHistoryClick = ::navigateToHistory,
-                onGoHomeClick = ::navigateToHome
-            ).show()
+            reportViewModel.postMissingReport(
+                description = binding.etMissingReportDescription.text.toString(),
+            )
         }
 
         with(binding.tvMissingReportLocationAddress) {
@@ -96,24 +97,59 @@ class MissingReportFragment : Fragment() {
                     }
                 ).show(childFragmentManager, LOCATION_TAG)
             }
+
+            addTextChangedListener { text ->
+                reportViewModel.updateReportData(
+                    location = text.toString()
+                )
+            }
         }
 
         binding.rgMissingReportSpecies.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rb_missing_report_dog_button -> {
-                    reportViewModel.selectSpeciesType(SpeciesType.DOG)
+                    reportViewModel.updateReportData(
+                        speciesType = SpeciesType.DOG
+                    )
                 }
 
                 R.id.rb_missing_report_cat_button -> {
-                    reportViewModel.selectSpeciesType(SpeciesType.CAT)
+                    reportViewModel.updateReportData(
+                        speciesType = SpeciesType.CAT
+                    )
                 }
 
                 R.id.rb_missing_report_extra_button -> {
-                    reportViewModel.selectSpeciesType(SpeciesType.ETC)
+                    reportViewModel.updateReportData(
+                        speciesType = SpeciesType.ETC
+                    )
                 }
             }
             binding.actvMissingReportBreed.text = null
         }
+
+        binding.rgMissingReportGenders.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rb_missing_report_male_button -> {
+                    reportViewModel.updateReportData(
+                        sexType = SexType.MALE
+                    )
+                }
+
+                R.id.rb_missing_report_female_button -> {
+                    reportViewModel.updateReportData(
+                        sexType = SexType.FEMALE
+                    )
+                }
+
+                R.id.rb_missing_report_unknown_button -> {
+                    reportViewModel.updateReportData(
+                        sexType = SexType.UNKNOWN
+                    )
+                }
+            }
+        }
+
     }
 
     private fun navigateToHistory() {
@@ -160,7 +196,38 @@ class MissingReportFragment : Fragment() {
                             breedAdapter.changeItems(selectedBreedNames)
                     }
                 }
+                launch {
+                    reportViewModel.reportUiState.collectLatest { uiState ->
+                        when (uiState) {
+                            ReportUiState.Default -> {
+                                binding.pbMissingReportLoading.visibility = View.GONE
+                                binding.btnMissingReportConfirm.isEnabled = false
+                            }
 
+                            ReportUiState.Loading -> {
+                                binding.pbMissingReportLoading.visibility = View.VISIBLE
+                            }
+
+                            ReportUiState.Enable -> {
+                                binding.btnMissingReportConfirm.isEnabled = true
+                            }
+
+                            ReportUiState.Finished -> {
+                                binding.pbMissingReportLoading.visibility = View.GONE
+                                ReportFinishDialog(
+                                    requireContext(),
+                                    ReportType.MISSING,
+                                    onGoHistoryClick = ::navigateToHistory,
+                                    onGoHomeClick = ::navigateToHome
+                                ).show()
+                            }
+
+                            else -> {
+                                binding.pbMissingReportLoading.visibility = View.GONE
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -181,6 +248,17 @@ class MissingReportFragment : Fragment() {
             setVisibleMonthRange(startMonth, endMonth)
             setCurrentMonth(endMonth)
             setSelectableDateRange(startMonth, endMonth)
+
+            setCalendarListener(object : CalendarListener {
+                override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
+                    reportViewModel.updateReportData(
+                        missingDate = startDate.time
+                    )
+                }
+
+                override fun onFirstDateSelected(startDate: Calendar) {}
+
+            })
         }
     }
 
@@ -189,29 +267,43 @@ class MissingReportFragment : Fragment() {
             ReportFeatureAdapter(
                 features = PhysicalFeatureType.entries.toList().map {
                     ReportFeature(it.feature, it.featureId)
-                }) { featureId ->
-                reportViewModel.updateSelectedFeatureIds(featureId)
-            }
+                },
+                onFeatureClick = {
+                    reportViewModel.updateReportData(
+                        featureIds = it
+                    )
+                })
 
         binding.rvMissingReportExternalFeatures.adapter =
             ReportFeatureAdapter(
                 features = ExternalFeatureType.entries.toList().map {
                     ReportFeature(it.feature, it.featureId)
-                }) { featureId ->
-                reportViewModel.updateSelectedFeatureIds(featureId)
-            }
+                },
+                onFeatureClick = {
+                    reportViewModel.updateReportData(
+                        featureIds = it
+                    )
+                })
 
         binding.rvMissingReportCharacterFeatures.adapter =
             ReportFeatureAdapter(
                 features = CharacterFeatureType.entries.toList().map {
                     ReportFeature(it.feature, it.featureId)
-                }) { featureId ->
-                reportViewModel.updateSelectedFeatureIds(featureId)
-            }
+                },
+                onFeatureClick = {
+                    reportViewModel.updateReportData(
+                        featureIds = it
+                    )
+                })
     }
 
     private fun setUpColorAdapter() {
-        colorAdapter = ReportColorAdapter()
+        colorAdapter = ReportColorAdapter { furColor ->
+            reportViewModel.updateReportData(
+                furColor = furColor
+            )
+        }
+
         with(binding.rvMissingReportColors) {
             adapter = colorAdapter
             layoutManager = GridLayoutManager(context, 3)
@@ -232,6 +324,9 @@ class MissingReportFragment : Fragment() {
                 binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
             }
             setOnItemClickListener { _, _, _, _ ->
+                reportViewModel.updateReportData(
+                    breedName = text.toString()
+                )
                 requireContext().hideKeyboard(windowToken)
                 clearFocus()
             }
@@ -260,9 +355,7 @@ class MissingReportFragment : Fragment() {
     private fun setupUploadImageRecyclerView() {
         reportImageAdapter = ReportImageAdapter(
             reportType = ReportType.MISSING,
-            onAIButtonClick = { uri ->
-                reportViewModel.getGptData(uri)
-            }
+            onAIButtonClick = { }
         ).apply {
             submitList(ReportDummys.dummyImageUris)
         }
