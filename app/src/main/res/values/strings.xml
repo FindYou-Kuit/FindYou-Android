@@ -23,7 +23,7 @@
     <string name="search_name_welshcorgi">웰시코기</string>
     <string name="search_disappear_title">실종신고</string>
     <string name="search_detail_found_date">발견날짜</string>
-    <string name="search_detail_found_date_value">2024-11-04</string>
+    <string name="search_detail_found_date_value">2024–11–04</string>
     <string name="search_detail_gender">성별</string>
     <string name="search_detail_gender_value">암컷</string>
     <string name="search_see_more">더보기</string>
@@ -35,7 +35,7 @@
     <string name="search_detail_reporter_info">신고자 정보</string>
     <string name="search_detail_reporter_info_value">닉네임</string>
     <string name="search_detail_report_date">신고 날짜</string>
-    <string name="search_detail_report_date_value">2024-11-05</string>
+    <string name="search_detail_report_date_value">2024–11–05</string>
     <string name="search_detail_found_location">발견 장소</string>
     <string name="search_detail_found_location_value">광진구 화양동</string>
     <string name="search_detail_see_location">위치 보기</string>
@@ -49,31 +49,31 @@
     <string name="search_detail_witness_info">목격자 정보</string>
     <string name="search_detail_witness_info_value">닉네임</string>
     <string name="search_detail_write_date">작성 날짜</string>
-    <string name="search_detail_write_date_value">2024-11-05</string>
+    <string name="search_detail_write_date_value">2024–11–05</string>
     <string name="search_detail_see_shelter_location">보호소 위치 보기</string>
     <string name="search_detail_age">나이</string>
     <string name="search_detail_age_value">2024, 1살</string>
     <string name="search_detail_weight">몸무게</string>
     <string name="search_detail_weight_value">2kg</string>
     <string name="search_detail_post_date">게시 날짜</string>
-    <string name="search_detail_post_date_value">2024-11-23</string>
+    <string name="search_detail_post_date_value">2024–11–23</string>
     <string name="search_detail_neuter">중성화</string>
     <string name="search_detail_neuter_value">아니요</string>
     <string name="search_detail_special_note">특이사항</string>
     <string name="search_detail_see">보기</string>
     <string name="search_detail_special_note_value">멀티푸주청 갑옷을 입고 있어서 미용함. 귀병 조금 있음(치료중). 브라백토투여. 사람 엄청 좋아하는 아이\n\n</string>
     <string name="search_detail_noti_num">공고 번호</string>
-    <string name="search_detail_noti_num_value">경남-창원1-2024-00545</string>
+    <string name="search_detail_noti_num_value">경남–창원1–2024–00545</string>
     <string name="search_detail_noti_date">공고 기간</string>
     <string name="search_detail_noti_date_value">2024.11.23 ~ 2024.12.03</string>
     <string name="search_detail_rescue_location">구조 장소</string>
     <string name="search_detail_rescue_location_value">성산구 내동</string>
     <string name="search_detail_shelter">보호 센터</string>
     <string name="search_detail_shelter_value">태민동물병원</string>
-    <string name="search_detail_shelter_phone_num">010-2868-2108</string>
+    <string name="search_detail_shelter_phone_num">010–2868–2108</string>
     <string name="search_detail_shelter_phone_num_value">관할 기관</string>
     <string name="search_detail_jurisdiction">창원유기동물보호소</string>
-    <string name="search_detail_jurisdiction_value">055-930-3562</string>
+    <string name="search_detail_jurisdiction_value">055–930–3562</string>
     <string name="search_filter_date">날짜</string>
     <string name="search_filter_date_input">날짜 입력</string>
     <string name="search_filter_type">축종</string>
@@ -104,7 +104,7 @@
     <string name="report_dialog_witness_report">목격 신고글 작성</string>
     <string name="report_dialog_missing_report">실종 신고글 작성</string>
     <string name="report_dialog_set_location">현 위치로 설정하기</string>
-    <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000-0ddd 광진구 건국대학교 000-00 202호</string>
+    <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000–0ddd 광진구 건국대학교 000–00 202호</string>
     <string name="report_dialog_find_location">지도에서 위치 찾기</string>
 
     <!--  witness report  -->
@@ -204,7 +204,7 @@
     <string name="report_info_first_call_center">(1) 다산 콜센터</string>
     <string name="report_info_first_call_center_num">Tel) 120</string>
     <string name="report_info_first_center">(2) 동물 보호 상담센터</string>
-    <string name="report_info_first_center_num">Tel) 1577-0954</string>
+    <string name="report_info_first_center_num">Tel) 1577–0954</string>
     <string name="report_info_first_part">(3) 지역별 동물 보호 부서</string>
     <string name="report_info_first_part_search">동물 보호 부서 조회</string>
 
