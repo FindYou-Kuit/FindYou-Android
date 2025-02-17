@@ -154,7 +154,7 @@ class ReportViewModel @Inject constructor(
     }
 
     fun postMissingReport(
-        imageKeys: List<Int>,
+        imageUrls: List<String>,
         breedName: String,
         @StringRes sex: Int,
         furColors: List<FurColorType>,
@@ -171,7 +171,10 @@ class ReportViewModel @Inject constructor(
 
         val missingReportData =
             MissingReportData(
-                imageKeys = imageKeys,
+                imageUrls = listOf(
+                    "https://findyoubucket.s3.ap-northeast-2.amazonaws.com/0b8780d6-59ba-4bba-99d1-3715ea08446b.jpg",
+                    "https://findyoubucket.s3.ap-northeast-2.amazonaws.com/5b947ba4-b5f4-4588-8ae3-0c324fee3a66.jpg"
+                ),
                 breedId = breedId,
                 sex = sexType,
                 furColors = furColors,

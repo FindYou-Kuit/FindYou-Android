@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MissingReportRequestDto(
     @SerialName("imageUrls")
-    val imageUrls: List<Int>,
+    val imageUrls: List<String>,
     @SerialName("breed")
     val breed: Int,
     @SerialName("sex")

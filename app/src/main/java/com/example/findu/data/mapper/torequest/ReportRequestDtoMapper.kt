@@ -5,7 +5,7 @@ import com.example.findu.domain.model.report.MissingReportData
 
 fun MissingReportData.toRequestDto() =
     MissingReportRequestDto(
-        imageUrls = imageKeys,
+        imageUrls = imageUrls,
         breed = breedId,
         sex = sex.value,
         furColor = furColors.map { it.color },

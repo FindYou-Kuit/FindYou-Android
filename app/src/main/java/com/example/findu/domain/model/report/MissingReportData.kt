@@ -3,7 +3,7 @@ package com.example.findu.domain.model.report
 import kotlinx.datetime.Instant
 
 data class MissingReportData(
-    val imageKeys: List<Int>,
+    val imageUrls: List<String>,
     val breedId: Int,
     val sex: SexType,
     val furColors: List<FurColorType>,
