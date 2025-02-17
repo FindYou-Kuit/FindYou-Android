@@ -7,6 +7,7 @@ import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
+import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
-    
+
     @Provides
     @Singleton
     fun provideGetHomeUseCase(
@@ -34,10 +35,16 @@ object UseCaseModule {
     fun provideGetBreedValidationUseCase(
         breedRepository: BreedRepository
     ): GetBreedValidationUseCase = GetBreedValidationUseCase(breedRepository)
-  
+
     @Provides
     @Singleton
     fun provideAnalysisImageWithGptUseCase(
         reportRepository: ReportRepository
     ): AnalysisImageWithGptUseCase = AnalysisImageWithGptUseCase(reportRepository)
+
+    @Provides
+    @Singleton
+    fun provideUploadImagesUseCase(
+        reportRepository: ReportRepository
+    ): UploadImagesUseCase = UploadImagesUseCase(reportRepository)
 }
