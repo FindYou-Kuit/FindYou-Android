@@ -85,7 +85,9 @@ class WitnessReportFragment : Fragment() {
         }
 
         binding.btnWitnessReportConfirm.setOnClickListener {
-
+            reportViewModel.postWitnessReport(
+                description = binding.etWitnessReportDescription.text.toString()
+            )
         }
 
         with(binding.tvWitnessReportLocationAddress) {
@@ -252,17 +254,17 @@ class WitnessReportFragment : Fragment() {
         when (gptData.species) {
             SpeciesType.DOG -> {
                 binding.rbWitnessReportDogButton.isChecked = true
-                reportViewModel.selectSpeciesType(SpeciesType.DOG)
+                reportViewModel.updateReportData(speciesType = SpeciesType.DOG)
             }
 
             SpeciesType.CAT -> {
                 binding.rbWitnessReportCatButton.isChecked = true
-                reportViewModel.selectSpeciesType(SpeciesType.CAT)
+                reportViewModel.updateReportData(speciesType = SpeciesType.CAT)
             }
 
             SpeciesType.ETC -> {
                 binding.rbWitnessReportExtraButton.isChecked = true
-                reportViewModel.selectSpeciesType(SpeciesType.ETC)
+                reportViewModel.updateReportData(speciesType = SpeciesType.ETC)
             }
 
             null -> {}
