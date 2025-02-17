@@ -10,6 +10,7 @@ import com.example.findu.data.mapper.todomain.report.toDomain
 import com.example.findu.data.mapper.todomain.toDomain
 import com.example.findu.domain.model.report.GptData
 import com.example.findu.domain.repository.report.ReportRepository
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class ReportRepositoryImpl @Inject constructor(
@@ -24,7 +25,7 @@ class ReportRepositoryImpl @Inject constructor(
             gptRemoteDataSource.postImagePrompt(request).toDomain()
         }
 
-    override suspend fun uploadImages(images: List<String>): Result<List<Int>> =
+    override suspend fun uploadImages(images: List<MultipartBody.Part>): Result<List<Int>> =
         runCatching {
             reportRemoteDataSource.uploadImages(images).handleBaseResponse().getOrThrow().toDomain()
         }
