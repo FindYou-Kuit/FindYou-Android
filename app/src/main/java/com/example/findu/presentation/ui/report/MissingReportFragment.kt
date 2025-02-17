@@ -1,13 +1,21 @@
 package com.example.findu.presentation.ui.report
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -30,6 +38,7 @@ import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_D
 import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
 import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
+import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
@@ -57,6 +66,8 @@ class MissingReportFragment : Fragment() {
     }
     private lateinit var colorAdapter: ReportColorAdapter
 
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,8 +75,29 @@ class MissingReportFragment : Fragment() {
         _binding = FragmentMissingReportBinding.inflate(inflater, container, false)
 
         initListener()
+        getCapturedUri()
+        getUploadedUri()
 
         return binding.root
+    }
+
+    private fun getUploadedUri() {
+        pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    reportViewModel.addImageUri(uri)
+                } else {
+                    Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun getCapturedUri() {
+        setFragmentResultListener(IMAGE_URI) { _, result ->
+            val imageUri = result.getString(IMAGE_RESULT_KEY)
+            imageUri?.let { reportViewModel.addImageUri(Uri.parse(imageUri)) }
+        }
+
     }
 
     private fun initListener() {
@@ -129,13 +161,21 @@ class MissingReportFragment : Fragment() {
         setUpFeatureAdapter()
         setUpCalender()
 
-
         observeViewModel()
     }
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(lifecycle.currentState) {
+                launch {
+                    reportViewModel.imageUriList.collectLatest { imageUriList ->
+                          with(reportImageAdapter) {
+                              submitList(imageUriList) {
+                                  notifyItemChanged(0)
+                              }
+                          }   
+                     }
+                }
                 launch {
                     reportViewModel.breedData.collectLatest { breedData ->
                         breedData?.let {
@@ -158,7 +198,6 @@ class MissingReportFragment : Fragment() {
                             breedAdapter.changeItems(selectedBreedNames)
                     }
                 }
-
             }
         }
     }
@@ -239,14 +278,27 @@ class MissingReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
+        val dialog = ReportImageDialog(
+            requireContext(),
+            onCapture = {
+                findNavController().navigate(R.id.action_fragment_missing_report_to_fragment_report_camera)
+            },
+            onUpload = {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+        )
         reportImageAdapter = ReportImageAdapter(
-            reportType = ReportType.MISSING,
+            context = requireContext(),
+            reportType = ReportType.WITNESS,
+            onRemoveClickListener = { position -> reportViewModel.removeImageUriPostion(position) },
+            onUploadClickListener = { dialog.show() },
             onAIButtonClick = { uri ->
                 reportViewModel.getGptData(uri)
             }
         ).apply {
-            submitList(ReportDummys.dummyImageUris)
+            submitList(reportViewModel.imageUriList.value)
         }
+
         with(binding.rvMissingReportImages) {
             adapter = reportImageAdapter
             layoutManager =
@@ -260,5 +312,15 @@ class MissingReportFragment : Fragment() {
         binding.root.viewTreeObserver.removeOnGlobalLayoutListener { }
 
         _binding = null
+    }
+
+    companion object {
+        const val SCROLL_OFFSET = 258
+        const val DROP_DOWN_HEIGHT = 248
+        const val DROP_DOWN_MAX_COUNT = 8
+        const val LOCATION_TAG = "Report Location Dialog"
+
+        const val IMAGE_RESULT_KEY = "result_key"
+        const val IMAGE_URI = "image_uri"
     }
 }
