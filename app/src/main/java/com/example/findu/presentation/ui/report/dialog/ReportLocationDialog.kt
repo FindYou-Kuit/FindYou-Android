@@ -10,12 +10,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.findu.BuildConfig
 import com.example.findu.databinding.DialogReportLocationBinding
+import com.example.findu.presentation.ui.report.viewmodel.LocationViewModel
 import com.example.findu.presentation.util.PermissionUtils.REQUEST_CODE_LOCATION_PERMISSION
 import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
 import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
@@ -26,21 +32,27 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationSource
 import com.naver.maps.map.NaverMap
+import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ReportLocationDialog(
     private val address: String,
     private val onSetClickListener: (String) -> Unit = {},
 ) : DialogFragment(), OnMapReadyCallback {
 
     private val binding by lazy { DialogReportLocationBinding.inflate(layoutInflater) }
+    private val locationViewModel by viewModels<LocationViewModel>()
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     private lateinit var naverMap: NaverMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationSource : LocationSource
+    private lateinit var locationSource: LocationSource
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,13 +67,35 @@ class ReportLocationDialog(
         if (!hasLocationPermission(requireContext())) {
             requestLocationPermission(requireActivity())
         } else {
+            NaverMapSdk.getInstance(requireContext()).client =
+                NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_CLIENT_ID)
             setUpMapView()
-
         }
         setUpLocationTextView()
         setUpListener()
 
+        observeViewModel()
+
         return binding.root
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                launch {
+                    locationViewModel.location.collectLatest { location ->
+                        binding.tvReportLocationDialogAddress.text = location
+                    }
+                }
+                launch {
+                    locationViewModel.errorMessage.collectLatest { errorMessage ->
+                        errorMessage?.let {
+                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -117,7 +151,6 @@ class ReportLocationDialog(
             with(uiSettings) {
                 isZoomControlEnabled = false
                 isScaleBarEnabled = false
-                isLocationButtonEnabled = true
             }
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
@@ -143,8 +176,7 @@ class ReportLocationDialog(
 
             addOnCameraIdleListener {
                 val latLng = cameraPosition.target
-                // getAddressFromLatLng(latLng)
-                // binding.tvReportLocationDialogAddress.text = apiAddress
+                locationViewModel.getLocation(latLng.latitude, latLng.longitude)
             }
         }
     }
