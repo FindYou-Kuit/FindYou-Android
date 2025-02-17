@@ -21,9 +21,9 @@ class DetailSearchViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
-    fun getDetailSearchProtect() {
+    fun getDetailSearchProtect(protectingReportId: Long) {
         viewModelScope.launch {
-            getDetailSearchUseCase.getProtectData().fold(
+            getDetailSearchUseCase.getProtectData(protectingReportId).fold(
                 onSuccess = { data ->
                     _detailSearchData.value = data
                 },
@@ -34,9 +34,9 @@ class DetailSearchViewModel @Inject constructor(
         }
     }
 
-    fun getDetailSearchReport() {
+    fun getDetailSearchReport(reportId: Long) {
         viewModelScope.launch {
-            getDetailSearchUseCase.getReportData().fold(
+            getDetailSearchUseCase.getReportData(reportId).fold(
                 onSuccess = { data ->
                     _detailSearchData.value = data
                 },
