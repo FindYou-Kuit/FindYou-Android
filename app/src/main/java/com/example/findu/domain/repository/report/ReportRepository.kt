@@ -5,4 +5,6 @@ import com.example.findu.domain.model.report.GptData
 
 interface ReportRepository {
     suspend fun postImageAnalysis(encodeString: String) : Result<GptData>
+
+    suspend fun uploadImages(images: List<String>) : Result<List<Int>>
 }
