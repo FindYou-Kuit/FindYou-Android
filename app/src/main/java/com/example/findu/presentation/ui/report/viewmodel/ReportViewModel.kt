@@ -2,14 +2,20 @@ package com.example.findu.presentation.ui.report.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.R
 import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.model.report.GptData
+import com.example.findu.domain.model.report.MissingReportData
+import com.example.findu.domain.model.report.SexType
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
+import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.model.GptUiState
 import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
@@ -20,6 +26,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +36,7 @@ class ReportViewModel @Inject constructor(
     private val analysisImageWithGptUseCase: AnalysisImageWithGptUseCase,
     private val getBreedValidationUseCase: GetBreedValidationUseCase,
     private val uploadImagesUseCase: UploadImagesUseCase,
+    private val postMissingReportUseCase: PostMissingReportUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -49,6 +58,7 @@ class ReportViewModel @Inject constructor(
     val gptUiState = _gptUiState.asStateFlow()
 
     private val _selectedFeatureIds = MutableStateFlow<MutableList<Int>>(mutableListOf())
+    val selectedFeatureIds = _selectedFeatureIds.asStateFlow()
 
     init {
         getBreedData()
@@ -143,4 +153,57 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    fun postMissingReport(
+        imageKeys: List<Int>,
+        breedName: String,
+        @StringRes sex: Int,
+        furColors: List<FurColorType>,
+        location: String,
+        description: String,
+        missingDate: Instant
+    ) {
+        val breedId = getBreedIds(breedName)
+        val sexType = when (sex) {
+            R.string.male_gender -> SexType.MALE
+            R.string.female_gender -> SexType.FEMALE
+            else -> SexType.UNKNOWN
+        }
+
+        val missingReportData =
+            MissingReportData(
+                imageKeys = imageKeys,
+                breedId = breedId,
+                sex = sexType,
+                furColors = furColors,
+                location = location,
+                featureIds = selectedFeatureIds.value,
+                description = description,
+                missingDate = missingDate
+            )
+
+        viewModelScope.launch {
+            postMissingReportUseCase(missingReportData).fold(
+                onSuccess = { },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "신고 접수 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    private fun getBreedIds(breedName: String): Int =
+        when (_speciesType.value) {
+            SpeciesType.DOG -> {
+                _breedData.value?.dogBreedList?.find { it.breedName == breedName }!!.breedId
+            }
+
+            SpeciesType.CAT -> {
+                _breedData.value?.catBreedList?.find { it.breedName == breedName }!!.breedId
+            }
+
+            SpeciesType.ETC -> {
+                _breedData.value?.etcBreedList?.find { it.breedName == breedName }!!.breedId
+            }
+
+        }
 }
