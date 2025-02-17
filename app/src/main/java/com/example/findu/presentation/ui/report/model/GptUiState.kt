@@ -1,4 +1,4 @@
-package com.example.findu.presentation.model
+package com.example.findu.presentation.ui.report.model
 
 sealed interface GptUiState {
     object Default : GptUiState
