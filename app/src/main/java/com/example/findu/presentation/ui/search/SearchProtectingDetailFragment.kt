@@ -7,24 +7,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.findu.R
+import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
+import com.example.findu.domain.model.search.DetailSearchData
 import com.example.findu.presentation.ui.search.model.DetailSearchRv
-import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.presentation.ui.search.model.SearchRv
+import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailProtectingBinding
     private var isDetailVisible = false
-    private val imageList = listOf(
-        DetailSearchRv(R.drawable.img_search_detail_witness_content),
-        DetailSearchRv(R.drawable.img_search_detail),
-        DetailSearchRv(R.drawable.img_search_detail),
-        DetailSearchRv(R.drawable.img_search_detail_witness_content)
-    )
+    private val viewModel by viewModels<DetailSearchViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,11 +38,14 @@ class SearchProtectingDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item = arguments?.getSerializable("selectedItem") as? SearchRv
+        val item = arguments?.getSerializable("selectedItem") as? DetailSearchRv
         if (item == null) {
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
+//        observeViewModel()
+//        viewModel.getDetailSearchProtect()
+
         initTagView(item)
         initBookmarkUI(item)
         setContentVisibility()
@@ -50,6 +54,8 @@ class SearchProtectingDetailFragment : Fragment() {
         initCallButtons()
 
     }
+
+
 
 
     private fun initBackButton() {
@@ -77,31 +83,31 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initMapButtons(item: SearchRv) {
+    private fun initMapButtons(item: DetailSearchRv) {
         binding.btnViewLocation.setOnClickListener {
-            openNaverMap(item.address)
+            openNaverMap(item.foundLocation)
         }
         binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(item.address)
+            openNaverMap(item.foundLocation)
         }
     }
 
-    private fun initBookmarkUI(item: SearchRv) {
-        updateBookmarkUI(item.isBookmark)
+    private fun initBookmarkUI(item: DetailSearchRv) {
+        updateBookmarkUI(item.interest)
         binding.ivSearchDetailBookmark.setOnClickListener {
-            item.isBookmark = !item.isBookmark
-            updateBookmarkUI(item.isBookmark)
+            item.interest = !item.interest
+            updateBookmarkUI(item.interest)
         }
     }
 
-    private fun initTagView(item: SearchRv) {
+    private fun initTagView(item: DetailSearchRv) {
         item.let {
-            binding.tvDetailTagField.text = item.status.text
-            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.status.textColor))
-            binding.tvDetailTagField.setBackgroundResource(item.status.backgroundRes)
-            binding.tvDetailBreedField.text = it.name
-            binding.tvDetailHappenDateField.text = it.date
-            binding.tvDetailFoundLocationField.text = it.address
+            binding.tvDetailTagField.text = item.tag.text
+            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.tag.textColor))
+            binding.tvDetailTagField.setBackgroundResource(item.tag.backgroundRes)
+            binding.tvDetailBreedField.text = it.breed
+            binding.tvDetailHappenDateField.text = it.happenDate
+            binding.tvDetailFoundLocationField.text = it.foundLocation
         }
     }
 

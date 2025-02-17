@@ -5,7 +5,7 @@ import java.io.Serializable
 data class DetailSearchData(
     val imageUrl: String,
     val breed: String,
-    val tag: String,
+    val tag: SearchStatus,
     val age: String,
     val weight: String,
     val sex: String,
