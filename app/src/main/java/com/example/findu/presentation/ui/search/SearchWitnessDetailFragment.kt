@@ -9,22 +9,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
+import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailWitnessBinding
+import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.model.DetailSearchRv
 import com.example.findu.presentation.ui.search.model.SearchRv
+import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class SearchWitnessDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailWitnessBinding
-    private val imageList = listOf(
-        DetailSearchRv(R.drawable.img_search_detail_witness_content),
-        DetailSearchRv(R.drawable.img_search_detail_witness_content),
-        DetailSearchRv(R.drawable.img_search_detail_witness_content),
-        DetailSearchRv(R.drawable.img_search_detail_witness_content)
-    )
+    private val viewModel by viewModels<DetailReportViewModel>()
+    private var cardId: Long = -1
+    private var tag: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,23 +42,73 @@ class SearchWitnessDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item = arguments?.getSerializable("selectedItem") as? SearchRv
-        if (item == null) {
+        arguments?.let {
+            cardId = it.getLong("cardId", -1)
+            tag = it.getString("tag")
+        }
+
+        if (cardId == -1L || tag == null) {
+            Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
-        initTagView(item)
-        initBookmarkUI(item)
+
+        observeViewModel()
+        fetchDetailData()
         initListener()
-        initMapButtons(item)
-        initViewPager()
 
     }
 
-    private fun initViewPager(){
+    private fun fetchDetailData() {
+        when (tag) {
+            "목격신고", "실종신고" -> viewModel.getDetailSearchReport(cardId)
+            else -> {
+                Toast.makeText(requireContext(), "잘못된 태그 값입니다.", Toast.LENGTH_SHORT).show()
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+    }
+    
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.detailSearchData.collectLatest { data ->
+                data?.let { updateUI(it) }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest { message ->
+                message?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun updateUI(data: DetailReportData) {
+        binding.apply {
+            tvDetailTagField.text = data.tag.text
+            tvDetailBreedField.text = data.breed
+            tvDetailFurColorField.text = data.furColor
+            tvDetailUserNameField.text = data.userName
+            tvDetailWriteDateField.text = data.writeDate
+            tvDetailEventDateField.text = data.eventDate
+            tvDetailEventLocationField.text = data.eventLocation
+            tvDetailAdditionalDescriptionField.text = data.additionalDescription
+
+            initViewPager(data.imageUrls)
+            initTagView(data)
+            initBookmarkUI(data)
+            initMapButtons(data)
+        }
+    }
+
+
+    private fun initViewPager(imageList: List<String>){
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailImg.setCurrentItem(1, false)
+
         val indicatorCount = imageList.size
         val pageIndicators = Array(indicatorCount) { View(requireContext()) }
         val indicatorContainer = binding.llDotsContainer
@@ -95,12 +151,12 @@ class SearchWitnessDetailFragment : Fragment() {
         })
     }
 
-    private fun initMapButtons(item: SearchRv) {
-        binding.btnViewLocation.setOnClickListener{
-            openNaverMap(item.address)
+    private fun initMapButtons(data: DetailReportData) {
+        binding.btnViewLocation.setOnClickListener {
+            openNaverMap(data.eventLocation)
         }
-        binding.btnShowFoundPlace.setOnClickListener{
-            openNaverMap(item.address)
+        binding.btnShowFoundPlace.setOnClickListener {
+            openNaverMap(data.eventLocation)
         }
     }
 
@@ -114,25 +170,22 @@ class SearchWitnessDetailFragment : Fragment() {
         }
     }
 
-    private fun initBookmarkUI(item: SearchRv) {
-        updateBookmarkUI(item.isBookmark)
+    private fun initBookmarkUI(data: DetailReportData) {
+        updateBookmarkUI(data.interest)
         binding.ivSearchDetailBookmark.setOnClickListener {
-            item.isBookmark = !item.isBookmark
-            updateBookmarkUI(item.isBookmark)
+            data.interest = !data.interest
+            updateBookmarkUI(data.interest)
         }
     }
 
-    private fun initTagView(item: SearchRv) {
-        item.let {
-            binding.tvDetailTagField.text = item.tag.text
-            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.tag.textColor))
-            binding.tvDetailTagField.setBackgroundResource(item.tag.backgroundRes)
+    private fun initTagView(data: DetailReportData) {
+        binding.tvDetailTagField.text = data.tag.toString()
 
-            binding.tvDetailBreedField.text = it.name
-            binding.tvDetailEventDateField.text = it.date
-            binding.tvDetailEventLocationField.text = it.address
-        }
+        val tagInfo = data.tag.toDetailSearchRvTag()
+        binding.tvDetailTagField.setTextColor(requireContext().getColor(tagInfo.textColor))
+        binding.tvDetailTagField.setBackgroundResource(tagInfo.backgroundRes)
     }
+
 
     private fun openNaverMap(address: String) {
         if (address.isNotEmpty()) {

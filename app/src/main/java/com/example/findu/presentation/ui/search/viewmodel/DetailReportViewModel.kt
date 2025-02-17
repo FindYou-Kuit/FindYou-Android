@@ -12,27 +12,26 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailSearchViewModel @Inject constructor(
+class DetailReportViewModel @Inject constructor(
     private val getDetailSearchUseCase: GetDetailSearchUseCase
 ) : ViewModel() {
 
-    private val _detailSearchData = MutableStateFlow<DetailProtectData?>(null)
+    private val _detailSearchData = MutableStateFlow<DetailReportData?>(null) // ✅ DetailReportData로 수정
     val detailSearchData = _detailSearchData.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
-    fun getDetailSearchProtect(protectingReportId: Long) {
+    fun getDetailSearchReport(reportId: Long) {
         viewModelScope.launch {
-            getDetailSearchUseCase.getProtectData(protectingReportId).fold(
+            getDetailSearchUseCase.getReportData(reportId).fold(
                 onSuccess = { data ->
                     _detailSearchData.value = data
                 },
                 onFailure = { error ->
-                    _errorMessage.value = error.message ?: "구조 동물 상세 정보를 불러오는 중 오류가 발생했습니다."
+                    _errorMessage.value = error.message ?: "신고 동물 상세 정보를 불러오는 중 오류가 발생했습니다."
                 }
             )
         }
     }
-
 }
