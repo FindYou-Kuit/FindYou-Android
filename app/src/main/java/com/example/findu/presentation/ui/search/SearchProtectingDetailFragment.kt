@@ -61,7 +61,6 @@ class SearchProtectingDetailFragment : Fragment() {
     private fun fetchDetailData() {
         when (tag) {
             "보호중" -> viewModel.getDetailSearchProtect(cardId)
-            "목격신고", "실종신고" -> viewModel.getDetailSearchReport(cardId)
             else -> {
                 Toast.makeText(requireContext(), "잘못된 태그 값입니다.", Toast.LENGTH_SHORT).show()
                 requireActivity().supportFragmentManager.popBackStack()
