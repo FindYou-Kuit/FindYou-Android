@@ -124,9 +124,9 @@ class SearchWitnessDetailFragment : Fragment() {
 
     private fun initTagView(item: SearchRv) {
         item.let {
-            binding.tvDetailTagField.text = item.status.text
-            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.status.textColor))
-            binding.tvDetailTagField.setBackgroundResource(item.status.backgroundRes)
+            binding.tvDetailTagField.text = item.tag.text
+            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.tag.textColor))
+            binding.tvDetailTagField.setBackgroundResource(item.tag.backgroundRes)
 
             binding.tvDetailBreedField.text = it.name
             binding.tvDetailEventDateField.text = it.date
