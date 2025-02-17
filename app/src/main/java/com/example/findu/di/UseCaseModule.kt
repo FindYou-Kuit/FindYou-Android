@@ -8,6 +8,7 @@ import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
+import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import dagger.Module
 import dagger.Provides
@@ -54,4 +55,10 @@ object UseCaseModule {
     fun providePostMissingReportUseCase(
         reportRepository: ReportRepository
     ): PostMissingReportUseCase = PostMissingReportUseCase(reportRepository)
+
+    @Provides
+    @Singleton
+    fun providePostWitnessReportUseCase(
+        reportRepository: ReportRepository
+    ): PostWitnessReportUseCase = PostWitnessReportUseCase(reportRepository)
 }
