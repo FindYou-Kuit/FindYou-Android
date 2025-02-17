@@ -3,10 +3,12 @@ package com.example.findu.di
 import com.example.findu.data.datalocal.datasource.DummyLocalDataSource
 import com.example.findu.data.dataremote.datasource.DummyRemoteDataSource
 import com.example.findu.data.datalocal.datasourceimpl.DummyLocalDataSourceImpl
+import com.example.findu.data.dataremote.datasource.HomeRemoteDataSource
+import com.example.findu.data.dataremote.datasource.BreedRemoteDataSource
+import com.example.findu.data.dataremote.datasourceimpl.BreedRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasource.GptRemoteDataSource
 import com.example.findu.data.dataremote.datasourceimpl.DummyRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.GptRemoteDataSourceImpl
-import com.example.findu.data.dataremote.datasource.HomeRemoteDataSource
 import com.example.findu.data.dataremote.datasourceimpl.HomeRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -20,6 +22,10 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsDummyRemoteDataSource(dummyRemoteDataSourceImpl: DummyRemoteDataSourceImpl): DummyRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsBreedRemoteDataSource(breedRemoteDataSourceImpl: BreedRemoteDataSourceImpl): BreedRemoteDataSource
 
     @Binds
     @Singleton
