@@ -6,6 +6,6 @@ import okhttp3.MultipartBody
 class UploadImagesUseCase(
     private val reportRepository: ReportRepository
 ) {
-    suspend operator fun invoke(files: List<MultipartBody.Part>): Result<List<Int>> =
+    suspend operator fun invoke(files: List<MultipartBody.Part>): Result<List<String>> =
         reportRepository.uploadImages(files)
 }

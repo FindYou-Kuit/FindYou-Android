@@ -8,7 +8,7 @@ import okhttp3.MultipartBody
 interface ReportRepository {
     suspend fun postImageAnalysis(encodeString: String) : Result<GptData>
 
-    suspend fun uploadImages(files: List<MultipartBody.Part>) : Result<List<Int>>
+    suspend fun uploadImages(files: List<MultipartBody.Part>) : Result<List<String>>
 
     suspend fun postMissingReport(missingReportData: MissingReportData) : Result<Unit>
 }

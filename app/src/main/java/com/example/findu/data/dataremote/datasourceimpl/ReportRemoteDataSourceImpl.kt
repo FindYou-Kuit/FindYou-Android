@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ReportRemoteDataSourceImpl @Inject constructor(
     private val service: ReportService
 ) : ReportRemoteDataSource {
-    override suspend fun uploadImages(files: List<MultipartBody.Part>): BaseResponse<List<Int>> =
+    override suspend fun uploadImages(files: List<MultipartBody.Part>): BaseResponse<List<String>> =
         service.uploadImages(files)
 
     override suspend fun postMissingReport(requestDto: MissingReportRequestDto): NullableBaseResponse<Unit> =

@@ -26,7 +26,7 @@ class ReportRepositoryImpl @Inject constructor(
             gptRemoteDataSource.postImagePrompt(request).toDomain()
         }
 
-    override suspend fun uploadImages(files: List<MultipartBody.Part>): Result<List<Int>> =
+    override suspend fun uploadImages(files: List<MultipartBody.Part>): Result<List<String>> =
         runCatching {
             reportRemoteDataSource.uploadImages(files).handleBaseResponse().getOrThrow()
         }
