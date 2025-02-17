@@ -10,6 +10,7 @@ import com.example.findu.data.mapper.todomain.toDomain
 import com.example.findu.data.mapper.torequest.toRequestDto
 import com.example.findu.domain.model.report.GptData
 import com.example.findu.domain.model.report.MissingReportData
+import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.repository.report.ReportRepository
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -32,11 +33,16 @@ class ReportRepositoryImpl @Inject constructor(
         }
 
     override suspend fun postMissingReport(missingReportData: MissingReportData): Result<Unit> =
-        kotlin.runCatching {
+        runCatching {
             reportRemoteDataSource.postMissingReport(
                 missingReportData.toRequestDto()
             ).handleBaseResponse().getOrThrow()
         }
 
-
+    override suspend fun postWitnessReport(witnessReportData: WitnessReportData): Result<Unit> =
+        runCatching {
+            reportRemoteDataSource.postWitnessReport(
+                witnessReportData.toRequestDto()
+            ).handleBaseResponse().getOrThrow()
+        }
 }
