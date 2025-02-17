@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentVolunteerInfoBinding
 
 class VolunteerInfoFragment : Fragment() {
@@ -17,7 +18,14 @@ class VolunteerInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentVolunteerInfoBinding.inflate(inflater, container, false)
+        initListener()
         return binding.root
+    }
+
+    private fun initListener() {
+        binding.ivVolunteerInfoBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     override fun onDestroyView() {
