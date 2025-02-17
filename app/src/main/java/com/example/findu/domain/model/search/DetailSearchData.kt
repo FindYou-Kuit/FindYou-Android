@@ -21,6 +21,6 @@ data class DetailSearchData(
     val careTel: String,
     val authority: String,
     val authorityPhoneNumber: String,
-    val interest: Boolean
+    var interest: Boolean
 ) : Serializable
 

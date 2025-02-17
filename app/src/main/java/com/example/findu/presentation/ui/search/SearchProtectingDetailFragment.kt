@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
@@ -26,6 +27,8 @@ class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailProtectingBinding
     private var isDetailVisible = false
     private val viewModel by viewModels<DetailSearchViewModel>()
+    private var cardId: Long = -1
+    private var tag: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,20 +41,76 @@ class SearchProtectingDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item = arguments?.getSerializable("selectedItem") as? DetailSearchRv
-        if (item == null) {
+        arguments?.let {
+            cardId = it.getLong("cardId", -1)
+            tag = it.getString("tag")
+        }
+
+        if (cardId == -1L || tag == null) {
+            Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
-//        observeViewModel()
-//        viewModel.getDetailSearchProtect()
+        observeViewModel()
+        fetchDetailData()
 
-        initTagView(item)
-        initBookmarkUI(item)
         setContentVisibility()
         initBackButton()
-        initMapButtons(item)
-        initCallButtons()
+
+    }
+
+    private fun fetchDetailData() {
+        when (tag) {
+            "보호중" -> viewModel.getDetailSearchProtect(cardId)
+            "목격신고", "실종신고" -> viewModel.getDetailSearchReport(cardId)
+            else -> {
+                Toast.makeText(requireContext(), "잘못된 태그 값입니다.", Toast.LENGTH_SHORT).show()
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.detailSearchData.collectLatest { data ->
+                data?.let { updateUI(it) }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest { message ->
+                message?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun updateUI(data: DetailSearchData) {
+        binding.apply {
+            Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
+            tvDetailTagField.text = data.tag.text
+            tvDetailBreedField.text = data.breed
+            tvDetailAgeField.text = data.age
+            tvDetailWeightField.text = data.weight
+            tvDetailSexField.text = data.sex
+            tvDetailHappenDateField.text = data.happenDate
+            tvDetailFurColorField.text = data.furColor
+            tvDetailNeuteringField.text = data.neutering
+            tvDetailSignificantField.text = data.significant
+            tvDetailNoticeNumberField.text = data.noticeNumber
+            tvDetailNoticeDurationField.text = data.noticeDuration
+            tvDetailFoundLocationField.text = data.foundLocation
+            tvDetailCareNameField.text = data.careName
+            tvDetailCareTelField.text = data.careTel
+            tvDetailAuthorityField.text = data.authority
+            tvDetailAuthorityPhoneNumberField.text = data.authorityPhoneNumber
+
+            initTagView(data)
+            initBookmarkUI(data)
+            initCallButtons(data)
+            initMapButtons(data)
+        }
 
     }
 
@@ -62,13 +121,13 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initCallButtons() {
+    private fun initCallButtons(data: DetailSearchData) {
         binding.tvDetailCareTelField.setOnClickListener {
-            call(binding.tvDetailCareTelField.text.toString())
+            call(data.careTel)
         }
 
         binding.tvDetailAuthorityPhoneNumberField.setOnClickListener {
-            call(binding.tvDetailAuthorityPhoneNumberField.text.toString())
+            call(data.authorityPhoneNumber)
         }
     }
 
@@ -81,32 +140,29 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initMapButtons(item: DetailSearchRv) {
+    private fun initMapButtons(data: DetailSearchData) {
         binding.btnViewLocation.setOnClickListener {
-            openNaverMap(item.foundLocation)
+            openNaverMap(data.careAddr)
         }
         binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(item.foundLocation)
+            openNaverMap(data.foundLocation)
         }
     }
 
-    private fun initBookmarkUI(item: DetailSearchRv) {
-        updateBookmarkUI(item.interest)
+    private fun initBookmarkUI(data: DetailSearchData) {
+        updateBookmarkUI(data.interest)
         binding.ivSearchDetailBookmark.setOnClickListener {
-            item.interest = !item.interest
-            updateBookmarkUI(item.interest)
+            data.interest = !data.interest
+            updateBookmarkUI(data.interest)
         }
     }
 
-    private fun initTagView(item: DetailSearchRv) {
-        item.let {
-            binding.tvDetailTagField.text = item.tag.text
-            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.tag.textColor))
-            binding.tvDetailTagField.setBackgroundResource(item.tag.backgroundRes)
-            binding.tvDetailBreedField.text = it.breed
-            binding.tvDetailHappenDateField.text = it.happenDate
-            binding.tvDetailFoundLocationField.text = it.foundLocation
-        }
+    private fun initTagView(data: DetailSearchData) {
+        binding.tvDetailTagField.text = data.tag.toString()
+
+        val tagInfo = data.tag.toDetailSearchRvTag()
+        binding.tvDetailTagField.setTextColor(requireContext().getColor(tagInfo.textColor))
+        binding.tvDetailTagField.setBackgroundResource(tagInfo.backgroundRes)
     }
 
     private fun openNaverMap(address: String) {
