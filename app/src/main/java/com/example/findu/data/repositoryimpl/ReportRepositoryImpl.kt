@@ -6,7 +6,6 @@ import com.example.findu.data.dataremote.model.request.GptRequestDto
 import com.example.findu.data.dataremote.model.request.GptRequestDto.Companion.imageContent
 import com.example.findu.data.dataremote.model.request.ImageUrl
 import com.example.findu.data.dataremote.util.handleBaseResponse
-import com.example.findu.data.mapper.todomain.report.toDomain
 import com.example.findu.data.mapper.todomain.toDomain
 import com.example.findu.domain.model.report.GptData
 import com.example.findu.domain.repository.report.ReportRepository
@@ -25,9 +24,8 @@ class ReportRepositoryImpl @Inject constructor(
             gptRemoteDataSource.postImagePrompt(request).toDomain()
         }
 
-    override suspend fun uploadImages(images: List<MultipartBody.Part>): Result<List<Int>> =
+    override suspend fun uploadImages(files: List<MultipartBody.Part>): Result<List<Int>> =
         runCatching {
-            reportRemoteDataSource.uploadImages(images).handleBaseResponse().getOrThrow().toDomain()
+            reportRemoteDataSource.uploadImages(files).handleBaseResponse().getOrThrow()
         }
-
 }
