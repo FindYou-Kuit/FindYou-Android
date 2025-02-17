@@ -33,6 +33,7 @@ import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.ui.report.model.ReportDummys
+import com.example.findu.presentation.ui.report.viewmodel.ReportViewModel
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard

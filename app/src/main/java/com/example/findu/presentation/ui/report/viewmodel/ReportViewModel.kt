@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report
+package com.example.findu.presentation.ui.report.viewmodel
 
 import android.content.Context
 import android.net.Uri
