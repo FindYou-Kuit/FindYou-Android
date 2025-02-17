@@ -23,3 +23,21 @@ data class MissingReportRequestDto(
     @SerialName("missingDate")
     val missingDate: Instant
 )
+
+@Serializable
+data class WitnessReportRequestDto(
+    @SerialName("imageUrls")
+    val imageUrls: List<String>,
+    @SerialName("breed")
+    val breed: Int,
+    @SerialName("furColor")
+    val furColor: List<String>,
+    @SerialName("location")
+    val location: String,
+    @SerialName("features")
+    val features: List<Int>,
+    @SerialName("description")
+    val description: String,
+    @SerialName("missingDate")
+    val missingDate: Instant
+)
