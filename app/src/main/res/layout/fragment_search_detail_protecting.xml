@@ -100,9 +100,9 @@
                     android:background="@drawable/bg_search_protecting_tag"
                     android:text="보호중"
                     android:textColor="@color/green1"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_detail_title_field"
-                    app:layout_constraintStart_toEndOf="@id/tv_detail_title_field"
-                    app:layout_constraintTop_toTopOf="@id/tv_detail_title_field" />
+                    app:layout_constraintBottom_toBottomOf="@id/tv_detail_breed_field"
+                    app:layout_constraintStart_toEndOf="@id/tv_detail_breed_field"
+                    app:layout_constraintTop_toTopOf="@id/tv_detail_breed_field" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_view_location"
@@ -120,7 +120,7 @@
                     app:iconSize="15dp"
                     app:iconTint="@null"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_detail_title_field"
+                    app:layout_constraintTop_toBottomOf="@id/tv_detail_breed_field"
                     app:strokeColor="@color/main_color"
                     app:strokeWidth="1dp" />
 
