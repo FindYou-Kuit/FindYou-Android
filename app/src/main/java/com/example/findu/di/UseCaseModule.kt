@@ -1,6 +1,8 @@
 package com.example.findu.di
 
 import com.example.findu.domain.repository.DetailSearchRepository
+import com.example.findu.domain.repository.report.ReportRepository
+import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.repository.SearchRepository
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
@@ -15,6 +17,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
+
     @Provides
     @Singleton
     fun provideGetHomeUseCase(
@@ -32,4 +35,10 @@ object UseCaseModule {
     fun provideGetDetailSearchUseCase(
         detailSearchRepository: DetailSearchRepository
     ): GetDetailSearchUseCase = GetDetailSearchUseCase(detailSearchRepository)
+
+    @Provides
+    @Singleton
+    fun provideAnalysisImageWithGptUseCase(
+        reportRepository: ReportRepository
+    ): AnalysisImageWithGptUseCase = AnalysisImageWithGptUseCase(reportRepository)
 }
