@@ -12,6 +12,7 @@ import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.model.GptUiState
+import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
 import com.example.findu.presentation.util.UriUtil.uriToBase64
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -117,12 +118,18 @@ class ReportViewModel @Inject constructor(
     }
 
     fun uploadImages(images: List<Uri>) {
+
         viewModelScope.launch {
             uploadImagesUseCase(
-                images.
+                images.toMultiPartBodys(context)
             ).fold(
-                onSuccess = { _errorMessage.value = "이미지 업로드에 성공했습니다." },
-                onFailure = { error -> _errorMessage.value = error.message ?: "이미지 업로드 중 오류가 발생했습니다." }
+                onSuccess = { data ->
+//                    _errorMessage.value = data.message
+                },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "이미지 업로드 중 오류가 발생했습니다."
+                }
             )
         }
+    }
 }
