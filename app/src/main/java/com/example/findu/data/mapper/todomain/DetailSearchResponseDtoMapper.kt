@@ -1,17 +1,13 @@
 package com.example.findu.data.mapper.todomain
 
-import com.example.findu.data.dataremote.model.response.DetailSearchResponseDto
-import com.example.findu.data.dataremote.model.response.HomeResponseDto
-import com.example.findu.data.dataremote.model.response.ProtectAnimalCard
-import com.example.findu.data.dataremote.model.response.ReportAnimalCard
-import com.example.findu.domain.model.HomeData
-import com.example.findu.domain.model.ProtectAnimal
-import com.example.findu.domain.model.ReportAnimal
-import com.example.findu.domain.model.search.DetailSearchData
+import com.example.findu.data.dataremote.model.response.DetailProtectResponseDto
+import com.example.findu.data.dataremote.model.response.DetailReportResponseDto
+import com.example.findu.domain.model.search.DetailProtectData
+import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.domain.model.search.SearchStatus
 import com.example.findu.presentation.ui.search.model.SearchRvTag
 
-fun DetailSearchResponseDto.toDomain() = DetailSearchData(
+fun DetailProtectResponseDto.toDomain() = DetailProtectData(
     imageUrl = this.imageUrl,
     breed = this.breed,
     tag = this.tag.toDetailSearchStatus(),
@@ -33,6 +29,22 @@ fun DetailSearchResponseDto.toDomain() = DetailSearchData(
     interest = this.interest
 )
 
+fun DetailReportResponseDto.toDomain() = DetailReportData(
+    imageUrls = this.imageUrls,
+    breed = this.breed,
+    tag = this.tag.toDetailSearchStatus(),
+    sex = this.sex ?: "정보 없음",
+    furColor = this.furColor,
+    userName = this.userName,
+    writeDate = this.writeDate,
+    eventDate = this.eventDate,
+    eventLocation = this.eventLocation ?: "위치 정보 없음",
+    foundLocation = this.foundLocation?:"위치 정보 없음",
+    features = this.features,
+    additionalDescription = this.additionalDescription,
+    interest = this.interest,
+)
+
 fun String.toDetailSearchStatus(): SearchStatus {
     return when (this) {
         "보호중" -> SearchStatus.PROTECTING
@@ -41,6 +53,7 @@ fun String.toDetailSearchStatus(): SearchStatus {
         else -> throw IllegalArgumentException("Unknown tag value: $this")
     }
 }
+
 fun SearchStatus.toDetailSearchRvTag(): SearchRvTag {
     return when (this) {
         SearchStatus.PROTECTING -> SearchRvTag.PROTECTING

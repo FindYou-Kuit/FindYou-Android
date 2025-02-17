@@ -15,8 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
-import com.example.findu.domain.model.search.DetailSearchData
-import com.example.findu.presentation.ui.search.model.DetailSearchRv
+import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -86,7 +85,7 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun updateUI(data: DetailSearchData) {
+    private fun updateUI(data: DetailProtectData) {
         binding.apply {
             Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
             tvDetailTagField.text = data.tag.text
@@ -121,7 +120,7 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initCallButtons(data: DetailSearchData) {
+    private fun initCallButtons(data: DetailProtectData) {
         binding.tvDetailCareTelField.setOnClickListener {
             call(data.careTel)
         }
@@ -140,7 +139,7 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initMapButtons(data: DetailSearchData) {
+    private fun initMapButtons(data: DetailProtectData) {
         binding.btnViewLocation.setOnClickListener {
             openNaverMap(data.careAddr)
         }
@@ -149,7 +148,7 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initBookmarkUI(data: DetailSearchData) {
+    private fun initBookmarkUI(data: DetailProtectData) {
         updateBookmarkUI(data.interest)
         binding.ivSearchDetailBookmark.setOnClickListener {
             data.interest = !data.interest
@@ -157,7 +156,7 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initTagView(data: DetailSearchData) {
+    private fun initTagView(data: DetailProtectData) {
         binding.tvDetailTagField.text = data.tag.toString()
 
         val tagInfo = data.tag.toDetailSearchRvTag()

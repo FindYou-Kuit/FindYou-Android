@@ -2,7 +2,7 @@ package com.example.findu.presentation.ui.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.findu.domain.model.search.DetailSearchData
+import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ class DetailSearchViewModel @Inject constructor(
     private val getDetailSearchUseCase: GetDetailSearchUseCase
 ) : ViewModel() {
 
-    private val _detailSearchData = MutableStateFlow<DetailSearchData?>(null)
+    private val _detailSearchData = MutableStateFlow<DetailProtectData?>(null)
     val detailSearchData = _detailSearchData.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String?>(null)

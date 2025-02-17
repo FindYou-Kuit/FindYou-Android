@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DetailSearchResponseDto(
+data class DetailProtectResponseDto(
     @SerialName("imageUrl")
     val imageUrl: String,
     @SerialName("breed")

@@ -2,7 +2,7 @@ package com.example.findu.domain.model.search
 
 import java.io.Serializable
 
-data class DetailSearchData(
+data class DetailProtectData(
     val imageUrl: String,
     val breed: String,
     val tag: SearchStatus,
