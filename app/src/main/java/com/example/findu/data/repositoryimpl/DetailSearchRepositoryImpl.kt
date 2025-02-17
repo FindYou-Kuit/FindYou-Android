@@ -13,12 +13,12 @@ import javax.inject.Inject
 class DetailSearchRepositoryImpl @Inject constructor(
     private val detailSearchRemoteDataSource: DetailSearchRemoteDataSource
 ) : DetailSearchRepository {
-    override suspend fun getDetailSearchProtect(): Result<DetailSearchData> =
+    override suspend fun getDetailSearchProtect(protectingReportId: Long): Result<DetailSearchData> =
         runCatching {
-            detailSearchRemoteDataSource.getDetailSearchProtect().handleBaseResponse().getOrThrow().toDomain()
+            detailSearchRemoteDataSource.getDetailSearchProtect(protectingReportId).handleBaseResponse().getOrThrow().toDomain()
         }
-    override suspend fun getDetailSearchReport(): Result<DetailSearchData> =
+    override suspend fun getDetailSearchReport(reportId: Long): Result<DetailSearchData> =
         runCatching {
-            detailSearchRemoteDataSource.getDetailSearchReport().handleBaseResponse().getOrThrow().toDomain()
+            detailSearchRemoteDataSource.getDetailSearchReport(reportId).handleBaseResponse().getOrThrow().toDomain()
         }
 }
