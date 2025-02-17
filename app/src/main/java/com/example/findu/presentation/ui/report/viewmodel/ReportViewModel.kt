@@ -48,6 +48,8 @@ class ReportViewModel @Inject constructor(
     private val _gptUiState: MutableStateFlow<GptUiState> = MutableStateFlow(GptUiState.Default)
     val gptUiState = _gptUiState.asStateFlow()
 
+    private val _selectedFeatureIds = MutableStateFlow<MutableList<Int>>(mutableListOf())
+
     init {
         getBreedData()
     }
@@ -132,4 +134,13 @@ class ReportViewModel @Inject constructor(
             )
         }
     }
+
+    fun updateSelectedFeatureIds(featureId: Int) {
+        if (_selectedFeatureIds.value.contains(featureId)) {
+            _selectedFeatureIds.value.remove(featureId)
+        } else {
+            _selectedFeatureIds.value.add(featureId)
+        }
+    }
+
 }

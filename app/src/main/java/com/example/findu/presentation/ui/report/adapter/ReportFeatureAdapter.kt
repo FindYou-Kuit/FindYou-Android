@@ -4,17 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.databinding.ItemFeatureChipBinding
+import com.example.findu.presentation.type.report.ReportFeature
 
 class ReportFeatureAdapter(
-    private val features: List<String>
+    private val features: List<ReportFeature>,
+    private val onFeatureClick : (Int) -> Unit
 ) : RecyclerView.Adapter<ReportFeatureAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemFeatureChipBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(feature: String) {
-            binding.chipReportFeature.text = feature
+        fun bind(feature: ReportFeature) {
+            binding.chipReportFeature.text = feature.feature
             binding.root.setOnClickListener {
                 binding.chipReportFeature.isChecked = !binding.chipReportFeature.isChecked
+                onFeatureClick(feature.featureId)
             }
         }
     }

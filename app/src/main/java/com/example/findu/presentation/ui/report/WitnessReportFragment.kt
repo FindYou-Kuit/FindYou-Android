@@ -21,6 +21,7 @@ import com.example.findu.presentation.model.GptUiState
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
+import com.example.findu.presentation.type.report.ReportFeature
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
@@ -240,11 +241,28 @@ class WitnessReportFragment : Fragment() {
 
     private fun setUpFeatureAdapter() {
         binding.rvWitnessReportPhysicalFeatures.adapter =
-            ReportFeatureAdapter(PhysicalFeatureType.entries.toList().map { it.feature })
+            ReportFeatureAdapter(
+                features = PhysicalFeatureType.entries.toList().map {
+                    ReportFeature(it.feature, it.featureId)
+                }) { featureId ->
+                reportViewModel.updateSelectedFeatureIds(featureId)
+            }
+
         binding.rvWitnessReportExternalFeatures.adapter =
-            ReportFeatureAdapter(ExternalFeatureType.entries.toList().map { it.feature })
+            ReportFeatureAdapter(
+                features = ExternalFeatureType.entries.toList().map {
+                    ReportFeature(it.feature, it.featureId)
+                }) { featureId ->
+                reportViewModel.updateSelectedFeatureIds(featureId)
+            }
+
         binding.rvWitnessReportCharacterFeatures.adapter =
-            ReportFeatureAdapter(CharacterFeatureType.entries.toList().map { it.feature })
+            ReportFeatureAdapter(
+                features = CharacterFeatureType.entries.toList().map {
+                    ReportFeature(it.feature, it.featureId)
+                }) { featureId ->
+                reportViewModel.updateSelectedFeatureIds(featureId)
+            }
     }
 
     private fun setUpColorAdapter() {

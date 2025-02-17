@@ -19,6 +19,7 @@ import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
+import com.example.findu.presentation.type.report.ReportFeature
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.type.report.ReportType
@@ -185,11 +186,28 @@ class MissingReportFragment : Fragment() {
 
     private fun setUpFeatureAdapter() {
         binding.rvMissingReportPhysicalFeatures.adapter =
-            ReportFeatureAdapter(PhysicalFeatureType.entries.toList().map { it.feature })
+            ReportFeatureAdapter(
+                features = PhysicalFeatureType.entries.toList().map {
+                    ReportFeature(it.feature, it.featureId)
+                }) { featureId ->
+                reportViewModel.updateSelectedFeatureIds(featureId)
+            }
+
         binding.rvMissingReportExternalFeatures.adapter =
-            ReportFeatureAdapter(ExternalFeatureType.entries.toList().map { it.feature })
+            ReportFeatureAdapter(
+                features = ExternalFeatureType.entries.toList().map {
+                    ReportFeature(it.feature, it.featureId)
+                }) { featureId ->
+                reportViewModel.updateSelectedFeatureIds(featureId)
+            }
+
         binding.rvMissingReportCharacterFeatures.adapter =
-            ReportFeatureAdapter(CharacterFeatureType.entries.toList().map { it.feature })
+            ReportFeatureAdapter(
+                features = CharacterFeatureType.entries.toList().map {
+                    ReportFeature(it.feature, it.featureId)
+                }) { featureId ->
+                reportViewModel.updateSelectedFeatureIds(featureId)
+            }
     }
 
     private fun setUpColorAdapter() {
