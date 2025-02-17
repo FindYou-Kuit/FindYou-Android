@@ -11,7 +11,7 @@ import com.example.findu.presentation.ui.report.model.ReportDummys
 
 class ReportBreedAdapter(
     context: Context,
-    items: List<String>
+    items: MutableList<String>
 ) : ArrayAdapter<String>(
     context,
     R.layout.item_report_breeds,
@@ -43,5 +43,12 @@ class ReportBreedAdapter(
         }
         return itemBinding.root
 
+    }
+
+    fun changeItems(items: List<String>?) {
+        if (items.isNullOrEmpty()) return
+        clear()
+        addAll(items)
+        notifyDataSetChanged()
     }
 }

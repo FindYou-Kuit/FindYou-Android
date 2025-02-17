@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMissingReportBinding
+import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
@@ -31,6 +33,10 @@ import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
+import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_HEIGHT
+import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
+import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
+import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
@@ -52,7 +58,12 @@ class MissingReportFragment : Fragment() {
     private val reportViewModel by viewModels<ReportViewModel>()
 
     private lateinit var reportImageAdapter: ReportImageAdapter
-    private lateinit var breedAdapter: ArrayAdapter<String>
+    private val breedAdapter: ReportBreedAdapter by lazy {
+        ReportBreedAdapter(
+            requireContext(),
+            reportViewModel.selectedBreedList.value.toMutableList()
+        )
+    }
     private lateinit var colorAdapter: ReportColorAdapter
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
@@ -116,6 +127,23 @@ class MissingReportFragment : Fragment() {
                 ).show(childFragmentManager, LOCATION_TAG)
             }
         }
+
+        binding.rgMissingReportSpecies.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rb_missing_report_dog_button -> {
+                    reportViewModel.selectSpeciesType(SpeciesType.DOG)
+                }
+
+                R.id.rb_missing_report_cat_button -> {
+                    reportViewModel.selectSpeciesType(SpeciesType.CAT)
+                }
+
+                R.id.rb_missing_report_extra_button -> {
+                    reportViewModel.selectSpeciesType(SpeciesType.ETC)
+                }
+            }
+            binding.actvMissingReportBreed.text = null
+        }
     }
 
     private fun navigateToHistory() {
@@ -129,7 +157,6 @@ class MissingReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUploadImageRecyclerView()
-        setUpBreedsAdapter()
         setUpColorAdapter()
         setUpFeatureAdapter()
         setUpCalender()
@@ -140,11 +167,35 @@ class MissingReportFragment : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(lifecycle.currentState) {
-                reportViewModel.imageUriList.collectLatest { imageUriList ->
-                    with(reportImageAdapter) {
-                        submitList(imageUriList) {
-                            notifyItemChanged(0)
+                launch {
+                    reportViewModel.imageUriList.collectLatest { imageUriList ->
+                          with(reportImageAdapter) {
+                              submitList(imageUriList) {
+                                  notifyItemChanged(0)
+                              }
+                          }   
+                     }
+                }
+                launch {
+                    reportViewModel.breedData.collectLatest { breedData ->
+                        breedData?.let {
+                            setUpBreedsAdapter()
                         }
+                    }
+                }
+
+                launch {
+                    reportViewModel.errorMessage.collectLatest { errorMessage ->
+                        errorMessage?.let {
+                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                launch {
+                    reportViewModel.selectedBreedList.collectLatest { selectedBreedNames ->
+                        if (selectedBreedNames.isNotEmpty())
+                            breedAdapter.changeItems(selectedBreedNames)
                     }
                 }
             }
@@ -188,17 +239,15 @@ class MissingReportFragment : Fragment() {
     }
 
     private fun setUpBreedsAdapter() {
-        breedAdapter = ReportBreedAdapter(
-            requireContext(),
-            ReportDummys.dummyBreeds
-        )
-
         with(binding.actvMissingReportBreed) {
             setAdapter(breedAdapter)
             setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
 
             setOnClickListener {
-                dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                dropDownHeight =
+                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 showDropDown()
                 binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
             }
@@ -207,7 +256,7 @@ class MissingReportFragment : Fragment() {
                 clearFocus()
             }
             addTextChangedListener { text ->
-                ReportDummys.dummyBreeds
+                reportViewModel.selectedBreedList.value
                     .filter { it.contains(text.toString()) }
                     .let { matches ->
                         dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
@@ -216,8 +265,11 @@ class MissingReportFragment : Fragment() {
                     }
             }
             setOnFocusChangeListener { _, hasFocus ->
+                dropDownHeight =
+                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 if (hasFocus) {
-                    dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
                     showDropDown()
                     binding.svMissingReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
                 }
