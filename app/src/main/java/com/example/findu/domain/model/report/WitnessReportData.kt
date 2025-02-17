@@ -9,5 +9,5 @@ data class WitnessReportData(
     val location: String,
     val featureIds: List<Int>,
     val description: String,
-    val missingDate: Instant
+    val foundDate: Instant
 )

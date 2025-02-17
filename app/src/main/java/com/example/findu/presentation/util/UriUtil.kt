@@ -58,7 +58,7 @@ object UriUtil {
         return this.map {
             val file = uriToFile(it, context)
             val image = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("reportImages", file.name, image)
+            MultipartBody.Part.createFormData("files", file.name, image)
         }
     }
 }

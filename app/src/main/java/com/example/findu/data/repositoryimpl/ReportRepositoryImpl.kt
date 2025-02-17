@@ -1,5 +1,6 @@
 package com.example.findu.data.repositoryimpl
 
+import android.util.Log
 import com.example.findu.data.dataremote.datasource.GptRemoteDataSource
 import com.example.findu.data.dataremote.datasource.NaverRemoteDataSource
 import com.example.findu.data.dataremote.datasource.ReportRemoteDataSource
@@ -31,10 +32,11 @@ class ReportRepositoryImpl @Inject constructor(
             gptRemoteDataSource.postImagePrompt(request).toDomain()
         }
 
-    override suspend fun uploadImages(files: List<MultipartBody.Part>): Result<List<String>> =
-        runCatching {
+    override suspend fun uploadImages(files: List<MultipartBody.Part>): Result<List<String>> {
+        Log.d("ReportRepositoryImpl", "uploadImages: $files")
+        return runCatching {
             reportRemoteDataSource.uploadImages(files).handleBaseResponse().getOrThrow()
-        }
+        }}
 
     override suspend fun postMissingReport(missingReportData: MissingReportData): Result<Unit> =
         runCatching {
@@ -52,6 +54,8 @@ class ReportRepositoryImpl @Inject constructor(
 
     override suspend fun getAddress(lat: Double, lng: Double): Result<AddressData> =
         runCatching {
-            naverRemoteDataSource.getAddress("$lng,$lat").toDomain()
+            val a = naverRemoteDataSource.getAddress("$lng,$lat").toDomain()
+            Log.d("ReportLocationDialog", "getAddress: $a")
+            a
         }
 }

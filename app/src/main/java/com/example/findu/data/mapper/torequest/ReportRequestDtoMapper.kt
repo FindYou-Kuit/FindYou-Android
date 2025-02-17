@@ -25,5 +25,5 @@ fun WitnessReportData.toRequestDto() =
         location = location,
         features = featureIds,
         description = description,
-        missingDate = missingDate
+        foundDate = foundDate
     )

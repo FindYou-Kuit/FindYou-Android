@@ -1,12 +1,18 @@
 package com.example.findu.presentation.ui.report
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -32,11 +38,13 @@ import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_HEIGHT
 import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
+import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_RESULT_KEY
+import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_URI
 import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
 import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
+import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
-import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.ui.report.viewmodel.ReportViewModel
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
@@ -64,6 +72,8 @@ class WitnessReportFragment : Fragment() {
     }
     private lateinit var colorAdapter: ReportColorAdapter
 
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,8 +84,29 @@ class WitnessReportFragment : Fragment() {
         reportViewModel.updateReportData(
             sexType = SexType.UNKNOWN
         )
+        getCapturedUri()
+        getUploadedUri()
 
         return binding.root
+    }
+
+    private fun getUploadedUri() {
+        pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    reportViewModel.addImageUri(uri)
+                } else {
+                    Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun getCapturedUri() {
+        setFragmentResultListener(IMAGE_URI) { _, result ->
+            val imageUri = result.getString(IMAGE_RESULT_KEY)
+            imageUri?.let { reportViewModel.addImageUri(Uri.parse(imageUri)) }
+        }
+
     }
 
     private fun initListener() {
@@ -113,19 +144,19 @@ class WitnessReportFragment : Fragment() {
             when (checkedId) {
                 R.id.rb_witness_report_dog_button -> {
                     reportViewModel.updateReportData(
-                        speciesType = SpeciesType.DOG
+                        speciesType = SpeciesType.DOG, breedName = ""
                     )
                 }
 
                 R.id.rb_witness_report_cat_button -> {
                     reportViewModel.updateReportData(
-                        speciesType = SpeciesType.CAT
+                        speciesType = SpeciesType.CAT, breedName = ""
                     )
                 }
 
                 R.id.rb_witness_report_extra_button -> {
                     reportViewModel.updateReportData(
-                        speciesType = SpeciesType.ETC
+                        speciesType = SpeciesType.ETC, breedName = ""
                     )
                 }
             }
@@ -156,6 +187,15 @@ class WitnessReportFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(lifecycle.currentState) {
                 launch {
+                    reportViewModel.imageUriList.collectLatest { imageUriList ->
+                        with(reportImageAdapter) {
+                            submitList(imageUriList) {
+                                notifyItemChanged(0)
+                            }
+                        }
+                    }
+                }
+                launch {
                     reportViewModel.breedData.collectLatest { breedData ->
                         breedData?.let {
                             setUpBreedsAdapter()
@@ -166,6 +206,7 @@ class WitnessReportFragment : Fragment() {
                 launch {
                     reportViewModel.errorMessage.collectLatest { errorMessage ->
                         errorMessage?.let {
+                            Log.e("WitnessReportFragment", it)
                             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -180,6 +221,7 @@ class WitnessReportFragment : Fragment() {
 
                 launch {
                     reportViewModel.gptData.collectLatest { gptData ->
+                        Log.d("WitnessReportFragment", "gptData: $gptData")
                         gptData?.let {
                             setSpecies(gptData)
                             setBreedName(gptData)
@@ -190,6 +232,7 @@ class WitnessReportFragment : Fragment() {
 
                 launch {
                     reportViewModel.gptUiState.collectLatest { uiState ->
+                        Log.d("WitnessReportFragment", "uiState: $uiState")
                         when (uiState) {
                             GptUiState.Loading -> {
                                 binding.pbWitnessReportLoading.visibility = View.VISIBLE
@@ -206,6 +249,7 @@ class WitnessReportFragment : Fragment() {
                     reportViewModel.reportUiState.collectLatest { uiState ->
                         when (uiState) {
                             ReportUiState.Default -> {
+                                binding.pbWitnessReportLoading.visibility = View.GONE
                                 binding.btnWitnessReportConfirm.isEnabled = false
                             }
 
@@ -286,12 +330,15 @@ class WitnessReportFragment : Fragment() {
         with(binding.cvWitnessReportCalendar) {
             setVisibleMonthRange(startMonth, endMonth)
             setCurrentMonth(endMonth)
-            setSelectableDateRange(startMonth, endMonth)
-
+            setSelectedDateRange(Calendar.getInstance(), Calendar.getInstance())
+            reportViewModel.updateReportData(
+                date = Calendar.getInstance().time
+            )
+            binding.cvWitnessReportCalendar.
             setCalendarListener(object : CalendarListener {
                 override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
                     reportViewModel.updateReportData(
-                        missingDate = startDate.time
+                        date = startDate.time
                     )
                 }
 
@@ -387,13 +434,28 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
+        val dialog = ReportImageDialog(
+            requireContext(),
+            onCapture = {
+                findNavController().navigate(R.id.action_fragment_witness_report_to_fragment_report_camera)
+            },
+            onUpload = {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+        )
+
         reportImageAdapter = ReportImageAdapter(
+            context = requireContext(),
             reportType = ReportType.WITNESS,
+            onRemoveClickListener = { position -> reportViewModel.removeImageUriPosition(position) },
+            onUploadClickListener = { dialog.show() },
             onAIButtonClick = { uri ->
                 reportViewModel.getGptData(uri)
-            }).apply {
-            submitList(ReportDummys.dummyImageUris)
+            }
+        ).apply {
+            submitList(reportViewModel.imageUriList.value)
         }
+
         with(binding.rvWitnessReportImages) {
             adapter = reportImageAdapter
             layoutManager = LinearLayoutManager(

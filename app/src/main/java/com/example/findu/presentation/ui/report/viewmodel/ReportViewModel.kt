@@ -27,7 +27,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -44,6 +43,10 @@ class ReportViewModel @Inject constructor(
     private val postWitnessReportUseCase: PostWitnessReportUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
+
+    private val _imageUriList: MutableStateFlow<List<Uri>> =
+        MutableStateFlow(mutableListOf(Uri.EMPTY))
+    val imageUriList: StateFlow<List<Uri>> get() = _imageUriList
 
     private val _gptData: MutableStateFlow<GptData?> = MutableStateFlow(null)
     val gptData = _gptData.asStateFlow()
@@ -64,23 +67,11 @@ class ReportViewModel @Inject constructor(
     private val _reportUiState = MutableStateFlow<ReportUiState>(ReportUiState.Default)
     val reportUiState = _reportUiState.asStateFlow()
 
-//    private val _imageUris = MutableStateFlow<List<Uri>>(emptyList())
-//    private val _selectedSpeciesType = MutableStateFlow<SpeciesType?>(null)
-//    private val _selectedBreedName = MutableStateFlow<String?>(null)
-//    private val _selectedSexType: MutableStateFlow<SexType?> = MutableStateFlow(null)
-//    private val _selectedFurColors = MutableStateFlow<List<FurColorType>>(emptyList())
-//    private val _selectedFeatureIds = MutableStateFlow<MutableList<Int>>(mutableListOf())
-//    private val _description: String? = null
-//    private val _location = MutableStateFlow<String?>(null)
-//    private val _selectedMissingDate = MutableStateFlow<Date?>(null)
-
-    private val _imageUris = MutableStateFlow<MutableList<Uri>>(mutableListOf())
     private val _selectedSpeciesType = MutableStateFlow<SpeciesType?>(null)
     private val _selectedBreedName = MutableStateFlow<String?>(null)
     private val _selectedSexType = MutableStateFlow<SexType?>(null)
     private val _selectedFurColors = MutableStateFlow<MutableList<FurColorType>>(mutableListOf())
     private val _selectedFeatureIds = MutableStateFlow<MutableList<Int>>(mutableListOf())
-    private val _description = MutableStateFlow<String?>(null)
     private val _location = MutableStateFlow<String?>(null)
     private val _selectedMissingDate = MutableStateFlow<Date?>(null)
 
@@ -89,6 +80,20 @@ class ReportViewModel @Inject constructor(
     init {
         getBreedData()
 //        testPostMissingReport()
+    }
+
+
+    fun addImageUri(uri: Uri) {
+        val list = _imageUriList.value.toMutableList()
+        list.add(uri)
+        _imageUriList.value = list
+        Log.d("ReportViewModel", "addImageUri: ${_imageUriList.value}")
+    }
+
+    fun removeImageUriPosition(position: Int) {
+        val list = _imageUriList.value.toMutableList()
+        list.removeAt(position)
+        _imageUriList.value = list
     }
 
     private fun getBreedData() {
@@ -111,6 +116,9 @@ class ReportViewModel @Inject constructor(
                 onSuccess = { validationData ->
                     if (validationData.isExist) {
                         _gptData.value = gptValue
+                        _selectedBreedName.value = gptValue.breed
+                        _selectedSpeciesType.value = gptValue.species
+                        _selectedFurColors.value = gptValue.furColors.toMutableList()
                     } else {
                         _gptData.value = gptValue.copy(breed = "")
                         _errorMessage.value = "유효하지 않은 품종입니다."
@@ -150,16 +158,16 @@ class ReportViewModel @Inject constructor(
         furColor: FurColorType? = null,
         featureIds: Int? = null,
         location: String? = null,
-        missingDate: Date? = null
+        date: Date? = null
     ) {
-        imageUris?.let { _imageUris.value.add(it) }
+        imageUris?.let { addImageUri(it) }
         speciesType?.let { selectSpeciesType(it) }
         breedName?.let { _selectedBreedName.value = it }
         sexType?.let { _selectedSexType.value = it }
         furColor?.let { updateSelectedFurColors(it) }
         featureIds?.let { updateSelectedFeatureIds(it) }
         location?.let { _location.value = it }
-        missingDate?.let { _selectedMissingDate.value = it }
+        date?.let { _selectedMissingDate.value = it }
 
         Log.d("ReportViewModel", "_selectedSpeciesType: ${_selectedSpeciesType.value}")
         Log.d("ReportViewModel", "_selectedBreedName: ${_selectedBreedName.value}")
@@ -225,7 +233,35 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             _reportUiState.value = ReportUiState.Loading
 
-            uploadImages(_imageUris.value)
+            uploadMissingImages(description)
+        }
+    }
+
+    private fun uploadMissingImages(description: String) {
+        Log.d("ReportViewModel", "uploadImages: $_imageUriList.value")
+
+        viewModelScope.launch {
+            uploadImagesUseCase(
+                _imageUriList.value.drop(1).toMultiPartBodys(context)
+            ).fold(
+                onSuccess = { data ->
+                    imageUrls = data
+                    postMissingReportData(description)
+                },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "이미지 업로드 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    private fun postMissingReportData(
+        description: String
+    ) {
+        val breedId = getBreedIds(_selectedBreedName.value!!)
+
+        viewModelScope.launch {
+            _reportUiState.value = ReportUiState.Loading
 
             val missingReportData =
                 MissingReportData(
@@ -253,12 +289,37 @@ class ReportViewModel @Inject constructor(
     fun postWitnessReport(
         description: String
     ) {
+        viewModelScope.launch {
+            _reportUiState.value = ReportUiState.Loading
+            uploadWitnessImages(description)
+        }
+    }
+
+    private fun uploadWitnessImages(description: String) {
+        Log.d("ReportViewModel", "uploadImages: $_imageUriList.value")
+
+        viewModelScope.launch {
+            uploadImagesUseCase(
+                _imageUriList.value.drop(1).toMultiPartBodys(context)
+            ).fold(
+                onSuccess = { data ->
+                    imageUrls = data
+                    postWitnessReportData(description)
+                },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "이미지 업로드 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    private fun postWitnessReportData(
+        description: String
+    ) {
         val breedId = getBreedIds(_selectedBreedName.value!!)
 
         viewModelScope.launch {
             _reportUiState.value = ReportUiState.Loading
-
-            uploadImages(_imageUris.value)
 
             val witnessReportData =
                 WitnessReportData(
@@ -268,7 +329,7 @@ class ReportViewModel @Inject constructor(
                     location = _location.value!!,
                     featureIds = _selectedFeatureIds.value,
                     description = description,
-                    missingDate = Instant.fromEpochMilliseconds(_selectedMissingDate.value!!.time)
+                    foundDate = Instant.fromEpochMilliseconds(_selectedMissingDate.value!!.time)
                 )
 
             postWitnessReportUseCase(witnessReportData).fold(
@@ -276,23 +337,6 @@ class ReportViewModel @Inject constructor(
                 onFailure = { error ->
                     _errorMessage.value = error.message ?: "신고 접수 중 오류가 발생했습니다."
                     _reportUiState.value = ReportUiState.Error
-                }
-            )
-
-        }
-    }
-
-    private fun uploadImages(images: List<Uri>) {
-
-        viewModelScope.launch {
-            uploadImagesUseCase(
-                images.toMultiPartBodys(context)
-            ).fold(
-                onSuccess = { data ->
-                    imageUrls = data
-                },
-                onFailure = { error ->
-                    _errorMessage.value = error.message ?: "이미지 업로드 중 오류가 발생했습니다."
                 }
             )
         }

@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.report.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.usecase.report.GetAddressUseCase
@@ -30,6 +31,7 @@ class LocationViewModel @Inject constructor(
                     _location.value = addressData.address
                 },
                 onFailure = { error ->
+                    Log.e("ReportLocationDialog", "getLocation: ${error.message}")
                     _errorMessage.value = error.message ?: "주소를 불러오는 중 오류가 발생했습니다."
                 }
             )

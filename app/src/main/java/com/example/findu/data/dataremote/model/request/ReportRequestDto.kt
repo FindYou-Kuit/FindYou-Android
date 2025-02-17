@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MissingReportRequestDto(
+    @SerialName("userId")
+    val userId: Int = 1,
     @SerialName("imageUrls")
     val imageUrls: List<String>,
     @SerialName("breed")
@@ -26,6 +28,8 @@ data class MissingReportRequestDto(
 
 @Serializable
 data class WitnessReportRequestDto(
+    @SerialName("userId")
+    val userId: Int = 1,
     @SerialName("imageUrls")
     val imageUrls: List<String>,
     @SerialName("breed")
@@ -38,6 +42,6 @@ data class WitnessReportRequestDto(
     val features: List<Int>,
     @SerialName("description")
     val description: String,
-    @SerialName("missingDate")
-    val missingDate: Instant
+    @SerialName("foundDate")
+    val foundDate: Instant
 )

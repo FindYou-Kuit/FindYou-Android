@@ -38,9 +38,9 @@
         app:chipCornerRadius="10dp"
         app:chipEndPadding="2dp"
         app:chipIconVisible="false"
+        app:chipMinHeight="24dp"
         app:chipStartPadding="2dp"
         app:chipStrokeWidth="0dp"
-        app:chipMinHeight="24dp"
         app:layout_constraintBottom_toBottomOf="@id/tv_home_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_home_name" />
@@ -55,26 +55,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_home_name" />
 
-    <ImageView
-        android:id="@+id/iv_home_location"
-        android:layout_width="8dp"
-        android:layout_height="10dp"
-        android:layout_marginTop="3dp"
-        android:contentDescription="@string/home_rv_location"
-        android:src="@drawable/icon_home_location"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_date" />
-
-    <TextView
-        android:id="@+id/tv_home_location"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:text="@string/home_rv_location"
-        android:textAppearance="@style/TextAppearance.FindU.caption_12"
-        app:layout_constraintBottom_toBottomOf="@id/iv_home_location"
-        app:layout_constraintStart_toEndOf="@id/iv_home_location"
-        app:layout_constraintTop_toTopOf="@id/iv_home_location" />
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_date">
+
+        <ImageView
+            android:id="@+id/iv_home_location"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/home_rv_location"
+            android:src="@drawable/icon_home_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_home_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/home_rv_location"
+            android:textAppearance="@style/TextAppearance.FindU.caption_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_home_location"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.findu.BuildConfig
+import com.example.findu.R
 import com.example.findu.databinding.DialogReportLocationBinding
 import com.example.findu.presentation.ui.report.viewmodel.LocationViewModel
 import com.example.findu.presentation.util.PermissionUtils.REQUEST_CODE_LOCATION_PERMISSION
@@ -54,6 +56,8 @@ class ReportLocationDialog(
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationSource: LocationSource
 
+    private var cameraMoveCount = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,16 +65,20 @@ class ReportLocationDialog(
     ): View {
         super.onCreate(savedInstanceState)
 
+
+        NaverMapSdk.getInstance(requireContext()).client =
+            NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_CLIENT_ID)
+
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         if (!hasLocationPermission(requireContext())) {
             requestLocationPermission(requireActivity())
         } else {
-            NaverMapSdk.getInstance(requireContext()).client =
-                NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_CLIENT_ID)
-            setUpMapView()
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         }
+
+        setUpMapView()
+
         setUpLocationTextView()
         setUpListener()
 
@@ -84,20 +92,24 @@ class ReportLocationDialog(
             repeatOnLifecycle(lifecycle.currentState) {
                 launch {
                     locationViewModel.location.collectLatest { location ->
-                        binding.tvReportLocationDialogAddress.text = location
+                        location?.let {
+                            binding.tvReportLocationDialogAddress.text = it
+                        } ?: run {
+                            binding.tvReportLocationDialogAddress.setText(R.string.report_location)
+                        }
                     }
-                }
-                launch {
-                    locationViewModel.errorMessage.collectLatest { errorMessage ->
-                        errorMessage?.let {
-                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    launch {
+                        locationViewModel.errorMessage.collectLatest { errorMessage ->
+                            errorMessage?.let {
+                                Log.e("ReportLocationDialog", it)
+                                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
             }
         }
     }
-
 
     private fun setUpLocationTextView() {
 
@@ -139,7 +151,7 @@ class ReportLocationDialog(
             dismiss()
         }
 
-        binding.ivReportLocationDialogClose.setOnClickListener {
+        binding.clReportLocationDialogClose.setOnClickListener {
             dismiss()
         }
     }
@@ -152,6 +164,21 @@ class ReportLocationDialog(
                 isZoomControlEnabled = false
                 isScaleBarEnabled = false
             }
+            addOnCameraIdleListener {
+                Log.d(
+                    "ReportLocationDialog",
+                    "onMapReady: addOnCameraIdleListener $cameraMoveCount"
+                )
+                if (cameraMoveCount < 1) {
+                    cameraMoveCount += 1
+
+                } else {
+                    val latLng = cameraPosition.target
+                    Log.d("ReportLocationDialog", "onMapReady: addOnCameraIdleListener $latLng")
+                    locationViewModel.getLocation(latLng.latitude, latLng.longitude)
+                }
+            }
+
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -162,22 +189,22 @@ class ReportLocationDialog(
             ) {
                 return
             }
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    moveCamera(
-                        CameraUpdate.scrollTo(
-                            LatLng(
-                                location?.latitude ?: 37.5666102,
-                                location?.longitude ?: 126.9783881
+
+
+            if (hasLocationPermission(requireContext())) {
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        moveCamera(
+                            CameraUpdate.scrollTo(
+                                LatLng(
+                                    location?.latitude ?: 37.5666102,
+                                    location?.longitude ?: 126.9783881
+                                )
                             )
                         )
-                    )
-                }
-
-            addOnCameraIdleListener {
-                val latLng = cameraPosition.target
-                locationViewModel.getLocation(latLng.latitude, latLng.longitude)
+                    }
             }
+
         }
     }
 

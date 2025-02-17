@@ -14,7 +14,7 @@ interface ReportService {
     @Multipart
     @POST("/api/v1/reports/images")
     suspend fun uploadImages(
-        @Part("files") files: List<MultipartBody.Part?>
+        @Part files: List<MultipartBody.Part>
     ): BaseResponse<List<String>>
 
     @POST("/api/v1/reports/new-missing-reports")

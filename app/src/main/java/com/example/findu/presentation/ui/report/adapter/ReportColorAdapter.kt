@@ -17,15 +17,19 @@ class ReportColorAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(furColor: FurColorType) {
-            binding.tvReportColorsName.text = furColor.color
-            binding.cbReportColors.isChecked = selectedColorList.contains(furColor)
             binding.root.setOnClickListener {
                 binding.cbReportColors.isChecked = !binding.cbReportColors.isChecked
-                onColorClick(furColor)
-                if (binding.cbReportColors.isChecked) {
-                    selectedColorList.add(furColor)
-                } else {
-                    selectedColorList.remove(furColor)
+            }
+            binding.tvReportColorsName.text = furColor.color
+            with(binding.cbReportColors) {
+                isChecked = selectedColorList.contains(furColor)
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        selectedColorList.add(furColor)
+                    } else {
+                        selectedColorList.remove(furColor)
+                    }
+                    onColorClick(furColor)
                 }
             }
         }
