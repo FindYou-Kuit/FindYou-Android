@@ -7,6 +7,7 @@ import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
+import com.example.findu.domain.usecase.report.GetAddressUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
@@ -61,4 +62,10 @@ object UseCaseModule {
     fun providePostWitnessReportUseCase(
         reportRepository: ReportRepository
     ): PostWitnessReportUseCase = PostWitnessReportUseCase(reportRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetAddressUseCase(
+        reportRepository: ReportRepository
+    ): GetAddressUseCase = GetAddressUseCase(reportRepository)
 }
