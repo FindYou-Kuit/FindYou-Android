@@ -43,6 +43,26 @@ class SearchReportFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        childFragmentManager.setFragmentResultListener("filterResults", this) { _, bundle ->
+            val selectedFilters =
+                bundle.getStringArrayList("selectedFilters") ?: return@setFragmentResultListener
+            binding.cgSearchGroupFilters.removeAllViews()
+
+            updateFilterChips(selectedFilters)
+
+        }
+        val chipGroup = binding.cgSearchGroupFilters
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip
+            chip?.setOnCloseIconClickListener {
+                chipGroup.removeView(chip)
+            }
+        }
+    }
+
+
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.searchData.collectLatest { searchResults ->
@@ -68,31 +88,35 @@ class SearchReportFragment : Fragment() {
                     date = it.date,
                     address = it.location,
                     isBookmark = it.interest,
-                    status = it.tag.toSearchRvTag()
+                    tag = it.tag.toSearchRvTag(),
+                    cardId = it.cardId
                 )
             }
         }
         rvAdapter.updateData(searchList)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        childFragmentManager.setFragmentResultListener("filterResults", this) { _, bundle ->
-            val selectedFilters =
-                bundle.getStringArrayList("selectedFilters") ?: return@setFragmentResultListener
-            binding.cgSearchGroupFilters.removeAllViews()
-
-            updateFilterChips(selectedFilters)
-
-        }
-        val chipGroup = binding.cgSearchGroupFilters
-        for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as? Chip
-            chip?.setOnCloseIconClickListener {
-                chipGroup.removeView(chip)
+    private fun navigateToDetail(cardId: Long, tag: String) {
+        val fragment = when (tag) {
+            "목격신고" -> SearchWitnessDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("report_Id", cardId)
+                }
             }
+            "실종신고" -> SearchDisappearDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("report_Id", cardId)
+                }
+            }
+            else -> return
         }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fcv_main, fragment)
+            .addToBackStack(null)
+            .commit()
     }
+
 
     private fun updateFilterChips(filters: List<String>?) {
         val chipGroup = binding.cgSearchGroupFilters
@@ -121,7 +145,7 @@ class SearchReportFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(items) { item ->
-            openDetailFragment(item)
+            navigateToDetail(item.cardId, item.tag.text)
         }
         binding.rvSearchHorizontalContent.adapter = rvAdapter
         binding.rvSearchHorizontalContent.layoutManager =

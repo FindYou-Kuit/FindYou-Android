@@ -8,5 +8,6 @@ data class SearchRv(
     val date : String,
     val address : String,
     var isBookmark : Boolean,
-    var status : SearchRvTag,
+    var tag : SearchRvTag,
+    val cardId: Long
 ) : Serializable

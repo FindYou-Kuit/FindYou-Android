@@ -69,14 +69,39 @@ class SearchAllFragment : Fragment() {
                     date = it.date,
                     address = it.location,
                     isBookmark = it.interest,
-                    status = it.tag.toSearchRvTag()
+                    tag = it.tag.toSearchRvTag(),
+                    cardId = it.cardId
                 )
             }
         }
         rvAdapter.updateData(searchList)
-
     }
 
+    private fun navigateToDetail(cardId: Long, tag: String) {
+        val fragment = when (tag) {
+            "보호중" -> SearchProtectingDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("protecting_report_id", cardId)
+                }
+            }
+            "목격신고" -> SearchWitnessDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("report_Id", cardId)
+                }
+            }
+            "실종신고" -> SearchDisappearDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("report_Id", cardId)
+                }
+            }
+            else -> return
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fcv_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
     private fun initFilterButton() {
         binding.ibSearchFilter.setOnClickListener {
@@ -122,22 +147,9 @@ class SearchAllFragment : Fragment() {
         }
     }
 
-    private fun openDetailFragment(selectedItem: SearchRv) {
-        val detailFragment = SearchDisappearDetailFragment().apply {
-            arguments = Bundle().apply {
-                putSerializable("selectedItem", selectedItem)
-            }
-        }
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_main, detailFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(emptyList()) { item ->
-            openDetailFragment(item)
+            navigateToDetail(item.cardId, item.tag.text)
         }
         binding.rvSearchHorizontalContent.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

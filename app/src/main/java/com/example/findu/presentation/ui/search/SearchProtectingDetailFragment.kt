@@ -56,8 +56,6 @@ class SearchProtectingDetailFragment : Fragment() {
     }
 
 
-
-
     private fun initBackButton() {
         binding.ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
