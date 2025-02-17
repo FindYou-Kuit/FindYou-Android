@@ -7,7 +7,9 @@ import com.example.findu.data.dataremote.model.request.GptRequestDto.Companion.i
 import com.example.findu.data.dataremote.model.request.ImageUrl
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.toDomain
+import com.example.findu.data.mapper.torequest.toRequestDto
 import com.example.findu.domain.model.report.GptData
+import com.example.findu.domain.model.report.MissingReportData
 import com.example.findu.domain.repository.report.ReportRepository
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -28,4 +30,13 @@ class ReportRepositoryImpl @Inject constructor(
         runCatching {
             reportRemoteDataSource.uploadImages(files).handleBaseResponse().getOrThrow()
         }
+
+    override suspend fun postMissingReport(missingReportData: MissingReportData): Result<Unit> =
+        kotlin.runCatching {
+            reportRemoteDataSource.postMissingReport(
+                missingReportData.toRequestDto()
+            ).handleBaseResponse().getOrThrow()
+        }
+
+
 }
