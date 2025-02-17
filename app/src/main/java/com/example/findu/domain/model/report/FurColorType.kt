@@ -1,4 +1,4 @@
-package com.example.findu.presentation.type.report
+package com.example.findu.domain.model.report
 
 enum class FurColorType(
     val color: String

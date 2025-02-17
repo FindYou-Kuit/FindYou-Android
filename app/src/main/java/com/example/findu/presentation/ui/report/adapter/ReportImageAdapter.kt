@@ -16,6 +16,7 @@ import com.example.findu.presentation.type.report.ReportType
 
 class ReportImageAdapter(
     val reportType: ReportType,
+    val onAIButtonClick : (Uri) -> Unit
 ) : ListAdapter<Uri, RecyclerView.ViewHolder>(diffUtil) {
 
     inner class DefaultImageViewHolder(private val binding: ItemReportDefaultImageBinding) :
@@ -55,6 +56,10 @@ class ReportImageAdapter(
             Glide.with(binding.root)
                 .load(uri)
                 .into(binding.ivReportUploadedImage)
+
+            binding.btnReportUploadedAiDistinction.setOnClickListener {
+                onAIButtonClick(uri)
+            }
 
         }
     }

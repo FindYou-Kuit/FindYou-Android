@@ -1,32 +1,35 @@
 package com.example.findu.presentation.ui.report
 
-import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentWitnessReportBinding
+import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.domain.model.report.GptData
+import com.example.findu.presentation.model.GptUiState
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
 import com.example.findu.presentation.type.report.ReportType
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_HEIGHT
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_MAX_COUNT
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.LOCATION_TAG
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
+import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_HEIGHT
+import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
+import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
+import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
 import com.example.findu.presentation.ui.report.model.ReportDummys
@@ -35,16 +38,25 @@ import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.example.findu.presentation.util.ViewUtils.setKeyboardVisibilityListener
 import com.example.findu.presentation.util.ViewUtils.verticalScrollToYPosition
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Calendar
 
+@AndroidEntryPoint
 class WitnessReportFragment : Fragment() {
     private var _binding: FragmentWitnessReportBinding? = null
     private val binding get() = _binding!!
     private val reportViewModel by viewModels<ReportViewModel>()
 
     private lateinit var reportImageAdapter: ReportImageAdapter
-    private lateinit var breedAdapter: ArrayAdapter<String>
+    private val breedAdapter: ReportBreedAdapter by lazy {
+        ReportBreedAdapter(
+            requireContext(),
+            reportViewModel.selectedBreedList.value.toMutableList()
+        )
+    }
     private lateinit var colorAdapter: ReportColorAdapter
 
     override fun onCreateView(
@@ -85,6 +97,23 @@ class WitnessReportFragment : Fragment() {
                 ).show(childFragmentManager, LOCATION_TAG)
             }
         }
+
+        binding.rgWitnessReportSpecies.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rb_witness_report_dog_button -> {
+                    reportViewModel.selectSpeciesType(SpeciesType.DOG)
+                }
+
+                R.id.rb_witness_report_cat_button -> {
+                    reportViewModel.selectSpeciesType(SpeciesType.CAT)
+                }
+
+                R.id.rb_witness_report_extra_button -> {
+                    reportViewModel.selectSpeciesType(SpeciesType.ETC)
+                }
+            }
+            binding.actvWitnessReportBreed.text = null
+        }
     }
 
     private fun navigateToHistory() {
@@ -99,10 +128,94 @@ class WitnessReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUploadImageRecyclerView()
-        setUpBreedsAdapter()
         setUpColorAdapter()
         setUpFeatureAdapter()
         setUpCalender()
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                launch {
+                    reportViewModel.breedData.collectLatest { breedData ->
+                        breedData?.let {
+                            setUpBreedsAdapter()
+                        }
+                    }
+                }
+
+                launch {
+                    reportViewModel.errorMessage.collectLatest { errorMessage ->
+                        errorMessage?.let {
+                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                launch {
+                    reportViewModel.selectedBreedList.collectLatest { selectedBreedNames ->
+                        if (selectedBreedNames.isNotEmpty())
+                            breedAdapter.changeItems(selectedBreedNames)
+                    }
+                }
+
+                launch {
+                    reportViewModel.gptData.collectLatest { gptData ->
+                        setSpecies(gptData)
+                        setBreedName(gptData)
+                        setFurColors(gptData)
+                    }
+                }
+
+                launch {
+                    reportViewModel.gptUiState.collectLatest { uiState ->
+                        when (uiState) {
+                            GptUiState.Loading -> {
+                                binding.pbReportLoading.visibility = View.VISIBLE
+                            }
+
+                            GptUiState.Default, GptUiState.Finished -> {
+                                binding.pbReportLoading.visibility = View.GONE
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setFurColors(gptData: GptData) {
+        colorAdapter.updateSelectedColors(gptData.furColors)
+    }
+
+    private fun setBreedName(gptData: GptData) {
+        if (gptData.breed.isEmpty())
+            binding.actvWitnessReportBreed.setHint(R.string.report_cannot_distinction)
+        else
+            binding.actvWitnessReportBreed.setText(gptData.breed)
+    }
+
+    private fun setSpecies(gptData: GptData) {
+        when (gptData.species) {
+            SpeciesType.DOG -> {
+                binding.rbWitnessReportDogButton.isChecked = true
+                reportViewModel.selectSpeciesType(SpeciesType.DOG)
+            }
+
+            SpeciesType.CAT -> {
+                binding.rbWitnessReportCatButton.isChecked = true
+                reportViewModel.selectSpeciesType(SpeciesType.CAT)
+            }
+
+            SpeciesType.ETC -> {
+                binding.rbWitnessReportExtraButton.isChecked = true
+                reportViewModel.selectSpeciesType(SpeciesType.ETC)
+            }
+
+            null -> {}
+        }
     }
 
     private fun setUpCalender() {
@@ -142,17 +255,15 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun setUpBreedsAdapter() {
-        breedAdapter = ReportBreedAdapter(
-            requireContext(),
-            ReportDummys.dummyBreeds
-        )
-
         with(binding.actvWitnessReportBreed) {
             setAdapter(breedAdapter)
-            setDropDownBackgroundResource(com.example.findu.R.drawable.bg_bottom_radius_8_g4)
+            setDropDownBackgroundResource(R.drawable.bg_bottom_radius_8_g4)
 
             setOnClickListener {
-                dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                dropDownHeight =
+                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 showDropDown()
                 binding.svWitnessReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
             }
@@ -161,7 +272,7 @@ class WitnessReportFragment : Fragment() {
                 clearFocus()
             }
             addTextChangedListener { text ->
-                ReportDummys.dummyBreeds
+                reportViewModel.selectedBreedList.value
                     .filter { it.contains(text.toString()) }
                     .let { matches ->
                         dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
@@ -170,7 +281,10 @@ class WitnessReportFragment : Fragment() {
                     }
             }
             setOnFocusChangeListener { _, hasFocus ->
-                dropDownHeight = requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                dropDownHeight =
+                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 if (hasFocus) {
                     showDropDown()
                     binding.svWitnessReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
@@ -180,7 +294,11 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun setupUploadImageRecyclerView() {
-        reportImageAdapter = ReportImageAdapter(ReportType.WITNESS).apply {
+        reportImageAdapter = ReportImageAdapter(
+            reportType = ReportType.WITNESS,
+            onAIButtonClick = { uri ->
+                reportViewModel.getGptData(uri)
+            }).apply {
             submitList(ReportDummys.dummyImageUris)
         }
         with(binding.rvWitnessReportImages) {

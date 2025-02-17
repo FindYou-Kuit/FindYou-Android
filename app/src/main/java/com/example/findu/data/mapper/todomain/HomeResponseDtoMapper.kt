@@ -8,8 +8,8 @@ import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
 
 fun HomeResponseDto.toDomain() = HomeData(
-    todayRescuedAnimalCount = todayRescuedAnimalCount,
-    todayReportAnimalCount = todayRescuedAnimalCount,
+    todayRescuedAnimalCount = yesterdayRescuedAnimalCount,
+    todayReportAnimalCount = yesterdayRescuedAnimalCount,
     protectAnimalCards = protectAnimalCards.map { it.toDomain() },
     reportAnimalCards = reportAnimalCards.map { it.toDomain() }
 )
@@ -19,7 +19,7 @@ fun ProtectAnimalCard.toDomain() = ProtectAnimal(
     thumbnailImageUrl = thumbnailImageUrl,
     title = title,
     tag = tag,
-    noticeStartDate = noticeStartDate,
+    noticeStartDate = happenDate,
     careAddress = careAddress
 )
 
