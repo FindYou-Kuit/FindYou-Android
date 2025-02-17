@@ -1,6 +1,7 @@
 package com.example.findu.data.dataremote.service
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
+import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -12,4 +13,10 @@ interface ReportService {
     suspend fun uploadImages(
         @Part("files") files: List<MultipartBody.Part?>
     ): BaseResponse<List<Int>>
+
+    @POST("/api/v1/reports/new-missing-reports")
+    suspend fun postMissingReport(
+        @Part("files") files: List<MultipartBody.Part?>
+    ): NullableBaseResponse<Unit>
+
 }
