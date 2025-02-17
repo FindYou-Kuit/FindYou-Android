@@ -8,6 +8,6 @@ import javax.inject.Inject
 class NaverRemoteDataSourceImpl @Inject constructor(
     private val naverService: NaverService
 ): NaverRemoteDataSource {
-    override suspend fun postImagePrompt(coords: String): NaverResponseDto =
+    override suspend fun getAddress(coords: String): NaverResponseDto =
         naverService.getAddress(coords = coords)
 }
