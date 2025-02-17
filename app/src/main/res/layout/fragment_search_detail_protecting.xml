@@ -81,7 +81,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_search_detail_name"
+                    android:id="@+id/tv_detail_breed_field"
                     style="@style/TextAppearance.FindU.Head1_SB_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_search_detail_tag"
+                    android:id="@+id/tv_detail_tag_field"
                     style="@style/TextAppearance.FindU.Tag1_SB_12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,9 +100,9 @@
                     android:background="@drawable/bg_search_protecting_tag"
                     android:text="보호중"
                     android:textColor="@color/green1"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_search_detail_name"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_detail_name"
-                    app:layout_constraintTop_toTopOf="@id/tv_search_detail_name" />
+                    app:layout_constraintBottom_toBottomOf="@id/tv_detail_title_field"
+                    app:layout_constraintStart_toEndOf="@id/tv_detail_title_field"
+                    app:layout_constraintTop_toTopOf="@id/tv_detail_title_field" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_view_location"
@@ -120,7 +120,7 @@
                     app:iconSize="15dp"
                     app:iconTint="@null"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_search_detail_name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_detail_title_field"
                     app:strokeColor="@color/main_color"
                     app:strokeWidth="1dp" />
 
@@ -161,6 +161,7 @@
                                 android:textColor="@color/main_color" />
 
                             <TextView
+                                android:id="@+id/tv_detail_age_field"
                                 style="@style/TextAppearance.FindU.Body1_SB_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -188,6 +189,7 @@
                                 android:textColor="@color/main_color" />
 
                             <TextView
+                                android:id="@+id/tv_detail_weight_field"
                                 style="@style/TextAppearance.FindU.Body1_SB_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -215,6 +217,7 @@
                                 android:textColor="@color/main_color" />
 
                             <TextView
+                                android:id="@+id/tv_detail_sex_field"
                                 style="@style/TextAppearance.FindU.Body1_SB_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -259,7 +262,7 @@
                     android:id="@+id/cl_search_content_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cl_search_show_more">
 
@@ -307,7 +310,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_search_content_post_date"
+                                android:id="@+id/tv_detail_happenDate_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -335,6 +338,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_detail_furColor_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -362,6 +366,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_detail_neutering_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -428,6 +433,7 @@
                                 app:layout_constraintTop_toBottomOf="@id/cl_search_detail_special_note_btn">
 
                                 <TextView
+                                    android:id="@+id/tv_detail_significant_field"
                                     style="@style/TextAppearance.FindU.Tag1_SB_12"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -458,6 +464,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_detail_noticeNumber_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -485,6 +492,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_detail_noticeDuration_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -512,7 +520,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_search_content_detail_rescue_location"
+                                android:id="@+id/tv_detail_foundLocation_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -535,8 +543,8 @@
                                 app:icon="@drawable/ic_search_detail_location"
                                 app:iconSize="15dp"
                                 app:iconTint="@null"
-                                app:layout_constraintEnd_toEndOf="@id/tv_search_content_detail_rescue_location"
-                                app:layout_constraintTop_toBottomOf="@id/tv_search_content_detail_rescue_location"
+                                app:layout_constraintEnd_toEndOf="@id/tv_detail_foundLocation_field"
+                                app:layout_constraintTop_toBottomOf="@id/tv_detail_foundLocation_field"
                                 app:strokeColor="@color/main_color"
                                 app:strokeWidth="1dp" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -559,7 +567,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_search_content_detail_shelter"
+                                android:id="@+id/tv_detail_careName_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -569,7 +577,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_protect_center_phone_number"
+                                android:id="@+id/tv_detail_careTel_field"
                                 style="@style/TextAppearance.FindU.Body2_R_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -578,17 +586,17 @@
                                 android:linksClickable="true"
                                 android:text="@string/search_detail_shelter_phone_num"
                                 android:textColor="@color/main_color"
-                                app:layout_constraintEnd_toEndOf="@id/tv_search_content_detail_shelter"
-                                app:layout_constraintTop_toBottomOf="@id/tv_search_content_detail_shelter" />
+                                app:layout_constraintEnd_toEndOf="@id/tv_detail_careName_field"
+                                app:layout_constraintTop_toBottomOf="@id/tv_detail_careName_field" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="102dp"
                                 android:src="@drawable/ic_search_call"
-                                app:layout_constraintBottom_toBottomOf="@id/tv_protect_center_phone_number"
+                                app:layout_constraintBottom_toBottomOf="@id/tv_detail_careTel_field"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@id/tv_protect_center_phone_number" />
+                                app:layout_constraintTop_toTopOf="@id/tv_detail_careTel_field" />
 
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -613,7 +621,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_search_content_detail_jurisdiction"
+                                android:id="@+id/tv_detail_authority_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -623,7 +631,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_jurisdiction_phone_number"
+                                android:id="@+id/tv_detail_authorityPhoneNumber_field"
                                 style="@style/TextAppearance.FindU.Body2_R_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -631,17 +639,17 @@
                                 android:linksClickable="true"
                                 android:text="@string/search_detail_jurisdiction_value"
                                 android:textColor="@color/main_color"
-                                app:layout_constraintEnd_toEndOf="@id/tv_search_content_detail_jurisdiction"
-                                app:layout_constraintTop_toBottomOf="@id/tv_search_content_detail_jurisdiction" />
+                                app:layout_constraintEnd_toEndOf="@id/tv_detail_authority_field"
+                                app:layout_constraintTop_toBottomOf="@id/tv_detail_authority_field" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="102dp"
                                 android:src="@drawable/ic_search_call"
-                                app:layout_constraintBottom_toBottomOf="@id/tv_jurisdiction_phone_number"
+                                app:layout_constraintBottom_toBottomOf="@id/tv_detail_authorityPhoneNumber_field"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@id/tv_jurisdiction_phone_number" />
+                                app:layout_constraintTop_toTopOf="@id/tv_detail_authorityPhoneNumber_field" />
 
 
                         </androidx.constraintlayout.widget.ConstraintLayout>

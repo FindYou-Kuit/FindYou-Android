@@ -8,7 +8,6 @@ import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.data.repositoryimpl.ReportRepositoryImpl
 import com.example.findu.domain.repository.DummyRepository
 import com.example.findu.domain.repository.report.ReportRepository
-import com.example.findu.data.repositoryimpl.HomeRepositoryImpl
 import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.repository.SearchRepository
 import dagger.Binds

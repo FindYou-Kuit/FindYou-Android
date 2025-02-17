@@ -48,56 +48,9 @@ class SearchProtectingDetailFragment : Fragment() {
         initBackButton()
         initMapButtons(item)
         initCallButtons()
-        initViewPager()
 
     }
 
-    private fun initViewPager() {
-        val adapter = SearchDetailVPAdapter(imageList)
-        binding.vpSearchDetailImg.adapter = adapter
-        binding.vpSearchDetailImg.setCurrentItem(1, false)
-        val indicatorCount = imageList.size
-        val pageIndicators = Array(indicatorCount) { View(requireContext()) }
-        val indicatorContainer = binding.llDotsContainer
-
-        indicatorContainer.removeAllViews()
-        for (i in pageIndicators.indices) {
-            val indicator = View(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(6, 6).apply {
-                    marginStart = 3
-                    marginEnd = 3
-                }
-                setBackgroundResource(R.drawable.ic_search_indicator_inactive)
-            }
-            indicatorContainer.addView(indicator)
-            pageIndicators[i] = indicator
-        }
-        pageIndicators[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
-
-        binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                val realPosition = when (position) {
-                    0 -> imageList.size - 1
-                    imageList.size + 1 -> 0
-                    else -> position - 1
-                }
-
-                pageIndicators.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
-                pageIndicators[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
-
-                binding.vpSearchDetailImg.postDelayed({
-                    when (position) {
-                        0 -> binding.vpSearchDetailImg.setCurrentItem(imageList.size, false)
-                        imageList.size + 1 -> binding.vpSearchDetailImg.setCurrentItem(1, false)
-                    }
-                }, 200)
-            }
-        })
-
-    }
 
     private fun initBackButton() {
         binding.ivSearchDetailBack.setOnClickListener {
@@ -106,12 +59,12 @@ class SearchProtectingDetailFragment : Fragment() {
     }
 
     private fun initCallButtons() {
-        binding.tvProtectCenterPhoneNumber.setOnClickListener {
-            call(binding.tvProtectCenterPhoneNumber.text.toString())
+        binding.tvDetailCareTelField.setOnClickListener {
+            call(binding.tvDetailCareTelField.text.toString())
         }
 
-        binding.tvJurisdictionPhoneNumber.setOnClickListener {
-            call(binding.tvJurisdictionPhoneNumber.text.toString())
+        binding.tvDetailAuthorityPhoneNumberField.setOnClickListener {
+            call(binding.tvDetailAuthorityPhoneNumberField.text.toString())
         }
     }
 
@@ -143,12 +96,12 @@ class SearchProtectingDetailFragment : Fragment() {
 
     private fun initTagView(item: SearchRv) {
         item.let {
-            binding.tvSearchDetailTag.text = item.status.text
-            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
-            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
-            binding.tvSearchDetailName.text = it.name
-            binding.tvSearchContentPostDate.text = it.date
-            binding.tvSearchContentDetailRescueLocation.text = it.address
+            binding.tvDetailTagField.text = item.status.text
+            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.status.textColor))
+            binding.tvDetailTagField.setBackgroundResource(item.status.backgroundRes)
+            binding.tvDetailBreedField.text = it.name
+            binding.tvDetailHappenDateField.text = it.date
+            binding.tvDetailFoundLocationField.text = it.address
         }
     }
 

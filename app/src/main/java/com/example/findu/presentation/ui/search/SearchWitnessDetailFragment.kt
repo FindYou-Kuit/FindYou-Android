@@ -124,13 +124,13 @@ class SearchWitnessDetailFragment : Fragment() {
 
     private fun initTagView(item: SearchRv) {
         item.let {
-            binding.tvSearchDetailTag.text = item.status.text
-            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
-            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
+            binding.tvDetailTagField.text = item.status.text
+            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.status.textColor))
+            binding.tvDetailTagField.setBackgroundResource(item.status.backgroundRes)
 
-            binding.tvSearchDetailName.text = it.name
-            binding.tvSearchDetailFoundDate.text = it.date
-            binding.tvSearchContentDetailRescueLocationContent.text = it.address
+            binding.tvDetailBreedField.text = it.name
+            binding.tvDetailEventDateField.text = it.date
+            binding.tvDetailEventLocationField.text = it.address
         }
     }
 

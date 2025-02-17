@@ -82,7 +82,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_search_detail_name"
+                    android:id="@+id/tv_detail_title_field"
                     style="@style/TextAppearance.FindU.Head1_SB_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_search_detail_tag"
+                    android:id="@+id/tv_detail_tag_field"
                     style="@style/TextAppearance.FindU.Tag1_SB_12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,9 +101,9 @@
                     android:background="@drawable/bg_search_report_tag"
                     android:text="@string/search_witness_title"
                     android:textColor="@color/blue1"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_search_detail_name"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_detail_name"
-                    app:layout_constraintTop_toTopOf="@id/tv_search_detail_name" />
+                    app:layout_constraintBottom_toBottomOf="@id/tv_detail_title_field"
+                    app:layout_constraintStart_toEndOf="@id/tv_detail_title_field"
+                    app:layout_constraintTop_toTopOf="@id/tv_detail_title_field" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_view_location"
@@ -121,7 +121,7 @@
                     app:iconSize="15dp"
                     app:iconTint="@null"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_search_detail_name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_detail_title_field"
                     app:strokeColor="@color/main_color"
                     app:strokeWidth="1dp" />
 
@@ -139,6 +139,7 @@
                     app:layout_constraintTop_toBottomOf="@id/btn_view_location">
 
                     <TextView
+                        android:id="@+id/tv_detail_eventDate_field"
                         style="@style/TextAppearance.FindU.Body2_SB_14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -243,6 +244,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_detail_breed_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -270,6 +272,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_detail_furColor_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -297,6 +300,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_detail_userName_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -325,6 +329,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_detail_writeDate_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -352,7 +357,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_search_detail_found_date"
+                                android:id="@id/tv_detail_eventDate_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -380,7 +385,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_search_content_detail_rescue_location_content"
+                                android:id="@+id/tv_detail_eventLocation_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -403,8 +408,8 @@
                                 app:icon="@drawable/ic_search_detail_location"
                                 app:iconSize="15dp"
                                 app:iconTint="@null"
-                                app:layout_constraintEnd_toEndOf="@id/tv_search_content_detail_rescue_location_content"
-                                app:layout_constraintTop_toBottomOf="@id/tv_search_content_detail_rescue_location_content"
+                                app:layout_constraintEnd_toEndOf="@id/tv_detail_eventLocation_field"
+                                app:layout_constraintTop_toBottomOf="@id/tv_detail_eventLocation_field"
                                 app:strokeColor="@color/main_color"
                                 app:strokeWidth="1dp" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -454,6 +459,7 @@
                             app:layout_constraintTop_toBottomOf="@id/cg_search_group_feature">
 
                             <TextView
+                                android:id="@+id/tv_detail_additionalDescription_field"
                                 style="@style/TextAppearance.FindU.Tag1_SB_12"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

@@ -123,12 +123,12 @@ class SearchDisappearDetailFragment : Fragment() {
 
     private fun initTagView(item: SearchRv){
         item.let {
-            binding.tvSearchDetailTag.text = item.status.text
-            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
-            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
-            binding.tvSearchDetailName.text = it.name
-            binding.tvSearchContentDetailReportDate.text = it.date
-            binding.tvSearchContentDetailRescueLocation.text = it.address
+            binding.tvDetailTagField.text = item.status.text
+            binding.tvDetailTagField.setTextColor(requireContext().getColor(item.status.textColor))
+            binding.tvDetailTagField.setBackgroundResource(item.status.backgroundRes)
+            binding.tvDetailBreedField.text = it.name
+            binding.tvDetailWriteDateField.text = it.date
+            binding.tvDetailFoundLocationField.text = it.address
         }
     }
 

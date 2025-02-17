@@ -10,7 +10,6 @@ import com.example.findu.data.dataremote.datasource.SearchRemoteDataSource
 import com.example.findu.data.dataremote.datasourceimpl.DetailSearchRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.DummyRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.GptRemoteDataSourceImpl
-import com.example.findu.data.dataremote.datasource.HomeRemoteDataSource
 import com.example.findu.data.dataremote.datasourceimpl.HomeRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.SearchRemoteDataSourceImpl
 import dagger.Binds
