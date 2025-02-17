@@ -4,6 +4,7 @@ import com.example.findu.data.dataremote.datasource.ReportRemoteDataSource
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.request.MissingReportRequestDto
+import com.example.findu.data.dataremote.model.request.WitnessReportRequestDto
 import com.example.findu.data.dataremote.service.ReportService
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -16,5 +17,8 @@ class ReportRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun postMissingReport(requestDto: MissingReportRequestDto): NullableBaseResponse<Unit> =
         service.postMissingReport(requestDto)
+
+    override suspend fun postWitnessReport(requestDto: WitnessReportRequestDto): NullableBaseResponse<Unit> =
+        service.postWitnessReport(requestDto)
 
 }
