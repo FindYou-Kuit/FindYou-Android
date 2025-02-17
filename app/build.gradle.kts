@@ -26,6 +26,8 @@ android {
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
         manifestPlaceholders["naverClientId"] = properties["NAVER_CLIENT_ID"].toString()
+        buildConfigField("String", "NAVER_CLIENT_ID", properties["NAVER_CLIENT_ID"].toString())
+        buildConfigField("String", "NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"].toString())
     }
 
     buildTypes {
