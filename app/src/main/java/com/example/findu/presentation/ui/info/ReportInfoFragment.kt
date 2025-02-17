@@ -1,5 +1,7 @@
 package com.example.findu.presentation.ui.info
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +27,21 @@ class ReportInfoFragment : Fragment() {
     private fun initListener() {
         binding.ivReportInfoBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.llSecondCall.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            startActivity(intent)
+        }
+
+        binding.llFourthSystem.setOnClickListener {
+            val url = "https://www.animal.go.kr/front/awtis/public/publicList.do?menuNo=1000000055"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        }
+
+        binding.llFifthUp.setOnClickListener {
+            binding.svReportInfo.smoothScrollTo(0, 0)
         }
     }
 

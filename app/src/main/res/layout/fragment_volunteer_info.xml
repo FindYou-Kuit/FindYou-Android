@@ -81,7 +81,7 @@
                 android:contentDescription="@null"
                 android:elevation="1dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_banner_blue"
+                android:src="@drawable/img_volunteer_info"
                 app:layout_constraintDimensionRatio="360:208"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
