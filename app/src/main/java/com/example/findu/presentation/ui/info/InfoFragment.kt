@@ -54,6 +54,10 @@ class InfoFragment : Fragment() {
                     findNavController().navigate(R.id.fragment_report_info)
                 }
 
+                R.drawable.img_banner_purple -> {
+                    findNavController().navigate(R.id.fragment_adopt_info)
+                }
+
                 else -> {
                     findNavController().navigate(R.id.fragment_home)
                 }

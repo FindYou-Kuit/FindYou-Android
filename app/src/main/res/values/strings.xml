@@ -233,4 +233,50 @@
     <string name="report_info_fifth_description">페이지 상단 카드에서 관련 기관을 확인하세요!</string>
     <string name="report_info_fifth_search">상단으로 이동</string>
 
+    <!--adopt info-->
+    <string name="adopt_info_sub_title">유기 동물 입양 절차 및 주의점</string>
+    <string name="adopt_info_description">유기 동물을 입양해야 하는 이유와 입양 절차 등, 유기 동물 입양과 관련된 여러 정보들을 알아봅시다!</string>
+
+    <string name="adopt_info_reason_title">입양을 해야 하는 이유</string>
+    <string name="adopt_info_reason_first">1. 유기되거나 버려져 상처를 입은 동물들에게 새로운 집과 행복을 줄 수 있어요!</string>
+    <string name="adopt_info_reason_second">2. 동물 보호와 복지에 참여할 수 있어요!</string>
+    <string name="adopt_info_reason_third">3. 유기 동물 문제를 해결하는데 기여할 수 있어요!</string>
+
+    <string name="adopt_info_alert_title">※ 사지 말고 입양하세요!</string>
+    <string name="adopt_info_alert_description">펫샵에서 사지 않고 입양을 선택하는 건 동물의 생명을 구하고 사회적 가치를 실현하는 소중한 행동이에요.\n입양을 통해 동물과 사랑이 함께 행복한 사회를 만들어요!</string>
+
+    <string name="adopt_info_sequence_title">유기 동물 입양 절차</string>
+
+    <string name="adopt_info_sequence_first_title">1. 유기 동물 확인</string>
+    <string name="adopt_info_sequence_first_description">아래와 같은 경로로 입양하고 싶은 아이를 찾아보아요!</string>
+    <string name="adopt_info_sequence_first_tag">(1) 앱 내에 "보호 중"태그가 달린 아이들</string>
+    <string name="adopt_info_sequence_first_site">(2) 유기 동물 온라인 조회 사이트</string>
+    <string name="adopt_info_sequence_first_center">(3) 유기 동물보호소</string>
+
+    <string name="adopt_info_sequence_second_title">2. 상담 예약 및 입양 신청서 작성</string>
+    <string name="adopt_info_sequence_second_description">입양하려는 아이가 있는 보호소에 연락해 방문 및 상담 예약을 진행하고, 필요한 입양 신청서를 작성해요.</string>
+    <string name="adopt_info_sequence_second_alert_title">입양 신청서에는 다음과 같은 정보를 기재해야 해요!</string>
+    <string name="adopt_info_sequence_second_alert_description_1">(1) 가족 구성원, 혼인 정보 등을 포함한 입양자의 개인정보</string>
+    <string name="adopt_info_sequence_second_alert_description_2">(2) 입양 후 계획, 예상 비용 등 입양자의 입양 의지</string>
+
+    <string name="adopt_info_sequence_third_title">3. 방문 및 상담 진행</string>
+    <string name="adopt_info_sequence_third_description">해당 보호소나 보호센터에 방문해서 상담을 진행해요. 입양하려는 이유, 의지 등에 대해 얘기해요.</string>
+
+    <string name="adopt_info_sequence_fourth_title">4. 교육 이수 및 입양료 납부</string>
+    <string name="adopt_info_sequence_fourth_description">보호소, 보호센터별로 입양 절차가 다룰 수 있어요. 입양을 위한 교육을 시청해야 하거나, 소정의 입양료를 납부해야 할 수 있어요.</string>
+    <string name="adopt_info_sequence_fourth_alert_title">입양비를 지원받을 수 있어요!</string>
+    <string name="adopt_info_sequence_fourth_alert_description">여러 지자체나 센터에서 유기 동물 입양비 지원 사업을 시행하고 있어서 입양비를 지원받을 수도 있어요!</string>
+
+    <string name="adopt_info_sequence_fifth_title">5. 유기 동물 입양</string>
+    <string name="adopt_info_sequence_fifth_description">입양한 동물의 소유권을 증명할 수 있는 중요한 문서에요!</string>
+    <string name="adopt_info_sequence_fifth_sub_description_1">(1) 모든 절차가 완료되면 입양 확인서를 발급받을 수 있어요.</string>
+    <string name="adopt_info_sequence_fifth_sub_description_2">(2) 입양한 날짜를 조율하고 아이를 맞이할 준비를 합니다.</string>
+
+    <string name="adopt_info_sequence_sixth_title">유기 동물 입양 시 주의점</string>
+    <string name="adopt_info_sequence_sixth_patience_title">인내심</string>
+    <string name="adopt_info_sequence_sixth_patience_description">입양한 동물이 낯선 환경에 무서워할 수 있어요. 아이가 적응할 때까지 인내심을 가지고 기다려줘야 해요!</string>
+    <string name="adopt_info_sequence_sixth_responsibility_title">책임감</string>
+    <string name="adopt_info_sequence_sixth_responsibility_description">충분한 운동과 놀이 시간, 적절한 자료 등을 통해 아이를 행복하게 해줘야 해요.\n유기 동물에게는 파양 당한 경험이 큰 상처로 남아요.\n입양한 동물이 늙고 병들어도 책임감 있게 평생 함께 하겠다는 마음가짐이 필요해요.</string>
+
+
 </resources>
