@@ -12,9 +12,11 @@ import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.model.report.GptData
 import com.example.findu.domain.model.report.MissingReportData
 import com.example.findu.domain.model.report.SexType
+import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
+import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.ui.report.model.GptUiState
 import com.example.findu.presentation.ui.report.model.ReportUiState
@@ -39,6 +41,7 @@ class ReportViewModel @Inject constructor(
     private val getBreedValidationUseCase: GetBreedValidationUseCase,
     private val uploadImagesUseCase: UploadImagesUseCase,
     private val postMissingReportUseCase: PostMissingReportUseCase,
+    private val postWitnessReportUseCase: PostWitnessReportUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -102,6 +105,24 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    private fun getBreedValidation(gptValue: GptData) {
+        viewModelScope.launch {
+            getBreedValidationUseCase(gptValue.breed).fold(
+                onSuccess = { validationData ->
+                    if (validationData.isExist) {
+                        _gptData.value = gptValue
+                    } else {
+                        _gptData.value = gptValue.copy(breed = "")
+                        _errorMessage.value = "유효하지 않은 품종입니다."
+                    }
+                },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "품종을 검증하는 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
     fun getGptData(imageUri: Uri) {
         viewModelScope.launch {
             _gptUiState.value = GptUiState.Loading
@@ -121,40 +142,44 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    private fun getBreedValidation(gptValue: GptData) {
-        viewModelScope.launch {
-            getBreedValidationUseCase(gptValue.breed).fold(
-                onSuccess = { validationData ->
-                    if (validationData.isExist) {
-                        _gptData.value = gptValue
-                    } else {
-                        _gptData.value = gptValue.copy(breed = "")
-                        _errorMessage.value = "유효하지 않은 품종입니다."
-                    }
-                },
-                onFailure = { error ->
-                    _errorMessage.value = error.message ?: "품종을 검증하는 중 오류가 발생했습니다."
-                }
-            )
+    fun updateReportData(
+        imageUris: Uri? = null,
+        speciesType: SpeciesType? = null,
+        breedName: String? = null,
+        sexType: SexType? = null,
+        furColor: FurColorType? = null,
+        featureIds: Int? = null,
+        location: String? = null,
+        missingDate: Date? = null
+    ) {
+        imageUris?.let { _imageUris.value.add(it) }
+        speciesType?.let { selectSpeciesType(it) }
+        breedName?.let { _selectedBreedName.value = it }
+        sexType?.let { _selectedSexType.value = it }
+        furColor?.let { updateSelectedFurColors(it) }
+        featureIds?.let { updateSelectedFeatureIds(it) }
+        location?.let { _location.value = it }
+        missingDate?.let { _selectedMissingDate.value = it }
+
+        Log.d("ReportViewModel", "_selectedSpeciesType: ${_selectedSpeciesType.value}")
+        Log.d("ReportViewModel", "_selectedBreedName: ${_selectedBreedName.value}")
+        Log.d("ReportViewModel", "_selectedSexType: ${_selectedSexType.value}")
+        Log.d("ReportViewModel", "_selectedFurColors: ${_selectedFurColors.value}")
+        Log.d("ReportViewModel", "_selectedFeatureIds: ${_selectedFeatureIds.value}")
+        Log.d("ReportViewModel", "_location: ${_location.value}")
+        Log.d("ReportViewModel", "_selectedMissingDate: ${_selectedMissingDate.value}")
+
+        if (_selectedSpeciesType.value != null &&
+            !_selectedBreedName.value.isNullOrEmpty() &&
+            _selectedSexType.value != null &&
+            _selectedFurColors.value.isNotEmpty() &&
+            _selectedFeatureIds.value.isNotEmpty() &&
+            !_location.value.isNullOrEmpty() &&
+            _selectedMissingDate.value != null
+        ) {
+            _reportUiState.value = ReportUiState.Enable
         }
     }
-
-    fun uploadImages(images: List<Uri>) {
-
-        viewModelScope.launch {
-            uploadImagesUseCase(
-                images.toMultiPartBodys(context)
-            ).fold(
-                onSuccess = { data ->
-                    imageUrls = data
-                },
-                onFailure = { error ->
-                    _errorMessage.value = error.message ?: "이미지 업로드 중 오류가 발생했습니다."
-                }
-            )
-        }
-    }
-
 
     fun testPostMissingReport(
     ) {
@@ -225,6 +250,54 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    fun postWitnessReport(
+        description: String
+    ) {
+        val breedId = getBreedIds(_selectedBreedName.value!!)
+
+        viewModelScope.launch {
+            _reportUiState.value = ReportUiState.Loading
+
+            uploadImages(_imageUris.value)
+
+            val witnessReportData =
+                WitnessReportData(
+                    imageUrls = imageUrls,
+                    breedId = breedId,
+                    furColors = _selectedFurColors.value,
+                    location = _location.value!!,
+                    featureIds = _selectedFeatureIds.value,
+                    description = description,
+                    missingDate = Instant.fromEpochMilliseconds(_selectedMissingDate.value!!.time)
+                )
+
+            postWitnessReportUseCase(witnessReportData).fold(
+                onSuccess = { },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "신고 접수 중 오류가 발생했습니다."
+                    _reportUiState.value = ReportUiState.Error
+                }
+            )
+
+        }
+    }
+
+    private fun uploadImages(images: List<Uri>) {
+
+        viewModelScope.launch {
+            uploadImagesUseCase(
+                images.toMultiPartBodys(context)
+            ).fold(
+                onSuccess = { data ->
+                    imageUrls = data
+                },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "이미지 업로드 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
     private fun getBreedIds(breedName: String): Int =
         when (_selectedSpeciesType.value) {
             SpeciesType.DOG -> {
@@ -239,45 +312,6 @@ class ReportViewModel @Inject constructor(
                 _breedData.value?.etcBreedList?.find { it.breedName == breedName }!!.breedId
             }
         }
-
-    fun updateReportData(
-        imageUris: Uri? = null,
-        speciesType: SpeciesType? = null,
-        breedName: String? = null,
-        sexType: SexType? = null,
-        furColor: FurColorType? = null,
-        featureIds: Int? = null,
-        location: String? = null,
-        missingDate: Date? = null
-    ) {
-        imageUris?.let { _imageUris.value.add(it) }
-        speciesType?.let { selectSpeciesType(it) }
-        breedName?.let { _selectedBreedName.value = it }
-        sexType?.let { _selectedSexType.value = it }
-        furColor?.let { updateSelectedFurColors(it) }
-        featureIds?.let { updateSelectedFeatureIds(it) }
-        location?.let { _location.value = it }
-        missingDate?.let { _selectedMissingDate.value = it }
-
-        Log.d("ReportViewModel", "_selectedSpeciesType: ${_selectedSpeciesType.value}")
-        Log.d("ReportViewModel", "_selectedBreedName: ${_selectedBreedName.value}")
-        Log.d("ReportViewModel", "_selectedSexType: ${_selectedSexType.value}")
-        Log.d("ReportViewModel", "_selectedFurColors: ${_selectedFurColors.value}")
-        Log.d("ReportViewModel", "_selectedFeatureIds: ${_selectedFeatureIds.value}")
-        Log.d("ReportViewModel", "_location: ${_location.value}")
-        Log.d("ReportViewModel", "_selectedMissingDate: ${_selectedMissingDate.value}")
-
-        if (_selectedSpeciesType.value != null &&
-            !_selectedBreedName.value.isNullOrEmpty() &&
-            _selectedSexType.value != null &&
-            _selectedFurColors.value.isNotEmpty() &&
-            _selectedFeatureIds.value.isNotEmpty() &&
-            !_location.value.isNullOrEmpty() &&
-            _selectedMissingDate.value != null
-        ) {
-            _reportUiState.value = ReportUiState.Enable
-        }
-    }
 
     private fun selectSpeciesType(speciesType: SpeciesType) {
         _selectedSpeciesType.value = speciesType
