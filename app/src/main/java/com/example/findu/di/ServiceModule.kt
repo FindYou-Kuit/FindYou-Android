@@ -64,7 +64,7 @@ object ServiceModule {
         json: Json
     ): NaverService {
         val naverRetrofit = Retrofit.Builder()
-            .baseUrl("https://api.openai.com/")
+            .baseUrl("https://naveropenapi.apigw.ntruss.com/")
             .client(okHttpClient)
             .addConverterFactory(
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull()))

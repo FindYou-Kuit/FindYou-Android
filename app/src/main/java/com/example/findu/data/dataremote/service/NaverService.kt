@@ -12,6 +12,7 @@ interface NaverService {
         @Header("x-ncp-apigw-api-key-id") clientId: String = BuildConfig.NAVER_CLIENT_ID,
         @Header("x-ncp-apigw-api-key") clientSecret: String = BuildConfig.NAVER_CLIENT_SECRET,
         @Query("coords") coords: String,
+        @Query("orders") orders : String = "roadaddr",
         @Query("output") output: String = "json",
     ): NaverResponseDto
 }

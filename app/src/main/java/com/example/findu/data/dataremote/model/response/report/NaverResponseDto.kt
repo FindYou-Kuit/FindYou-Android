@@ -15,6 +15,8 @@ data class NaverResponseDto(
     data class Result(
         @SerialName("code")
         val code: Code,
+        @SerialName("land")
+        val land: Land,
         @SerialName("name")
         val name: String,
         @SerialName("region")
@@ -29,6 +31,54 @@ data class NaverResponseDto(
             @SerialName("type")
             val type: String
         )
+
+        @Serializable
+        data class Land(
+            @SerialName("addition0")
+            val addition0: Addition,
+            @SerialName("addition1")
+            val addition1: Addition,
+            @SerialName("addition2")
+            val addition2: Addition,
+            @SerialName("addition3")
+            val addition3: Addition,
+            @SerialName("addition4")
+            val addition4: Addition,
+            @SerialName("coords")
+            val coords: Coords,
+            @SerialName("name")
+            val name: String,
+            @SerialName("number1")
+            val number1: String,
+            @SerialName("number2")
+            val number2: String,
+            @SerialName("type")
+            val type: String
+        ) {
+            @Serializable
+            data class Addition(
+                @SerialName("type")
+                val type: String,
+                @SerialName("value")
+                val value: String
+            )
+
+            @Serializable
+            data class Coords(
+                @SerialName("center")
+                val center: Center
+            ) {
+                @Serializable
+                data class Center(
+                    @SerialName("crs")
+                    val crs: String,
+                    @SerialName("x")
+                    val x: Double,
+                    @SerialName("y")
+                    val y: Double
+                )
+            }
+        }
 
         @Serializable
         data class Region(
