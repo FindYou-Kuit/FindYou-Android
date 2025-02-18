@@ -41,6 +41,7 @@ class ReportCameraFragment : Fragment() {
     private var imageUri: Uri? = null
 
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +65,7 @@ class ReportCameraFragment : Fragment() {
     }
 
     private fun launchRequestPermission() {
-        val requestPermissionLauncher: ActivityResultLauncher<String> =
+        requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
                 if (isGranted) {
                     startCamera()
@@ -78,7 +79,8 @@ class ReportCameraFragment : Fragment() {
 
     private fun takePhoto() {
         imageCapture ?: let {
-            Toast.makeText(requireContext(), FAILED_TO_TAKE_PHOTO_MESSAGE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), FAILED_TO_TAKE_PHOTO_MESSAGE, Toast.LENGTH_SHORT)
+                .show()
             return@takePhoto
         }
 

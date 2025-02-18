@@ -29,6 +29,21 @@ class MyFragment : Fragment() {
     private val binding get() = _binding!!
     private val myViewModel by viewModels<MyViewModel>()
 
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    Toast.makeText(requireContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,8 +94,7 @@ class MyFragment : Fragment() {
                     Toast.makeText(requireContext(), "카메라 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    launchCameraRequestPermission()
-
+                    requestPermissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             }
 
@@ -99,19 +113,6 @@ class MyFragment : Fragment() {
                     onWithdrawalClick = { myViewModel.deleteUserData() }).show()
             }
         }
-    }
-
-    private fun launchCameraRequestPermission() {
-        val requestPermissionLauncher: ActivityResultLauncher<String> =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    Toast.makeText(requireContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    findNavController().popBackStack()
-                }
-
-            }
-        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
