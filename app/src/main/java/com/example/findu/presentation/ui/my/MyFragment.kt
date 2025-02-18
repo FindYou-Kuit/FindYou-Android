@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.my
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -50,7 +52,6 @@ class MyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMyBinding.inflate(inflater, container, false)
-
 
         initListener()
         myViewModel.fetchNickName()
@@ -123,7 +124,15 @@ class MyFragment : Fragment() {
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(lifecycle.currentState) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    myViewModel.nickNameState.collect { nickName ->
+                        nickName?.let {
+                            binding.tvMyNickname.text = nickName
+                            binding.etMyNickname.setText(nickName)
+                        }
+                    }
+                }
                 launch {
                     myViewModel.deleteUserMessage.collect { message ->
                         message?.let {
@@ -135,14 +144,6 @@ class MyFragment : Fragment() {
                     myViewModel.errorMessage.collect { message ->
                         message?.let {
                             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-
-                launch {
-                    myViewModel.nickNameState.collect { nickName ->
-                        nickName?.let {
-                            binding.tvMyNickname.text = nickName
                         }
                     }
                 }

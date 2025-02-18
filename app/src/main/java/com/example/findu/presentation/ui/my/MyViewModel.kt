@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.my
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
