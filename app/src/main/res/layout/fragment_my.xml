@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".presentation.ui.my.MyFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_top_container"
@@ -57,13 +59,44 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_my_edit_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/ll_my_nickname"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ll_my_nickname">
+
+        <EditText
+            android:id="@+id/et_my_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="닉네임"
+            android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_my_done_edit"
+            android:layout_width="33dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_button_rd_10"
+            android:text="완료"
+            android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="75dp"
         android:text="안녕하세요"
         android:textAppearance="@style/TextAppearance.FindU.My_R_24"
-        app:layout_constraintStart_toStartOf="@id/ll_my_nickname"
-        app:layout_constraintTop_toBottomOf="@id/ll_my_nickname" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_my_top_container" />
 
     <ImageView
         android:id="@+id/iv_my_illust"
@@ -106,12 +139,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:orientation="vertical"
-        android:paddingHorizontal="22dp"
         app:layout_constraintTop_toBottomOf="@id/btn_my_report_history">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="22dp"
             android:text="메뉴"
             android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
             android:textColor="@color/gray4" />
@@ -121,6 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="5dp"
+            android:paddingHorizontal="22dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -149,6 +183,7 @@
             android:id="@+id/cl_my_keep_animal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:paddingHorizontal="22dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -177,6 +212,7 @@
             android:id="@+id/cl_my_location_permission"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:paddingHorizontal="22dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -205,6 +241,7 @@
             android:id="@+id/cl_my_camera_permission"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:paddingHorizontal="22dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -233,6 +270,7 @@
             android:id="@+id/cl_my_alarm_setting"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:paddingHorizontal="22dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -261,6 +299,7 @@
             android:id="@+id/cl_my_contact_us"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:paddingHorizontal="22dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -289,6 +328,7 @@
             android:id="@+id/cl_my_withdrawal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:paddingHorizontal="22dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView

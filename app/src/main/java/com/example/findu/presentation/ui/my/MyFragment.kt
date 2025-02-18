@@ -17,9 +17,27 @@ class MyFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMyBinding.inflate(inflater, container, false)
+
+
+        initListener()
+
         return binding.root
+    }
+
+    private fun initListener() {
+        binding.llMyNickname.setOnClickListener {
+            binding.llMyNickname.visibility = View.INVISIBLE
+            binding.llMyEditNickname.visibility = View.VISIBLE
+        }
+
+        binding.btnMyDoneEdit.setOnClickListener {
+            binding.llMyNickname.visibility = View.VISIBLE
+            binding.llMyEditNickname.visibility = View.INVISIBLE
+
+            // patch nickname api
+        }
     }
 
     override fun onDestroyView() {
