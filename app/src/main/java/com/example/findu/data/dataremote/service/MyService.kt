@@ -3,6 +3,7 @@ package com.example.findu.data.dataremote.service
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
+import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import retrofit2.http.Body
@@ -36,4 +37,7 @@ interface MyService {
     suspend fun patchNickname(
         @Body newNickname: String
     ): NullableBaseResponse<Unit>
+
+    @GET("/api/v1/users/nickname")
+    suspend fun getNickname(): BaseResponse<MyNickNameResponseDto>
 }
