@@ -45,7 +45,17 @@
         android:id="@+id/fragment_my"
         android:name="com.example.findu.presentation.ui.my.MyFragment"
         android:label="My"
-        tools:layout="@layout/fragment_my" />
+        tools:layout="@layout/fragment_my" >
+        <action
+            android:id="@+id/action_fragment_my_to_fragment_my_report_history"
+            app:destination="@id/fragment_my_report_history" />
+        <action
+            android:id="@+id/action_fragment_my_to_fragment_my_recent_history"
+            app:destination="@id/fragment_my_recent_history" />
+        <action
+            android:id="@+id/action_fragment_my_to_fragment_my_keep_animals"
+            app:destination="@id/fragment_my_keep_animals" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_witness_report"
@@ -80,5 +90,23 @@
         android:name="com.example.findu.presentation.ui.report.ReportCameraFragment"
         android:label="Report Camera"
         tools:layout="@layout/fragment_report_camera" />
+
+    <fragment
+        android:id="@+id/fragment_my_keep_animals"
+        android:name="com.example.findu.presentation.ui.my.MyKeepAnimalsFragment"
+        android:label="My Keep Animals"
+        tools:layout="@layout/fragment_my_keep_animals" />
+
+    <fragment
+        android:id="@+id/fragment_my_recent_history"
+        android:name="com.example.findu.presentation.ui.my.MyRecentHistoryFragment"
+        android:label="My Recent History"
+        tools:layout="@layout/fragment_my_recent_history" />
+
+    <fragment
+        android:id="@+id/fragment_my_report_history"
+        android:name="com.example.findu.presentation.ui.my.MyReportHistoryFragment"
+        android:label="My Report History"
+        tools:layout="@layout/fragment_my_report_history" />
 
 </navigation>
