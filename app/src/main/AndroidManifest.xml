@@ -29,6 +29,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.login.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -37,7 +40,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.ui.report.dialog.ReportLocationActivity"
             android:exported="false" />

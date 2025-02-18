@@ -3,8 +3,11 @@ package com.example.findu.presentation.ui.splash
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.findu.databinding.ActivitySplashBinding
-import com.example.findu.presentation.ui.main.MainActivity
+import com.example.findu.presentation.ui.login.LoginActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
@@ -14,11 +17,14 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.postDelayed(
-            {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }, 3000
-        )
+        lifecycleScope.launch {
+            delay(3000)
+            navigateToLogin()
+        }
+    }
+
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }

@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">FindU</string>
 
+    <!-- login -->
+    <string name="login_description">유기동물 관심의 시작,</string>
+    <string name="login_app_name">찾아유</string>
+    <string name="login_email">이메일 주소</string>
+    <string name="login_password">비밀번호</string>
+    <string name="login_button">로그인</string>
+    <string name="login_signup">회원가입</string>
+    <string name="login_find_password">비밀번호 찾기</string>
+    <string name="login_social">또는</string>
+
     <!--  common -->
     <string name="slash">/</string>
     <string name="one">1</string>
