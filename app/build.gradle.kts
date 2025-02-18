@@ -25,7 +25,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
-        manifestPlaceholders["naverClientId"] = properties["NAVER_CLIENT_ID"].toString()
+        manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"].toString()
+        buildConfigField("String", "NAVER_CLIENT_ID", properties["NAVER_CLIENT_ID"].toString())
+        buildConfigField("String", "NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"].toString())
     }
 
     buildTypes {
@@ -69,6 +71,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.datetime)
 
     // Hilt
     implementation(libs.bundles.hilt)

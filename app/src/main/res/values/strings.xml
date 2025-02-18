@@ -191,6 +191,8 @@
     <string name="dialog_home_report_detail_center_num">Tel) 1577–0954</string>
     <string name="dialog_home_report_detail_call_center">다산 콜센터</string>
     <string name="dialog_home_report_detail_call_center_num">Tel) 120</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--info-->
     <string name="info_top_bar">정보</string>

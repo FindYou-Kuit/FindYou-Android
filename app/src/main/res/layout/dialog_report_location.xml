@@ -5,15 +5,27 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_report_dialog_rd12">
 
-    <ImageView
-        android:id="@+id/iv_report_location_dialog_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_report_location_dialog_close"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="28dp"
-        android:src="@drawable/ic_report_dialog_close_10"
+        android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_report_location_dialog_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_report_dialog_close_10"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ImageView
         android:id="@+id/iv_report_location_dialog_location"
@@ -48,9 +60,9 @@
         <TextView
             android:id="@+id/tv_report_location_dialog_address"
             android:layout_width="wrap_content"
-            android:maxWidth="204dp"
             android:layout_height="wrap_content"
-            android:text="@string/report_dialog_default_location_address"
+            android:maxWidth="220dp"
+            android:text="@string/report_location"
             android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
             android:textColor="@color/gray4"
             app:layout_constraintStart_toStartOf="parent"

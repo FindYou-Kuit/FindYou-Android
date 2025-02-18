@@ -20,7 +20,7 @@ class ReportImageAdapter(
     val reportType: ReportType,
     private val onRemoveClickListener: (Int) -> Unit,
     private val onUploadClickListener: () -> Unit,
-    val onAIButtonClick : (Uri) -> Unit
+    val onAIButtonClick: (Uri) -> Unit = {}
 ) : ListAdapter<Uri, RecyclerView.ViewHolder>(diffUtil) {
 
     inner class DefaultImageViewHolder(private val binding: ItemReportDefaultImageBinding) :
