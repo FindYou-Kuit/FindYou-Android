@@ -165,16 +165,11 @@ class ReportLocationDialog(
                 isScaleBarEnabled = false
             }
             addOnCameraIdleListener {
-                Log.d(
-                    "ReportLocationDialog",
-                    "onMapReady: addOnCameraIdleListener $cameraMoveCount"
-                )
                 if (cameraMoveCount < 1) {
                     cameraMoveCount += 1
 
                 } else {
                     val latLng = cameraPosition.target
-                    Log.d("ReportLocationDialog", "onMapReady: addOnCameraIdleListener $latLng")
                     locationViewModel.getLocation(latLng.latitude, latLng.longitude)
                 }
             }

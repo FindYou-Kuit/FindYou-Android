@@ -32,11 +32,10 @@ class ReportRepositoryImpl @Inject constructor(
             gptRemoteDataSource.postImagePrompt(request).toDomain()
         }
 
-    override suspend fun uploadImages(files: List<MultipartBody.Part>): Result<List<String>> {
-        Log.d("ReportRepositoryImpl", "uploadImages: $files")
-        return runCatching {
+    override suspend fun uploadImages(files: List<MultipartBody.Part>): Result<List<String>> =
+        runCatching {
             reportRemoteDataSource.uploadImages(files).handleBaseResponse().getOrThrow()
-        }}
+        }
 
     override suspend fun postMissingReport(missingReportData: MissingReportData): Result<Unit> =
         runCatching {
@@ -54,8 +53,6 @@ class ReportRepositoryImpl @Inject constructor(
 
     override suspend fun getAddress(lat: Double, lng: Double): Result<AddressData> =
         runCatching {
-            val a = naverRemoteDataSource.getAddress("$lng,$lat").toDomain()
-            Log.d("ReportLocationDialog", "getAddress: $a")
-            a
+            naverRemoteDataSource.getAddress("$lng,$lat").toDomain()
         }
 }

@@ -9,10 +9,6 @@ import javax.inject.Inject
 class NaverRemoteDataSourceImpl @Inject constructor(
     private val naverService: NaverService
 ): NaverRemoteDataSource {
-    override suspend fun getAddress(coords: String): NaverResponseDto {
-        val a =naverService.getAddress(coords = coords)
-        Log.d("ReportLocationDialog", "coords: $coords")
-        Log.d("ReportLocationDialog", "getAddress: $a")
-        return a
-    }
+    override suspend fun getAddress(coords: String): NaverResponseDto =
+        naverService.getAddress(coords = coords)
 }
