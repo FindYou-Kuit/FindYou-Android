@@ -395,7 +395,7 @@
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/cl_search_detail_special_note_btn"
-                                android:layout_width="wrap_content"
+                                android:layout_width="320dp"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
