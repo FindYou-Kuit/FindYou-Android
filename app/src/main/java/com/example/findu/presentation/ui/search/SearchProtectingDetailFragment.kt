@@ -91,7 +91,7 @@ class SearchProtectingDetailFragment : Fragment() {
         binding.apply {
             Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
             tvSearchContentDetailTitle.text = name
-            tvDetailTagField.text = data.tag.text
+            tvDetailTagField.text = convertTagToKorean(data.tag.text)
             tvDetailBreedField.text = data.breed
             tvDetailAgeField.text = data.age
             tvDetailWeightField.text = data.weight
@@ -160,11 +160,21 @@ class SearchProtectingDetailFragment : Fragment() {
     }
 
     private fun initTagView(data: DetailProtectData) {
-        binding.tvDetailTagField.text = data.tag.toString()
+        val koreanTag = convertTagToKorean(data.tag.toString())
+        binding.tvDetailTagField.text = koreanTag
 
         val tagInfo = data.tag.toDetailSearchRvTag()
         binding.tvDetailTagField.setTextColor(requireContext().getColor(tagInfo.textColor))
         binding.tvDetailTagField.setBackgroundResource(tagInfo.backgroundRes)
+    }
+
+    private fun convertTagToKorean(tag: String?): String {
+        return when (tag) {
+            "WITNESS" -> "목격신고"
+            "MISSING" -> "실종신고"
+            "PROTECTING" -> "보호중"
+            else -> tag ?: "알 수 없음"
+        }
     }
 
     private fun openNaverMap(address: String) {
