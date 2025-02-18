@@ -2,6 +2,7 @@ package com.example.findu.data.dataremote.service
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
+import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -17,4 +18,10 @@ interface MyService {
     suspend fun getReportHistory(
         @Query("lastReportId") lastReportId: Long,
     ): BaseResponse<MyReportHistoryResponseDto>
+
+    @GET("/api/v1/users/viewed-animals")
+    suspend fun getViewedAnimals(
+        @Query("lastViewedReportId") lastReportId: Long,
+        @Query("lastViewedProtectId") lastProtectId: Long,
+    ): BaseResponse<MyViewedAnimalsResponseDto>
 }
