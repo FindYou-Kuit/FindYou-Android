@@ -2,6 +2,7 @@ package com.example.findu.data.dataremote.datasourceimpl
 
 import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
 import com.example.findu.data.dataremote.model.base.BaseResponse
+import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
@@ -25,4 +26,7 @@ class MyRemoteDataSourceImpl @Inject constructor(
         lastProtectId: Long
     ): BaseResponse<MyViewedAnimalsResponseDto> =
         myService.getViewedAnimals(lastReportId, lastProtectId)
+
+    override suspend fun deleteUser(): NullableBaseResponse<Unit> =
+        myService.deleteUser()
 }

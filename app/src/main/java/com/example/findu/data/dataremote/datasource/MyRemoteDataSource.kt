@@ -1,6 +1,7 @@
 package com.example.findu.data.dataremote.datasource
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
+import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
@@ -19,4 +20,6 @@ interface MyRemoteDataSource {
         lastReportId: Long,
         lastProtectId: Long
     ): BaseResponse<MyViewedAnimalsResponseDto>
+
+    suspend fun deleteUser(): NullableBaseResponse<Unit>
 }
