@@ -10,8 +10,8 @@ import com.example.findu.presentation.ui.search.model.SearchRvTag
 fun SearchResponseDto.toDomain(): SearchData {
     return SearchData(
         cards = this.cards.map { it.toDomain() },
-        lastProtectId = this.lastProtectId,
-        lastReportId = this.lastReportId,
+        lastProtectId = this.lastProtectId ?: -1,
+        lastReportId = this.lastReportId ?: -1,
         isLast = this.isLast
     )
 }

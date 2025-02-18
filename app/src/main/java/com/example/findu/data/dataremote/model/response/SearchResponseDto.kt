@@ -8,9 +8,9 @@ data class SearchResponseDto(
     @SerialName("cards")
     val cards: List<SearchAnimalCard>,
     @SerialName("lastProtectId")
-    val lastProtectId : Long,
+    val lastProtectId : Long?,
     @SerialName("lastReportId")
-    val lastReportId : Long,
+    val lastReportId : Long? ,
     @SerialName("isLast")
     val isLast : Boolean
 )
