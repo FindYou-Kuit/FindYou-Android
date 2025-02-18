@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyRecentHistoryBinding
 import com.example.findu.presentation.model.MyRecentHistoryRv
 import com.example.findu.presentation.ui.my.adapter.MyRecentHistoryRvAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyRecentHistoryFragment : Fragment() {
     private var _binding: FragmentMyRecentHistoryBinding? = null
     private val binding get() = _binding!!
@@ -57,9 +59,6 @@ class MyRecentHistoryFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
-        myRecentHistoryRvAdapter.submitList(
-            MyRecentHistoryRv.dummyItems
-        )
     }
 
     override fun onDestroyView() {

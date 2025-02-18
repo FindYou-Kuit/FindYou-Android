@@ -87,9 +87,6 @@ class MyInterestFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
-        myInterestRvAdapter.submitList(
-            MyInterestRv.dummyItems
-        )
     }
 
     override fun onDestroyView() {

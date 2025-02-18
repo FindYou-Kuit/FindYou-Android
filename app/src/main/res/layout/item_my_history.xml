@@ -51,8 +51,8 @@
             android:id="@+id/chip_my_history_animal_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
             app:chipCornerRadius="10dp"
@@ -65,6 +65,7 @@
             app:layout_constraintTop_toBottomOf="@id/iv_my_history_image" />
 
         <LinearLayout
+            android:id="@+id/ll_my_history_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -94,11 +95,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
             android:text="삭제"
             android:textAppearance="@style/TextAppearance.FindU.caption_11"
             android:textColor="@color/red1"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ll_my_history_address"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <FrameLayout
