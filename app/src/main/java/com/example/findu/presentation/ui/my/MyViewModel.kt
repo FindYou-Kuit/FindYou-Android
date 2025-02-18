@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.my
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class MyViewModel @Inject constructor(
     private val getInterestUseCase: GetInterestUseCase,
     private val getReportHistoryUseCase: GetReportHistoryUseCase,
-    private val getViewedAnimalUseCase: GetViewedAnimalUseCase
+    private val getViewedAnimalUseCase: GetViewedAnimalUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -30,6 +32,9 @@ class MyViewModel @Inject constructor(
 
     private val _viewedAnimals = MutableStateFlow<List<MyViewedAnimalsRv>>(emptyList())
     val viewedAnimals = _viewedAnimals.asStateFlow()
+
+    private val _deleteUserMessage = MutableStateFlow<String?>(null)
+    val deleteUserMessage = _deleteUserMessage.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
@@ -81,4 +86,16 @@ class MyViewModel @Inject constructor(
         }
     }
 
+    fun deleteUserData() {
+        viewModelScope.launch {
+            deleteUserUseCase().fold(
+                onSuccess = {
+                    _deleteUserMessage.value = "회원 탈퇴가 완료되었습니다."
+                },
+                onFailure = {
+                    _errorMessage.value = it.message ?: "회원 탈퇴 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
 }
