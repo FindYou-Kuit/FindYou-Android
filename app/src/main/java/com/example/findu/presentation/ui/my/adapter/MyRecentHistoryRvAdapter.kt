@@ -44,6 +44,14 @@ class MyRecentHistoryRvAdapter(
                     binding.root.context.getColorStateList(stateType.backgroundChipColor)
 
                 tvMyHistoryDelete.visibility = View.GONE
+
+                if (item.interest) {
+                    binding.ivMyHistoryKeep.visibility = View.VISIBLE
+                    binding.ivMyHistoryNonKeep.visibility = View.GONE
+                } else {
+                    binding.ivMyHistoryKeep.visibility = View.GONE
+                    binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
+                }
             }
         }
 

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyReportHistoryBinding
+import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.ui.my.adapter.MyReportHistoryAdapter
 
 class MyReportHistoryFragment : Fragment() {
@@ -54,8 +55,11 @@ class MyReportHistoryFragment : Fragment() {
         with(binding.rvMyReportHistory) {
             adapter = myReportHistoryAdapter
             layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
+        myReportHistoryAdapter.submitList(
+            MyReportHistoryRv.dummyItems
+        )
     }
 
     override fun onDestroyView() {

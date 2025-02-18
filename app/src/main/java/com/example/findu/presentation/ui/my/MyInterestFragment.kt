@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyInterestBinding
+import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.ui.my.adapter.MyInterestRvAdapter
 
 class MyInterestFragment : Fragment() {
@@ -54,8 +55,11 @@ class MyInterestFragment : Fragment() {
         with(binding.rvMyKeepAnimals) {
             adapter = myInterestRvAdapter
             layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
+        myInterestRvAdapter.submitList(
+            MyInterestRv.dummyItems
+        )
     }
 
     override fun onDestroyView() {
