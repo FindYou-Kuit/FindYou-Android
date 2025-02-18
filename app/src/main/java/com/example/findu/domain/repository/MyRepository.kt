@@ -20,4 +20,6 @@ interface MyRepository {
     ): Result<MyViewedAnimalData>
 
     suspend fun deleteUser(): Result<Unit>
+
+    suspend fun patchNickname(newNickname: String): Result<Unit>
 }

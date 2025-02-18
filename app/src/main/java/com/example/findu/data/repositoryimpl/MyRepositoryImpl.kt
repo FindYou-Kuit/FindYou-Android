@@ -44,4 +44,9 @@ class MyRepositoryImpl @Inject constructor(
         runCatching {
             myRemoteDataSource.deleteUser().handleBaseResponse().getOrThrow()
         }
+
+    override suspend fun patchNickname(newNickname: String): Result<Unit> =
+        runCatching {
+            myRemoteDataSource.patchNickname(newNickname).handleBaseResponse().getOrThrow()
+        }
 }

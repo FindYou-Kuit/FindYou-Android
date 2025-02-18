@@ -12,6 +12,7 @@ import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
+import com.example.findu.domain.usecase.my.PatchNickNameUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
@@ -97,4 +98,10 @@ object UseCaseModule {
     fun provideDeleteUserUseCase(
         myRepository: MyRepository
     ): DeleteUserUseCase = DeleteUserUseCase(myRepository)
+
+    @Provides
+    @Singleton
+    fun providePatchNickNameUseCase(
+        myRepository: MyRepository
+    ): PatchNickNameUseCase = PatchNickNameUseCase(myRepository)
 }
