@@ -4,6 +4,7 @@ import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
+import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.example.findu.data.dataremote.service.MyService
@@ -32,4 +33,7 @@ class MyRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun patchNickname(newNickname: String): NullableBaseResponse<Unit> =
         myService.patchNickname(newNickname)
+
+    override suspend fun getNickname(): BaseResponse<MyNickNameResponseDto> =
+        myService.getNickname()
 }
