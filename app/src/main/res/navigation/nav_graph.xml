@@ -32,7 +32,6 @@
             app:destination="@id/fragment_missing_report"
             app:popUpTo="@id/fragment_report"
             app:popUpToInclusive="true" />
-
     </fragment>
 
     <fragment
@@ -40,6 +39,24 @@
         android:name="com.example.findu.presentation.ui.info.InfoFragment"
         android:label="Info"
         tools:layout="@layout/fragment_info" />
+
+    <fragment
+        android:id="@+id/fragment_report_info"
+        android:name="com.example.findu.presentation.ui.info.ReportInfoFragment"
+        android:label="Report Info"
+        tools:layout="@layout/fragment_report_info" />
+
+    <fragment
+        android:id="@+id/fragment_adopt_info"
+        android:name="com.example.findu.presentation.ui.info.AdoptInfoFragment"
+        android:label="Adopt Info"
+        tools:layout="@layout/fragment_adopt_info" />
+
+    <fragment
+        android:id="@+id/fragment_volunteer_info"
+        android:name="com.example.findu.presentation.ui.info.VolunteerInfoFragment"
+        android:label="Adopt Info"
+        tools:layout="@layout/fragment_volunteer_info" />
 
     <fragment
         android:id="@+id/fragment_my"

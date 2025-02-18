@@ -36,16 +36,13 @@ import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
-import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_HEIGHT
-import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_RESULT_KEY
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_URI
-import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
-import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
+import com.example.findu.presentation.ui.report.viewmodel.ReportViewModel
+import com.example.findu.presentation.ui.report.constants.ReportConstants
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
-import com.example.findu.presentation.ui.report.viewmodel.ReportViewModel
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
@@ -130,7 +127,7 @@ class WitnessReportFragment : Fragment() {
                     onSetClickListener = { newAddress ->
                         text = newAddress
                     }
-                ).show(childFragmentManager, LOCATION_TAG)
+                ).show(childFragmentManager, ReportConstants.LOCATION_TAG)
             }
 
             addTextChangedListener { text ->
@@ -206,8 +203,24 @@ class WitnessReportFragment : Fragment() {
                 launch {
                     reportViewModel.errorMessage.collectLatest { errorMessage ->
                         errorMessage?.let {
-                            Log.e("WitnessReportFragment", it)
                             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                launch {
+                    reportViewModel.selectedBreedList.collectLatest { selectedBreedNames ->
+                        if (selectedBreedNames.isNotEmpty())
+                            breedAdapter.changeItems(selectedBreedNames)
+                    }
+                }
+
+                launch {
+                    reportViewModel.errorMessage.collectLatest { errorMessage ->
+                        errorMessage?.let {
+                            Log.e("WitnessReportFragment", it)
+                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 }
@@ -282,6 +295,7 @@ class WitnessReportFragment : Fragment() {
         }
     }
 
+
     private fun setFurColors(gptData: GptData) {
         colorAdapter.updateSelectedColors(gptData.furColors)
     }
@@ -334,8 +348,7 @@ class WitnessReportFragment : Fragment() {
             reportViewModel.updateReportData(
                 date = Calendar.getInstance().time
             )
-            binding.cvWitnessReportCalendar.
-            setCalendarListener(object : CalendarListener {
+            binding.cvWitnessReportCalendar.setCalendarListener(object : CalendarListener {
                 override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
                     reportViewModel.updateReportData(
                         date = startDate.time
@@ -398,11 +411,11 @@ class WitnessReportFragment : Fragment() {
 
             setOnClickListener {
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedList.value.size < ReportConstants.DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
-                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                    else requireContext().dpToPx(ReportConstants.DROP_DOWN_HEIGHT)
                 showDropDown()
-                binding.svWitnessReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
+                binding.svWitnessReportContainer.verticalScrollToYPosition(ReportConstants.SCROLL_OFFSET)
             }
             setOnItemClickListener { _, _, _, _ ->
                 reportViewModel.updateReportData(
@@ -415,19 +428,22 @@ class WitnessReportFragment : Fragment() {
                 reportViewModel.selectedBreedList.value
                     .filter { it.contains(text.toString()) }
                     .let { matches ->
-                        dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
-                            requireContext().dpToPx(DROP_DOWN_HEIGHT)
-                        } else ViewGroup.LayoutParams.WRAP_CONTENT
+                        dropDownHeight =
+                            if (matches.size > ReportConstants.DROP_DOWN_MAX_COUNT) {
+                                requireContext().dpToPx(ReportConstants.DROP_DOWN_HEIGHT)
+                            } else ViewGroup.LayoutParams.WRAP_CONTENT
                     }
             }
             setOnFocusChangeListener { _, hasFocus ->
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedList.value.size < ReportConstants.DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
-                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                    else requireContext().dpToPx(ReportConstants.DROP_DOWN_HEIGHT)
                 if (hasFocus) {
                     showDropDown()
-                    binding.svWitnessReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
+                    binding.svWitnessReportContainer.verticalScrollToYPosition(
+                        ReportConstants.SCROLL_OFFSET
+                    )
                 }
             }
         }
@@ -447,7 +463,11 @@ class WitnessReportFragment : Fragment() {
         reportImageAdapter = ReportImageAdapter(
             context = requireContext(),
             reportType = ReportType.WITNESS,
-            onRemoveClickListener = { position -> reportViewModel.removeImageUriPosition(position) },
+            onRemoveClickListener = { position ->
+                reportViewModel.removeImageUriPosition(
+                    position
+                )
+            },
             onUploadClickListener = { dialog.show() },
             onAIButtonClick = { uri ->
                 reportViewModel.getGptData(uri)
