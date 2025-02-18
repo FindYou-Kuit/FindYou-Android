@@ -2,20 +2,17 @@ package com.example.findu.presentation.ui.report
 
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -27,16 +24,11 @@ import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
-import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
-import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
-import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_HEIGHT
-import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
-import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
-import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
+import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
@@ -169,12 +161,12 @@ class MissingReportFragment : Fragment() {
             repeatOnLifecycle(lifecycle.currentState) {
                 launch {
                     reportViewModel.imageUriList.collectLatest { imageUriList ->
-                          with(reportImageAdapter) {
-                              submitList(imageUriList) {
-                                  notifyItemChanged(0)
-                              }
-                          }   
-                     }
+                        with(reportImageAdapter) {
+                            submitList(imageUriList) {
+                                notifyItemChanged(0)
+                            }
+                        }
+                    }
                 }
                 launch {
                     reportViewModel.breedData.collectLatest { breedData ->

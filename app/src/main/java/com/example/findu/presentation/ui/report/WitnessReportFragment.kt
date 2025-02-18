@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -29,24 +27,16 @@ import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
 import com.example.findu.presentation.type.report.ReportType
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_HEIGHT
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.DROP_DOWN_MAX_COUNT
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.LOCATION_TAG
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_RESULT_KEY
 import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_URI
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.SCROLL_OFFSET
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
-import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_HEIGHT
-import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
-import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
-import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
+import com.example.findu.presentation.ui.report.constants.ReportConstants
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
-import com.example.findu.presentation.ui.report.model.ReportDummys
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
@@ -131,7 +121,7 @@ class WitnessReportFragment : Fragment() {
                     onSetClickListener = { newAddress ->
                         text = newAddress
                     }
-                ).show(childFragmentManager, LOCATION_TAG)
+                ).show(childFragmentManager, ReportConstants.LOCATION_TAG)
             }
         }
 
@@ -183,53 +173,53 @@ class WitnessReportFragment : Fragment() {
                     }
                 }
             }
-                launch {
-                    reportViewModel.breedData.collectLatest { breedData ->
-                        breedData?.let {
-                            setUpBreedsAdapter()
+            launch {
+                reportViewModel.breedData.collectLatest { breedData ->
+                    breedData?.let {
+                        setUpBreedsAdapter()
+                    }
+                }
+            }
+
+            launch {
+                reportViewModel.errorMessage.collectLatest { errorMessage ->
+                    errorMessage?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            launch {
+                reportViewModel.selectedBreedList.collectLatest { selectedBreedNames ->
+                    if (selectedBreedNames.isNotEmpty())
+                        breedAdapter.changeItems(selectedBreedNames)
+                }
+            }
+
+            launch {
+                reportViewModel.gptData.collectLatest { gptData ->
+                    setSpecies(gptData)
+                    setBreedName(gptData)
+                    setFurColors(gptData)
+                }
+            }
+
+            launch {
+                reportViewModel.gptUiState.collectLatest { uiState ->
+                    when (uiState) {
+                        GptUiState.Loading -> {
+                            binding.pbReportLoading.visibility = View.VISIBLE
                         }
-                    }
-                }
 
-                launch {
-                    reportViewModel.errorMessage.collectLatest { errorMessage ->
-                        errorMessage?.let {
-                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-
-                launch {
-                    reportViewModel.selectedBreedList.collectLatest { selectedBreedNames ->
-                        if (selectedBreedNames.isNotEmpty())
-                            breedAdapter.changeItems(selectedBreedNames)
-                    }
-                }
-
-                launch {
-                    reportViewModel.gptData.collectLatest { gptData ->
-                        setSpecies(gptData)
-                        setBreedName(gptData)
-                        setFurColors(gptData)
-                    }
-                }
-
-                launch {
-                    reportViewModel.gptUiState.collectLatest { uiState ->
-                        when (uiState) {
-                            GptUiState.Loading -> {
-                                binding.pbReportLoading.visibility = View.VISIBLE
-                            }
-
-                            GptUiState.Default, GptUiState.Finished -> {
-                                binding.pbReportLoading.visibility = View.GONE
-                            }
+                        GptUiState.Default, GptUiState.Finished -> {
+                            binding.pbReportLoading.visibility = View.GONE
                         }
                     }
                 }
             }
         }
     }
+
 
     private fun setFurColors(gptData: GptData) {
         colorAdapter.updateSelectedColors(gptData.furColors)
@@ -306,11 +296,11 @@ class WitnessReportFragment : Fragment() {
 
             setOnClickListener {
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedList.value.size < ReportConstants.DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
-                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                    else requireContext().dpToPx(ReportConstants.DROP_DOWN_HEIGHT)
                 showDropDown()
-                binding.svWitnessReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
+                binding.svWitnessReportContainer.verticalScrollToYPosition(ReportConstants.SCROLL_OFFSET)
             }
             setOnItemClickListener { _, _, _, _ ->
                 requireContext().hideKeyboard(windowToken)
@@ -320,19 +310,19 @@ class WitnessReportFragment : Fragment() {
                 reportViewModel.selectedBreedList.value
                     .filter { it.contains(text.toString()) }
                     .let { matches ->
-                        dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
-                            requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                        dropDownHeight = if (matches.size > ReportConstants.DROP_DOWN_MAX_COUNT) {
+                            requireContext().dpToPx(ReportConstants.DROP_DOWN_HEIGHT)
                         } else ViewGroup.LayoutParams.WRAP_CONTENT
                     }
             }
             setOnFocusChangeListener { _, hasFocus ->
                 dropDownHeight =
-                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                    if (reportViewModel.selectedBreedList.value.size < ReportConstants.DROP_DOWN_MAX_COUNT)
                         ViewGroup.LayoutParams.WRAP_CONTENT
-                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                    else requireContext().dpToPx(ReportConstants.DROP_DOWN_HEIGHT)
                 if (hasFocus) {
                     showDropDown()
-                    binding.svWitnessReportContainer.verticalScrollToYPosition(SCROLL_OFFSET)
+                    binding.svWitnessReportContainer.verticalScrollToYPosition(ReportConstants.SCROLL_OFFSET)
                 }
             }
         }
@@ -360,7 +350,7 @@ class WitnessReportFragment : Fragment() {
         ).apply {
             submitList(reportViewModel.imageUriList.value)
         }
-        
+
         with(binding.rvWitnessReportImages) {
             adapter = reportImageAdapter
             layoutManager = LinearLayoutManager(
