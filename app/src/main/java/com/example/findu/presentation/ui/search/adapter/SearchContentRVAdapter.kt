@@ -87,6 +87,12 @@ class SearchContentRVAdapter(
             binding.tvSearchContentName.text = item.name
             binding.tvSearchContentDate.text = item.date
             binding.tvSearchContentAddress.text = item.address
+            binding.tvSearchContentStatus.text = item.tag.text
+            binding.tvSearchContentStatus.setTextColor(
+                binding.root.context.getColor(item.tag.textColor)
+            )
+            binding.tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
+
             Glide.with(binding.root.context)
                 .load(item.image)
                 .into(binding.ivSearchContent)
@@ -100,6 +106,13 @@ class SearchContentRVAdapter(
             binding.tvSearchContentName.text = item.name
             binding.tvSearchContentDate.text = item.date
             binding.tvSearchContentAddress.text = item.address
+            binding.tvSearchContentStatus.text = item.tag.text
+
+            binding.tvSearchContentStatus.setTextColor(
+                binding.root.context.getColor(item.tag.textColor)
+            )
+            binding.tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
+
             Glide.with(binding.root.context)
                 .load(item.image)
                 .into(binding.ivSearchContent)

@@ -30,7 +30,7 @@ fun SearchAnimalCard.toDomain(): SearchAnimal {
 
 
 fun String.toSearchStatus(): SearchStatus {
-    return when (this) {
+    return when (this.trim()) {
         "보호중" -> SearchStatus.PROTECTING
         "목격신고" -> SearchStatus.WITNESS
         "실종신고" -> SearchStatus.MISSING
