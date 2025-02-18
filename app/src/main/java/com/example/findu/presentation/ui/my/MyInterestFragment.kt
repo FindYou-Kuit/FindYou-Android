@@ -5,13 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyInterestBinding
 import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.ui.my.adapter.MyInterestRvAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MyInterestFragment : Fragment() {
     private var _binding: FragmentMyInterestBinding? = null
     private val binding get() = _binding!!
@@ -35,6 +42,7 @@ class MyInterestFragment : Fragment() {
         _binding = FragmentMyInterestBinding.inflate(inflater, container, false)
 
         initListener()
+        myViewModel.fetchInterestAnimals()
 
         return binding.root
     }
@@ -49,6 +57,25 @@ class MyInterestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpAdapter()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                launch {
+                    myViewModel.interestAnimals.collectLatest { data ->
+                        myInterestRvAdapter.submitList(data)
+                    }
+                }
+
+                launch {
+                    myViewModel.errorMessage.collectLatest { message ->
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpAdapter() {
