@@ -1,7 +1,7 @@
 package com.example.findu.presentation.model
 
 data class MyReportHistoryRv(
-    val reportId: Int,
+    val reportId: Long,
     val thumbnailImageUrl: String,
     val title: String,
     val tag: String,
@@ -31,7 +31,7 @@ data class MyReportHistoryRv(
 }
 
 data class MyRecentHistoryRv(
-    val cardId: Int,
+    val cardId: Long,
     val thumbnailImageUrl: String,
     val title: String,
     val tag: String,
@@ -64,8 +64,8 @@ data class MyRecentHistoryRv(
 }
 
 data class MyInterestRv(
-    val interestId: Int,
-    val animalId: Int,
+    val interestId: Long,
+    val animalId: Long,
     val isProtectingAnimal: Boolean,
     val thumbnailImageUrl: String,
     val title: String,

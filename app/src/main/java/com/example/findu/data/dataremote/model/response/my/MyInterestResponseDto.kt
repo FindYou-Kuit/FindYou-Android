@@ -11,20 +11,20 @@ data class MyInterestResponseDto(
     @SerialName("isLast")
     val isLast: Boolean,
     @SerialName("lastInterestProtectId")
-    val lastInterestProtectId: Int,
+    val lastInterestProtectId: Long,
     @SerialName("lastInterestReportId")
-    val lastInterestReportId: Int
+    val lastInterestReportId: Long
 ) {
     @Serializable
     data class InterestAnimalDto(
         @SerialName("animalId")
-        val animalId: Int,
+        val animalId: Long,
         @SerialName("date")
         val date: String,
         @SerialName("interest")
         val interest: Boolean,
         @SerialName("interestId")
-        val interestId: Int,
+        val interestId: Long,
         @SerialName("isProtectingAnimal")
         val isProtectingAnimal: Boolean,
         @SerialName("location")

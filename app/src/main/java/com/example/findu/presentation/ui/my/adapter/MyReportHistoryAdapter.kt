@@ -14,8 +14,8 @@ import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 
 class MyReportHistoryAdapter(
-    private val onDeleteClick: (Int) -> Unit = {},
-    private val onItemClick: (Int) -> Unit = {}
+    private val onDeleteClick: (Long) -> Unit = {},
+    private val onItemClick: (Long) -> Unit = {}
 ) : ListAdapter<MyReportHistoryRv, MyReportHistoryAdapter.MyListRvViewHolder>(diffUtil) {
 
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :

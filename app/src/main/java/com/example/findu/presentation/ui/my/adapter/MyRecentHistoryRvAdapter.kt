@@ -13,8 +13,8 @@ import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.type.AnimalStateType
 
 class MyRecentHistoryRvAdapter(
-    private val onKeepClick: (Int, Boolean) -> Unit,
-    private val onItemClick: (Int) -> Unit = {}
+    private val onKeepClick: (Long, Boolean) -> Unit,
+    private val onItemClick: (Long) -> Unit = {}
 ) : ListAdapter<MyRecentHistoryRv, MyRecentHistoryRvAdapter.MyListRvViewHolder>(diffUtil) {
 
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
