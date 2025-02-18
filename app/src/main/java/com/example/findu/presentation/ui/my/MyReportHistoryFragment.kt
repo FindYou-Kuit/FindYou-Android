@@ -82,9 +82,6 @@ class MyReportHistoryFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
-        myReportHistoryAdapter.submitList(
-            MyReportHistoryRv.dummyItems
-        )
     }
 
     override fun onDestroyView() {

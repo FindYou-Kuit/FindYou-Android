@@ -7,28 +7,7 @@ data class MyReportHistoryRv(
     val tag: String,
     val date: String,
     val location: String
-) {
-    companion object {
-        val dummyItems = listOf(
-            MyReportHistoryRv(
-                1,
-                "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
-                "말티즈",
-                "보호중",
-                "2021.09.01",
-                "서울시 강남구"
-            ),
-            MyReportHistoryRv(
-                1,
-                "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
-                "말티즈",
-                "보호중",
-                "2021.09.01",
-                "서울시 강남구"
-            )
-        )
-    }
-}
+)
 
 data class MyViewedAnimalsRv(
     val cardId: Long,
@@ -38,30 +17,7 @@ data class MyViewedAnimalsRv(
     val date: String,
     val location: String,
     var interest: Boolean,
-) {
-    companion object {
-        val dummyItems = listOf(
-            MyViewedAnimalsRv(
-                1,
-                "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
-                "말티즈",
-                "목격신고",
-                "2021.09.01",
-                "서울시 강남구",
-                false
-            ),
-            MyViewedAnimalsRv(
-                1,
-                "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
-                "말티즈",
-                "실종신고",
-                "2021.09.01",
-                "서울시 강남구",
-                false
-            )
-        )
-    }
-}
+)
 
 data class MyInterestRv(
     val animalId: Long,
@@ -71,27 +27,4 @@ data class MyInterestRv(
     val date: String,
     val location: String,
     var interest: Boolean,
-) {
-    companion object {
-        val dummyItems = listOf(
-            MyInterestRv(
-                1,
-                "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
-                "말티즈",
-                "보호중",
-                "2021.09.01",
-                "서울시 강남구",
-                false
-            ),
-            MyInterestRv(
-                1,
-                "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
-                "말티즈",
-                "보호중",
-                "2021.09.01",
-                "서울시 강남구",
-                false
-            )
-        )
-    }
-}
+)
