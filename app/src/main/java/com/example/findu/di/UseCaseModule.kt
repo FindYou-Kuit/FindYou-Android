@@ -10,6 +10,7 @@ import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
+import com.example.findu.domain.usecase.my.GetNickNameUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
@@ -104,4 +105,10 @@ object UseCaseModule {
     fun providePatchNickNameUseCase(
         myRepository: MyRepository
     ): PatchNickNameUseCase = PatchNickNameUseCase(myRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetNickNameUseCase(
+        myRepository: MyRepository
+    ): GetNickNameUseCase = GetNickNameUseCase(myRepository)
 }
