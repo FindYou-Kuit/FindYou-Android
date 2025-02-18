@@ -6,23 +6,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.databinding.ItemReportColorsBinding
 import com.example.findu.domain.model.report.FurColorType
 
-class ReportColorAdapter() : RecyclerView.Adapter<ReportColorAdapter.ViewHolder>() {
+class ReportColorAdapter(
+    private val onColorClick: (FurColorType) -> Unit
+) : RecyclerView.Adapter<ReportColorAdapter.ViewHolder>() {
 
     private val colorList = FurColorType.entries.toList()
-    private val selectedColorList = mutableListOf<FurColorType>()
+    val selectedColorList = mutableListOf<FurColorType>()
 
     inner class ViewHolder(private val binding: ItemReportColorsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(furColor: FurColorType) {
-            binding.tvReportColorsName.text = furColor.color
-            binding.cbReportColors.isChecked = selectedColorList.contains(furColor)
             binding.root.setOnClickListener {
                 binding.cbReportColors.isChecked = !binding.cbReportColors.isChecked
-                if (binding.cbReportColors.isChecked) {
-                    selectedColorList.add(furColor)
-                } else {
-                    selectedColorList.remove(furColor)
+            }
+            binding.tvReportColorsName.text = furColor.color
+            with(binding.cbReportColors) {
+                isChecked = selectedColorList.contains(furColor)
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        selectedColorList.add(furColor)
+                    } else {
+                        selectedColorList.remove(furColor)
+                    }
+                    onColorClick(furColor)
                 }
             }
         }

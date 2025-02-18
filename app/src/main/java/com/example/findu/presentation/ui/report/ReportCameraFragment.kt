@@ -22,8 +22,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentReportCameraBinding
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_RESULT_KEY
-import com.example.findu.presentation.ui.report.MissingReportFragment.Companion.IMAGE_URI
+import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_RESULT_KEY
+import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_URI
 import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat

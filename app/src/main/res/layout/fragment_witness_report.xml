@@ -365,6 +365,7 @@
                     app:layout_constraintStart_toEndOf="@id/tv_witness_report_description_title" />
 
                 <EditText
+                    android:id="@+id/et_witness_report_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -503,7 +504,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
-        android:id="@+id/pb_report_loading"
+        android:id="@+id/pb_witness_report_loading"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
