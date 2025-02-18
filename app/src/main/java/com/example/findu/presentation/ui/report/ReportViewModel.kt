@@ -1,7 +1,8 @@
 package com.example.findu.presentation.ui.report
 
-import android.content.Context
 import android.net.Uri
+import android.util.Log
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.BreedData
@@ -28,6 +29,10 @@ class ReportViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
+    private val _imageUriList: MutableStateFlow<List<Uri>> =
+        MutableStateFlow(mutableListOf(Uri.EMPTY))
+    val imageUriList: StateFlow<List<Uri>> get() = _imageUriList
+
     private val _gptData: MutableStateFlow<GptData> = MutableStateFlow(GptData())
     val gptData = _gptData.asStateFlow()
 
@@ -44,7 +49,19 @@ class ReportViewModel @Inject constructor(
 
     private val _gptUiState: MutableStateFlow<GptUiState> = MutableStateFlow(GptUiState.Default)
     val gptUiState = _gptUiState.asStateFlow()
+    
+    fun addImageUri(uri: Uri) {
+        val list = _imageUriList.value.toMutableList()
+        list.add(uri)
+        _imageUriList.value = list
+    }
 
+    fun removeImageUriPostion(position: Int) {
+        val list = _imageUriList.value.toMutableList()
+        list.removeAt(position)
+        _imageUriList.value = list
+    }
+    
     init {
         getBreedData()
     }

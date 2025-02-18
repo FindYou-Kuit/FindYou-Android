@@ -73,6 +73,9 @@
             android:id="@+id/action_fragment_witness_report_to_fragment_home"
             app:destination="@id/fragment_home"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_witness_report_to_fragment_report_camera"
+            app:destination="@id/fragment_report_camera" />
     </fragment>
 
     <fragment
@@ -84,6 +87,15 @@
             android:id="@+id/action_fragment_missing_report_to_fragment_home"
             app:destination="@id/fragment_home"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_missing_report_to_fragment_report_camera"
+            app:destination="@id/fragment_report_camera" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fragment_report_camera"
+        android:name="com.example.findu.presentation.ui.report.ReportCameraFragment"
+        android:label="Report Camera"
+        tools:layout="@layout/fragment_report_camera" />
 
 </navigation>

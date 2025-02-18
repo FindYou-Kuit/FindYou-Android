@@ -122,6 +122,7 @@
     <string name="report_color_title">반려동물의 털색을 표시해 주세요!</string>
     <string name="report_feature_title">특징을 체크해주세요!</string>
     <string name="report_location">주소를 입력해주세요</string>
+    <string name="report_image_count">%d</string>
     <string name="report_cannot_distinction">품종을 인식하지 못했습니다.</string>
 
     <!--  colors  -->
