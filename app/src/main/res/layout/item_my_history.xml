@@ -8,7 +8,7 @@
     android:paddingVertical="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_my_history_top_container"
+        android:id="@+id/cl_my_history_container"
         android:layout_width="match_parent"
         android:layout_height="258dp"
         android:background="@drawable/bg_white_rd_18"
@@ -23,8 +23,7 @@
             android:layout_height="158dp"
             android:scaleType="centerCrop"
             android:src="@drawable/img_sample_dog"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/MyHistoryTopCorners" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_my_history_title"
@@ -79,6 +78,7 @@
                 android:src="@drawable/icon_report_location_map_orange" />
 
             <TextView
+                android:id="@+id/tv_my_history_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -89,6 +89,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_my_history_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
@@ -98,6 +99,31 @@
             android:textColor="@color/red1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/fl_my_history_keep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_my_history_keep"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_my_keep" />
+
+            <ImageView
+                android:id="@+id/iv_my_history_non_keep"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_my_non_keep"
+                android:visibility="gone" />
+
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
