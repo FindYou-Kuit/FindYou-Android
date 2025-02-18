@@ -39,4 +39,9 @@ class MyRepositoryImpl @Inject constructor(
                 lastProtectId = lastProtectId
             ).handleBaseResponse().getOrThrow().toDomain()
         }
+
+    override suspend fun deleteUser(): Result<Unit> =
+        runCatching {
+            myRemoteDataSource.deleteUser().handleBaseResponse().getOrThrow()
+        }
 }
