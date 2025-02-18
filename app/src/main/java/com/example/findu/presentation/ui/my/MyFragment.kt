@@ -38,6 +38,7 @@ class MyFragment : Fragment() {
 
 
         initListener()
+        myViewModel.fetchNickName()
 
         return binding.root
     }

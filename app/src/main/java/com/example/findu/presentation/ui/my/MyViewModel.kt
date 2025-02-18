@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
+import com.example.findu.domain.usecase.my.GetNickNameUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
@@ -23,7 +24,8 @@ class MyViewModel @Inject constructor(
     private val getReportHistoryUseCase: GetReportHistoryUseCase,
     private val getViewedAnimalUseCase: GetViewedAnimalUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
-    private val patchNickNameUseCase: PatchNickNameUseCase
+    private val patchNickNameUseCase: PatchNickNameUseCase,
+    private val getNickNameUseCase: GetNickNameUseCase
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -112,6 +114,19 @@ class MyViewModel @Inject constructor(
                 onSuccess = {},
                 onFailure = {
                     _errorMessage.value = it.message ?: "닉네임 변경 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    fun fetchNickName() {
+        viewModelScope.launch {
+            getNickNameUseCase().fold(
+                onSuccess = {
+                    _nickNameState.value = it
+                },
+                onFailure = {
+                    _errorMessage.value = it.message ?: "닉네임을 불러오는 중 오류가 발생했습니다."
                 }
             )
         }
