@@ -110,9 +110,9 @@
 
     <fragment
         android:id="@+id/fragment_my_keep_animals"
-        android:name="com.example.findu.presentation.ui.my.MyKeepAnimalsFragment"
+        android:name="com.example.findu.presentation.ui.my.MyInterestFragment"
         android:label="My Keep Animals"
-        tools:layout="@layout/fragment_my_keep_animals" />
+        tools:layout="@layout/fragment_my_interest" />
 
     <fragment
         android:id="@+id/fragment_my_recent_history"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.my.MyKeepAnimalsFragment">
+    tools:context=".presentation.ui.my.MyInterestFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_keep_animals_top_container"

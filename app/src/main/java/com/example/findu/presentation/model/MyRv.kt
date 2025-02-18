@@ -18,3 +18,15 @@ data class MyRecentHistoryRv(
     val location: String,
     var interest: Boolean,
 )
+
+data class MyInterestRv(
+    val interestId: Int,
+    val animalId: Int,
+    val isProtectingAnimal: Boolean,
+    val thumbnailImageUrl: String,
+    val title: String,
+    val tag: String,
+    val date: String,
+    val location: String,
+    var interest: Boolean,
+)

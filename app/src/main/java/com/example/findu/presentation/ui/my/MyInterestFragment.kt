@@ -1,0 +1,65 @@
+package com.example.findu.presentation.ui.my
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.findu.databinding.FragmentMyInterestBinding
+import com.example.findu.presentation.ui.my.adapter.MyInterestRvAdapter
+
+class MyInterestFragment : Fragment() {
+    private var _binding: FragmentMyInterestBinding? = null
+    private val binding get() = _binding!!
+    private val myViewModel by viewModels<MyViewModel>()
+    private val myInterestRvAdapter = MyInterestRvAdapter(
+        onKeepClick = { animalId, interest, tag ->
+//            myViewModel.updateInterest(animalId, interest, tag)
+        },
+        onItemClick = { animalId ->
+//            findNavController().navigate(
+//                MyInterestFragmentDirections.actionMyInterestFragmentToAnimalDetailFragment(animalId)
+//            )
+        }
+    )
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMyInterestBinding.inflate(inflater, container, false)
+
+        initListener()
+
+        return binding.root
+    }
+
+    private fun initListener() {
+        binding.clMyKeepAnimalsBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setUpAdapter()
+    }
+
+    private fun setUpAdapter() {
+        with(binding.rvMyKeepAnimals) {
+            adapter = myInterestRvAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

@@ -333,7 +333,9 @@ class ReportViewModel @Inject constructor(
                 )
 
             postWitnessReportUseCase(witnessReportData).fold(
-                onSuccess = { },
+                onSuccess = {
+                    _reportUiState.value = ReportUiState.Finished
+                },
                 onFailure = { error ->
                     _errorMessage.value = error.message ?: "신고 접수 중 오류가 발생했습니다."
                     _reportUiState.value = ReportUiState.Error
