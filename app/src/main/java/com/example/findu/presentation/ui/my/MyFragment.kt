@@ -72,12 +72,17 @@ class MyFragment : Fragment() {
 
             clMyCameraPermission.setOnClickListener {
                 if (hasCameraPermission(requireContext())) {
+                    Toast.makeText(requireContext(), "카메라 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
                     launchCameraRequestPermission()
+
                 }
             }
 
             clMyLocationPermission.setOnClickListener {
                 if (hasLocationPermission(requireContext())) {
+                    Toast.makeText(requireContext(), "위치 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
                     requestLocationPermission(requireActivity())
                 }
             }
