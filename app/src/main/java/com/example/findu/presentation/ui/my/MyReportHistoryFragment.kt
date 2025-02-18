@@ -26,9 +26,10 @@ class MyReportHistoryFragment : Fragment() {
 
     private val myReportHistoryAdapter by lazy {
         MyReportHistoryAdapter(
-            onDeleteClick = { reportId ->
+            onDeleteClick = { reportId, deleteItem ->
                 MyDeleteHistoryDialog(requireContext()) {
 //                    myViewModel.deleteReport(reportId)
+                    deleteItem()
                 }.show()
 //                myViewModel.deleteReport(reportId)
             },
