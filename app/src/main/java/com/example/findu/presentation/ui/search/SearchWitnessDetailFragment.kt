@@ -90,7 +90,7 @@ class SearchWitnessDetailFragment : Fragment() {
 
     private fun updateUI(data: DetailReportData) {
         binding.apply {
-            tvSearchContentDetailTitle.text = name
+            tvDetailTitleField.text = name
             tvDetailTagField.text = data.tag.text
             tvDetailBreedField.text = data.breed
             tvDetailFurColorField.text = data.furColor
