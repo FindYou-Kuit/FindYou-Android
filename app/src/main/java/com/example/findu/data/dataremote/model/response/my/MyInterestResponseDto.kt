@@ -23,10 +23,6 @@ data class MyInterestResponseDto(
         val date: String,
         @SerialName("interest")
         val interest: Boolean,
-        @SerialName("interestId")
-        val interestId: Long,
-        @SerialName("isProtectingAnimal")
-        val isProtectingAnimal: Boolean,
         @SerialName("location")
         val location: String,
         @SerialName("tag")

@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_history_container"
         android:layout_width="match_parent"
-        android:layout_height="258dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
         android:background="@drawable/bg_white_rd_18"
         android:clipToOutline="true"
         android:elevation="4dp"

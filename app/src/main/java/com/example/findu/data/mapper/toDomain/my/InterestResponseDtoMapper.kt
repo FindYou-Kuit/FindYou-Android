@@ -10,8 +10,6 @@ fun MyInterestResponseDto.toDomain(): MyInterestData {
                 animalId = it.animalId,
                 date = it.date,
                 interest = it.interest,
-                interestId = it.interestId,
-                isProtectingAnimal = it.isProtectingAnimal,
                 location = it.location,
                 tag = it.tag,
                 thumbnailImageUrl = it.thumbnailImageUrl,

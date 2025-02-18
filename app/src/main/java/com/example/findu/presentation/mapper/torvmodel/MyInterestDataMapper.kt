@@ -5,9 +5,7 @@ import com.example.findu.presentation.model.MyInterestRv
 
 fun MyInterestData.InterestAnimal.toRvModel(): MyInterestRv {
     return MyInterestRv(
-        interestId = this.interestId,
         animalId = this.animalId,
-        isProtectingAnimal = this.isProtectingAnimal,
         thumbnailImageUrl = this.thumbnailImageUrl,
         title = this.title,
         tag = this.tag,

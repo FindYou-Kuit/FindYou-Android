@@ -64,9 +64,7 @@ data class MyRecentHistoryRv(
 }
 
 data class MyInterestRv(
-    val interestId: Long,
     val animalId: Long,
-    val isProtectingAnimal: Boolean,
     val thumbnailImageUrl: String,
     val title: String,
     val tag: String,
@@ -78,8 +76,6 @@ data class MyInterestRv(
         val dummyItems = listOf(
             MyInterestRv(
                 1,
-                1,
-                true,
                 "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
                 "말티즈",
                 "보호중",
@@ -89,8 +85,6 @@ data class MyInterestRv(
             ),
             MyInterestRv(
                 1,
-                1,
-                true,
                 "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
                 "말티즈",
                 "보호중",

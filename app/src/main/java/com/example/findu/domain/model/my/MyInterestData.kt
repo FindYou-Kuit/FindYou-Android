@@ -10,8 +10,6 @@ data class MyInterestData(
         val animalId: Long,
         val date: String,
         val interest: Boolean,
-        val interestId: Long,
-        val isProtectingAnimal: Boolean,
         val location: String,
         val tag: String,
         val thumbnailImageUrl: String,
