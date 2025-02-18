@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyRecentHistoryBinding
 import com.example.findu.presentation.ui.my.adapter.MyRecentHistoryRvAdapter
@@ -31,7 +32,15 @@ class MyRecentHistoryFragment : Fragment() {
     ): View {
         _binding = FragmentMyRecentHistoryBinding.inflate(inflater, container, false)
 
+        initListener()
+
         return binding.root
+    }
+
+    private fun initListener() {
+        binding.clMyRecentHistoryBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
 
