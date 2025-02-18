@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemMyHistoryBinding
 import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.type.AnimalStateType
+import com.example.findu.presentation.util.ViewUtils.addUnderLine
 
 class MyReportHistoryAdapter(
     private val onDeleteClick: (Int) -> Unit = {},
@@ -42,6 +43,8 @@ class MyReportHistoryAdapter(
                     binding.root.context.getColorStateList(stateType.backgroundChipColor)
 
                 flMyHistoryKeep.visibility = View.GONE
+
+                tvMyHistoryDelete.addUnderLine()
             }
         }
 
