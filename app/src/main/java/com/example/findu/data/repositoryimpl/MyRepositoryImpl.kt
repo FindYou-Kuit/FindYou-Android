@@ -49,4 +49,9 @@ class MyRepositoryImpl @Inject constructor(
         runCatching {
             myRemoteDataSource.patchNickname(newNickname).handleBaseResponse().getOrThrow()
         }
+
+    override suspend fun getNickname(): Result<String> =
+        runCatching {
+            myRemoteDataSource.getNickname().handleBaseResponse().getOrThrow().nickname
+        }
 }

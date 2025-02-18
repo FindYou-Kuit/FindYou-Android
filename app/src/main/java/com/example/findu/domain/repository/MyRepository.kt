@@ -22,4 +22,6 @@ interface MyRepository {
     suspend fun deleteUser(): Result<Unit>
 
     suspend fun patchNickname(newNickname: String): Result<Unit>
+
+    suspend fun getNickname(): Result<String>
 }
