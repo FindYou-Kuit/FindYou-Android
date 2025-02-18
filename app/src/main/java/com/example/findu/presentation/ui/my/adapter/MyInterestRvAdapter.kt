@@ -20,6 +20,16 @@ class MyInterestRvAdapter(
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MyInterestRv) {
+
+            setUpView(item)
+            initListener(item)
+
+            Glide.with(binding.root.context)
+                .load(item.thumbnailImageUrl)
+                .into(binding.ivMyHistoryImage)
+        }
+
+        private fun setUpView(item: MyInterestRv) {
             with(binding) {
                 tvMyHistoryTitle.text = item.title
                 tvMyHistoryDate.text = item.date
@@ -35,24 +45,23 @@ class MyInterestRvAdapter(
 
                 tvMyHistoryDelete.visibility = View.GONE
             }
+        }
 
-            binding.flMyHistoryKeep.setOnClickListener {
-                item.interest = !item.interest
-                onKeepClick(item.animalId, item.interest, item.tag)
-                if (item.interest) {
-                    binding.ivMyHistoryKeep.visibility = View.VISIBLE
-                    binding.ivMyHistoryNonKeep.visibility = View.GONE
-                } else {
-                    binding.ivMyHistoryKeep.visibility = View.GONE
-                    binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
+        private fun initListener(item: MyInterestRv) {
+            with(binding) {
+                flMyHistoryKeep.setOnClickListener {
+                    item.interest = !item.interest
+                    onKeepClick(item.animalId, item.interest, item.tag)
+                    if (item.interest) {
+                        binding.ivMyHistoryKeep.visibility = View.VISIBLE
+                        binding.ivMyHistoryNonKeep.visibility = View.GONE
+                    } else {
+                        binding.ivMyHistoryKeep.visibility = View.GONE
+                        binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
+                    }
                 }
+                clMyHistoryContainer.setOnClickListener { onItemClick(item.animalId) }
             }
-
-            binding.clMyHistoryContainer.setOnClickListener { onItemClick(item.animalId) }
-
-            Glide.with(binding.root.context)
-                .load(item.thumbnailImageUrl)
-                .into(binding.ivMyHistoryImage)
         }
     }
 

@@ -19,6 +19,15 @@ class MyReportHistoryAdapter(
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MyReportHistoryRv) {
+            setUpView(item)
+            initListener(item)
+
+            Glide.with(binding.root.context)
+                .load(item.thumbnailImageUrl)
+                .into(binding.ivMyHistoryImage)
+        }
+
+        private fun setUpView(item: MyReportHistoryRv) {
             with(binding) {
                 tvMyHistoryTitle.text = item.title
                 tvMyHistoryDate.text = item.date
@@ -34,12 +43,17 @@ class MyReportHistoryAdapter(
 
                 flMyHistoryKeep.visibility = View.GONE
             }
-            binding.tvMyHistoryDelete.setOnClickListener { onDeleteClick(item.reportId) }
-            binding.clMyHistoryContainer.setOnClickListener { onItemClick(item.reportId) }
+        }
 
-            Glide.with(binding.root.context)
-                .load(item.thumbnailImageUrl)
-                .into(binding.ivMyHistoryImage)
+        private fun initListener(item: MyReportHistoryRv) {
+            with(binding) {
+                tvMyHistoryDelete.setOnClickListener {
+                    onDeleteClick(item.reportId)
+                }
+                clMyHistoryContainer.setOnClickListener {
+                    onItemClick(item.reportId)
+                }
+            }
         }
     }
 

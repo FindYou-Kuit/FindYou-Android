@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemMyHistoryBinding
 import com.example.findu.presentation.model.MyRecentHistoryRv
+import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.type.AnimalStateType
 
 class MyRecentHistoryRvAdapter(
@@ -19,6 +20,16 @@ class MyRecentHistoryRvAdapter(
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MyRecentHistoryRv) {
+
+            setUpView(item)
+            initListener(item)
+
+            Glide.with(binding.root.context)
+                .load(item.thumbnailImageUrl)
+                .into(binding.ivMyHistoryImage)
+        }
+
+        private fun setUpView(item: MyRecentHistoryRv) {
             with(binding) {
                 tvMyHistoryTitle.text = item.title
                 tvMyHistoryDate.text = item.date
@@ -34,24 +45,24 @@ class MyRecentHistoryRvAdapter(
 
                 tvMyHistoryDelete.visibility = View.GONE
             }
+        }
 
-            binding.flMyHistoryKeep.setOnClickListener {
-                item.interest = !item.interest
-                onKeepClick(item.cardId, item.interest)
-                if (item.interest) {
-                    binding.ivMyHistoryKeep.visibility = View.VISIBLE
-                    binding.ivMyHistoryNonKeep.visibility = View.GONE
-                } else {
-                    binding.ivMyHistoryKeep.visibility = View.GONE
-                    binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
+        private fun initListener(item: MyRecentHistoryRv) {
+            with(binding) {
+                flMyHistoryKeep.setOnClickListener {
+                    item.interest = !item.interest
+                    onKeepClick(item.cardId, item.interest)
+                    if (item.interest) {
+                        binding.ivMyHistoryKeep.visibility = View.VISIBLE
+                        binding.ivMyHistoryNonKeep.visibility = View.GONE
+                    } else {
+                        binding.ivMyHistoryKeep.visibility = View.GONE
+                        binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
+                    }
                 }
+                clMyHistoryContainer.setOnClickListener { onItemClick(item.cardId) }
+
             }
-
-            binding.clMyHistoryContainer.setOnClickListener { onItemClick(item.cardId) }
-
-            Glide.with(binding.root.context)
-                .load(item.thumbnailImageUrl)
-                .into(binding.ivMyHistoryImage)
         }
     }
 
