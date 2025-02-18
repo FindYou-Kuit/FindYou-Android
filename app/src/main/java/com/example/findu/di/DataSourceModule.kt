@@ -7,11 +7,13 @@ import com.example.findu.data.dataremote.datasource.HomeRemoteDataSource
 import com.example.findu.data.dataremote.datasource.BreedRemoteDataSource
 import com.example.findu.data.dataremote.datasourceimpl.BreedRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasource.GptRemoteDataSource
+import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
 import com.example.findu.data.dataremote.datasource.NaverRemoteDataSource
 import com.example.findu.data.dataremote.datasource.ReportRemoteDataSource
 import com.example.findu.data.dataremote.datasourceimpl.DummyRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.GptRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.HomeRemoteDataSourceImpl
+import com.example.findu.data.dataremote.datasourceimpl.MyRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.NaverRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.ReportRemoteDataSourceImpl
 import dagger.Binds
@@ -50,4 +52,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsNaverRemoteDataSource(naverRemoteDataSourceImpl: NaverRemoteDataSourceImpl): NaverRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsMyRemoteDataSource(myRemoteDataSourceImpl: MyRemoteDataSourceImpl): MyRemoteDataSource
 }

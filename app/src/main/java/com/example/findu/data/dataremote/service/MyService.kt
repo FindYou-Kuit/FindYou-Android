@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface MyService {
     @GET("/api/v1/users/interest-animals")
     suspend fun getInterestAnimals(
-        @Query("lastInterestReportId") lastReportId: Long = Long.MAX_VALUE,
-        @Query("lastInterestProtectId") lastProtectId: Long = Long.MAX_VALUE,
+        @Query("lastInterestReportId") lastReportId: Long,
+        @Query("lastInterestProtectId") lastProtectId: Long,
     ): BaseResponse<MyInterestResponseDto>
 }
