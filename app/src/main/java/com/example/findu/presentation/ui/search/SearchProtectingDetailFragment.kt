@@ -29,6 +29,7 @@ class SearchProtectingDetailFragment : Fragment() {
     private val viewModel by viewModels<DetailSearchViewModel>()
     private var cardId: Long = -1
     private var tag: String? = null
+    private var name: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +45,7 @@ class SearchProtectingDetailFragment : Fragment() {
         arguments?.let {
             cardId = it.getLong("cardId", -1)
             tag = it.getString("tag")
+            name = it.getString("name")
         }
 
         if (cardId == -1L || tag == null) {
@@ -88,6 +90,7 @@ class SearchProtectingDetailFragment : Fragment() {
     private fun updateUI(data: DetailProtectData) {
         binding.apply {
             Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
+            tvSearchContentDetailTitle.text = name
             tvDetailTagField.text = data.tag.text
             tvDetailBreedField.text = data.breed
             tvDetailAgeField.text = data.age

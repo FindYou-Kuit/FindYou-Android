@@ -6,7 +6,7 @@ data class DetailReportData(
     val imageUrls: List<String>,
     val breed: String,
     val tag: SearchStatus,
-    val sex: String,
+    val sex: String?,
     val furColor: String,
     val userName: String,
     val writeDate: String,

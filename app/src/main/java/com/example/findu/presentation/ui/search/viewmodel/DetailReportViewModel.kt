@@ -16,7 +16,7 @@ class DetailReportViewModel @Inject constructor(
     private val getDetailSearchUseCase: GetDetailSearchUseCase
 ) : ViewModel() {
 
-    private val _detailSearchData = MutableStateFlow<DetailReportData?>(null) // ✅ DetailReportData로 수정
+    private val _detailSearchData = MutableStateFlow<DetailReportData?>(null)
     val detailSearchData = _detailSearchData.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String?>(null)

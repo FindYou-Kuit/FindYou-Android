@@ -139,7 +139,6 @@
                     app:layout_constraintTop_toBottomOf="@id/btn_view_location">
 
                     <TextView
-                        android:id="@+id/tv_detail_eventDate_field"
                         style="@style/TextAppearance.FindU.Body2_SB_14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -151,6 +150,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/tv_detail_witness_date_field"
                         style="@style/TextAppearance.FindU.Body1_SB_16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -357,7 +357,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@id/tv_detail_eventDate_field"
+                                android:id="@+id/tv_detail_eventDate_field"
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

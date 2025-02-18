@@ -34,6 +34,7 @@ class SearchDisappearDetailFragment : Fragment() {
     private val viewModel by viewModels<DetailReportViewModel>()
     private var cardId: Long = -1
     private var tag: String? = null
+    private var name: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +49,7 @@ class SearchDisappearDetailFragment : Fragment() {
         arguments?.let {
             cardId = it.getLong("cardId", -1)
             tag = it.getString("tag")
+            name = it.getString("name")
         }
 
         if (cardId == -1L || tag == null) {
@@ -89,13 +91,15 @@ class SearchDisappearDetailFragment : Fragment() {
 
     private fun updateUI(data: DetailReportData) {
         binding.apply {
+            tvDetailTitleField.text = name
             tvDetailTagField.text = data.tag.text
             tvDetailBreedField.text = data.breed
             tvDetailSexField.text = data.sex
             tvDetailFurColorField.text = data.furColor
-            tvDetailUserNameField.text=data.userName
+            tvDetailUserNameField.text = data.userName
             tvDetailWriteDateField.text = data.writeDate
             tvDetailEventDateField.text = data.eventDate
+            tvDetailReportDateField.text = data.writeDate
             tvDetailFoundLocationField.text = data.foundLocation
             tvDetailAdditionalDescriptionField.text = data.additionalDescription
 
@@ -190,17 +194,24 @@ class SearchDisappearDetailFragment : Fragment() {
     private fun openNaverMap(address: String) {
         if (address.isNotEmpty()) {
             val encodedAddress = Uri.encode(address)
-            val uri = Uri.parse("nmap://search?query=$encodedAddress&appname=${requireContext().packageName}")
+            val uri =
+                Uri.parse("nmap://search?query=$encodedAddress&appname=${requireContext().packageName}")
             val intent = Intent(Intent.ACTION_VIEW, uri)
 
             if (intent.resolveActivity(requireContext().packageManager) != null) {
                 startActivity(intent)
             } else {
                 try {
-                    val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap"))
+                    val playStoreIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=com.nhn.android.nmap")
+                    )
                     startActivity(playStoreIntent)
                 } catch (e: ActivityNotFoundException) {
-                    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.nhn.android.nmap"))
+                    val webIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.nhn.android.nmap")
+                    )
                     startActivity(webIntent)
                 }
             }

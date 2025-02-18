@@ -160,10 +160,11 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_found_date"
+                                android:text="신고날짜"
                                 android:textColor="@color/main_color" />
 
                             <TextView
+                                android:id="@+id/tv_detail_report_date_field"
                                 style="@style/TextAppearance.FindU.Body1_SB_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

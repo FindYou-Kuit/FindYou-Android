@@ -79,24 +79,27 @@ class SearchRescueFragment : Fragment() {
         rvAdapter.updateData(searchList)
     }
 
-    private fun navigateToDetail(cardId: Long, tag: String) {
+    private fun navigateToDetail(cardId: Long, tag: String, name:String) {
         val fragment = when (tag) {
             "보호중" -> SearchProtectingDetailFragment().apply {
                 arguments = Bundle().apply {
                     putLong("cardId", cardId)
                     putString("tag", tag)
+                    putString("name", name)
                 }
             }
             "목격신고" -> SearchWitnessDetailFragment().apply {
                 arguments = Bundle().apply {
                     putLong("cardId", cardId)
                     putString("tag", tag)
+                    putString("name", name)
                 }
             }
             "실종신고" -> SearchDisappearDetailFragment().apply {
                 arguments = Bundle().apply {
                     putLong("cardId", cardId)
                     putString("tag", tag)
+                    putString("name", name)
                 }
             }
             else -> return
@@ -154,7 +157,7 @@ class SearchRescueFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(items) { item ->
-            navigateToDetail(item.cardId, item.tag.text)
+            navigateToDetail(item.cardId, item.tag.text, item.name)
         }
         binding.rvSearchHorizontalContent.adapter = rvAdapter
         binding.rvSearchHorizontalContent.layoutManager =

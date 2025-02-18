@@ -78,12 +78,13 @@ class SearchAllFragment : Fragment() {
         rvAdapter.updateData(searchList)
     }
 
-    private fun navigateToDetail(cardId: Long, tag: String) {
+    private fun navigateToDetail(cardId: Long, tag: String, name: String) {
         val fragment = when (tag) {
             "보호중" -> SearchProtectingDetailFragment().apply {
                 arguments = Bundle().apply {
                     putLong("cardId", cardId)
                     putString("tag", tag)
+                    putString("name", name)
                 }
             }
 
@@ -91,6 +92,7 @@ class SearchAllFragment : Fragment() {
                 arguments = Bundle().apply {
                     putLong("cardId", cardId)
                     putString("tag", tag)
+                    putString("name", name)
                 }
             }
 
@@ -98,6 +100,7 @@ class SearchAllFragment : Fragment() {
                 arguments = Bundle().apply {
                     putLong("cardId", cardId)
                     putString("tag", tag)
+                    putString("name", name)
                 }
             }
 
@@ -156,7 +159,7 @@ class SearchAllFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(emptyList()) { item ->
-            navigateToDetail(item.cardId, item.tag.text)
+            navigateToDetail(item.cardId, item.tag.text, item.name)
         }
         binding.rvSearchHorizontalContent.apply {
             layoutManager =

@@ -10,7 +10,7 @@ data class DetailReportResponseDto(
     @SerialName("tag")
     val tag: String,
     @SerialName("sex")
-    val sex: String,
+    val sex: String?,
     @SerialName("breed")
     val breed: String,
     @SerialName("furColor")

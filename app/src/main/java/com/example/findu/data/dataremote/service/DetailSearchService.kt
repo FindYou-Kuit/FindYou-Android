@@ -12,7 +12,7 @@ interface DetailSearchService {
         @Path("protecting_report_id") protectingReportId: Long
         ): BaseResponse<DetailProtectResponseDto>
 
-    @GET("/api/v1/users/interest-animals/report-animals/{report_animal_id}")
+    @GET("/api/v1/reports/report-animals/{report_id}")
     suspend fun getDetailSearchReport(
         @Path("report_id") reportId: Long
     ): BaseResponse<DetailReportResponseDto>

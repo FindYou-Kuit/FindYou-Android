@@ -31,6 +31,7 @@ class SearchWitnessDetailFragment : Fragment() {
     private val viewModel by viewModels<DetailReportViewModel>()
     private var cardId: Long = -1
     private var tag: String? = null
+    private var name: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +40,14 @@ class SearchWitnessDetailFragment : Fragment() {
         binding = FragmentSearchDetailWitnessBinding.inflate(layoutInflater)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
             cardId = it.getLong("cardId", -1)
             tag = it.getString("tag")
+            name = it.getString("name")
         }
 
         if (cardId == -1L || tag == null) {
@@ -68,7 +71,7 @@ class SearchWitnessDetailFragment : Fragment() {
             }
         }
     }
-    
+
     private fun observeViewModel() {
         lifecycleScope.launch {
             viewModel.detailSearchData.collectLatest { data ->
@@ -87,11 +90,13 @@ class SearchWitnessDetailFragment : Fragment() {
 
     private fun updateUI(data: DetailReportData) {
         binding.apply {
+            tvSearchContentDetailTitle.text = name
             tvDetailTagField.text = data.tag.text
             tvDetailBreedField.text = data.breed
             tvDetailFurColorField.text = data.furColor
             tvDetailUserNameField.text = data.userName
             tvDetailWriteDateField.text = data.writeDate
+            tvDetailWitnessDateField.text = data.eventDate
             tvDetailEventDateField.text = data.eventDate
             tvDetailEventLocationField.text = data.eventLocation
             tvDetailAdditionalDescriptionField.text = data.additionalDescription
@@ -104,7 +109,7 @@ class SearchWitnessDetailFragment : Fragment() {
     }
 
 
-    private fun initViewPager(imageList: List<String>){
+    private fun initViewPager(imageList: List<String>) {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailImg.setCurrentItem(1, false)
@@ -161,7 +166,7 @@ class SearchWitnessDetailFragment : Fragment() {
     }
 
     private fun initListener() {
-        binding.clSearchShowMore.setOnClickListener{
+        binding.clSearchShowMore.setOnClickListener {
             binding.clSearchContentDetail.visibility = View.VISIBLE
             binding.clSearchShowMore.visibility = View.INVISIBLE
         }
@@ -190,17 +195,24 @@ class SearchWitnessDetailFragment : Fragment() {
     private fun openNaverMap(address: String) {
         if (address.isNotEmpty()) {
             val encodedAddress = Uri.encode(address)
-            val uri = Uri.parse("nmap://search?query=$encodedAddress&appname=${requireContext().packageName}")
+            val uri =
+                Uri.parse("nmap://search?query=$encodedAddress&appname=${requireContext().packageName}")
             val intent = Intent(Intent.ACTION_VIEW, uri)
 
             if (intent.resolveActivity(requireContext().packageManager) != null) {
                 startActivity(intent)
             } else {
                 try {
-                    val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap"))
+                    val playStoreIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=com.nhn.android.nmap")
+                    )
                     startActivity(playStoreIntent)
                 } catch (e: ActivityNotFoundException) {
-                    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.nhn.android.nmap"))
+                    val webIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.nhn.android.nmap")
+                    )
                     startActivity(webIntent)
                 }
             }
