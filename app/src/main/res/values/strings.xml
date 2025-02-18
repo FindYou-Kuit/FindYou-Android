@@ -88,7 +88,7 @@
     <string name="search_filter_check">확인</string>
     <string name="date_single">%d.%d.%d ~</string>
     <string name="date_range">%1$d.%2$d.%3$d ~ %4$d.%5$d.%6$d</string>
-  
+
     <!-- report dialog -->
     <string name="report_dialog_finished">신고가 완료되었어요!</string>
     <string name="report_dialog_missing_mention">당신의 가족을 저희가 열심히 찾아드릴게요!</string>
@@ -191,5 +191,7 @@
     <string name="dialog_home_report_detail_center_num">Tel) 1577–0954</string>
     <string name="dialog_home_report_detail_call_center">다산 콜센터</string>
     <string name="dialog_home_report_detail_call_center_num">Tel) 120</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
