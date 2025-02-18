@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemMyHistoryBinding
 import com.example.findu.presentation.model.MyInterestRv
-import com.example.findu.presentation.model.MyRecentHistoryRv
 import com.example.findu.presentation.type.AnimalStateType
 
 class MyInterestRvAdapter(

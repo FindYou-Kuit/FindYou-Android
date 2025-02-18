@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
+import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.presentation.mapper.torvmodel.toRvModel
 import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.model.MyReportHistoryRv
+import com.example.findu.presentation.model.MyViewedAnimalsRv
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyViewModel @Inject constructor(
     private val getInterestUseCase: GetInterestUseCase,
-    private val getReportHistoryUseCase: GetReportHistoryUseCase
+    private val getReportHistoryUseCase: GetReportHistoryUseCase,
+    private val getViewedAnimalUseCase: GetViewedAnimalUseCase
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -24,6 +27,9 @@ class MyViewModel @Inject constructor(
 
     private val _reportHistory = MutableStateFlow<List<MyReportHistoryRv>>(emptyList())
     val reportHistory = _reportHistory.asStateFlow()
+
+    private val _viewedAnimals = MutableStateFlow<List<MyViewedAnimalsRv>>(emptyList())
+    val viewedAnimals = _viewedAnimals.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
@@ -51,6 +57,22 @@ class MyViewModel @Inject constructor(
             ).fold(
                 onSuccess = { data ->
                     _reportHistory.value = data.reports.map { it.toRvModel() }
+                },
+                onFailure = {
+                    _errorMessage.value = it.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    fun fetchViewedAnimals() {
+        viewModelScope.launch {
+            getViewedAnimalUseCase(
+                lastReportId = Long.MAX_VALUE,
+                lastProtectId = Long.MAX_VALUE
+            ).fold(
+                onSuccess = { data ->
+                    _viewedAnimals.value = data.viewedAnimals.map { it.toRvModel() }
                 },
                 onFailure = {
                     _errorMessage.value = it.message ?: "데이터를 불러오는 중 오류가 발생했습니다."

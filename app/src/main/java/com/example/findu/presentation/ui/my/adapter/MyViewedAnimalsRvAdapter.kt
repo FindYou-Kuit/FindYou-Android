@@ -8,18 +8,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemMyHistoryBinding
-import com.example.findu.presentation.model.MyRecentHistoryRv
-import com.example.findu.presentation.model.MyReportHistoryRv
+import com.example.findu.presentation.model.MyViewedAnimalsRv
 import com.example.findu.presentation.type.AnimalStateType
 
-class MyRecentHistoryRvAdapter(
+class MyViewedAnimalsRvAdapter(
     private val onKeepClick: (Long, Boolean) -> Unit,
     private val onItemClick: (Long) -> Unit = {}
-) : ListAdapter<MyRecentHistoryRv, MyRecentHistoryRvAdapter.MyListRvViewHolder>(diffUtil) {
+) : ListAdapter<MyViewedAnimalsRv, MyViewedAnimalsRvAdapter.MyListRvViewHolder>(diffUtil) {
 
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MyRecentHistoryRv) {
+        fun bind(item: MyViewedAnimalsRv) {
 
             setUpView(item)
             initListener(item)
@@ -29,7 +28,7 @@ class MyRecentHistoryRvAdapter(
                 .into(binding.ivMyHistoryImage)
         }
 
-        private fun setUpView(item: MyRecentHistoryRv) {
+        private fun setUpView(item: MyViewedAnimalsRv) {
             with(binding) {
                 tvMyHistoryTitle.text = item.title
                 tvMyHistoryDate.text = item.date
@@ -55,7 +54,7 @@ class MyRecentHistoryRvAdapter(
             }
         }
 
-        private fun initListener(item: MyRecentHistoryRv) {
+        private fun initListener(item: MyViewedAnimalsRv) {
             with(binding) {
                 flMyHistoryKeep.setOnClickListener {
                     item.interest = !item.interest
@@ -86,18 +85,18 @@ class MyRecentHistoryRvAdapter(
 
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<MyRecentHistoryRv>() {
+        val diffUtil = object : DiffUtil.ItemCallback<MyViewedAnimalsRv>() {
 
             override fun areItemsTheSame(
-                oldItem: MyRecentHistoryRv,
-                newItem: MyRecentHistoryRv
+                oldItem: MyViewedAnimalsRv,
+                newItem: MyViewedAnimalsRv
             ): Boolean {
                 return oldItem == newItem
             }
 
             override fun areContentsTheSame(
-                oldItem: MyRecentHistoryRv,
-                newItem: MyRecentHistoryRv
+                oldItem: MyViewedAnimalsRv,
+                newItem: MyViewedAnimalsRv
             ): Boolean {
                 return oldItem == newItem
             }

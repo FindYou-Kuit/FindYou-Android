@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.my.MyRecentHistoryFragment">
+    tools:context=".presentation.ui.my.MyViewedAnimalFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_recent_history_top_container"

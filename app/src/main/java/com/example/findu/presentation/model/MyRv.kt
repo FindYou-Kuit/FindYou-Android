@@ -30,7 +30,7 @@ data class MyReportHistoryRv(
     }
 }
 
-data class MyRecentHistoryRv(
+data class MyViewedAnimalsRv(
     val cardId: Long,
     val thumbnailImageUrl: String,
     val title: String,
@@ -41,7 +41,7 @@ data class MyRecentHistoryRv(
 ) {
     companion object {
         val dummyItems = listOf(
-            MyRecentHistoryRv(
+            MyViewedAnimalsRv(
                 1,
                 "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
                 "말티즈",
@@ -50,7 +50,7 @@ data class MyRecentHistoryRv(
                 "서울시 강남구",
                 false
             ),
-            MyRecentHistoryRv(
+            MyViewedAnimalsRv(
                 1,
                 "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
                 "말티즈",
