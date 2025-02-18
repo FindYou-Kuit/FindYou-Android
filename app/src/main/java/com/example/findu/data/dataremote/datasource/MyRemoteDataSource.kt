@@ -22,4 +22,6 @@ interface MyRemoteDataSource {
     ): BaseResponse<MyViewedAnimalsResponseDto>
 
     suspend fun deleteUser(): NullableBaseResponse<Unit>
+
+    suspend fun patchNickname(newNickname: String): NullableBaseResponse<Unit>
 }

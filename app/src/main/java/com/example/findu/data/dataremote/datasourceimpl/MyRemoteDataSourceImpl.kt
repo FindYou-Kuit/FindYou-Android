@@ -29,4 +29,7 @@ class MyRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun deleteUser(): NullableBaseResponse<Unit> =
         myService.deleteUser()
+
+    override suspend fun patchNickname(newNickname: String): NullableBaseResponse<Unit> =
+        myService.patchNickname(newNickname)
 }

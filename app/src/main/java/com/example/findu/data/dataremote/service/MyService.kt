@@ -5,8 +5,10 @@ import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.Query
 
 interface MyService {
@@ -29,4 +31,9 @@ interface MyService {
 
     @DELETE("/api/v1/users")
     suspend fun deleteUser(): NullableBaseResponse<Unit>
+
+    @PATCH("/api/v1/users/nickname")
+    suspend fun patchNickname(
+        @Body newNickname: String
+    ): NullableBaseResponse<Unit>
 }
