@@ -37,9 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SearchProtectingDetailActivity"
-            android:exported="false" />
+
         <activity
             android:name=".presentation.ui.report.dialog.ReportLocationActivity"
             android:exported="false" />
