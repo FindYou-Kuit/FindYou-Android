@@ -2,7 +2,6 @@ package com.example.findu.presentation.ui.report
 
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,7 +28,6 @@ import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
 import com.example.findu.presentation.type.report.ReportFeature
-import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
@@ -39,6 +38,7 @@ import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_URI
 import com.example.findu.presentation.ui.report.constants.ReportConstants.LOCATION_TAG
 import com.example.findu.presentation.ui.report.constants.ReportConstants.SCROLL_OFFSET
+import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
