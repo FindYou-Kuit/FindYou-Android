@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -81,19 +82,25 @@ class SearchAllFragment : Fragment() {
         val fragment = when (tag) {
             "보호중" -> SearchProtectingDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putLong("protecting_report_id", cardId)
+                    putLong("cardId", cardId)
+                    putString("tag", tag)
                 }
             }
+
             "목격신고" -> SearchWitnessDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putLong("report_Id", cardId)
+                    putLong("cardId", cardId)
+                    putString("tag", tag)
                 }
             }
+
             "실종신고" -> SearchDisappearDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putLong("report_Id", cardId)
+                    putLong("cardId", cardId)
+                    putString("tag", tag)
                 }
             }
+
             else -> return
         }
 
@@ -152,7 +159,8 @@ class SearchAllFragment : Fragment() {
             navigateToDetail(item.cardId, item.tag.text)
         }
         binding.rvSearchHorizontalContent.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = rvAdapter
         }
     }
@@ -183,6 +191,7 @@ class SearchAllFragment : Fragment() {
 
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding.cgSearchGroupFilters.removeAllViews()
