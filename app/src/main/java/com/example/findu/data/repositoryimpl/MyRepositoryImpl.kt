@@ -5,6 +5,7 @@ import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.my.toDomain
 import com.example.findu.domain.model.my.MyInterestData
 import com.example.findu.domain.model.my.MyReportHistoryData
+import com.example.findu.domain.model.my.MyViewedAnimalData
 import com.example.findu.domain.repository.MyRepository
 import javax.inject.Inject
 
@@ -26,5 +27,16 @@ class MyRepositoryImpl @Inject constructor(
         runCatching {
             myRemoteDataSource.getReportHistory(lastReportId = lastReportId)
                 .handleBaseResponse().getOrThrow().toDomain()
+        }
+
+    override suspend fun getMyViewedAnimals(
+        lastReportId: Long,
+        lastProtectId: Long
+    ): Result<MyViewedAnimalData> =
+        runCatching {
+            myRemoteDataSource.getViewedAnimals(
+                lastReportId = lastReportId,
+                lastProtectId = lastProtectId
+            ).handleBaseResponse().getOrThrow().toDomain()
         }
 }

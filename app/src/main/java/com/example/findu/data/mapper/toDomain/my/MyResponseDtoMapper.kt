@@ -2,8 +2,10 @@ package com.example.findu.data.mapper.todomain.my
 
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
+import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.example.findu.domain.model.my.MyInterestData
 import com.example.findu.domain.model.my.MyReportHistoryData
+import com.example.findu.domain.model.my.MyViewedAnimalData
 
 fun MyInterestResponseDto.toDomain(): MyInterestData {
     return MyInterestData(
@@ -34,6 +36,25 @@ fun MyReportHistoryResponseDto.toDomain(): MyReportHistoryData {
                 date = it.date,
                 location = it.location,
                 reportId = it.reportId,
+                tag = it.tag,
+                thumbnailImageUrl = it.thumbnailImageUrl,
+                title = it.title
+            )
+        }
+    )
+}
+
+fun MyViewedAnimalsResponseDto.toDomain(): MyViewedAnimalData {
+    return MyViewedAnimalData(
+        isLast = isLast,
+        lastViewedProtectId = lastViewedProtectId,
+        lastViewedReportId = lastViewedReportId,
+        viewedAnimals = viewedAnimals.map {
+            MyViewedAnimalData.ViewedAnimal(
+                cardId = it.cardId,
+                date = it.date,
+                interest = it.interest,
+                location = it.location,
                 tag = it.tag,
                 thumbnailImageUrl = it.thumbnailImageUrl,
                 title = it.title
