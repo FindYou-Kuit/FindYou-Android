@@ -4,14 +4,17 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!--  CameraX  -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- CameraX -->
     <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
+
+    <queries>
+        <package android:name="com.nhn.android.nmap" />
+    </queries>
 
     <application
         android:name=".FindUApp"
@@ -26,6 +29,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.splash.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".SearchProtectingDetailActivity"
             android:exported="false" />
         <activity
@@ -38,17 +50,7 @@
 
         <activity
             android:name=".presentation.ui.main.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
     </application>
-    <queries>
-        <package android:name="com.nhn.android.nmap" />
-    </queries>
-
 
 </manifest>
