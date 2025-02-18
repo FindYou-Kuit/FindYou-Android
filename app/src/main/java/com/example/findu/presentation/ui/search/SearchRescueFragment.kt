@@ -83,17 +83,20 @@ class SearchRescueFragment : Fragment() {
         val fragment = when (tag) {
             "보호중" -> SearchProtectingDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putLong("protecting_report_id", cardId)
+                    putLong("cardId", cardId)
+                    putString("tag", tag)
                 }
             }
             "목격신고" -> SearchWitnessDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putLong("report_Id", cardId)
+                    putLong("cardId", cardId)
+                    putString("tag", tag)
                 }
             }
             "실종신고" -> SearchDisappearDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putLong("report_Id", cardId)
+                    putLong("cardId", cardId)
+                    putString("tag", tag)
                 }
             }
             else -> return
