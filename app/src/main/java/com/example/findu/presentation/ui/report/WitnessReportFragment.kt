@@ -218,7 +218,6 @@ class WitnessReportFragment : Fragment() {
                 launch {
                     reportViewModel.errorMessage.collectLatest { errorMessage ->
                         errorMessage?.let {
-                            Log.e("WitnessReportFragment", it)
                             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT)
                                 .show()
                         }

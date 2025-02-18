@@ -101,7 +101,6 @@ class ReportLocationDialog(
                     launch {
                         locationViewModel.errorMessage.collectLatest { errorMessage ->
                             errorMessage?.let {
-                                Log.e("ReportLocationDialog", it)
                                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                             }
                         }
