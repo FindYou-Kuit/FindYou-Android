@@ -3,6 +3,7 @@ package com.example.findu.data.dataremote.datasource
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
+import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 
 interface MyRemoteDataSource {
     suspend fun getInterestAnimals(
@@ -13,4 +14,9 @@ interface MyRemoteDataSource {
     suspend fun getReportHistory(
         lastReportId: Long
     ): BaseResponse<MyReportHistoryResponseDto>
+
+    suspend fun getViewedAnimals(
+        lastReportId: Long,
+        lastProtectId: Long
+    ): BaseResponse<MyViewedAnimalsResponseDto>
 }
