@@ -40,6 +40,7 @@ class SearchReportFragment : Fragment() {
         observeViewModel()
         viewModel.getSearchReportData()
         initFilterButton()
+        initToggleButton()
         return binding.root
     }
 
