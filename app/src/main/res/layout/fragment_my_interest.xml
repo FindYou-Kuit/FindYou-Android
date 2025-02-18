@@ -9,6 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_keep_animals_top_container"
         android:layout_width="match_parent"
+        android:elevation="4dp"
+        android:background="@color/white"
         android:layout_height="56dp"
         app:layout_constraintTop_toTopOf="parent">
 
