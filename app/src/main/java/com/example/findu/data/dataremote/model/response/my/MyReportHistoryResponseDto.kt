@@ -9,7 +9,7 @@ data class MyReportHistoryResponseDto(
     @SerialName("isLast")
     val isLast: Boolean,
     @SerialName("lastReportId")
-    val lastReportId: Int,
+    val lastReportId: Long,
     @SerialName("reports")
     val reports: List<Report>
 ) {
@@ -20,7 +20,7 @@ data class MyReportHistoryResponseDto(
         @SerialName("location")
         val location: String,
         @SerialName("reportId")
-        val reportId: Int,
+        val reportId: Long,
         @SerialName("tag")
         val tag: String,
         @SerialName("thumbnailImageUrl")
