@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.my.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

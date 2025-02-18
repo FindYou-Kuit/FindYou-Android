@@ -80,7 +80,7 @@
         app:layout_constraintTop_toBottomOf="@id/ll_my_withdrawal_dialog_mention">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_my_withdrawal_dialog_go_history"
+            android:id="@+id/btn_my_withdrawal_dialog_withdrawal"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@drawable/bg_button_report_dialog"
@@ -89,7 +89,7 @@
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_my_withdrawal_dialog_go_home"
+            android:id="@+id/btn_my_withdrawal_dialog_cancel"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"

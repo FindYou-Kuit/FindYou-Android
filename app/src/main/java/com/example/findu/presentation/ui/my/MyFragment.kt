@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
+import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
 import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
 import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
 import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
@@ -79,6 +80,10 @@ class MyFragment : Fragment() {
                 if (hasLocationPermission(requireContext())) {
                     requestLocationPermission(requireActivity())
                 }
+            }
+
+            clMyWithdrawal.setOnClickListener {
+                MyWithdrawalDialog(requireContext()).show()
             }
         }
     }

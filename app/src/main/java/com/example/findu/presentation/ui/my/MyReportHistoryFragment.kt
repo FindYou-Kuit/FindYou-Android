@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyReportHistoryBinding
 import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.ui.my.adapter.MyReportHistoryAdapter
+import com.example.findu.presentation.ui.my.dialog.MyDeleteHistoryDialog
 
 class MyReportHistoryFragment : Fragment() {
     private var _binding: FragmentMyReportHistoryBinding? = null
@@ -20,6 +21,9 @@ class MyReportHistoryFragment : Fragment() {
     private val myReportHistoryAdapter by lazy {
         MyReportHistoryAdapter(
             onDeleteClick = { reportId ->
+                MyDeleteHistoryDialog(requireContext()) {
+//                    myViewModel.deleteReport(reportId)
+                }.show()
 //                myViewModel.deleteReport(reportId)
             },
             onItemClick = { reportId ->

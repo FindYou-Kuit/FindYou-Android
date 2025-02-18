@@ -45,7 +45,7 @@ data class MyRecentHistoryRv(
                 1,
                 "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
                 "말티즈",
-                "보호중",
+                "목격신고",
                 "2021.09.01",
                 "서울시 강남구",
                 false
@@ -54,7 +54,7 @@ data class MyRecentHistoryRv(
                 1,
                 "https://cdn.pixabay.com/photo/2024/12/27/14/58/owl-9294302_640.jpg",
                 "말티즈",
-                "보호중",
+                "실종신고",
                 "2021.09.01",
                 "서울시 강남구",
                 false
