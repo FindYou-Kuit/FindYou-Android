@@ -6,6 +6,7 @@ import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
+import com.example.findu.domain.usecase.my.PatchNickNameUseCase
 import com.example.findu.presentation.mapper.torvmodel.toRvModel
 import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.model.MyReportHistoryRv
@@ -21,7 +22,8 @@ class MyViewModel @Inject constructor(
     private val getInterestUseCase: GetInterestUseCase,
     private val getReportHistoryUseCase: GetReportHistoryUseCase,
     private val getViewedAnimalUseCase: GetViewedAnimalUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase
+    private val deleteUserUseCase: DeleteUserUseCase,
+    private val patchNickNameUseCase: PatchNickNameUseCase
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -38,6 +40,9 @@ class MyViewModel @Inject constructor(
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
+
+    private val _nickNameState = MutableStateFlow<String?>(null)
+    val nickNameState = _nickNameState.asStateFlow()
 
     fun fetchInterestAnimals() {
         viewModelScope.launch {
@@ -94,6 +99,19 @@ class MyViewModel @Inject constructor(
                 },
                 onFailure = {
                     _errorMessage.value = it.message ?: "회원 탈퇴 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    fun updateNickName(newNickName: String) {
+        _nickNameState.value = newNickName
+
+        viewModelScope.launch {
+            patchNickNameUseCase(newNickName).fold(
+                onSuccess = {},
+                onFailure = {
+                    _errorMessage.value = it.message ?: "닉네임 변경 중 오류가 발생했습니다."
                 }
             )
         }

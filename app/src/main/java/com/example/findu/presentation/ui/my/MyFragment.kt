@@ -54,7 +54,7 @@ class MyFragment : Fragment() {
                 llMyNickname.visibility = View.VISIBLE
                 llMyEditNickname.visibility = View.INVISIBLE
 
-                // patch nickname api
+                myViewModel.updateNickName(etMyNickname.text.toString())
             }
 
             etMyNickname.addTextChangedListener { text ->
@@ -133,6 +133,14 @@ class MyFragment : Fragment() {
                     myViewModel.errorMessage.collect { message ->
                         message?.let {
                             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                launch {
+                    myViewModel.nickNameState.collect { nickName ->
+                        nickName?.let {
+                            binding.tvMyNickname.text = nickName
                         }
                     }
                 }
