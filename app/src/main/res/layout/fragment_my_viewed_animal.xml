@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="최근 본 동물"
+            android:text="@string/my_viewed_animal_title"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
