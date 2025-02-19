@@ -23,6 +23,7 @@ import com.example.findu.presentation.ui.search.model.DetailSearchRv
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
 import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
+import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -107,6 +108,18 @@ class SearchDisappearDetailFragment : Fragment() {
             initTagView(data)
             initBookmarkUI(data)
             initMapButtons(data)
+            initFeatureChips(data.features)
+        }
+    }
+
+    private fun initFeatureChips(features: List<String>) {
+        val chipGroup = binding.cgSearchGroupFeature
+        chipGroup.removeAllViews()
+
+        features.forEach { feature ->
+            val chip = layoutInflater.inflate(R.layout.item_search_features_chip, chipGroup, false) as Chip
+            chip.text = feature
+            chipGroup.addView(chip)
         }
     }
 

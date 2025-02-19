@@ -18,9 +18,8 @@ import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailWitnessBinding
 import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.presentation.ui.search.model.DetailSearchRv
-import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
+import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -105,6 +104,18 @@ class SearchWitnessDetailFragment : Fragment() {
             initTagView(data)
             initBookmarkUI(data)
             initMapButtons(data)
+            initFeatureChips(data.features)
+        }
+    }
+
+    private fun initFeatureChips(features: List<String>) {
+        val chipGroup = binding.cgSearchGroupFeature
+        chipGroup.removeAllViews()
+
+        features.forEach { feature ->
+            val chip = layoutInflater.inflate(R.layout.item_search_features_chip, chipGroup, false) as Chip
+            chip.text = feature
+            chipGroup.addView(chip)
         }
     }
 
