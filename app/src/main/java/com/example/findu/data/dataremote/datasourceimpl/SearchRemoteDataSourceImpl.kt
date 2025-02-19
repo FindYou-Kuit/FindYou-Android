@@ -8,21 +8,58 @@ import retrofit2.http.Query
 import javax.inject.Inject
 
 class SearchRemoteDataSourceImpl @Inject constructor(
-private val service: SearchService
+    private val service: SearchService
 ) : SearchRemoteDataSource {
     override suspend fun getSearchAll(
-        @Query("lastProtectId") lastProtectId: Long,
-        @Query("lastReportId") lastReportId: Long
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?,
+        lastProtectId: Long,
+        lastReportId: Long
     ): BaseResponse<SearchResponseDto> =
-        service.getSearchAll(lastProtectId, lastReportId)
+        service.getSearchAll(
+            startDate = startDate,
+            endDate = endDate,
+            species = species,
+            breeds = breeds,
+            location = location,
+            lastProtectId = lastProtectId,
+            lastReportId = lastReportId
+        )
 
     override suspend fun getSearchReport(
-        @Query("lastReportId") lastReportId: Long
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?,
+        lastReportId: Long
     ): BaseResponse<SearchResponseDto> =
-        service.getSearchReport(lastReportId)
+        service.getSearchReport(
+            startDate = startDate,
+            endDate = endDate,
+            species = species,
+            breeds = breeds,
+            location = location,
+            lastReportId = lastReportId
+        )
 
     override suspend fun getSearchProtect(
-        @Query("lastProtectId") lastProtectId: Long
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?,
+        lastProtectId: Long
     ): BaseResponse<SearchResponseDto> =
-        service.getSearchProtect(lastProtectId)
+        service.getSearchProtect(
+            startDate = startDate,
+            endDate = endDate,
+            species = species,
+            breeds = breeds,
+            location = location,
+            lastProtectId = lastProtectId
+        )
 }

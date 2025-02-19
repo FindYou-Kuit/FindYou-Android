@@ -6,15 +6,30 @@ import retrofit2.http.Query
 
 interface SearchRemoteDataSource {
     suspend fun getSearchAll(
-        @Query("lastProtectId") lastProtectId: Long = Long.MAX_VALUE,
-        @Query("lastReportId") lastReportId: Long = Long.MAX_VALUE
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?,
+        lastProtectId: Long = Long.MAX_VALUE,
+        lastReportId: Long = Long.MAX_VALUE
     ): BaseResponse<SearchResponseDto>
 
     suspend fun getSearchReport(
-        @Query("lastReportId") lastReportId: Long = Long.MAX_VALUE
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?, 
+        lastReportId: Long = Long.MAX_VALUE
     ): BaseResponse<SearchResponseDto>
 
     suspend fun getSearchProtect(
-        @Query("lastProtectId") lastProtectId: Long = Long.MAX_VALUE
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?,
+        lastProtectId: Long = Long.MAX_VALUE
     ): BaseResponse<SearchResponseDto>
 }
