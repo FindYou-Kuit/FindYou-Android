@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.search
+package com.example.findu.presentation.ui.search.tablayout
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,9 +14,13 @@ import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchData
+import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
+import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
+import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
+import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchRv
-import com.example.findu.presentation.ui.search.model.SearchRvTag
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +30,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SearchRescueFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchRescueBinding
+    private var _binding: FragmentSearchRescueBinding? = null
+    private val binding get() = _binding!!
+
     private var items = ArrayList<SearchRv>()
     private lateinit var rvAdapter: SearchContentRVAdapter
     private var isGridMode = false
@@ -36,8 +42,8 @@ class SearchRescueFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSearchRescueBinding.inflate(layoutInflater)
+    ): View {
+        _binding = FragmentSearchRescueBinding.inflate(layoutInflater)
         initRVAdapter()
         observeViewModel()
         viewModel.getSearchProtectData()
@@ -79,7 +85,7 @@ class SearchRescueFragment : Fragment() {
         rvAdapter.updateData(searchList)
     }
 
-    private fun navigateToDetail(cardId: Long, tag: String, name:String) {
+    private fun navigateToDetail(cardId: Long, tag: String, name: String) {
         val fragment = when (tag) {
             "보호중" -> SearchProtectingDetailFragment().apply {
                 arguments = Bundle().apply {
@@ -88,6 +94,7 @@ class SearchRescueFragment : Fragment() {
                     putString("name", name)
                 }
             }
+
             "목격신고" -> SearchWitnessDetailFragment().apply {
                 arguments = Bundle().apply {
                     putLong("cardId", cardId)
@@ -95,6 +102,7 @@ class SearchRescueFragment : Fragment() {
                     putString("name", name)
                 }
             }
+
             "실종신고" -> SearchDisappearDetailFragment().apply {
                 arguments = Bundle().apply {
                     putLong("cardId", cardId)
@@ -102,6 +110,7 @@ class SearchRescueFragment : Fragment() {
                     putString("name", name)
                 }
             }
+
             else -> return
         }
 
@@ -117,11 +126,11 @@ class SearchRescueFragment : Fragment() {
             val selectedFilters =
                 bundle.getStringArrayList("selectedFilters") ?: return@setFragmentResultListener
 
-            binding.cgSearchGroupFilters.removeAllViews()
+            binding.cgSearchRescueGroupFilters.removeAllViews()
             updateFilterChips(selectedFilters)
 
         }
-        val chipGroup = binding.cgSearchGroupFilters
+        val chipGroup = binding.cgSearchRescueGroupFilters
         for (i in 0 until chipGroup.childCount) {
             val chip = chipGroup.getChildAt(i) as? Chip
             chip?.setOnCloseIconClickListener {
@@ -131,7 +140,7 @@ class SearchRescueFragment : Fragment() {
     }
 
     private fun updateFilterChips(filters: List<String>?) {
-        val chipGroup = binding.cgSearchGroupFilters
+        val chipGroup = binding.cgSearchRescueGroupFilters
         chipGroup.removeAllViews()
 
         if (filters.isNullOrEmpty() || filters.all { it.isBlank() }) {
@@ -149,7 +158,7 @@ class SearchRescueFragment : Fragment() {
     }
 
     private fun initFilterButton() {
-        binding.ibSearchFilter.setOnClickListener {
+        binding.ibSearchRescueFilter.setOnClickListener {
             val bottomSheet = SearchFilterBottomSheet()
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
@@ -159,8 +168,8 @@ class SearchRescueFragment : Fragment() {
         rvAdapter = SearchContentRVAdapter(items) { item ->
             navigateToDetail(item.cardId, item.tag.text, item.name)
         }
-        binding.rvSearchHorizontalContent.adapter = rvAdapter
-        binding.rvSearchHorizontalContent.layoutManager =
+        binding.rvSearchRescueHorizontalContent.adapter = rvAdapter
+        binding.rvSearchRescueHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
@@ -177,7 +186,7 @@ class SearchRescueFragment : Fragment() {
     }
 
     private fun initToggleButton() {
-        binding.ibSearchHorizontalSort.setOnClickListener {
+        binding.ibSearchRescueHorizontalSort.setOnClickListener {
             toggleLayoutMode()
         }
     }
@@ -186,26 +195,28 @@ class SearchRescueFragment : Fragment() {
         isGridMode = !isGridMode
 
         if (isGridMode) {
-            while (binding.rvSearchHorizontalContent.itemDecorationCount > 0) {
-                binding.rvSearchHorizontalContent.removeItemDecorationAt(0)
+            while (binding.rvSearchRescueHorizontalContent.itemDecorationCount > 0) {
+                binding.rvSearchRescueHorizontalContent.removeItemDecorationAt(0)
             }
 
-            binding.rvSearchHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
-            binding.rvSearchHorizontalContent.layoutManager = GridLayoutManager(requireContext(), 2)
+            binding.rvSearchRescueHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
+            binding.rvSearchRescueHorizontalContent.layoutManager =
+                GridLayoutManager(requireContext(), 2)
             rvAdapter.setGridMode(true)
-            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
+            binding.ibSearchRescueHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
 
         } else {
-            binding.rvSearchHorizontalContent.layoutManager =
+            binding.rvSearchRescueHorizontalContent.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rvAdapter.setGridMode(false)
-            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
+            binding.ibSearchRescueHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.cgSearchGroupFilters.removeAllViews()
+        binding.cgSearchRescueGroupFilters.removeAllViews()
+        _binding = null
     }
 
 }

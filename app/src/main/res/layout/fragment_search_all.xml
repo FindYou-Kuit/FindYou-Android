@@ -5,7 +5,7 @@
     android:id="@+id/fragment_search_all_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.search.SearchAllFragment">
+    tools:context=".presentation.ui.search.tablayout.SearchAllFragment">
 
     <HorizontalScrollView
         android:id="@+id/hs_search_all_filters"
