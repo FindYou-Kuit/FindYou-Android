@@ -7,18 +7,55 @@ class GetSearchUseCase(
     private val searchRepository: SearchRepository
 ) {
     suspend fun getAllData(
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?,
         lastProtectId: Long = Long.MAX_VALUE,
         lastReportId: Long = Long.MAX_VALUE
     ): Result<List<SearchData>> =
-        searchRepository.getSearchAll(lastProtectId, lastReportId)
+        searchRepository.getSearchAll(
+            startDate = startDate,
+            endDate = endDate,
+            species = species,
+            breeds = breeds,
+            location = location,
+            lastProtectId = lastProtectId,
+            lastReportId = lastReportId
+        )
 
     suspend fun getProtectData(
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?,
         lastProtectId: Long = Long.MAX_VALUE
     ): Result<List<SearchData>> =
-        searchRepository.getSearchProtect(lastProtectId)
+        searchRepository.getSearchProtect(
+            startDate = startDate,
+            endDate = endDate,
+            species = species,
+            breeds = breeds,
+            location = location,
+            lastProtectId = lastProtectId,
+        )
 
     suspend fun getReportData(
+        startDate: String?,
+        endDate: String?,
+        species: String?,
+        breeds: String?,
+        location: String?,
         lastReportId: Long = Long.MAX_VALUE
     ): Result<List<SearchData>> =
-        searchRepository.getSearchReport(lastReportId)
+        searchRepository.getSearchReport(
+            startDate = startDate,
+            endDate = endDate,
+            species = species,
+            breeds = breeds,
+            location = location,
+            lastReportId = lastReportId
+        )
 }

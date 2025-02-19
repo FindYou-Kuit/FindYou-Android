@@ -27,8 +27,8 @@ class SearchRepositoryImpl @Inject constructor(
                     species = species,
                     breeds = breeds,
                     location = location,
-                    lastProtectId,
-                    lastReportId
+                    lastProtectId = lastProtectId,
+                    lastReportId = lastReportId
                 ).handleBaseResponse().getOrThrow().toDomain()
             )
         }
