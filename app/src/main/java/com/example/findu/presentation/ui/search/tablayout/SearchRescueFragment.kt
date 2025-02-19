@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchRescueBinding
@@ -137,6 +138,27 @@ class SearchRescueFragment : Fragment() {
                 chipGroup.removeView(chip)
             }
         }
+
+        binding.rvSearchRescueHorizontalContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                when {
+                    firstVisibleItemPosition == 0 -> {
+                        binding.hsSearchRescueFilters.elevation = 0f
+                    }
+                    else -> {
+                        binding.hsSearchRescueFilters.elevation = 8f
+                    }
+                }
+            }
+        })
+
     }
 
     private fun updateFilterChips(filters: List<String>?) {

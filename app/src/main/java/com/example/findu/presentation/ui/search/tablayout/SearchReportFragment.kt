@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchReportBinding
@@ -66,6 +67,26 @@ class SearchReportFragment : Fragment() {
                 chipGroup.removeView(chip)
             }
         }
+
+        binding.rvSearchHorizontalContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                when {
+                    firstVisibleItemPosition == 0 -> {
+                        binding.hsSearchReportFilters.elevation = 0f
+                    }
+                    else -> {
+                        binding.hsSearchReportFilters.elevation = 8f
+                    }
+                }
+            }
+        })
     }
 
 
