@@ -36,7 +36,7 @@ class ReportRepositoryImpl @Inject constructor(
     ): Result<GptData> =
         runCatching {
             val request = GptRequestDto().apply {
-                imageContent.imageUrl = ImageUrl(url = "https://cdn.pixabay.com/photo/2019/08/26/06/26/black-dog-4430892_640.jpg")
+                imageContent.imageUrl = ImageUrl(encodeString)
                 textContent.text = getPromptText(
                     dogList = dogList,
                     catList = catList,
