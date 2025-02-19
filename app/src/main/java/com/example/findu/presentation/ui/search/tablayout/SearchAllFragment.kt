@@ -231,6 +231,9 @@ class SearchAllFragment : Fragment() {
             chip.text = location
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
+                viewModel.updateAllFilterState(
+                    viewModel.reportFilter?.copy(location = null)
+                )
             }
             chipGroup.addView(chip)
         }

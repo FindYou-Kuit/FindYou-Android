@@ -3,35 +3,53 @@ package com.example.findu.presentation.ui.search
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
+import android.widget.MultiAutoCompleteTextView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.archit.calendardaterangepicker.customviews.CalendarListener
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.adapter.SearchFilterBreedRVAdapter
+import com.example.findu.presentation.ui.search.adapter.SearchBreedAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
 import com.example.findu.presentation.ui.search.model.LocationData
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
+import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
+import com.example.findu.presentation.util.ViewUtils.dpToPx
+import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.Chip
+import com.google.android.material.shape.CornerFamily
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.util.Calendar
 
+@AndroidEntryPoint
 class SearchFilterBottomSheet : BottomSheetDialogFragment() {
 
     lateinit var binding: FragmentSearchFilterBottomSheetBinding
-    private lateinit var breedAdapter: SearchFilterBreedRVAdapter
     private lateinit var cityAdapter: SearchFilterLocationRVAdapter
     private lateinit var districtAdapter: SearchFilterLocationRVAdapter
 
+    private val viewModel by viewModels<SearchViewModel>()
+
+//    private val breedAdapter: SearchBreedAdapter by lazy {
+//        SearchBreedAdapter(
+//            requireContext(),
+//            reportViewModel.selectedBreedList.value.toMutableList()
+//        )
+//    }
+
+    private var selectedBreedList = mutableListOf<String>()
     private var selectedStartDate: String? = null
     private var selectedEndDate: String? = null
     private var selectedSpecies: String? = null
 
     private val breedList =
         listOf("리트리버", "말티즈", "불독", "사모예드", "시츄", "요크셔 테리어", "치와와", "포메라니안", "웰시코기")
-    private val selectedBreeds = mutableListOf<String>()
 
     private val cityList =
         listOf(
@@ -67,7 +85,8 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         binding = FragmentSearchFilterBottomSheetBinding.inflate(inflater, container, false)
         initListeners()
         setCalender()
-        setBreedSelector()
+//        setBreedSelector()
+        setUpBreedsAdapter()
         setLocationSelector()
         return binding.root
     }
@@ -107,13 +126,13 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         filterUiModel.endDate = selectedEndDate
 
         filterUiModel.species = selectedSpecies
-        filterUiModel.breeds = selectedBreeds
+        filterUiModel.breeds = selectedBreedList
 
         val location = selectedCity?.let { city ->
             city + selectedDistrict?.let { district ->
                 " $district"
             }
-        }?: ""
+        } ?: ""
 
         filterUiModel.location = location
         bundle.putSerializable(SELECTED_FILTER_DATA, filterUiModel)
@@ -194,23 +213,80 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         binding.actvSearchFilterDistrict.setBackgroundResource(R.drawable.bg_search_radius_8)
     }
 
-    private fun setBreedSelector() {
-        breedAdapter =
-            SearchFilterBreedRVAdapter(breedList, selectedBreeds) { updateSelectedBreeds() }
-        binding.rvSearchFilterBreeds.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvSearchFilterBreeds.adapter = breedAdapter
+    private fun setUpBreedsAdapter() {
+        val searchBreedAdapter = SearchBreedAdapter(requireContext(), breedList.toMutableList())
 
-        binding.actvSearchFilterBreed.setOnClickListener {
-            toggleRecyclerViewVisibility(
-                binding.rvSearchFilterBreeds,
-                binding.actvSearchFilterBreed
-            )
+        with(binding.actvSearchFilterBreed) {
+            setAdapter(searchBreedAdapter)
+            setDropDownBackgroundResource(R.drawable.bg_top_radius_8_g4)
+            setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+            setOnClickListener {
+//                dropDownHeight =
+//                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+//                        ViewGroup.LayoutParams.WRAP_CONTENT
+//                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
+            }
+            setOnItemClickListener { _, _, _, _ ->
+//                reportViewModel.updateReportData(
+//                    breedName = text.toString()
+//                )
+                requireContext().hideKeyboard(windowToken)
+                updateSelectedBreeds(text.toString())
+                clearFocus()
+            }
+            setOnTouchListener { _, _ ->
+                showDropDown()
+                true
+            }
+            addTextChangedListener { text ->
+//                reportViewModel.selectedBreedList.value
+//                    .filter { it.contains(text.toString()) }
+//                    .let { matches ->
+//                        dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
+//                            requireContext().dpToPx(DROP_DOWN_HEIGHT)
+//                        } else ViewGroup.LayoutParams.WRAP_CONTENT
+//                    }
+            }
+            setOnFocusChangeListener { _, hasFocus ->
+//                dropDownHeight =
+//                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+//                        ViewGroup.LayoutParams.WRAP_CONTENT
+//                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                if (hasFocus) {
+                    showDropDown()
+                }
+            }
         }
     }
 
+    private fun updateSelectedBreeds(breeds: String) {
+        selectedBreedList = breeds.split(", ").dropLast(1).toSet().toMutableList()
+        binding.tvSearchFilterBreedCount.text = getString(
+            R.string.search_bottom_sheet_breed_count,
+            selectedBreedList.size
+        )
 
-    private fun updateSelectedBreeds() {
-        binding.actvSearchFilterBreed.setText(selectedBreeds.joinToString(", "))
+        val chipGroup = binding.cgSearchFilterFeatures
+        chipGroup.removeAllViews()
+        selectedBreedList.forEach { breed ->
+            val chip = Chip(requireContext()).apply {
+                text = breed
+                chipBackgroundColor =
+                    ContextCompat.getColorStateList(requireContext(), R.color.main_color2)
+                chipStrokeColor =
+                    ContextCompat.getColorStateList(requireContext(), R.color.main_color2)
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.main_color))
+                chipMinHeight = requireContext().dpToPx(34).toFloat()
+                closeIconSize = requireContext().dpToPx(8).toFloat()
+                setPadding(requireContext().dpToPx(14), 0, requireContext().dpToPx(14), 0)
+                shapeAppearanceModel = shapeAppearanceModel.toBuilder()
+                    .setAllCorners(CornerFamily.ROUNDED, 50f)
+                    .build()
+
+            }
+            chipGroup.addView(chip)
+        }
+
     }
 
     private fun setCalender() {
@@ -294,7 +370,5 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                     }"
             }
         })
-
     }
-
 }

@@ -207,7 +207,7 @@ class SearchRescueFragment : Fragment() {
             chip.text = breed
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
-                viewModel.updateReportFilterState(
+                viewModel.updateProtectFilterState(
                     viewModel.protectFilter?.copy(
                         breeds = viewModel.protectFilter?.breeds?.filter { it != breed }
                     )
@@ -223,7 +223,7 @@ class SearchRescueFragment : Fragment() {
             chip.text = location
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
-                viewModel.updateReportFilterState(
+                viewModel.updateProtectFilterState(
                     viewModel.protectFilter?.copy(location = null)
                 )
             }
