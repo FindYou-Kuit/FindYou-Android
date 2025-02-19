@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.usecase.GetSearchUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import com.example.findu.presentation.mapper.todomain.toDomain
@@ -20,7 +22,9 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val getSearchUseCase: GetSearchUseCase,
     private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
-    private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase
+    private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
+    private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
+    private val deleteInterestReportAnimalUseCase: DeleteInterestReportAnimalUseCase
 ) : ViewModel() {
 
     private var _allFilter: SearchFilterUiModel? = SearchFilterUiModel()
@@ -168,14 +172,18 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             if (isInterest) {
                 postInterestProtectingAnimalUseCase(id).fold(
-                    onSuccess = {
-                        Log.d("SearchViewModel", "postProtectInterest: $it")
-                    },
+                    onSuccess = {},
                     onFailure = {
                         _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
                     }
                 )
             } else {
+                deleteInterestProtectingAnimalUseCase(id).fold(
+                    onSuccess = {},
+                    onFailure = {
+                        _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."
+                    }
+                )
             }
         }
     }
@@ -184,14 +192,18 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             if (isInterest) {
                 postInterestReportAnimalUseCase(id).fold(
-                    onSuccess = {
-                        Log.d("SearchViewModel", "postReportInterest: $it")
-                    },
+                    onSuccess = {},
                     onFailure = {
                         _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
                     }
                 )
             } else {
+                deleteInterestReportAnimalUseCase(id).fold(
+                    onSuccess = {},
+                    onFailure = {
+                        _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."
+                    }
+                )
             }
         }
     }
