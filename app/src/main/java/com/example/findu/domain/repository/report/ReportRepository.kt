@@ -8,7 +8,12 @@ import com.example.findu.domain.model.report.WitnessReportData
 import okhttp3.MultipartBody
 
 interface ReportRepository {
-    suspend fun postImageAnalysis(encodeString: String): Result<GptData>
+    suspend fun postImageAnalysis(
+        dogList: List<String>,
+        catList: List<String>,
+        etcList: List<String>,
+        encodeString: String
+    ): Result<GptData>
 
     suspend fun uploadImages(files: List<MultipartBody.Part>): Result<List<String>>
 

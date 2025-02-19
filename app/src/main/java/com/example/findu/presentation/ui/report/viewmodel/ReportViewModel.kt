@@ -134,7 +134,12 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             _gptUiState.value = GptUiState.Loading
             imageUri.uriToBase64(context)?.let { encodeString ->
-                analysisImageWithGptUseCase(encodeString).fold(
+                analysisImageWithGptUseCase(
+                    breedData.value!!.dogBreedList.map { it.breedName },
+                    breedData.value!!.catBreedList.map { it.breedName },
+                    breedData.value!!.etcBreedList.map { it.breedName },
+                    encodeString
+                ).fold(
                     onSuccess = { value ->
                         getBreedValidation(value)
                     },
