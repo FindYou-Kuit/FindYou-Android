@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +32,11 @@ class ReportImageAdapter(
             )
 
             binding.root.setOnClickListener {
-                onUploadClickListener()
+                if (currentList.size < 6) {
+                    onUploadClickListener()
+                } else {
+                    Toast.makeText(context, "최대 5장까지 업로드 가능합니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
