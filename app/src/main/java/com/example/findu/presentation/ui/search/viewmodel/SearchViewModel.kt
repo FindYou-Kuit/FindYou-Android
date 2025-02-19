@@ -1,11 +1,14 @@
 package com.example.findu.presentation.ui.search.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.usecase.GetSearchUseCase
 import com.example.findu.presentation.mapper.todomain.toDomain
 import com.example.findu.presentation.model.SearchFilters
+import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
+import com.example.findu.presentation.ui.search.model.toSearchFilters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -92,82 +95,34 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateAllFilterState(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: List<String>?,
-        location: String?,
+        searchFilters: SearchFilterUiModel?
     ) {
-        val speciesType = when (species) {
-            "개" -> "강아지"
-            "고양이" -> "고양이"
-            "기타" -> "기타"
-            else -> null
-        }
-
-        val newAllFilter = SearchFilters(
-            startDate = startDate ?: _allFilter?.startDate,
-            endDate = endDate ?: _allFilter?.endDate,
-            species = speciesType ?: _allFilter?.species,
-            breeds = breeds ?: _allFilter?.breeds,
-            location = location ?: _allFilter?.location
-        )
+        val newAllFilter = searchFilters?.toSearchFilters() ?: SearchFilters()
         if (newAllFilter != _allFilter) {
             _allFilter = newAllFilter
+            Log.d("SearchViewModel", "updateAllFilterState: $newAllFilter")
             getSearchAllData()
         }
     }
 
     fun updateReportFilterState(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: List<String>?,
-        location: String?,
+        searchFilters: SearchFilterUiModel?
     ) {
-        val speciesType = when (species) {
-            "개" -> "강아지"
-            "고양이" -> "고양이"
-            "기타" -> "기타"
-            else -> null
-        }
-
-        val newReportFilter = SearchFilters(
-            startDate = startDate ?: _reportFilter?.startDate,
-            endDate = endDate ?: _reportFilter?.endDate,
-            species = speciesType ?: _reportFilter?.species,
-            breeds = breeds ?: _reportFilter?.breeds,
-            location = location ?: _reportFilter?.location
-        )
+        val newReportFilter = searchFilters?.toSearchFilters() ?: SearchFilters()
         if (newReportFilter != _reportFilter) {
             _reportFilter = newReportFilter
+            Log.d("SearchViewModel", "updateReportFilterState: $newReportFilter")
             getSearchReportData()
         }
     }
 
     fun updateProtectFilterState(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: List<String>?,
-        location: String?,
+        searchFilters: SearchFilterUiModel?
     ) {
-        val speciesType = when (species) {
-            "개" -> "강아지"
-            "고양이" -> "고양이"
-            "기타" -> "기타"
-            else -> null
-        }
-        val newProtectFilter = SearchFilters(
-            startDate = startDate ?: _protectFilter?.startDate,
-            endDate = endDate ?: _protectFilter?.endDate,
-            species = speciesType ?: _protectFilter?.species,
-            breeds = breeds ?: _protectFilter?.breeds,
-            location = location ?: _protectFilter?.location
-        )
-
+        val newProtectFilter = searchFilters?.toSearchFilters() ?: SearchFilters()
         if (newProtectFilter != _protectFilter) {
             _protectFilter = newProtectFilter
+            Log.d("SearchViewModel", "updateProtectFilterState: $newProtectFilter")
             getSearchProtectData()
         }
     }

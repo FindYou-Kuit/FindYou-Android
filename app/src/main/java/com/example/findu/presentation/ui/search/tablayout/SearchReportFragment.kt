@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.search.tablayout
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,11 +16,14 @@ import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchReportBinding
 import com.example.findu.domain.model.search.SearchData
+import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
+import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
+import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import com.google.android.material.chip.Chip
@@ -52,35 +56,31 @@ class SearchReportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        childFragmentManager.setFragmentResultListener("filterResults", this) { _, bundle ->
-            val selectedFilters =
-                bundle.getStringArrayList("selectedFilters") ?: return@setFragmentResultListener
+        childFragmentManager.setFragmentResultListener(FILTER_RESULTS, this) { _, bundle ->
+
             binding.cgSearchReportGroupFilters.removeAllViews()
-
-            updateFilterChips(selectedFilters)
-
-        }
-        val chipGroup = binding.cgSearchReportGroupFilters
-        for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as? Chip
-            chip?.setOnCloseIconClickListener {
-                chipGroup.removeView(chip)
-            }
+            val filterUiModel: SearchFilterUiModel? =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
+                } else {
+                    bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
+                }
+            updateFilterChips(filterUiModel)
         }
 
-        binding.rvSearchHorizontalContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.rvSearchHorizontalContent.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                val totalItemCount = layoutManager.itemCount
 
                 when {
                     firstVisibleItemPosition == 0 -> {
                         binding.hsSearchReportFilters.elevation = 0f
                     }
+
                     else -> {
                         binding.hsSearchReportFilters.elevation = 8f
                     }
@@ -92,7 +92,7 @@ class SearchReportFragment : Fragment() {
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.searchData.collectLatest { searchResults ->
+            viewModel.reportSearchData.collectLatest { searchResults ->
                 setupRV(searchResults ?: emptyList())
             }
         }
@@ -121,6 +121,7 @@ class SearchReportFragment : Fragment() {
             }
         }
         rvAdapter.updateData(searchList)
+        binding.rvSearchHorizontalContent.scrollToPosition(0)
     }
 
     private fun navigateToDetail(cardId: Long, tag: String, name: String) {
@@ -151,17 +152,40 @@ class SearchReportFragment : Fragment() {
     }
 
 
-    private fun updateFilterChips(filters: List<String>?) {
+    private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchReportGroupFilters
         chipGroup.removeAllViews()
+        viewModel.updateAllFilterState(filters)
 
-        if (filters.isNullOrEmpty() || filters.all { it.isBlank() }) {
-            return
-        }
-        filters.forEach { filterText ->
+        if (filters == null) return
+
+        filters.species?.let { species ->
+            if (species.isEmpty()) return
             val chip =
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
-            chip.text = filterText
+
+            chip.text = if (species == "개") "강아지" else species
+            chip.setOnCloseIconClickListener {
+                chipGroup.removeView(chip)
+            }
+            chipGroup.addView(chip)
+        }
+
+        filters.breeds?.forEach { breed ->
+            val chip =
+                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
+            chip.text = breed
+            chip.setOnCloseIconClickListener {
+                chipGroup.removeView(chip)
+            }
+            chipGroup.addView(chip)
+        }
+
+        filters.location?.let { location ->
+            if (location.isEmpty()) return
+            val chip =
+                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
+            chip.text = location
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
             }

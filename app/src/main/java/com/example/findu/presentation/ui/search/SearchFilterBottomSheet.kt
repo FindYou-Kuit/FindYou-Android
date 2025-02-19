@@ -7,9 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.archit.calendardaterangepicker.customviews.CalendarListener
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
+import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
+import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.adapter.SearchFilterBreedRVAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
 import com.example.findu.presentation.ui.search.model.LocationData
+import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -20,6 +23,10 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     private lateinit var breedAdapter: SearchFilterBreedRVAdapter
     private lateinit var cityAdapter: SearchFilterLocationRVAdapter
     private lateinit var districtAdapter: SearchFilterLocationRVAdapter
+
+    private var selectedStartDate: String? = null
+    private var selectedEndDate: String? = null
+    private var selectedSpecies: String? = null
 
     private val breedList =
         listOf("리트리버", "말티즈", "불독", "사모예드", "시츄", "요크셔 테리어", "치와와", "포메라니안", "웰시코기")
@@ -67,31 +74,50 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     private fun initListeners() {
         binding.ivSearchFilterCloseBtn.setOnClickListener { dismiss() }
         binding.btnSearchFilterConfirm.setOnClickListener { applyFilters() }
+
+        binding.rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rb_dog -> {
+                    selectedSpecies = "개"
+                }
+
+                R.id.rb_cat -> {
+                    selectedSpecies = "고양이"
+                }
+
+                R.id.rb_etc -> {
+                    selectedSpecies = "기타"
+                }
+            }
+        }
     }
 
     private fun applyFilters() {
-        val filterList = mutableListOf<String>()
 
-        if (filterList.contains("null"))
-            filterList.remove("null")
+        val bundle = Bundle()
+        val filterUiModel = SearchFilterUiModel(
+            startDate = null,
+            endDate = null,
+            species = null,
+            breeds = null,
+            location = null
+        )
+        filterUiModel.startDate = selectedStartDate
+        filterUiModel.endDate = selectedEndDate
 
-        if (selectedBreeds.isNotEmpty()) {
-            filterList.addAll(selectedBreeds)
-        }
+        filterUiModel.species = selectedSpecies
+        filterUiModel.breeds = selectedBreeds
 
-        selectedCity?.let { if (it.isNotEmpty()) filterList.add(it) }
-        selectedDistrict?.let { if (it.isNotEmpty()) filterList.add(it) }
+        val location = selectedCity?.let { city ->
+            city + selectedDistrict?.let { district ->
+                " $district"
+            }
+        }?: ""
 
-        if (filterList.isEmpty()) {
-            dismiss()
-            return
-        }
+        filterUiModel.location = location
+        bundle.putSerializable(SELECTED_FILTER_DATA, filterUiModel)
 
-        val bundle = Bundle().apply {
-            putStringArrayList("selectedFilters", ArrayList(filterList))
-        }
-        parentFragmentManager.setFragmentResult("filterResults", bundle)
-
+        parentFragmentManager.setFragmentResult(FILTER_RESULTS, bundle)
         dismiss()
     }
 
@@ -252,7 +278,14 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                         R.color.gray6
                     )
                 )
-                binding.cvSearchFilterCalender.visibility = View.GONE
+                selectedStartDate =
+                    "${startDate.get(Calendar.YEAR)}-${startDate.get(Calendar.MONTH) + 1}-${
+                        startDate.get(Calendar.DAY_OF_MONTH)
+                    }"
+                selectedEndDate =
+                    "${endDate.get(Calendar.YEAR)}-${endDate.get(Calendar.MONTH) + 1}-${
+                        endDate.get(Calendar.DAY_OF_MONTH)
+                    }"
             }
         })
 
