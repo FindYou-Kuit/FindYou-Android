@@ -1,33 +1,22 @@
 package com.example.findu.domain.repository
 
 import com.example.findu.domain.model.search.SearchData
+import com.example.findu.domain.model.search.SearchFilterData
 
 interface SearchRepository {
     suspend fun getSearchAll(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: String?,
-        location: String?,
+        searchFilterData: SearchFilterData?,
         lastProtectId: Long = Long.MAX_VALUE,
         lastReportId: Long = Long.MAX_VALUE
     ): Result<List<SearchData>>
 
     suspend fun getSearchReport(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: String?,
-        location: String?,
+        searchFilterData: SearchFilterData?,
         lastReportId: Long = Long.MAX_VALUE
     ): Result<List<SearchData>>
 
     suspend fun getSearchProtect(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: String?,
-        location: String?,
+        searchFilterData: SearchFilterData?,
         lastProtectId: Long = Long.MAX_VALUE
     ): Result<List<SearchData>>
 }

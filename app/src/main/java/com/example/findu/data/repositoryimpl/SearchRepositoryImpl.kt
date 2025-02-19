@@ -4,6 +4,7 @@ import com.example.findu.data.dataremote.datasource.SearchRemoteDataSource
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.toDomain
 import com.example.findu.domain.model.search.SearchData
+import com.example.findu.domain.model.search.SearchFilterData
 import com.example.findu.domain.repository.SearchRepository
 import javax.inject.Inject
 
@@ -11,22 +12,14 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchRemoteDataSource: SearchRemoteDataSource
 ) : SearchRepository {
     override suspend fun getSearchAll(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: String?,
-        location: String?,
+        searchFilterData: SearchFilterData?,
         lastProtectId: Long,
         lastReportId: Long
     ): Result<List<SearchData>> =
         runCatching {
             listOf(
                 searchRemoteDataSource.getSearchAll(
-                    startDate = startDate,
-                    endDate = endDate,
-                    species = species,
-                    breeds = breeds,
-                    location = location,
+                    searchFilterData = searchFilterData,
                     lastProtectId = lastProtectId,
                     lastReportId = lastReportId
                 ).handleBaseResponse().getOrThrow().toDomain()
@@ -34,21 +27,13 @@ class SearchRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getSearchReport(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: String?,
-        location: String?,
+        searchFilterData: SearchFilterData?,
         lastReportId: Long
     ): Result<List<SearchData>> =
         runCatching {
             listOf(
                 searchRemoteDataSource.getSearchReport(
-                    startDate = startDate,
-                    endDate = endDate,
-                    species = species,
-                    breeds = breeds,
-                    location = location,
+                    searchFilterData = searchFilterData,
                     lastReportId = lastReportId
                 ).handleBaseResponse()
                     .getOrThrow().toDomain()
@@ -56,21 +41,13 @@ class SearchRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getSearchProtect(
-        startDate: String?,
-        endDate: String?,
-        species: String?,
-        breeds: String?,
-        location: String?,
+        searchFilterData: SearchFilterData?,
         lastProtectId: Long
     ): Result<List<SearchData>> =
         runCatching {
             listOf(
                 searchRemoteDataSource.getSearchProtect(
-                    startDate = startDate,
-                    endDate = endDate,
-                    species = species,
-                    breeds = breeds,
-                    location = location,
+                    searchFilterData = searchFilterData,
                     lastProtectId = lastProtectId
                 ).handleBaseResponse()
                     .getOrThrow().toDomain()
