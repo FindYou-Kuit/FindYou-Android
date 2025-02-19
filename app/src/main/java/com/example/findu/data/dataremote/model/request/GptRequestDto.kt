@@ -78,6 +78,7 @@ object GptRequestConstants {
 
     private const val PROMPT_OUTPUT_TEXT =
         "- Colors must be one or more, separated by commas (\",\").  \n" +
+                "The color must be chosen from the following fixed list: 검은색, 노란색, 갈색, 하얀색, 회색, 적색, 점박이, 줄무늬, 기타.  \n" +
                 "- There should be no spaces between commas in the color list.  \n" +
                 "**Example input & expected response:**  \n" +
                 "강아지,골든 리트리버,노란색  \n" +
