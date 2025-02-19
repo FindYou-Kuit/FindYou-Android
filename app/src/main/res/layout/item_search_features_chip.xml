@@ -6,5 +6,6 @@
     android:text="test"
     android:layout_marginEnd="2dp"
     android:layout_marginBottom="2dp"
+    android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
     android:clickable="false"
     android:checkable="false" />
