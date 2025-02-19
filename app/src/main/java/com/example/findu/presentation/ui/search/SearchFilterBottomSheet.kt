@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.search
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
@@ -10,7 +9,7 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
 import com.example.findu.presentation.ui.search.adapter.SearchFilterBreedRVAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
-import com.example.findu.presentation.ui.search.data.LocationData
+import com.example.findu.presentation.ui.search.model.LocationData
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -72,26 +71,12 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
 
     private fun applyFilters() {
         val filterList = mutableListOf<String>()
-        val selectedDate = binding.tvSearchFilterDateInput.text.toString()
-        if (selectedDate.isNotEmpty() && selectedDate != getString(R.string.search_filter_date_input)) {
-            filterList.add(selectedDate)
-        }
 
-        val selectedSpecies = listOf(
-            binding.rbDog,
-            binding.rbCat,
-            binding.rbEtc
-        ).find { it.isChecked }?.text.toString()
-
-        if (selectedSpecies.isNotBlank()) {
-            filterList.add(selectedSpecies)
-        }
         if (filterList.contains("null"))
             filterList.remove("null")
 
         if (selectedBreeds.isNotEmpty()) {
             filterList.addAll(selectedBreeds)
-
         }
 
         selectedCity?.let { if (it.isNotEmpty()) filterList.add(it) }
@@ -267,6 +252,7 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                         R.color.gray6
                     )
                 )
+                binding.cvSearchFilterCalender.visibility = View.GONE
             }
         })
 
