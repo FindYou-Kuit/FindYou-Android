@@ -18,4 +18,14 @@ class InterestRepositoryImpl @Inject constructor(
             interestRemoteDataSource.getInterestReportAnimals(id).handleBaseResponse()
         }
 
+    override suspend fun deleteInterestProtectingAnimals(reportId: Long): Result<Unit> =
+        runCatching {
+            interestRemoteDataSource.deleteInterestProtectingAnimals(reportId).handleBaseResponse()
+        }
+
+    override suspend fun deleteInterestReportAnimals(reportId: Long): Result<Unit> =
+        runCatching {
+            interestRemoteDataSource.deleteInterestReportAnimals(reportId).handleBaseResponse()
+        }
+
 }

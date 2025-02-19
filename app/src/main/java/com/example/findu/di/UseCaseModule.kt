@@ -12,6 +12,8 @@ import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
@@ -100,4 +102,16 @@ object UseCaseModule {
     fun providePostInterestProtectingAnimalUseCase(
         interestRepository: InterestRepository
     ): PostInterestProtectingAnimalUseCase = PostInterestProtectingAnimalUseCase(interestRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteInterestReportAnimalUseCase(
+        interestRepository: InterestRepository
+    ): DeleteInterestReportAnimalUseCase = DeleteInterestReportAnimalUseCase(interestRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteInterestProtectingAnimalUseCase(
+        interestRepository: InterestRepository
+    ): DeleteInterestProtectingAnimalUseCase = DeleteInterestProtectingAnimalUseCase(interestRepository)
 }
