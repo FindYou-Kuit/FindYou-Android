@@ -229,9 +229,15 @@ class SearchReportFragment : Fragment() {
     }
 
     private fun initRVAdapter() {
-        rvAdapter = SearchContentRVAdapter(items) { item ->
-            navigateToDetail(item.cardId, item.tag.text, item.name)
-        }
+        rvAdapter = SearchContentRVAdapter(
+            items = emptyList(),
+            onItemClick = { item ->
+                navigateToDetail(item.cardId, item.tag.text, item.name)
+            },
+            onBookmarkClick = { cardId, isBookmark, tag ->
+                viewModel.setInterest(cardId, isBookmark, tag)
+            }
+        )
         binding.rvSearchHorizontalContent.adapter = rvAdapter
         binding.rvSearchHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

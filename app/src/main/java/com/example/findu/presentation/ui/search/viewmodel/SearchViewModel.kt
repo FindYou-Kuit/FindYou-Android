@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.usecase.GetSearchUseCase
+import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import com.example.findu.presentation.mapper.todomain.toDomain
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.toSearchFilterUiModel
@@ -16,7 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val getSearchUseCase: GetSearchUseCase
+    private val getSearchUseCase: GetSearchUseCase,
+    private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
+    private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase
 ) : ViewModel() {
 
     private var _allFilter: SearchFilterUiModel? = SearchFilterUiModel()
@@ -80,6 +84,7 @@ class SearchViewModel @Inject constructor(
             )
         }
     }
+
     fun setAllFilter(searchFilter: SearchFilterUiModel) {
         _allFilter = searchFilter
     }
@@ -87,7 +92,7 @@ class SearchViewModel @Inject constructor(
     fun setReportFilter(searchFilter: SearchFilterUiModel) {
         _reportFilter = searchFilter
     }
-    
+
     fun setProtectFilter(searchFilter: SearchFilterUiModel) {
         _protectFilter = searchFilter
     }
@@ -111,9 +116,9 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateAllFilterState(
-        SearchFilterUiModel: SearchFilterUiModel?
+        searchFilterUiModel: SearchFilterUiModel?
     ) {
-        val newAllFilter = SearchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
+        val newAllFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newAllFilter != _allFilter) {
             _allFilter = newAllFilter
             Log.d("SearchViewModel", "updateAllFilterState: $newAllFilter")
@@ -122,9 +127,9 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateReportFilterState(
-        SearchFilterUiModel: SearchFilterUiModel?
+        searchFilterUiModel: SearchFilterUiModel?
     ) {
-        val newReportFilter = SearchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
+        val newReportFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newReportFilter != _reportFilter) {
             _reportFilter = newReportFilter
             Log.d("SearchViewModel", "updateReportFilterState: $newReportFilter")
@@ -133,13 +138,62 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateProtectFilterState(
-        SearchFilterUiModel: SearchFilterUiModel?
+        searchFilterUiModel: SearchFilterUiModel?
     ) {
-        val newProtectFilter = SearchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
+        val newProtectFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newProtectFilter != _protectFilter) {
             _protectFilter = newProtectFilter
             Log.d("SearchViewModel", "updateProtectFilterState: $newProtectFilter")
             getSearchProtectData()
         }
     }
+
+    fun setInterest(
+        id: Long,
+        isInterest: Boolean,
+        tag: String
+    ) {
+        when (tag) {
+            "보호중" -> postProtectInterest(id, isInterest)
+            "목격신고" -> postReportInterest(id, isInterest)
+            "실종신고" -> postReportInterest(id, isInterest)
+            else -> {
+                _errorMessage.value = "잘못된 태그 값입니다."
+            }
+        }
+
+    }
+
+    private fun postProtectInterest(id: Long, isInterest: Boolean) {
+        viewModelScope.launch {
+            if (isInterest) {
+                postInterestProtectingAnimalUseCase(id).fold(
+                    onSuccess = {
+                        Log.d("SearchViewModel", "postProtectInterest: $it")
+                    },
+                    onFailure = {
+                        _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
+                    }
+                )
+            } else {
+            }
+        }
+    }
+
+    private fun postReportInterest(id: Long, isInterest: Boolean) {
+        viewModelScope.launch {
+            if (isInterest) {
+                postInterestReportAnimalUseCase(id).fold(
+                    onSuccess = {
+                        Log.d("SearchViewModel", "postReportInterest: $it")
+                    },
+                    onFailure = {
+                        _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
+                    }
+                )
+            } else {
+            }
+        }
+    }
+
 }

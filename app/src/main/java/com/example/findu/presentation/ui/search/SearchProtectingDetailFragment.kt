@@ -81,6 +81,7 @@ class SearchProtectingDetailFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.errorMessage.collectLatest { message ->
                 message?.let {
+                    Log.e("DetailSearchViewModel", it)
                     Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -155,6 +156,7 @@ class SearchProtectingDetailFragment : Fragment() {
         updateBookmarkUI(data.interest)
         binding.ivSearchDetailBookmark.setOnClickListener {
             data.interest = !data.interest
+            viewModel.setInterestProtectingAnimal(cardId)
             updateBookmarkUI(data.interest)
         }
     }

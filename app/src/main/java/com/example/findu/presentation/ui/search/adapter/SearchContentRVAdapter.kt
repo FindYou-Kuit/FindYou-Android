@@ -12,7 +12,8 @@ import com.example.findu.presentation.ui.search.model.SearchRv
 
 class SearchContentRVAdapter(
     private var items: List<SearchRv>,
-    private val onItemClick: (SearchRv) -> Unit
+    private val onItemClick: (SearchRv) -> Unit,
+    private val onBookmarkClick: (Long, Boolean, String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -88,19 +89,45 @@ class SearchContentRVAdapter(
     inner class HorizontalViewHolder(private val binding: SearchHorizontalContentItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: SearchRv) {
-            binding.tvSearchContentName.text = item.name
-            binding.tvSearchContentDate.text = item.date
-            binding.tvSearchContentAddress.text = item.address
-            binding.tvSearchContentStatus.text = item.tag.text
-            binding.tvSearchContentStatus.setTextColor(
-                binding.root.context.getColor(item.tag.textColor)
-            )
-            binding.tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
 
-            Glide.with(binding.root.context)
-                .load(item.image)
-                .into(binding.ivSearchContent)
-            binding.root.setOnClickListener { onItemClick(item) }
+            initView(item)
+            initListener(item)
+        }
+
+        private fun initListener(item: SearchRv) {
+            with(binding) {
+                root.setOnClickListener { onItemClick(item) }
+                ivSearchContentBookmark.setOnClickListener {
+                    item.isBookmark = !item.isBookmark
+                    onBookmarkClick(item.cardId, item.isBookmark, item.tag.text)
+                    if (item.isBookmark) {
+                        binding.ivSearchContentBookmark.setImageResource(R.drawable.ic_search_fill_bookmark)
+                    } else {
+                        binding.ivSearchContentBookmark.setImageResource(R.drawable.ic_search_blank_bookmark)
+                    }
+                }
+            }
+        }
+
+        private fun initView(item: SearchRv) {
+            with(binding) {
+                tvSearchContentName.text = item.name
+                tvSearchContentDate.text = item.date
+                tvSearchContentAddress.text = item.address
+                tvSearchContentStatus.text = item.tag.text
+                tvSearchContentStatus.setTextColor(
+                    binding.root.context.getColor(item.tag.textColor)
+                )
+                tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
+                if (item.isBookmark) {
+                    binding.ivSearchContentBookmark.setImageResource(R.drawable.ic_search_fill_bookmark)
+                } else {
+                    binding.ivSearchContentBookmark.setImageResource(R.drawable.ic_search_blank_bookmark)
+                }
+                Glide.with(binding.root.context)
+                    .load(item.image)
+                    .into(binding.ivSearchContent)
+            }
         }
     }
 

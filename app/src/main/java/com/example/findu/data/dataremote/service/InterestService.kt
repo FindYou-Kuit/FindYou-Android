@@ -8,10 +8,10 @@ interface InterestService {
     @POST("/api/v1/users/interest-animals/protecting-animals")
     suspend fun getInterestProtectingAnimals(
         @Body id : Long
-    ) : NullableBaseResponse<Unit>
+    ) : NullableBaseResponse<Int>
 
     @POST("/api/v1/users/interest-animals/report-animals")
     suspend fun getInterestReportAnimals(
         @Body id : Long
-    ) : NullableBaseResponse<Unit>
+    ) : NullableBaseResponse<Int>
 }

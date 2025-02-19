@@ -178,10 +178,6 @@ class SearchDisappearDetailFragment : Fragment() {
     }
 
     private fun initListener() {
-        binding.clSearchShowMore.setOnClickListener {
-            binding.clSearchContentDetail.visibility = View.VISIBLE
-            binding.clSearchShowMore.visibility = View.INVISIBLE
-        }
         binding.ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -191,6 +187,7 @@ class SearchDisappearDetailFragment : Fragment() {
         updateBookmarkUI(data.interest)
         binding.ivSearchDetailBookmark.setOnClickListener {
             data.interest = !data.interest
+            viewModel.setInterestReportAnimal(cardId)
             updateBookmarkUI(data.interest)
         }
     }

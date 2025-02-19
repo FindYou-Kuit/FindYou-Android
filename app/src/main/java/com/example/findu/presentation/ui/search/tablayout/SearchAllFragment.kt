@@ -241,9 +241,15 @@ class SearchAllFragment : Fragment() {
     }
 
     private fun initRVAdapter() {
-        rvAdapter = SearchContentRVAdapter(emptyList()) { item ->
-            navigateToDetail(item.cardId, item.tag.text, item.name)
-        }
+        rvAdapter = SearchContentRVAdapter(
+            items = emptyList(),
+            onItemClick = { item ->
+                navigateToDetail(item.cardId, item.tag.text, item.name)
+            },
+            onBookmarkClick = { cardId, isBookmark, tag ->
+                viewModel.setInterest(cardId, isBookmark, tag)
+            }
+        )
         binding.rvSearchAllHorizontalContent.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

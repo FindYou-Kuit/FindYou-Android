@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
+import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailReportViewModel @Inject constructor(
-    private val getDetailSearchUseCase: GetDetailSearchUseCase
+    private val getDetailSearchUseCase: GetDetailSearchUseCase,
+    private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase
 ) : ViewModel() {
 
     private val _detailSearchData = MutableStateFlow<DetailReportData?>(null)
@@ -32,6 +34,21 @@ class DetailReportViewModel @Inject constructor(
                     _errorMessage.value = error.message ?: "신고 동물 상세 정보를 불러오는 중 오류가 발생했습니다."
                 }
             )
+        }
+    }
+
+    fun setInterestReportAnimal(id: Long) {
+        if (_detailSearchData.value?.interest == true) {
+            viewModelScope.launch {
+                postInterestReportAnimalUseCase(id).fold(
+                    onSuccess = { },
+                    onFailure = { error ->
+                        _errorMessage.value = error.message ?: "신고 동물 관심 등록 중 오류가 발생했습니다."
+                    }
+                )
+            }
+        } else {
+
         }
     }
 }
