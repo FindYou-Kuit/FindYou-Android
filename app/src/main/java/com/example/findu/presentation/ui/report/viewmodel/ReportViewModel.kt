@@ -131,6 +131,7 @@ class ReportViewModel @Inject constructor(
     }
 
     fun getGptData(imageUri: Uri) {
+        _gptData.value = null
         viewModelScope.launch {
             _gptUiState.value = GptUiState.Loading
             imageUri.uriToBase64(context)?.let { encodeString ->
