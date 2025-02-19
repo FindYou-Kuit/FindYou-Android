@@ -6,6 +6,7 @@ import com.example.findu.data.dataremote.service.DummyService
 import com.example.findu.data.dataremote.service.GptService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.example.findu.data.dataremote.service.HomeService
+import com.example.findu.data.dataremote.service.InterestService
 import com.example.findu.data.dataremote.service.SearchService
 import com.example.findu.data.dataremote.service.NaverService
 import com.example.findu.data.dataremote.service.ReportService
@@ -52,6 +53,11 @@ object ServiceModule {
     @Singleton
     fun provideReportService(retrofit: Retrofit): ReportService =
         retrofit.create(ReportService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideInterestService(retrofit: Retrofit): InterestService =
+        retrofit.create(InterestService::class.java)
 
     @Provides
     @Singleton
