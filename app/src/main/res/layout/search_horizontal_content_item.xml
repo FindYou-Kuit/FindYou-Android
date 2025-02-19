@@ -109,6 +109,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="5dp"
                         android:ellipsize="end"
+                        android:maxLines="1"
                         android:text="성산구 내동 628-1"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                         app:layout_constraintStart_toEndOf="@id/iv_search_content_address"
