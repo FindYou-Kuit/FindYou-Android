@@ -6,9 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.usecase.GetSearchUseCase
 import com.example.findu.presentation.mapper.todomain.toDomain
-import com.example.findu.presentation.model.SearchFilters
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
-import com.example.findu.presentation.ui.search.model.toSearchFilters
+import com.example.findu.presentation.ui.search.model.toSearchFilterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,11 +19,17 @@ class SearchViewModel @Inject constructor(
     private val getSearchUseCase: GetSearchUseCase
 ) : ViewModel() {
 
-    private var _allFilter: SearchFilters? = SearchFilters()
+    private var _allFilter: SearchFilterUiModel? = SearchFilterUiModel()
+    val allFilter: SearchFilterUiModel?
+        get() = _allFilter
 
-    private var _reportFilter: SearchFilters? = SearchFilters()
+    private var _reportFilter: SearchFilterUiModel? = SearchFilterUiModel()
+    val reportFilter: SearchFilterUiModel?
+        get() = _reportFilter
 
-    private var _protectFilter: SearchFilters? = SearchFilters()
+    private var _protectFilter: SearchFilterUiModel? = SearchFilterUiModel()
+    val protectFilter: SearchFilterUiModel?
+        get() = _protectFilter
 
     private val _allSearchData = MutableStateFlow<List<SearchData>?>(null)
     val allSearchData = _allSearchData.asStateFlow()
@@ -75,6 +80,17 @@ class SearchViewModel @Inject constructor(
             )
         }
     }
+    fun setAllFilter(searchFilter: SearchFilterUiModel) {
+        _allFilter = searchFilter
+    }
+
+    fun setReportFilter(searchFilter: SearchFilterUiModel) {
+        _reportFilter = searchFilter
+    }
+    
+    fun setProtectFilter(searchFilter: SearchFilterUiModel) {
+        _protectFilter = searchFilter
+    }
 
     fun getSearchProtectData(
         lastProtectId: Long = Long.MAX_VALUE
@@ -95,9 +111,9 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateAllFilterState(
-        searchFilters: SearchFilterUiModel?
+        SearchFilterUiModel: SearchFilterUiModel?
     ) {
-        val newAllFilter = searchFilters?.toSearchFilters() ?: SearchFilters()
+        val newAllFilter = SearchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newAllFilter != _allFilter) {
             _allFilter = newAllFilter
             Log.d("SearchViewModel", "updateAllFilterState: $newAllFilter")
@@ -106,9 +122,9 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateReportFilterState(
-        searchFilters: SearchFilterUiModel?
+        SearchFilterUiModel: SearchFilterUiModel?
     ) {
-        val newReportFilter = searchFilters?.toSearchFilters() ?: SearchFilters()
+        val newReportFilter = SearchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newReportFilter != _reportFilter) {
             _reportFilter = newReportFilter
             Log.d("SearchViewModel", "updateReportFilterState: $newReportFilter")
@@ -117,9 +133,9 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateProtectFilterState(
-        searchFilters: SearchFilterUiModel?
+        SearchFilterUiModel: SearchFilterUiModel?
     ) {
-        val newProtectFilter = searchFilters?.toSearchFilters() ?: SearchFilters()
+        val newProtectFilter = SearchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newProtectFilter != _protectFilter) {
             _protectFilter = newProtectFilter
             Log.d("SearchViewModel", "updateProtectFilterState: $newProtectFilter")

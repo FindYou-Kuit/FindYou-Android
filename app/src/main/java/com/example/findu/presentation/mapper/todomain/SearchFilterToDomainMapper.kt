@@ -1,9 +1,9 @@
 package com.example.findu.presentation.mapper.todomain
 
 import com.example.findu.domain.model.search.SearchFilterData
-import com.example.findu.presentation.model.SearchFilters
+import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 
-fun SearchFilters.toDomain() = SearchFilterData(
+fun SearchFilterUiModel.toDomain() = SearchFilterData(
     breeds = breeds,
     location = location,
     species = species,

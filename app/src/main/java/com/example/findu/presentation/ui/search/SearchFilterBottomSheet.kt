@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.search
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
@@ -262,6 +263,7 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                 )
             }
 
+            @SuppressLint("DefaultLocale")
             override fun onDateRangeSelected(startDate: Calendar, endDate: Calendar) {
                 binding.tvSearchFilterDateInput.text = getString(
                     R.string.date_range,
@@ -279,12 +281,16 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                     )
                 )
                 selectedStartDate =
-                    "${startDate.get(Calendar.YEAR)}-${startDate.get(Calendar.MONTH) + 1}-${
-                        startDate.get(Calendar.DAY_OF_MONTH)
+                    "${startDate.get(Calendar.YEAR)}-${
+                        String.format("%02d", startDate.get(Calendar.MONTH) + 1)
+                    }-${
+                        String.format("%02d", startDate.get(Calendar.DAY_OF_MONTH))
                     }"
                 selectedEndDate =
-                    "${endDate.get(Calendar.YEAR)}-${endDate.get(Calendar.MONTH) + 1}-${
-                        endDate.get(Calendar.DAY_OF_MONTH)
+                    "${endDate.get(Calendar.YEAR)}-${
+                        String.format("%02d", endDate.get(Calendar.MONTH) + 1)
+                    }-${
+                        String.format("%02d", endDate.get(Calendar.DAY_OF_MONTH))
                     }"
             }
         })

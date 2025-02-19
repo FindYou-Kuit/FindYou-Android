@@ -160,6 +160,10 @@ class SearchAllFragment : Fragment() {
                         binding.hsSearchAllFilters.elevation = 0f
                     }
 
+                    rvAdapter.returnItemSize() == 0 -> {
+                        binding.hsSearchAllFilters.elevation = 0f
+                    }
+
                     else -> {
                         binding.hsSearchAllFilters.elevation = 8f
                     }
@@ -184,7 +188,23 @@ class SearchAllFragment : Fragment() {
 
             chip.text = if (species == "개") "강아지" else species
             chip.setOnCloseIconClickListener {
-                chipGroup.removeView(chip)
+                chipGroup.removeAllViews()
+                viewModel.updateAllFilterState(
+                    viewModel.allFilter?.copy(
+                        species = null,
+                        breeds = null
+                    )
+                )
+                viewModel.allFilter?.location?.let {
+                    val locationChip =
+                        layoutInflater.inflate(
+                            R.layout.item_search_filter_chip,
+                            chipGroup,
+                            false
+                        ) as Chip
+                    locationChip.text = it
+                    chipGroup.addView(locationChip)
+                }
             }
             chipGroup.addView(chip)
         }
@@ -195,6 +215,11 @@ class SearchAllFragment : Fragment() {
             chip.text = breed
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
+                viewModel.updateAllFilterState(
+                    viewModel.allFilter?.copy(
+                        breeds = viewModel.allFilter?.breeds?.filter { it != breed }
+                    )
+                )
             }
             chipGroup.addView(chip)
         }

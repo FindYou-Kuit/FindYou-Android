@@ -52,6 +52,10 @@ class SearchContentRVAdapter(
         }
     }
 
+    fun returnItemSize(): Int {
+        return items.size
+    }
+
     override fun getItemCount(): Int {
         return items.size
     }

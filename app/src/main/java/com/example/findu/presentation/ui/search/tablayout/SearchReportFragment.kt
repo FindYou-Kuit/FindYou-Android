@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.forEach
+import androidx.core.view.forEachIndexed
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -78,6 +80,10 @@ class SearchReportFragment : Fragment() {
 
                 when {
                     firstVisibleItemPosition == 0 -> {
+                        binding.hsSearchReportFilters.elevation = 0f
+                    }
+
+                    rvAdapter.returnItemSize() == 0 -> {
                         binding.hsSearchReportFilters.elevation = 0f
                     }
 
@@ -155,7 +161,7 @@ class SearchReportFragment : Fragment() {
     private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchReportGroupFilters
         chipGroup.removeAllViews()
-        viewModel.updateAllFilterState(filters)
+        viewModel.updateReportFilterState(filters)
 
         if (filters == null) return
 
@@ -166,7 +172,23 @@ class SearchReportFragment : Fragment() {
 
             chip.text = if (species == "개") "강아지" else species
             chip.setOnCloseIconClickListener {
-                chipGroup.removeView(chip)
+                chipGroup.removeAllViews()
+                viewModel.updateReportFilterState(
+                    viewModel.reportFilter?.copy(
+                        species = null,
+                        breeds = null
+                    )
+                )
+                viewModel.reportFilter?.location?.let {
+                    val locationChip =
+                        layoutInflater.inflate(
+                            R.layout.item_search_filter_chip,
+                            chipGroup,
+                            false
+                        ) as Chip
+                    locationChip.text = it
+                    chipGroup.addView(locationChip)
+                }
             }
             chipGroup.addView(chip)
         }
@@ -177,6 +199,9 @@ class SearchReportFragment : Fragment() {
             chip.text = breed
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
+                viewModel.updateReportFilterState(
+                    viewModel.reportFilter?.copy(breeds = viewModel.reportFilter?.breeds?.filter { it != breed })
+                )
             }
             chipGroup.addView(chip)
         }
@@ -188,6 +213,9 @@ class SearchReportFragment : Fragment() {
             chip.text = location
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
+                viewModel.updateReportFilterState(
+                    viewModel.reportFilter?.copy(location = null)
+                )
             }
             chipGroup.addView(chip)
         }

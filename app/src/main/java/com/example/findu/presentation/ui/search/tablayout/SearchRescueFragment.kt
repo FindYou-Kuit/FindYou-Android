@@ -153,6 +153,10 @@ class SearchRescueFragment : Fragment() {
                         binding.hsSearchRescueFilters.elevation = 0f
                     }
 
+                    rvAdapter.returnItemSize() == 0 -> {
+                        binding.hsSearchRescueFilters.elevation = 0f
+                    }
+
                     else -> {
                         binding.hsSearchRescueFilters.elevation = 8f
                     }
@@ -165,7 +169,7 @@ class SearchRescueFragment : Fragment() {
     private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchRescueGroupFilters
         chipGroup.removeAllViews()
-        viewModel.updateAllFilterState(filters)
+        viewModel.updateProtectFilterState(filters)
 
         if (filters == null) return
 
@@ -176,7 +180,23 @@ class SearchRescueFragment : Fragment() {
 
             chip.text = if (species == "개") "강아지" else species
             chip.setOnCloseIconClickListener {
-                chipGroup.removeView(chip)
+                chipGroup.removeAllViews()
+                viewModel.updateProtectFilterState(
+                    viewModel.protectFilter?.copy(
+                        species = null,
+                        breeds = null
+                    )
+                )
+                viewModel.protectFilter?.location?.let {
+                    val locationChip =
+                        layoutInflater.inflate(
+                            R.layout.item_search_filter_chip,
+                            chipGroup,
+                            false
+                        ) as Chip
+                    locationChip.text = it
+                    chipGroup.addView(locationChip)
+                }
             }
             chipGroup.addView(chip)
         }
@@ -187,6 +207,11 @@ class SearchRescueFragment : Fragment() {
             chip.text = breed
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
+                viewModel.updateReportFilterState(
+                    viewModel.protectFilter?.copy(
+                        breeds = viewModel.protectFilter?.breeds?.filter { it != breed }
+                    )
+                )
             }
             chipGroup.addView(chip)
         }
@@ -198,6 +223,9 @@ class SearchRescueFragment : Fragment() {
             chip.text = location
             chip.setOnCloseIconClickListener {
                 chipGroup.removeView(chip)
+                viewModel.updateReportFilterState(
+                    viewModel.protectFilter?.copy(location = null)
+                )
             }
             chipGroup.addView(chip)
         }
