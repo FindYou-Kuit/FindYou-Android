@@ -13,16 +13,15 @@
         android:layout_height="54dp"
         android:background="@color/white"
         android:paddingHorizontal="20dp"
-        android:scrollbars="none"
         android:paddingVertical="10dp"
+        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            >
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageButton
                 android:id="@+id/ib_search_all_filter"
@@ -42,19 +41,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:singleLine="true">
 
-                <com.google.android.material.chip.Chip
-                    style="@style/SearchFilterChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="말티즈"
-                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/SearchFilterChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="세종자치특별시 세종자치특별시"
-                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
             </com.google.android.material.chip.ChipGroup>
 
 

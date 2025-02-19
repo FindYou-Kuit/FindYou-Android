@@ -10,6 +10,7 @@
         android:id="@+id/hs_search_rescue_filters"
         android:layout_width="match_parent"
         android:layout_height="54dp"
+        android:background="@color/white"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
         android:scrollbars="none"
@@ -41,19 +42,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:singleLine="true">
 
-                <com.google.android.material.chip.Chip
-                    style="@style/SearchFilterChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="말티즈"
-                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/SearchFilterChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="세종자치특별시 세종자치특별시"
-                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
             </com.google.android.material.chip.ChipGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
