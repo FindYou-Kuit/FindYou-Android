@@ -1,4 +1,4 @@
-package com.example.findu.domain.model.report
+package com.example.findu.domain.model.breed
 
 enum class SpeciesType(
     val species: String

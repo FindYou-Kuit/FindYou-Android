@@ -1,11 +1,14 @@
 package com.example.findu.di
 
 import com.example.findu.data.dataremote.service.DetailSearchService
+import com.example.findu.data.dataremote.service.BreedService
 import com.example.findu.data.dataremote.service.DummyService
 import com.example.findu.data.dataremote.service.GptService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.example.findu.data.dataremote.service.HomeService
 import com.example.findu.data.dataremote.service.SearchService
+import com.example.findu.data.dataremote.service.NaverService
+import com.example.findu.data.dataremote.service.ReportService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,6 +45,16 @@ object ServiceModule {
 
     @Provides
     @Singleton
+    fun provideBreedService(retrofit: Retrofit): BreedService =
+        retrofit.create(BreedService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideReportService(retrofit: Retrofit): ReportService =
+        retrofit.create(ReportService::class.java)
+
+    @Provides
+    @Singleton
     fun provideGptService(
         okHttpClient: OkHttpClient,
         json: Json
@@ -55,5 +68,22 @@ object ServiceModule {
             .build()
 
         return gptRetrofit.create(GptService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNaverService(
+        okHttpClient: OkHttpClient,
+        json: Json
+    ): NaverService {
+        val naverRetrofit = Retrofit.Builder()
+            .baseUrl("https://naveropenapi.apigw.ntruss.com/")
+            .client(okHttpClient)
+            .addConverterFactory(
+                json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull()))
+            )
+            .build()
+
+        return naverRetrofit.create(NaverService::class.java)
     }
 }

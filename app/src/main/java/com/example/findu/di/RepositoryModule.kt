@@ -1,10 +1,12 @@
 package com.example.findu.di
 
 import com.example.findu.data.repositoryimpl.DetailSearchRepositoryImpl
+import com.example.findu.data.repositoryimpl.BreedRepositoryImpl
 import com.example.findu.data.repositoryimpl.DummyRepositoryImpl
 import com.example.findu.data.repositoryimpl.HomeRepositoryImpl
 import com.example.findu.data.repositoryimpl.SearchRepositoryImpl
 import com.example.findu.domain.repository.DetailSearchRepository
+import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.data.repositoryimpl.ReportRepositoryImpl
 import com.example.findu.domain.repository.DummyRepository
 import com.example.findu.domain.repository.report.ReportRepository
@@ -34,6 +36,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindDetailSearchRepository(detailSearchRepositoryImpl: DetailSearchRepositoryImpl): DetailSearchRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBreedRepository(breedRepositoryImpl: BreedRepositoryImpl): BreedRepository
 
     @Binds
     @Singleton

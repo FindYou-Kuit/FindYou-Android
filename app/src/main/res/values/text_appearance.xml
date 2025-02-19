@@ -84,5 +84,12 @@
         <item name="android:letterSpacing">-0.03</item>
     </style>
 
+    <!--my page-->
+    <style name="TextAppearance.FindU.My_R_24" parent="">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:letterSpacing">-0.0125</item>
+    </style>
+
 
 </resources>

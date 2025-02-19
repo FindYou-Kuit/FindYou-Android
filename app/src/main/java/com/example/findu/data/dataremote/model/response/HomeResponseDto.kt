@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HomeResponseDto(
-    @SerialName("todayRescuedAnimalCount")
-    val todayRescuedAnimalCount: Int,
-    @SerialName("todayReportAnimalCount")
-    val todayReportAnimalCount: Int,
+    @SerialName("yesterdayRescuedAnimalCount")
+    val yesterdayRescuedAnimalCount: Int,
+    @SerialName("yesterdayReportedAnimalCount")
+    val yesterdayReportedAnimalCount: Int,
     @SerialName("protectAnimalCards")
     val protectAnimalCards: List<ProtectAnimalCard>,
     @SerialName("reportAnimalCards")
@@ -25,8 +25,8 @@ data class ProtectAnimalCard(
     val title: String,
     @SerialName("tag")
     val tag: String,
-    @SerialName("noticeStartDate")
-    val noticeStartDate: String,
+    @SerialName("happenDate")
+    val happenDate: String,
     @SerialName("careAddress")
     val careAddress: String
 )

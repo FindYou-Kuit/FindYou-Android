@@ -12,6 +12,7 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentReportBinding
 import com.example.findu.presentation.ui.home.dialog.HomeReportDetailDialog
 import com.example.findu.presentation.ui.report.dialog.ReportNavigationDialog
+import com.example.findu.presentation.ui.report.viewmodel.ReportViewModel
 
 class ReportFragment : Fragment() {
     private var _binding: FragmentReportBinding? = null

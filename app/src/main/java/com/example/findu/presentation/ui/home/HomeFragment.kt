@@ -100,7 +100,7 @@ class HomeFragment : Fragment() {
         lateinit var homeMissingAdapter: HomeRVAdapter
         val homeProtectList = homeData.protectAnimalCards.map {
             HomeRv(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
+                imageUrl = it.thumbnailImageUrl,
                 name = it.title,
                 type = AnimalStateType.fromTag(it.tag).state,
                 date = it.noticeStartDate,
@@ -110,7 +110,7 @@ class HomeFragment : Fragment() {
 
         val homeMissingList = homeData.reportAnimalCards.map {
             HomeRv(
-                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvRPU4KKmpmmg7iXY2yWqZM_vCb_KuBHTYw&s",
+                imageUrl = it.thumbnailImageUrl,
                 name = it.title,
                 type = AnimalStateType.fromTag(it.tag).state,
                 date = it.registerDate,
