@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import android.widget.MultiAutoCompleteTextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -260,7 +261,20 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun updateSelectedBreeds(breeds: String) {
-        selectedBreedList = breeds.split(", ").dropLast(1).toSet().toMutableList()
+        val breedsToList = breeds.split(", ").dropLast(1).distinct().toMutableList()
+        if (breedsToList.size > 10) {
+            Toast.makeText(
+                requireContext(),
+                "최대 10개만 선택할 수 있습니다!",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        selectedBreedList = breedsToList
+
+        binding.actvSearchFilterBreed.setText(selectedBreedList.joinToString(", "))
+
         binding.tvSearchFilterBreedCount.text = getString(
             R.string.search_bottom_sheet_breed_count,
             selectedBreedList.size
@@ -269,21 +283,12 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         val chipGroup = binding.cgSearchFilterFeatures
         chipGroup.removeAllViews()
         selectedBreedList.forEach { breed ->
-            val chip = Chip(requireContext()).apply {
-                text = breed
-                chipBackgroundColor =
-                    ContextCompat.getColorStateList(requireContext(), R.color.main_color2)
-                chipStrokeColor =
-                    ContextCompat.getColorStateList(requireContext(), R.color.main_color2)
-                setTextColor(ContextCompat.getColor(requireContext(), R.color.main_color))
-                chipMinHeight = requireContext().dpToPx(34).toFloat()
-                closeIconSize = requireContext().dpToPx(8).toFloat()
-                setPadding(requireContext().dpToPx(14), 0, requireContext().dpToPx(14), 0)
-                shapeAppearanceModel = shapeAppearanceModel.toBuilder()
-                    .setAllCorners(CornerFamily.ROUNDED, 50f)
-                    .build()
-
-            }
+            val chip = layoutInflater.inflate(
+                R.layout.item_search_breed_chip,
+                chipGroup,
+                false
+            ) as Chip
+            chip.text = breed
             chipGroup.addView(chip)
         }
 

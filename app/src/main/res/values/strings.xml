@@ -190,6 +190,7 @@
     <string name="dialog_home_report_detail_call_center">다산 콜센터</string>
     <string name="dialog_home_report_detail_call_center_num">Tel) 120</string>
     <string name="search_bottom_sheet_slash">/</string>
+    <string name="search_bottom_sheet_breed_default">0</string>
     <string name="search_bottom_sheet_max_count">10</string>
     <string name="search_bottom_sheet_breed_count">%d</string>
 
