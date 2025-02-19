@@ -218,7 +218,6 @@ class WitnessReportFragment : Fragment() {
                 launch {
                     reportViewModel.errorMessage.collectLatest { errorMessage ->
                         errorMessage?.let {
-                            Log.e("WitnessReportFragment", it)
                             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -234,7 +233,6 @@ class WitnessReportFragment : Fragment() {
 
                 launch {
                     reportViewModel.gptData.collectLatest { gptData ->
-                        Log.d("WitnessReportFragment", "gptData: $gptData")
                         gptData?.let {
                             setSpecies(gptData)
                             setBreedName(gptData)
@@ -245,7 +243,6 @@ class WitnessReportFragment : Fragment() {
 
                 launch {
                     reportViewModel.gptUiState.collectLatest { uiState ->
-                        Log.d("WitnessReportFragment", "uiState: $uiState")
                         when (uiState) {
                             GptUiState.Loading -> {
                                 binding.pbWitnessReportLoading.visibility = View.VISIBLE
