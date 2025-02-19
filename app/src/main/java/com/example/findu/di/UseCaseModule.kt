@@ -5,12 +5,15 @@ import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.repository.HomeRepository
+import com.example.findu.domain.repository.InterestRepository
 import com.example.findu.domain.repository.SearchRepository
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
+import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
@@ -85,4 +88,16 @@ object UseCaseModule {
     fun provideGetAddressUseCase(
         reportRepository: ReportRepository
     ): GetAddressUseCase = GetAddressUseCase(reportRepository)
+
+    @Provides
+    @Singleton
+    fun providePostInterestReportAnimalUseCase(
+        interestRepository: InterestRepository
+    ): PostInterestReportAnimalUseCase = PostInterestReportAnimalUseCase(interestRepository)
+
+    @Provides
+    @Singleton
+    fun providePostInterestProtectingAnimalUseCase(
+        interestRepository: InterestRepository
+    ): PostInterestProtectingAnimalUseCase = PostInterestProtectingAnimalUseCase(interestRepository)
 }
