@@ -31,7 +31,7 @@ class ReportNavigationDialog(
 
         initListener()
 
-        this.setOnDismissListener {
+        this.setOnCancelListener {
             onDismiss()
         }
 
@@ -41,6 +41,7 @@ class ReportNavigationDialog(
 
         binding.clReportNavigationCloseContainer.setOnClickListener {
             dismiss()
+            onDismiss()
         }
 
         binding.llReportNavigationCallContainer.setOnClickListener {
