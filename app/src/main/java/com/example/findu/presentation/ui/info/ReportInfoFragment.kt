@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.findu.R
 import com.example.findu.databinding.FragmentReportInfoBinding
 
 class ReportInfoFragment : Fragment() {
@@ -32,6 +33,10 @@ class ReportInfoFragment : Fragment() {
         binding.llSecondCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
             startActivity(intent)
+        }
+
+        binding.llFourthReport.setOnClickListener {
+            findNavController().navigate(R.id.action_fragment_report_info_to_fragment_search)
         }
 
         binding.llFourthSystem.setOnClickListener {

@@ -2,8 +2,10 @@ package com.example.findu.presentation.ui.home.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.example.findu.databinding.DialogHomeReportDetailBinding
@@ -43,11 +45,15 @@ class HomeReportDetailDialog(
         }
 
         binding.dialogHomeReportDetailCenter.setOnClickListener {
-
+            val num = "tel:15770954"
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse(num))
+            context.startActivity(intent)
         }
 
         binding.dialogHomeReportDetailCallCenter.setOnClickListener {
-
+            val num = "tel:120"
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse(num))
+            context.startActivity(intent)
         }
     }
 }

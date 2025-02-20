@@ -9,7 +9,8 @@ import com.example.findu.presentation.model.HomeRv
 import com.example.findu.presentation.type.AnimalStateType
 
 class HomeRVAdapter(
-    private val items: List<HomeRv>
+    private val items: List<HomeRv>,
+    private val onItemClick: (HomeRv) -> Unit
 ) : RecyclerView.Adapter<HomeRVAdapter.HomeViewHolder>() {
 
     inner class HomeViewHolder(private val binding: ItemHomeRvBinding) :
@@ -27,11 +28,13 @@ class HomeRVAdapter(
             binding.chipHomeAnimalState.chipBackgroundColor =
                 binding.root.context.getColorStateList(stateType.backgroundChipColor)
 
-
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
                 .into(binding.ivHome)
 
+            binding.root.setOnClickListener {
+                onItemClick(item)
+            }
         }
     }
 

@@ -6,10 +6,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.navigation.NavController
+import com.example.findu.R
 import com.example.findu.databinding.DialogHomeReportBinding
 
 class HomeReportDialog(
-    context: Context
+    context: Context,
+    private val navController: NavController
 ) : Dialog(context) {
     private var _binding: DialogHomeReportBinding? = null
     private val binding get() = _binding!!
@@ -36,7 +39,12 @@ class HomeReportDialog(
         }
 
         binding.llDialogHomeReportWrite.setOnClickListener {
-
+            navigateToWitnessReport()
         }
+    }
+
+    private fun navigateToWitnessReport() {
+        navController.navigate(R.id.action_fragment_home_to_fragment_witness_report)
+        dismiss()
     }
 }

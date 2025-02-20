@@ -13,6 +13,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
@@ -25,6 +26,9 @@ import com.example.findu.presentation.ui.home.adapter.HomeRVAdapter
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
 import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
+import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
+import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,9 +40,15 @@ class HomeFragment : Fragment() {
     private val homeViewModel by viewModels<HomeViewModel>()
 
     private val homeBannerImages = listOf(
-        R.drawable.img_banner_green,
-        R.drawable.img_banner_purple,
-        R.drawable.img_banner_blue
+        R.drawable.img_adopt_info,
+        R.drawable.img_volunteer_info,
+        R.drawable.img_report_info
+    )
+
+    private val homeBannerTexts = listOf(
+        R.string.home_banner_adopt,
+        R.string.home_banner_volunteer,
+        R.string.home_banner_report
     )
 
     override fun onCreateView(
@@ -83,14 +93,14 @@ class HomeFragment : Fragment() {
 
     private fun setupFindDialog() {
         binding.cvHomeFind.setOnClickListener {
-            val dialog = HomeFindDialog(requireContext())
+            val dialog = HomeFindDialog(requireContext(), findNavController())
             dialog.show()
         }
     }
 
     private fun setupReportDialog() {
         binding.cvHomeReport.setOnClickListener {
-            val dialog = HomeReportDialog(requireContext())
+            val dialog = HomeReportDialog(requireContext(), findNavController())
             dialog.show()
         }
     }
@@ -104,7 +114,8 @@ class HomeFragment : Fragment() {
                 name = it.title,
                 type = AnimalStateType.fromTag(it.tag).state,
                 date = it.noticeStartDate,
-                location = it.careAddress
+                location = it.careAddress,
+                id = it.protectId
             )
         }
 
@@ -114,12 +125,17 @@ class HomeFragment : Fragment() {
                 name = it.title,
                 type = AnimalStateType.fromTag(it.tag).state,
                 date = it.registerDate,
-                location = it.happenLocation
+                location = it.happenLocation,
+                id = it.reportId
             )
         }
 
-        homeProtectAdapter = HomeRVAdapter(homeProtectList)
-        homeMissingAdapter = HomeRVAdapter(homeMissingList)
+        homeProtectAdapter = HomeRVAdapter(homeProtectList) { item ->
+            navigateToDetail(item)
+        }
+        homeMissingAdapter = HomeRVAdapter(homeMissingList) { item ->
+            navigateToDetail(item)
+        }
 
         binding.rvHomeProtect.apply {
             layoutManager =
@@ -140,6 +156,41 @@ class HomeFragment : Fragment() {
         binding.rvHomeMissing.addItemDecoration(deco)
     }
 
+    private fun navigateToDetail(item: HomeRv) {
+        val fragment = when (item.type) {
+            "보호중" -> SearchProtectingDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("cardId", item.id.toLong())
+                    putString("tag", item.type)
+                    putString("name", item.name)
+                }
+            }
+
+            "목격신고" -> SearchWitnessDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("cardId", item.id.toLong())
+                    putString("tag", item.type)
+                    putString("name", item.name)
+                }
+            }
+
+            "실종신고" -> SearchDisappearDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("cardId", item.id.toLong())
+                    putString("tag", item.type)
+                    putString("name", item.name)
+                }
+            }
+
+            else -> return
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fcv_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     private fun setupTodayData(homeData: HomeData) {
         binding.tvHomeTodayRescueNum.text =
             getString(R.string.home_today_bar_rescue_num, homeData.todayRescuedAnimalCount)
@@ -158,12 +209,16 @@ class HomeFragment : Fragment() {
             false
         )
 
+        binding.tvHomeBanner.text = getString(homeBannerTexts[0])
+
         binding.vpHomeBanner.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val currentPage = (position % homeBannerImages.size) + 1
                 val totalPages = homeBannerImages.size
+
+                binding.tvHomeBanner.text = getString(homeBannerTexts[currentPage - 1])
                 binding.tvHomeBannerNum.text = getString(
                     R.string.home_banner_num,
                     currentPage,
