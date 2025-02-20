@@ -32,6 +32,15 @@
         <action
             android:id="@+id/action_fragment_search_to_fragment_missing_report"
             app:destination="@id/fragment_missing_report" />
+        <action
+            android:id="@+id/action_fragment_search_to_fragment_search_detail_protecting"
+            app:destination="@id/fragment_search_detail_protecting" />
+        <action
+            android:id="@+id/action_fragment_search_to_fragment_search_detail_witness"
+            app:destination="@id/fragment_search_detail_witness" />
+        <action
+            android:id="@+id/action_fragment_search_to_fragment_search_detail_disappear"
+            app:destination="@id/fragment_search_detail_disappear" />
     </fragment>
 
     <fragment
@@ -240,6 +249,5 @@
             android:defaultValue=""
             app:argType="string" />
     </fragment>
-
 
 </navigation>

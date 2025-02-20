@@ -45,17 +45,10 @@ class SearchProtectingDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            cardId = it.getLong("cardId", -1)
-            tag = it.getString("tag")
-            name = it.getString("name")
-        }
-
         cardId = args.id.ifBlank { cardId.toString() }.toLong()
         tag = args.tag.ifBlank { tag }
         name = args.name.ifBlank { name }
 
-        Log.d("SearchWitnessDetailFragment", "cardId: $cardId, tag: $tag, name: $name")
 
         if (cardId == -1L || tag == null) {
             Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
