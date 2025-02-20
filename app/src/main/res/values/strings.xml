@@ -29,6 +29,11 @@
     <string name="signup_nickname_hint">닉네임을 입력해주세요(최대 8글자)</string>
     <string name="signup_button">다음</string>
 
+    <!--signup_success-->
+    <string name="signup_success_title">%s님,\n가입을 환영합니다!</string>
+    <string name="signup_success_description">유기동물에 관심을 가져주셔서 감사해요!</string>
+    <string name="signup_success_button">찾아유 시작하기</string>
+
     <!--  common -->
     <string name="slash">/</string>
     <string name="one">1</string>

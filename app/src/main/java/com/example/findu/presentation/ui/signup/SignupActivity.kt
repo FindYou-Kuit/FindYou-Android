@@ -6,12 +6,10 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.findu.R
 import com.example.findu.databinding.ActivitySignupBinding
-import com.example.findu.presentation.ui.main.MainActivity
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -48,11 +46,11 @@ class SignupActivity : AppCompatActivity() {
 
         binding.clSignupButton.setOnClickListener {
             if (isSignupValid()) {
-                val intent = Intent(this, MainActivity::class.java)
+                val nickname = binding.etSignupNickname.text.toString()
+                val intent = Intent(this, SignupSuccessActivity::class.java)
+                intent.putExtra("nickname", nickname)
                 startActivity(intent)
                 finish()
-            } else {
-                Toast.makeText(this, "회원가입에 필요한 조건을 모두 만족해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
     }
