@@ -19,6 +19,15 @@
         <action
             android:id="@+id/action_fragment_home_to_fragment_search"
             app:destination="@id/fragment_search" />
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_search_detail_disappear"
+            app:destination="@id/fragment_search_detail_disappear" />
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_search_detail_witness"
+            app:destination="@id/fragment_search_detail_witness" />
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_search_detail_protecting"
+            app:destination="@id/fragment_search_detail_protecting" />
     </fragment>
 
     <fragment

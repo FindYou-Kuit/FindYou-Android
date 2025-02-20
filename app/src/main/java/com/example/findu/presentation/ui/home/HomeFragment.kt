@@ -26,9 +26,6 @@ import com.example.findu.presentation.ui.home.adapter.HomeRVAdapter
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
 import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
-import com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment
-import com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment
-import com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -157,38 +154,30 @@ class HomeFragment : Fragment() {
     }
 
     private fun navigateToDetail(item: HomeRv) {
-        val fragment = when (item.type) {
-            "보호중" -> SearchProtectingDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", item.id.toLong())
-                    putString("tag", item.type)
-                    putString("name", item.name)
-                }
-            }
 
-            "목격신고" -> SearchWitnessDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", item.id.toLong())
-                    putString("tag", item.type)
-                    putString("name", item.name)
-                }
+        when(item.type) {
+            "실종신고" -> {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailDisappear(
+                        id = item.id.toString(), tag = item.type, name = item.name
+                    )
+                )
             }
-
-            "실종신고" -> SearchDisappearDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", item.id.toLong())
-                    putString("tag", item.type)
-                    putString("name", item.name)
-                }
+            "목격신고" -> {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailWitness(
+                        id = item.id.toString(), tag = item.type, name = item.name
+                    )
+                )
             }
-
-            else -> return
+            "보호중" -> {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailProtecting(
+                        id = item.id.toString(), tag = item.type, name = item.name
+                    )
+                )
+            }
         }
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_main, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     private fun setupTodayData(homeData: HomeData) {
