@@ -93,7 +93,6 @@ class SearchProtectingDetailFragment : Fragment() {
     private fun updateUI(data: DetailProtectData) {
         binding.apply {
             Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
-            tvSearchContentDetailTitle.text = name
             tvDetailTagField.text = convertTagToKorean(data.tag.text)
             tvDetailBreedField.text = data.breed
             tvDetailAgeField.text = data.age

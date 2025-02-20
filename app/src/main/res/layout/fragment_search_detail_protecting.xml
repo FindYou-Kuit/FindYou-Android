@@ -87,7 +87,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="31dp"
-                    android:text="말티즈"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -165,7 +164,6 @@
                                 style="@style/TextAppearance.FindU.Body1_SB_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_age_value"
                                 android:textColor="@color/gray6" />
                         </LinearLayout>
 
@@ -193,7 +191,6 @@
                                 style="@style/TextAppearance.FindU.Body1_SB_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_weight_value"
                                 android:textColor="@color/gray6" />
                         </LinearLayout>
 
@@ -221,7 +218,6 @@
                                 style="@style/TextAppearance.FindU.Body1_SB_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_gender_value"
                                 android:textColor="@color/black" />
                         </LinearLayout>
 
@@ -292,7 +288,6 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_post_date_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -320,7 +315,6 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_hair_color_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -446,7 +440,6 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_noti_num_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -474,7 +467,6 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_noti_date_value"
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -502,7 +494,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_rescue_location_value"
+                                android:text=""
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -549,7 +541,7 @@
                                 style="@style/TextAppearance.FindU.Body2_SB_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/search_detail_shelter_value"
+                                android:text=""
                                 android:textColor="@color/gray6"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
