@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.findu.R
 import com.example.findu.databinding.ActivityLoginBinding
 import com.example.findu.presentation.ui.main.MainActivity
+import com.example.findu.presentation.ui.signup.SignupActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -28,11 +29,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.tvLoginSignup.setOnClickListener {
-
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
         }
 
         binding.clLoginButton.setOnClickListener {
-            validateAndLogin()
+            validateLogin()
         }
     }
 
@@ -50,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
         binding.etLoginPassword.setSelection(binding.etLoginPassword.text.length)
     }
 
-    private fun validateAndLogin() {
+    private fun validateLogin() {
         val email = binding.etLoginEmail.text.toString().trim()
         val password = binding.etLoginPassword.text.toString().trim()
 
