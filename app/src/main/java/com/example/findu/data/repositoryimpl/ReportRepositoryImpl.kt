@@ -4,8 +4,12 @@ import android.util.Log
 import com.example.findu.data.dataremote.datasource.GptRemoteDataSource
 import com.example.findu.data.dataremote.datasource.NaverRemoteDataSource
 import com.example.findu.data.dataremote.datasource.ReportRemoteDataSource
+import com.example.findu.data.dataremote.model.request.Content
+import com.example.findu.data.dataremote.model.request.GptRequestConstants.TEXT_TYPE
+import com.example.findu.data.dataremote.model.request.GptRequestConstants.getPromptText
 import com.example.findu.data.dataremote.model.request.GptRequestDto
 import com.example.findu.data.dataremote.model.request.GptRequestDto.Companion.imageContent
+import com.example.findu.data.dataremote.model.request.GptRequestDto.Companion.textContent
 import com.example.findu.data.dataremote.model.request.ImageUrl
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.report.toDomain
@@ -24,10 +28,20 @@ class ReportRepositoryImpl @Inject constructor(
     private val reportRemoteDataSource: ReportRemoteDataSource,
     private val naverRemoteDataSource: NaverRemoteDataSource
 ) : ReportRepository {
-    override suspend fun postImageAnalysis(encodeString: String): Result<GptData> =
+    override suspend fun postImageAnalysis(
+        dogList: List<String>,
+        catList: List<String>,
+        etcList: List<String>,
+        encodeString: String
+    ): Result<GptData> =
         runCatching {
             val request = GptRequestDto().apply {
-                imageContent.imageUrl = ImageUrl(url = encodeString)
+                imageContent.imageUrl = ImageUrl(encodeString)
+                textContent.text = getPromptText(
+                    dogList = dogList,
+                    catList = catList,
+                    etcList = etcList
+                )
             }
             gptRemoteDataSource.postImagePrompt(request).toDomain()
         }

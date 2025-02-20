@@ -3,7 +3,6 @@ package com.example.findu.data.dataremote.model.request
 import com.example.findu.data.dataremote.model.request.GptRequestConstants.GPT_MAX_TOKENS
 import com.example.findu.data.dataremote.model.request.GptRequestConstants.GPT_MODEL
 import com.example.findu.data.dataremote.model.request.GptRequestConstants.IMAGE_URL_TYPE
-import com.example.findu.data.dataremote.model.request.GptRequestConstants.PROMPT_TEXT
 import com.example.findu.data.dataremote.model.request.GptRequestConstants.ROLE_USER
 import com.example.findu.data.dataremote.model.request.GptRequestConstants.TEXT_TYPE
 import kotlinx.serialization.SerialName
@@ -20,18 +19,19 @@ data class GptRequestDto(
 ) {
     companion object {
         val imageContent = Content(type = IMAGE_URL_TYPE)
-        private val textContent = Content(type = TEXT_TYPE, text = PROMPT_TEXT)
+        var textContent = Content(type = TEXT_TYPE, text = "")
 
         val requestMessage = listOf(
-                RequestMessage(
-                    content = listOf(
-                        imageContent,
-                        textContent
-                    ),
-                )
+            RequestMessage(
+                content = listOf(
+                    imageContent,
+                    textContent
+                ),
             )
+        )
     }
 }
+
 @Serializable
 data class RequestMessage(
     @SerialName("content")
@@ -57,18 +57,33 @@ data class ImageUrl(
 )
 
 object GptRequestConstants {
+    fun getPromptText(
+        dogList: List<String>,
+        catList: List<String>,
+        etcList: List<String>
+    ): String = PROMPT_TEXT_INTRODUCE +
+            "If the species is \"강아지\": ${dogList.joinToString(", ")}  \n" +
+            "If the species is \"고양이\": ${catList.joinToString(", ")}  \n" +
+            "If the species is \"기타\": ${etcList.joinToString(", ")}  \n" +
+            PROMPT_OUTPUT_TEXT
+
+
     const val GPT_MODEL = "gpt-4o"
     const val GPT_MAX_TOKENS = 300
     const val ROLE_USER = "user"
-    const val PROMPT_TEXT = "Analyze the pet in this image and return a JSON response with:\n" +
-            "1. \"species\": The species of the pet (강아지, 고양이, or 기타).\n" +
-            "2. \"breed\": The exact breed name (only one).\n" +
-            "3. \"fur_color\": The detected fur color, return at least one of these(allow multiple): 검은색, 노란색, 갈색, 하얀색, 회색, 적색, 점박이, 줄무늬, 기타.\n" +
-            "\n" +
-            "Strictly format the response as comma-separated text** - **Do not include** any unnecessary symbols, line breaks, or formatting.\n" +
-            "\n" +
-            "### **Example Output(Only Korean)**\n" +
-            "강아지,리트리버,노란색"
+    private const val PROMPT_TEXT_INTRODUCE = "Generate a response in the following format:  \n" +
+            "Species,Breed,Color1,Color2,Color3,...  \n" +
+            "- The species must be one of the following: \"강아지\", \"고양이\", \"기타\".  \n" +
+            "- The breed must be exactly one, and it must match the species category:  \n"
+
+    private const val PROMPT_OUTPUT_TEXT =
+        "- Colors must be one or more, separated by commas (\",\").  \n" +
+                "The color must be chosen from the following fixed list: 검은색, 노란색, 갈색, 하얀색, 회색, 적색, 점박이, 줄무늬, 기타.  \n" +
+                "- There should be no spaces between commas in the color list.  \n" +
+                "**Example input & expected response:**  \n" +
+                "강아지,골든 리트리버,노란색  \n" +
+                "고양이,러시안 블루,회색,검은색  \n" +
+                "기타축종,기타,흰색  \n"
     const val IMAGE_URL_TYPE = "image_url"
     const val TEXT_TYPE = "text"
 }

@@ -245,11 +245,11 @@ class WitnessReportFragment : Fragment() {
                     reportViewModel.gptUiState.collectLatest { uiState ->
                         when (uiState) {
                             GptUiState.Loading -> {
-                                binding.pbWitnessReportLoading.visibility = View.VISIBLE
+                                binding.lavWitnessReportLoading.visibility = View.VISIBLE
                             }
 
                             GptUiState.Default, GptUiState.Finished -> {
-                                binding.pbWitnessReportLoading.visibility = View.GONE
+                                binding.lavWitnessReportLoading.visibility = View.GONE
                             }
                         }
                     }
@@ -259,12 +259,12 @@ class WitnessReportFragment : Fragment() {
                     reportViewModel.reportUiState.collectLatest { uiState ->
                         when (uiState) {
                             ReportUiState.Default -> {
-                                binding.pbWitnessReportLoading.visibility = View.GONE
+                                binding.lavWitnessReportLoading.visibility = View.GONE
                                 binding.btnWitnessReportConfirm.isEnabled = false
                             }
 
                             ReportUiState.Loading -> {
-                                binding.pbWitnessReportLoading.visibility = View.VISIBLE
+                                binding.lavWitnessReportLoading.visibility = View.VISIBLE
                             }
 
                             ReportUiState.Enable -> {
@@ -272,7 +272,7 @@ class WitnessReportFragment : Fragment() {
                             }
 
                             ReportUiState.Finished -> {
-                                binding.pbWitnessReportLoading.visibility = View.GONE
+                                binding.lavWitnessReportLoading.visibility = View.GONE
                                 ReportFinishDialog(
                                     requireContext(),
                                     ReportType.MISSING,
@@ -282,7 +282,7 @@ class WitnessReportFragment : Fragment() {
                             }
 
                             else -> {
-                                binding.pbWitnessReportLoading.visibility = View.GONE
+                                binding.lavWitnessReportLoading.visibility = View.GONE
                             }
                         }
                     }

@@ -241,12 +241,12 @@ class MissingReportFragment : Fragment() {
                     reportViewModel.reportUiState.collectLatest { uiState ->
                         when (uiState) {
                             ReportUiState.Default -> {
-                                binding.pbMissingReportLoading.visibility = View.GONE
+                                binding.lavMissingReportLoading.visibility = View.GONE
                                 binding.btnMissingReportConfirm.isEnabled = false
                             }
 
                             ReportUiState.Loading -> {
-                                binding.pbMissingReportLoading.visibility = View.VISIBLE
+                                binding.lavMissingReportLoading.visibility = View.VISIBLE
                             }
 
                             ReportUiState.Enable -> {
@@ -254,7 +254,7 @@ class MissingReportFragment : Fragment() {
                             }
 
                             ReportUiState.Finished -> {
-                                binding.pbMissingReportLoading.visibility = View.GONE
+                                binding.lavMissingReportLoading.visibility = View.GONE
                                 ReportFinishDialog(
                                     requireContext(),
                                     ReportType.MISSING,
@@ -264,7 +264,7 @@ class MissingReportFragment : Fragment() {
                             }
 
                             else -> {
-                                binding.pbMissingReportLoading.visibility = View.GONE
+                                binding.lavMissingReportLoading.visibility = View.GONE
                             }
                         }
                     }
