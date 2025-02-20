@@ -104,6 +104,10 @@ class MissingReportFragment : Fragment() {
     }
 
     private fun initListener() {
+        binding.clMissingReportBackButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.root.setKeyboardVisibilityListener {
             binding.clMissingReportLocationContainer.visibility =
                 if (it) View.GONE else View.VISIBLE

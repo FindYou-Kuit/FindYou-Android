@@ -107,6 +107,10 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun initListener() {
+        binding.clWitnessReportBackButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.root.setKeyboardVisibilityListener {
             binding.clWitnessReportLocationContainer.visibility =
                 if (it) View.GONE else View.VISIBLE
