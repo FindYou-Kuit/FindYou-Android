@@ -94,6 +94,7 @@ class SearchRescueFragment : Fragment() {
             rvAdapter.submitList(searchList)
             isNewList = false
             binding.rvSearchRescueHorizontalContent.scrollToPosition(0)
+            binding.rvSearchRescueHorizontalContent.smoothScrollToPosition(0)
         } else {
             rvAdapter.addData(searchList)
         }
@@ -145,6 +146,7 @@ class SearchRescueFragment : Fragment() {
                 } else {
                     bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
                 }
+            isNewList = true
             updateFilterChips(filterUiModel)
 
         }
@@ -180,7 +182,6 @@ class SearchRescueFragment : Fragment() {
         chipGroup.removeAllViews()
 
         if (filters == null) return
-
         viewModel.updateProtectFilterState(filters)
         isNewList = true
 
@@ -192,6 +193,7 @@ class SearchRescueFragment : Fragment() {
             chip.text = if (species == "개") "강아지" else species
             chip.setOnCloseIconClickListener {
                 chipGroup.removeAllViews()
+                isNewList = true
                 viewModel.updateProtectFilterState(
                     viewModel.protectFilter?.copy(
                         species = null,
@@ -199,6 +201,7 @@ class SearchRescueFragment : Fragment() {
                     )
                 )
                 viewModel.protectFilter?.location?.let {
+                    if (it.isNotBlank()) {
                     val locationChip =
                         layoutInflater.inflate(
                             R.layout.item_search_filter_chip,
@@ -206,8 +209,15 @@ class SearchRescueFragment : Fragment() {
                             false
                         ) as Chip
                     locationChip.text = it
+                    locationChip.setOnCloseIconClickListener {
+                        isNewList = true
+                        chipGroup.removeView(locationChip)
+                        viewModel.updateProtectFilterState(
+                            viewModel.protectFilter?.copy(location = null)
+                        )
+                    }
                     chipGroup.addView(locationChip)
-                }
+                }}
             }
             chipGroup.addView(chip)
         }
@@ -217,6 +227,7 @@ class SearchRescueFragment : Fragment() {
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
             chip.text = breed
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeView(chip)
                 viewModel.updateProtectFilterState(
                     viewModel.protectFilter?.copy(
@@ -233,6 +244,7 @@ class SearchRescueFragment : Fragment() {
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
             chip.text = location
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeView(chip)
                 viewModel.updateProtectFilterState(
                     viewModel.protectFilter?.copy(location = null)

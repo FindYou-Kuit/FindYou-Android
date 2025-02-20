@@ -7,7 +7,6 @@ import android.view.*
 import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -21,7 +20,6 @@ import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_D
 import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.adapter.SearchBreedAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
 import com.example.findu.presentation.ui.search.model.LocationData
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
@@ -30,7 +28,6 @@ import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
-import com.google.android.material.shape.CornerFamily
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -103,16 +100,17 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         binding.btnSearchFilterConfirm.setOnClickListener { applyFilters() }
 
         binding.rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
+            Log.d("SearchFilterBottomSheet", "checkedId: $checkedId")
             when (checkedId) {
-                R.id.rb_dog -> {
+                R.id.rb_search_filter_dog -> {
                     selectedSpecies = "개"
                 }
 
-                R.id.rb_cat -> {
+                R.id.rb_search_filter_cat -> {
                     selectedSpecies = "고양이"
                 }
 
-                R.id.rb_etc -> {
+                R.id.rb_search_filter_etc -> {
                     selectedSpecies = "기타"
                 }
             }
@@ -135,11 +133,19 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         filterUiModel.species = selectedSpecies
         filterUiModel.breeds = selectedBreedList
 
-        val location = selectedCity?.let { city ->
-            city + selectedDistrict?.let { district ->
-                " $district"
-            }
-        } ?: ""
+
+        var location = selectedCity ?: ""
+        location = if(selectedDistrict.isNullOrBlank()) {
+            location
+        } else {
+            "$location $selectedDistrict"
+        }
+        Log.d("SearchFilterBottomSheet", "selectedBreedList: ${selectedDistrict == "null"}")
+        Log.d("SearchFilterBottomSheet", "selectedBreedList: ${selectedDistrict.isNullOrEmpty()}")
+        Log.d(
+            "SearchFilterBottomSheet",
+            "location: $location , selectedCity: $selectedCity, selectedDistrict: $selectedDistrict"
+        )
 
         filterUiModel.location = location
         bundle.putSerializable(SELECTED_FILTER_DATA, filterUiModel)
@@ -254,6 +260,7 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun updateSelectedBreeds(breeds: String) {
+        Log.d("SearchFilterBottomSheet", "breeds: $breeds")
         val breedsToList = breeds.split(", ").filter {
             it.isNotBlank()
         }
@@ -384,22 +391,25 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     private fun initRadioGroupListener() {
         binding.rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.rb_dog -> {
+                R.id.rb_search_filter_dog -> {
                     viewModel.selectSpeciesType(SpeciesType.DOG)
+                    selectedSpecies = "개"
                     binding.actvSearchFilterBreed.text = null
                     binding.cgSearchFilterFeatures.removeAllViews()
                     breedList = emptyList()
                 }
 
-                R.id.rb_cat -> {
+                R.id.rb_search_filter_cat -> {
                     viewModel.selectSpeciesType(SpeciesType.CAT)
+                    selectedSpecies = "고양이"
                     binding.actvSearchFilterBreed.text = null
                     binding.cgSearchFilterFeatures.removeAllViews()
                     breedList = emptyList()
                 }
 
-                R.id.rb_etc -> {
+                R.id.rb_search_filter_etc -> {
                     viewModel.selectSpeciesType(SpeciesType.ETC)
+                    selectedSpecies = "기타"
                     binding.actvSearchFilterBreed.text = null
                     binding.cgSearchFilterFeatures.removeAllViews()
                     breedList = emptyList()
