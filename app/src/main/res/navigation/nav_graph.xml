@@ -55,13 +55,18 @@
         android:id="@+id/fragment_info"
         android:name="com.example.findu.presentation.ui.info.InfoFragment"
         android:label="Info"
-        tools:layout="@layout/fragment_info" />
+        tools:layout="@layout/fragment_info"/>
 
     <fragment
         android:id="@+id/fragment_report_info"
         android:name="com.example.findu.presentation.ui.info.ReportInfoFragment"
         android:label="Report Info"
-        tools:layout="@layout/fragment_report_info" />
+        tools:layout="@layout/fragment_report_info" >
+        <action
+            android:id="@+id/action_fragment_report_info_to_fragment_search"
+            app:destination="@id/fragment_search" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_adopt_info"
