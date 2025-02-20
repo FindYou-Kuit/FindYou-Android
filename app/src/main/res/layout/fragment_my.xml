@@ -83,6 +83,7 @@
                     android:id="@+id/et_my_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLength="8"
                     android:text="@string/my_default_nickname"
                     android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24" />
 

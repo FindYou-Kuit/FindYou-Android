@@ -127,7 +127,15 @@ class MyFragment : Fragment() {
             clMyWithdrawal.setOnClickListener {
                 MyWithdrawalDialog(
                     context = requireContext(),
-                    onWithdrawalClick = { myViewModel.deleteUserData() }).show()
+                    onWithdrawalClick = {
+                        myViewModel.deleteUserData()
+                        with(requireActivity()) {
+                            startActivity(
+                                Intent(requireContext(), LoginActivity::class.java)
+                            )
+                            finish()
+                        }
+                    }).show()
             }
         }
     }
