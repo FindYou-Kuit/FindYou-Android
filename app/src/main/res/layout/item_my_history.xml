@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_history_container"
         android:layout_width="match_parent"
-        android:layout_height="258dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
         android:background="@drawable/bg_white_rd_18"
         android:clipToOutline="true"
         android:elevation="4dp"
@@ -31,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:text="[개] 믹스견"
+            android:text="@string/my_item_default_name"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_my_history_image" />
@@ -41,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="2024-11-04"
+            android:text="@string/my_item_default_date"
             android:textColor="@color/gray4"
             app:layout_constraintStart_toStartOf="@id/tv_my_history_title"
             app:layout_constraintTop_toBottomOf="@id/tv_my_history_title" />
@@ -50,8 +51,8 @@
             android:id="@+id/chip_my_history_animal_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
             app:chipCornerRadius="10dp"
@@ -64,6 +65,7 @@
             app:layout_constraintTop_toBottomOf="@id/iv_my_history_image" />
 
         <LinearLayout
+            android:id="@+id/ll_my_history_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -83,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="5dp"
-                android:text="성산구 내동 111-1"
+                android:text="@string/my_item_default_location"
                 android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12" />
 
         </LinearLayout>
@@ -93,39 +95,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
-            android:text="삭제"
+            android:text="@string/my_item_delete"
             android:textAppearance="@style/TextAppearance.FindU.caption_11"
             android:textColor="@color/red1"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ll_my_history_address"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <FrameLayout
             android:id="@+id/fl_my_history_keep"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_my_history_keep"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/ic_my_keep" />
 
             <ImageView
                 android:id="@+id/iv_my_history_non_keep"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/ic_my_non_keep"
                 android:visibility="gone" />
-
 
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

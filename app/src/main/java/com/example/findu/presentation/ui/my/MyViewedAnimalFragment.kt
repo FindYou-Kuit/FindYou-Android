@@ -6,18 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.findu.databinding.FragmentMyRecentHistoryBinding
-import com.example.findu.presentation.model.MyRecentHistoryRv
-import com.example.findu.presentation.ui.my.adapter.MyRecentHistoryRvAdapter
+import com.example.findu.databinding.FragmentMyViewedAnimalBinding
+import com.example.findu.presentation.ui.my.adapter.MyViewedAnimalsRvAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-class MyRecentHistoryFragment : Fragment() {
-    private var _binding: FragmentMyRecentHistoryBinding? = null
+@AndroidEntryPoint
+class MyViewedAnimalFragment : Fragment() {
+    private var _binding: FragmentMyViewedAnimalBinding? = null
     private val binding get() = _binding!!
     private val myViewModel by viewModels<MyViewModel>()
 
-    private val myRecentHistoryRvAdapter = MyRecentHistoryRvAdapter(
+    private val myRecentHistoryRvAdapter = MyViewedAnimalsRvAdapter(
         onKeepClick = { cardId, interest ->
 //            myViewModel.patchInterest(cardId, interest)
         },
@@ -31,9 +36,10 @@ class MyRecentHistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMyRecentHistoryBinding.inflate(inflater, container, false)
+        _binding = FragmentMyViewedAnimalBinding.inflate(inflater, container, false)
 
         initListener()
+        myViewModel.fetchViewedAnimals()
 
         return binding.root
     }
@@ -49,6 +55,19 @@ class MyRecentHistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpAdapter()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                launch {
+                    myViewModel.viewedAnimals.collectLatest { viewedAnimals ->
+                        myRecentHistoryRvAdapter.submitList(viewedAnimals)
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpAdapter() {
@@ -57,9 +76,6 @@ class MyRecentHistoryFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
-        myRecentHistoryRvAdapter.submitList(
-            MyRecentHistoryRv.dummyItems
-        )
     }
 
     override fun onDestroyView() {

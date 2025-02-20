@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemMyHistoryBinding
 import com.example.findu.presentation.model.MyInterestRv
-import com.example.findu.presentation.model.MyRecentHistoryRv
 import com.example.findu.presentation.type.AnimalStateType
 
 class MyInterestRvAdapter(
-    private val onKeepClick: (Int, Boolean, String) -> Unit,
-    private val onItemClick: (Int) -> Unit = {}
+    private val onKeepClick: (Long, Boolean, String) -> Unit,
+    private val onItemClick: (Long) -> Unit = {}
 ) : ListAdapter<MyInterestRv, MyInterestRvAdapter.MyListRvViewHolder>(diffUtil) {
 
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :

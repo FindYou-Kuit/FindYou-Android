@@ -370,4 +370,28 @@
     <string name="volunteer_info_caution_sub_description_3">보호소는 괜찮겠지~하고 동물을 유기하고 가는 사람이 있어요..</string>
     <string name="volunteer_info_caution_description_4">4. 먼지나 털이 많이 날리고 오물이 묻을 수 있으니 방진복과 마스크를 꼭 착용해주세요.</string>
     <string name="volunteer_info_caution_description_5">5. 허리를 많이 숙이는 단순 노동 작업들이 많아 몸이 꽤 힘이 들 수 있어서 각오를 하고 오셔야 해요.</string>
+
+    <!--my page-->
+    <string name="my_page_title">마이페이지</string>
+    <string name="my_default_nickname">닉네임</string>
+    <string name="my_nim">님</string>
+    <string name="my_done">완료</string>
+    <string name="my_hello_message">안녕하세요</string>
+    <string name="my_go_to_report_history">내 신고내역 조회</string>
+    <string name="my_menu">메뉴</string>
+    <string name="my_go_to_viewed_animals">최근 본 동물</string>
+    <string name="my_go_to_interest_animals">관심 동물</string>
+    <string name="my_set_location_permission">위치 권한 설정</string>
+    <string name="my_set_camera_permission">카메라 권한 설정</string>
+    <string name="my_set_alarm_permission">알람 설정</string>
+    <string name="my_questions">문의하기</string>
+    <string name="my_go_to_withdrawal">회원 탈퇴</string>
+    <string name="my_interest_animal_title">관심 동물</string>
+    <string name="my_report_history_title">신고 내역</string>
+    <string name="my_viewed_animal_title">최근 본 동물</string>
+    <string name="my_item_default_name">[개] 믹스견</string>
+    <string name="my_item_default_date">2024–11–04</string>
+    <string name="my_item_default_location">성산구 내동 111–1</string>
+    <string name="my_item_delete">삭제</string>
+
 </resources>

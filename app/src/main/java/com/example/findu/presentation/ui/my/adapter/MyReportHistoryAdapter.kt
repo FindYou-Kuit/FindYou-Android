@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.my.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,8 @@ import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 
 class MyReportHistoryAdapter(
-    private val onDeleteClick: (Int) -> Unit = {},
-    private val onItemClick: (Int) -> Unit = {}
+    private val onDeleteClick: (Long, () -> Unit) -> Unit,
+    private val onItemClick: (Long) -> Unit = {}
 ) : ListAdapter<MyReportHistoryRv, MyReportHistoryAdapter.MyListRvViewHolder>(diffUtil) {
 
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
@@ -52,7 +51,9 @@ class MyReportHistoryAdapter(
         private fun initListener(item: MyReportHistoryRv) {
             with(binding) {
                 tvMyHistoryDelete.setOnClickListener {
-                    onDeleteClick(item.reportId)
+                    onDeleteClick(item.reportId) {
+                        deleteItem(item.reportId)
+                    }
                 }
                 clMyHistoryContainer.setOnClickListener {
                     onItemClick(item.reportId)
@@ -69,6 +70,15 @@ class MyReportHistoryAdapter(
 
     override fun onBindViewHolder(holder: MyListRvViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    private fun deleteItem(reportId: Long) {
+        val position = currentList.indexOfFirst { it.reportId == reportId }
+        if (position != -1) {
+            val list = currentList.toMutableList()
+            list.removeAt(position)
+            submitList(list)
+        }
     }
 
 

@@ -1,0 +1,57 @@
+package com.example.findu.data.repositoryimpl
+
+import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
+import com.example.findu.data.dataremote.util.handleBaseResponse
+import com.example.findu.data.mapper.todomain.my.toDomain
+import com.example.findu.domain.model.my.MyInterestData
+import com.example.findu.domain.model.my.MyReportHistoryData
+import com.example.findu.domain.model.my.MyViewedAnimalData
+import com.example.findu.domain.repository.MyRepository
+import javax.inject.Inject
+
+class MyRepositoryImpl @Inject constructor(
+    private val myRemoteDataSource: MyRemoteDataSource
+) : MyRepository {
+    override suspend fun getMyInterest(
+        lastReportId: Long,
+        lastProtectId: Long,
+    ): Result<MyInterestData> =
+        runCatching {
+            myRemoteDataSource.getInterestAnimals(
+                lastReportId = lastReportId,
+                lastProtectId = lastProtectId
+            ).handleBaseResponse().getOrThrow().toDomain()
+        }
+
+    override suspend fun getMyReportHistory(lastReportId: Long): Result<MyReportHistoryData> =
+        runCatching {
+            myRemoteDataSource.getReportHistory(lastReportId = lastReportId)
+                .handleBaseResponse().getOrThrow().toDomain()
+        }
+
+    override suspend fun getMyViewedAnimals(
+        lastReportId: Long,
+        lastProtectId: Long
+    ): Result<MyViewedAnimalData> =
+        runCatching {
+            myRemoteDataSource.getViewedAnimals(
+                lastReportId = lastReportId,
+                lastProtectId = lastProtectId
+            ).handleBaseResponse().getOrThrow().toDomain()
+        }
+
+    override suspend fun deleteUser(): Result<Unit> =
+        runCatching {
+            myRemoteDataSource.deleteUser().handleBaseResponse().getOrThrow()
+        }
+
+    override suspend fun patchNickname(newNickname: String): Result<Unit> =
+        runCatching {
+            myRemoteDataSource.patchNickname(newNickname).handleBaseResponse().getOrThrow()
+        }
+
+    override suspend fun getNickname(): Result<String> =
+        runCatching {
+            myRemoteDataSource.getNickname().handleBaseResponse().getOrThrow().nickname
+        }
+}
