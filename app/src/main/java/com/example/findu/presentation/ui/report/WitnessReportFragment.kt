@@ -353,6 +353,7 @@ class WitnessReportFragment : Fragment() {
         with(binding.cvWitnessReportCalendar) {
             setVisibleMonthRange(startMonth, endMonth)
             setCurrentMonth(endMonth)
+            setSelectableDateRange(startMonth, endMonth)
             setSelectedDateRange(Calendar.getInstance(), Calendar.getInstance())
             reportViewModel.updateReportData(
                 date = Calendar.getInstance().time
