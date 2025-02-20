@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.forEach
-import androidx.core.view.forEachIndexed
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -43,6 +41,9 @@ class SearchReportFragment : Fragment() {
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
+    private var lastReportId = Long.MAX_VALUE
+    private var isNewList = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,10 +68,11 @@ class SearchReportFragment : Fragment() {
                 } else {
                     bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
                 }
+            isNewList = true
             updateFilterChips(filterUiModel)
         }
 
-        binding.rvSearchHorizontalContent.addOnScrollListener(object :
+        binding.rvSearchReportHorizontalContent.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -83,7 +85,7 @@ class SearchReportFragment : Fragment() {
                         binding.hsSearchReportFilters.elevation = 0f
                     }
 
-                    rvAdapter.returnItemSize() == 0 -> {
+                    rvAdapter.itemCount == 0 -> {
                         binding.hsSearchReportFilters.elevation = 0f
                     }
 
@@ -100,6 +102,7 @@ class SearchReportFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.reportSearchData.collectLatest { searchResults ->
                 setupRV(searchResults ?: emptyList())
+                lastReportId = searchResults?.firstOrNull()?.lastReportId ?: Long.MAX_VALUE
             }
         }
 
@@ -126,8 +129,14 @@ class SearchReportFragment : Fragment() {
                 )
             }
         }
-        rvAdapter.updateData(searchList)
-        binding.rvSearchHorizontalContent.scrollToPosition(0)
+        if (isNewList) {
+            rvAdapter.submitList(searchList)
+            isNewList = false
+            binding.rvSearchReportHorizontalContent.scrollToPosition(0)
+            binding.rvSearchReportHorizontalContent.smoothScrollToPosition(0)
+        } else {
+            rvAdapter.addData(searchList)
+        }
     }
 
     private fun navigateToDetail(cardId: Long, tag: String, name: String) {
@@ -161,9 +170,11 @@ class SearchReportFragment : Fragment() {
     private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchReportGroupFilters
         chipGroup.removeAllViews()
-        viewModel.updateReportFilterState(filters)
 
         if (filters == null) return
+
+        viewModel.updateReportFilterState(filters)
+        isNewList = true
 
         filters.species?.let { species ->
             if (species.isEmpty()) return
@@ -172,6 +183,7 @@ class SearchReportFragment : Fragment() {
 
             chip.text = if (species == "개") "강아지" else species
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeAllViews()
                 viewModel.updateReportFilterState(
                     viewModel.reportFilter?.copy(
@@ -180,14 +192,23 @@ class SearchReportFragment : Fragment() {
                     )
                 )
                 viewModel.reportFilter?.location?.let {
-                    val locationChip =
-                        layoutInflater.inflate(
-                            R.layout.item_search_filter_chip,
-                            chipGroup,
-                            false
-                        ) as Chip
-                    locationChip.text = it
-                    chipGroup.addView(locationChip)
+                    if (it.isNotBlank()) {
+                        val locationChip =
+                            layoutInflater.inflate(
+                                R.layout.item_search_filter_chip,
+                                chipGroup,
+                                false
+                            ) as Chip
+                        locationChip.text = it
+                        locationChip.setOnCloseIconClickListener {
+                            isNewList = true
+                            chipGroup.removeView(chip)
+                            viewModel.updateReportFilterState(
+                                viewModel.reportFilter?.copy(location = null)
+                            )
+                        }
+                        chipGroup.addView(locationChip)
+                    }
                 }
             }
             chipGroup.addView(chip)
@@ -198,6 +219,7 @@ class SearchReportFragment : Fragment() {
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
             chip.text = breed
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeView(chip)
                 viewModel.updateReportFilterState(
                     viewModel.reportFilter?.copy(breeds = viewModel.reportFilter?.breeds?.filter { it != breed })
@@ -212,6 +234,7 @@ class SearchReportFragment : Fragment() {
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
             chip.text = location
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeView(chip)
                 viewModel.updateReportFilterState(
                     viewModel.reportFilter?.copy(location = null)
@@ -230,17 +253,43 @@ class SearchReportFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
-            items = emptyList(),
             onItemClick = { item ->
                 navigateToDetail(item.cardId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
             }
-        )
-        binding.rvSearchHorizontalContent.adapter = rvAdapter
-        binding.rvSearchHorizontalContent.layoutManager =
+        ).apply { submitList(emptyList()) }
+        binding.rvSearchReportHorizontalContent.adapter = rvAdapter
+        binding.rvSearchReportHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        binding.rvSearchReportHorizontalContent.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val rvPosition = when (recyclerView.layoutManager) {
+                    is LinearLayoutManager -> {
+                        (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    }
+
+                    else -> {
+                        (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+                    }
+                }
+
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
+
+                // 페이징 처리
+                if (rvPosition == totalCount) {
+                    viewModel.getSearchReportData(
+                        lastReportId
+                    )
+                }
+            }
+        })
     }
 
     private fun openDetailFragment(selectedItem: SearchRv) {
@@ -265,17 +314,17 @@ class SearchReportFragment : Fragment() {
         isGridMode = !isGridMode
 
         if (isGridMode) {
-            while (binding.rvSearchHorizontalContent.itemDecorationCount > 0) {
-                binding.rvSearchHorizontalContent.removeItemDecorationAt(0)
+            while (binding.rvSearchReportHorizontalContent.itemDecorationCount > 0) {
+                binding.rvSearchReportHorizontalContent.removeItemDecorationAt(0)
             }
 
-            binding.rvSearchHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
-            binding.rvSearchHorizontalContent.layoutManager = GridLayoutManager(requireContext(), 2)
+            binding.rvSearchReportHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
+            binding.rvSearchReportHorizontalContent.layoutManager = GridLayoutManager(requireContext(), 2)
             rvAdapter.setGridMode(true)
             binding.ibSearchReportHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
 
         } else {
-            binding.rvSearchHorizontalContent.layoutManager =
+            binding.rvSearchReportHorizontalContent.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rvAdapter.setGridMode(false)
             binding.ibSearchReportHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)

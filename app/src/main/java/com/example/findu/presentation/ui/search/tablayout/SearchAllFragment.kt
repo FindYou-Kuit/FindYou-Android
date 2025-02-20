@@ -42,6 +42,11 @@ class SearchAllFragment : Fragment() {
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
+    private var lastProtectId = Long.MAX_VALUE
+    private var lastReportId = Long.MAX_VALUE
+
+    private var isNewList = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +64,8 @@ class SearchAllFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.allSearchData.collectLatest { searchResults ->
                 setupRV(searchResults ?: emptyList())
+                lastReportId = searchResults?.firstOrNull()?.lastReportId ?: Long.MAX_VALUE
+                lastProtectId = searchResults?.firstOrNull()?.lastProtectId ?: Long.MAX_VALUE
             }
         }
 
@@ -85,8 +92,16 @@ class SearchAllFragment : Fragment() {
                 )
             }
         }
-        rvAdapter.updateData(searchList)
-        binding.rvSearchAllHorizontalContent.scrollToPosition(0)
+        Log.d("SearchAllFragment", "isNewList: $isNewList")
+        if(isNewList) {
+            rvAdapter.submitList(searchList)
+            isNewList = false
+            binding.rvSearchAllHorizontalContent.scrollToPosition(0)
+            binding.rvSearchAllHorizontalContent.smoothScrollToPosition(0)
+
+        } else {
+            rvAdapter.addData(searchList)
+        }
     }
 
     private fun navigateToDetail(cardId: Long, tag: String, name: String) {
@@ -143,6 +158,7 @@ class SearchAllFragment : Fragment() {
                 } else {
                     bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
                 }
+            isNewList = true
             updateFilterChips(filterUiModel)
 
         }
@@ -160,7 +176,7 @@ class SearchAllFragment : Fragment() {
                         binding.hsSearchAllFilters.elevation = 0f
                     }
 
-                    rvAdapter.returnItemSize() == 0 -> {
+                    rvAdapter.itemCount == 0 -> {
                         binding.hsSearchAllFilters.elevation = 0f
                     }
 
@@ -177,9 +193,10 @@ class SearchAllFragment : Fragment() {
     private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchAllGroupFilters
         chipGroup.removeAllViews()
-        viewModel.updateAllFilterState(filters)
 
         if (filters == null) return
+        viewModel.updateAllFilterState(filters)
+        isNewList = true
 
         filters.species?.let { species ->
             if (species.isEmpty()) return
@@ -189,6 +206,7 @@ class SearchAllFragment : Fragment() {
             chip.text = if (species == "개") "강아지" else species
             chip.setOnCloseIconClickListener {
                 chipGroup.removeAllViews()
+                isNewList = true
                 viewModel.updateAllFilterState(
                     viewModel.allFilter?.copy(
                         species = null,
@@ -196,6 +214,7 @@ class SearchAllFragment : Fragment() {
                     )
                 )
                 viewModel.allFilter?.location?.let {
+                    if (it.isNotBlank()) {
                     val locationChip =
                         layoutInflater.inflate(
                             R.layout.item_search_filter_chip,
@@ -203,8 +222,15 @@ class SearchAllFragment : Fragment() {
                             false
                         ) as Chip
                     locationChip.text = it
+                    locationChip.setOnCloseIconClickListener {
+                        isNewList = true
+                        chipGroup.removeView(chip)
+                        viewModel.updateAllFilterState(
+                            viewModel.reportFilter?.copy(location = null)
+                        )
+                    }
                     chipGroup.addView(locationChip)
-                }
+                }}
             }
             chipGroup.addView(chip)
         }
@@ -214,6 +240,7 @@ class SearchAllFragment : Fragment() {
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
             chip.text = breed
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeView(chip)
                 viewModel.updateAllFilterState(
                     viewModel.allFilter?.copy(
@@ -230,6 +257,7 @@ class SearchAllFragment : Fragment() {
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
             chip.text = location
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeView(chip)
                 viewModel.updateAllFilterState(
                     viewModel.reportFilter?.copy(location = null)
@@ -242,19 +270,45 @@ class SearchAllFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
-            items = emptyList(),
             onItemClick = { item ->
                 navigateToDetail(item.cardId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
             }
-        )
+        ).apply { submitList(emptyList()) }
         binding.rvSearchAllHorizontalContent.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = rvAdapter
         }
+
+        binding.rvSearchAllHorizontalContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val rvPosition = when(recyclerView.layoutManager) {
+                    is LinearLayoutManager -> {
+                        (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    }
+                    else -> {
+                        (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+                    }
+                }
+
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
+        Log.d("SearchAllFragment", "rvPosition: $rvPosition, totalCount: $totalCount")
+
+                // 페이징 처리
+                if(rvPosition == totalCount) {
+                    viewModel.getSearchAllData(
+                        lastProtectId,
+                        lastReportId
+                    )
+                }
+            }
+        })
     }
 
     private fun initToggleButton() {
