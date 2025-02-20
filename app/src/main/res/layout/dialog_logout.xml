@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="288dp"
     android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:clipChildren="false"
     android:background="@drawable/bg_report_dialog_rd12">
 
     <TextView
         android:id="@+id/tv_logout_dialog_mention"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:text="로그아웃 하시겠습니까?"
         android:textAppearance="@style/TextAppearance.FindU.Head2_SB_20"
         android:textColor="@color/gray6"
@@ -20,37 +22,33 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="15dp"
+        android:elevation="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        android:paddingBottom="40dp"
+        android:paddingBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_logout_dialog_mention">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_logout_dialog_cancel"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:textColor="@color/gray5"
             android:layout_height="50dp"
-            android:layout_weight="120"
             android:background="@drawable/bg_button_dialog_gray"
             android:backgroundTint="@null"
             android:text="취소"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="8" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_logout_dialog_logout"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="50dp"
-            android:layout_weight="120"
             android:textColor="@color/gray6"
+            android:layout_marginStart="8dp"
             android:background="@drawable/bg_button_report_dialog"
             android:backgroundTint="@null"
             android:text="로그아웃"
