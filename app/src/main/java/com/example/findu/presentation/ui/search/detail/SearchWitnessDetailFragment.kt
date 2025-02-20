@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.search
+package com.example.findu.presentation.ui.search.detail
 
 import android.content.ActivityNotFoundException
 import android.content.Intent

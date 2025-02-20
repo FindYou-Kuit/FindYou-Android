@@ -26,9 +26,9 @@ import com.example.findu.presentation.ui.home.adapter.HomeRVAdapter
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
 import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
-import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
-import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
-import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

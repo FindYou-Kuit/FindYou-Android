@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.search
+package com.example.findu.presentation.ui.search.detail
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -13,16 +13,12 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.presentation.ui.search.model.DetailSearchRv
-import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
-import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

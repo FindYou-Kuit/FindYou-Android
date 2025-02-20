@@ -5,7 +5,7 @@
     android:id="@+id/fragment_search_protect"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.search.SearchProtectingDetailFragment">
+    tools:context=".presentation.ui.search.detail.SearchProtectingDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_detail_top"

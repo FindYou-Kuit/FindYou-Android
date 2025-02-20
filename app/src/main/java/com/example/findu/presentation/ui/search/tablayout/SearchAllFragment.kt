@@ -19,11 +19,11 @@ import com.example.findu.databinding.FragmentSearchAllBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
-import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
