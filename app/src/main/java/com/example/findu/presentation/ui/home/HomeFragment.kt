@@ -1,5 +1,7 @@
 package com.example.findu.presentation.ui.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -56,7 +58,24 @@ class HomeFragment : Fragment() {
         setupReportDialog()
         setupFindDialog()
 
+        initListener()
+
         return binding.root
+    }
+
+    private fun initListener() {
+        binding.clHomeBottomPart.setOnClickListener {
+            goWebSite(PART_URL)
+        }
+
+        binding.clHomeBottomCenter.setOnClickListener {
+            goWebSite(CENTER_URL)
+        }
+    }
+
+    private fun goWebSite(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 
     private fun observeViewModel() {
@@ -149,7 +168,7 @@ class HomeFragment : Fragment() {
 
     private fun navigateToDetail(item: HomeRv) {
 
-        when(item.type) {
+        when (item.type) {
             "실종신고" -> {
                 findNavController().navigate(
                     HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailDisappear(
@@ -157,6 +176,7 @@ class HomeFragment : Fragment() {
                     )
                 )
             }
+
             "목격신고" -> {
                 findNavController().navigate(
                     HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailWitness(
@@ -164,6 +184,7 @@ class HomeFragment : Fragment() {
                     )
                 )
             }
+
             "보호중" -> {
                 findNavController().navigate(
                     HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailProtecting(
@@ -234,5 +255,12 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val PART_URL =
+            "https://www.animal.go.kr/front/awtis/relevant/relevantList.do?menuNo=5000000014"
+        private const val CENTER_URL =
+            "https://www.animal.go.kr/front/awtis/institution/institutionList.do?menuNo=1000000059"
     }
 }

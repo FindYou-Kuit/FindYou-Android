@@ -436,9 +436,9 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_bottom_protect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
+                    android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_home_bottom_title">
 
@@ -458,6 +458,7 @@
                         android:text="@string/home_bottom_protect"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/iv_home_bottom_protect" />
 
@@ -465,9 +466,9 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_bottom_center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
+                    android:layout_marginStart="15dp"
                     app:layout_constraintBottom_toBottomOf="@id/cl_home_bottom_protect"
                     app:layout_constraintStart_toEndOf="@id/cl_home_bottom_protect"
                     app:layout_constraintTop_toTopOf="@id/cl_home_bottom_protect">
@@ -488,6 +489,7 @@
                         android:text="@string/home_bottom_center"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/iv_home_bottom_center" />
 
@@ -495,9 +497,9 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_bottom_part"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
+                    android:layout_marginStart="15dp"
                     app:layout_constraintBottom_toBottomOf="@id/cl_home_bottom_protect"
                     app:layout_constraintStart_toEndOf="@id/cl_home_bottom_center"
                     app:layout_constraintTop_toTopOf="@id/cl_home_bottom_protect">
@@ -518,6 +520,7 @@
                         android:text="@string/home_bottom_part"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/iv_home_bottom_part" />
 
