@@ -16,13 +16,16 @@
         <action
             android:id="@+id/action_fragment_home_to_fragment_missing_report"
             app:destination="@id/fragment_missing_report" />
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_search"
+            app:destination="@id/fragment_search" />
     </fragment>
 
     <fragment
         android:id="@+id/fragment_search"
         android:name="com.example.findu.presentation.ui.search.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_fragment_search_to_fragment_witness_report"
             app:destination="@id/fragment_witness_report" />
@@ -76,7 +79,7 @@
         android:id="@+id/fragment_my"
         android:name="com.example.findu.presentation.ui.my.MyFragment"
         android:label="My"
-        tools:layout="@layout/fragment_my" >
+        tools:layout="@layout/fragment_my">
         <action
             android:id="@+id/action_fragment_my_to_fragment_my_report_history"
             app:destination="@id/fragment_my_report_history" />

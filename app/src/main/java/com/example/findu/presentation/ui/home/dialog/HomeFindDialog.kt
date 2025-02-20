@@ -6,10 +6,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.navigation.NavController
+import com.example.findu.R
 import com.example.findu.databinding.DialogHomeFindBinding
 
 class HomeFindDialog(
-    context: Context
+    context: Context,
+    private val navController: NavController
 ) : Dialog(context) {
     private var _binding: DialogHomeFindBinding? = null
     private val binding get() = _binding!!
@@ -31,11 +34,21 @@ class HomeFindDialog(
         }
 
         binding.llDialogHomeFindReport.setOnClickListener {
-
+            navigateToMissingReport()
         }
 
         binding.llDialogHomeFindSearch.setOnClickListener {
-
+            navigateToSearch()
         }
+    }
+
+    private fun navigateToMissingReport() {
+        navController.navigate(R.id.action_fragment_home_to_fragment_missing_report)
+        dismiss()
+    }
+
+    private fun navigateToSearch() {
+        navController.navigate(R.id.action_fragment_home_to_fragment_search)
+        dismiss()
     }
 }

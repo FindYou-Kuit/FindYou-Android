@@ -93,7 +93,7 @@ class HomeFragment : Fragment() {
 
     private fun setupFindDialog() {
         binding.cvHomeFind.setOnClickListener {
-            val dialog = HomeFindDialog(requireContext())
+            val dialog = HomeFindDialog(requireContext(), findNavController())
             dialog.show()
         }
     }
