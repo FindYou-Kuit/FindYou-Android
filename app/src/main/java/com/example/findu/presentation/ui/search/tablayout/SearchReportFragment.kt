@@ -43,6 +43,8 @@ class SearchReportFragment : Fragment() {
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
+    private var lastReportId = Long.MAX_VALUE
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,7 +85,7 @@ class SearchReportFragment : Fragment() {
                         binding.hsSearchReportFilters.elevation = 0f
                     }
 
-                    rvAdapter.returnItemSize() == 0 -> {
+                    rvAdapter.itemCount == 0 -> {
                         binding.hsSearchReportFilters.elevation = 0f
                     }
 
@@ -100,6 +102,7 @@ class SearchReportFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.reportSearchData.collectLatest { searchResults ->
                 setupRV(searchResults ?: emptyList())
+                lastReportId = searchResults?.firstOrNull()?.lastReportId ?: Long.MAX_VALUE
             }
         }
 
@@ -126,8 +129,10 @@ class SearchReportFragment : Fragment() {
                 )
             }
         }
-        rvAdapter.updateData(searchList)
-        binding.rvSearchHorizontalContent.scrollToPosition(0)
+        rvAdapter.addData(searchList)
+        if (lastReportId == Long.MAX_VALUE) {
+            binding.rvSearchHorizontalContent.scrollToPosition(0)
+        }
     }
 
     private fun navigateToDetail(cardId: Long, tag: String, name: String) {
@@ -230,17 +235,43 @@ class SearchReportFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
-            items = emptyList(),
             onItemClick = { item ->
                 navigateToDetail(item.cardId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
             }
-        )
+        ).apply { submitList(emptyList()) }
         binding.rvSearchHorizontalContent.adapter = rvAdapter
         binding.rvSearchHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        binding.rvSearchHorizontalContent.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val rvPosition = when (recyclerView.layoutManager) {
+                    is LinearLayoutManager -> {
+                        (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    }
+
+                    else -> {
+                        (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+                    }
+                }
+
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
+
+                // 페이징 처리
+                if (rvPosition == totalCount) {
+                    viewModel.getSearchReportData(
+                        lastReportId
+                    )
+                }
+            }
+        })
     }
 
     private fun openDetailFragment(selectedItem: SearchRv) {
