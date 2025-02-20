@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyViewedAnimalBinding
 import com.example.findu.presentation.ui.my.adapter.MyViewedAnimalsRvAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -91,6 +92,8 @@ class MyViewedAnimalFragment : Fragment() {
                 launch {
                     myViewModel.viewedAnimals.collectLatest { viewedAnimals ->
                         myRecentHistoryRvAdapter.submitList(viewedAnimals)
+                        delay(60)
+                        binding.rvMyRecentHistory.scrollToPosition(0)
                         binding.rvMyRecentHistory.smoothScrollToPosition(0)
                     }
                 }

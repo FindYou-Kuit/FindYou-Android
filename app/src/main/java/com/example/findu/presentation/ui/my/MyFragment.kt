@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.my
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
+import com.example.findu.presentation.ui.login.LoginActivity
+import com.example.findu.presentation.ui.my.dialog.MyLogoutDialog
 import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
 import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
 import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
@@ -106,6 +109,19 @@ class MyFragment : Fragment() {
                 } else {
                     requestLocationPermission(requireActivity())
                 }
+            }
+
+            clMyLogout.setOnClickListener {
+                MyLogoutDialog(
+                    context = requireContext(),
+                    onLogoutClick = {
+                        with(requireActivity()) {
+                            startActivity(
+                                Intent(requireContext(), LoginActivity::class.java)
+                            )
+                            finish()
+                        }
+                    }).show()
             }
 
             clMyWithdrawal.setOnClickListener {
