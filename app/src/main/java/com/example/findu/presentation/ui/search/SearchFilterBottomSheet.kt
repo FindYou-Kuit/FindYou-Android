@@ -2,16 +2,23 @@ package com.example.findu.presentation.ui.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.archit.calendardaterangepicker.customviews.CalendarListener
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBottomSheetBinding
+import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
+import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_HEIGHT
+import com.example.findu.presentation.ui.report.constants.ReportConstants.DROP_DOWN_MAX_COUNT
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.adapter.SearchBreedAdapter
@@ -25,6 +32,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Calendar
 
@@ -34,22 +43,21 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     lateinit var binding: FragmentSearchFilterBottomSheetBinding
     private lateinit var cityAdapter: SearchFilterLocationRVAdapter
     private lateinit var districtAdapter: SearchFilterLocationRVAdapter
+    private val breedAdapter: ReportBreedAdapter by lazy {
+        ReportBreedAdapter(
+            requireContext(),
+            viewModel.selectedBreedList.value.toMutableList()
+        )
+    }
 
     private val viewModel by viewModels<SearchViewModel>()
-
-//    private val breedAdapter: SearchBreedAdapter by lazy {
-//        SearchBreedAdapter(
-//            requireContext(),
-//            reportViewModel.selectedBreedList.value.toMutableList()
-//        )
-//    }
 
     private var selectedBreedList = mutableListOf<String>()
     private var selectedStartDate: String? = null
     private var selectedEndDate: String? = null
     private var selectedSpecies: String? = null
 
-    private val breedList =
+    private var breedList =
         listOf("리트리버", "말티즈", "불독", "사모예드", "시츄", "요크셔 테리어", "치와와", "포메라니안", "웰시코기")
 
     private val cityList =
@@ -82,12 +90,10 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSearchFilterBottomSheetBinding.inflate(inflater, container, false)
         initListeners()
         setCalender()
-//        setBreedSelector()
-        setUpBreedsAdapter()
         setLocationSelector()
         return binding.root
     }
@@ -215,22 +221,18 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setUpBreedsAdapter() {
-        val searchBreedAdapter = SearchBreedAdapter(requireContext(), breedList.toMutableList())
 
         with(binding.actvSearchFilterBreed) {
-            setAdapter(searchBreedAdapter)
+            setAdapter(breedAdapter)
             setDropDownBackgroundResource(R.drawable.bg_top_radius_8_g4)
             setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
             setOnClickListener {
-//                dropDownHeight =
-//                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
-//                        ViewGroup.LayoutParams.WRAP_CONTENT
-//                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                dropDownHeight =
+                    if (viewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
             }
             setOnItemClickListener { _, _, _, _ ->
-//                reportViewModel.updateReportData(
-//                    breedName = text.toString()
-//                )
                 requireContext().hideKeyboard(windowToken)
                 updateSelectedBreeds(text.toString())
                 clearFocus()
@@ -239,20 +241,11 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
                 showDropDown()
                 true
             }
-            addTextChangedListener { text ->
-//                reportViewModel.selectedBreedList.value
-//                    .filter { it.contains(text.toString()) }
-//                    .let { matches ->
-//                        dropDownHeight = if (matches.size > DROP_DOWN_MAX_COUNT) {
-//                            requireContext().dpToPx(DROP_DOWN_HEIGHT)
-//                        } else ViewGroup.LayoutParams.WRAP_CONTENT
-//                    }
-            }
             setOnFocusChangeListener { _, hasFocus ->
-//                dropDownHeight =
-//                    if (reportViewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
-//                        ViewGroup.LayoutParams.WRAP_CONTENT
-//                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
+                dropDownHeight =
+                    if (viewModel.selectedBreedList.value.size < DROP_DOWN_MAX_COUNT)
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    else requireContext().dpToPx(DROP_DOWN_HEIGHT)
                 if (hasFocus) {
                     showDropDown()
                 }
@@ -261,7 +254,11 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun updateSelectedBreeds(breeds: String) {
-        val breedsToList = breeds.split(", ").dropLast(1).distinct().toMutableList()
+        val breedsToList = breeds.split(", ").filter {
+            it.isNotBlank()
+        }
+            .distinct().toMutableList()
+
         if (breedsToList.size > 10) {
             Toast.makeText(
                 requireContext(),
@@ -272,6 +269,7 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         }
 
         selectedBreedList = breedsToList
+        Log.d("SearchFilterBottomSheet", "updateSelectedBreeds: $selectedBreedList")
 
         binding.actvSearchFilterBreed.setText(selectedBreedList.joinToString(", "))
 
@@ -376,4 +374,60 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
             }
         })
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
+        initRadioGroupListener()
+    }
+
+    private fun initRadioGroupListener() {
+        binding.rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rb_dog -> {
+                    viewModel.selectSpeciesType(SpeciesType.DOG)
+                    binding.actvSearchFilterBreed.text = null
+                    binding.cgSearchFilterFeatures.removeAllViews()
+                    breedList = emptyList()
+                }
+
+                R.id.rb_cat -> {
+                    viewModel.selectSpeciesType(SpeciesType.CAT)
+                    binding.actvSearchFilterBreed.text = null
+                    binding.cgSearchFilterFeatures.removeAllViews()
+                    breedList = emptyList()
+                }
+
+                R.id.rb_etc -> {
+                    viewModel.selectSpeciesType(SpeciesType.ETC)
+                    binding.actvSearchFilterBreed.text = null
+                    binding.cgSearchFilterFeatures.removeAllViews()
+                    breedList = emptyList()
+                }
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                launch {
+                    viewModel.breedData.collectLatest { breedData ->
+                        breedData?.let {
+                            setUpBreedsAdapter()
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.selectedBreedList.collectLatest { selectedBreedList ->
+                        if (selectedBreedList.isNotEmpty())
+                            breedAdapter.changeItems(selectedBreedList)
+                    }
+                }
+
+            }
+        }
+    }
+
 }

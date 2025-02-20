@@ -3,7 +3,10 @@ package com.example.findu.presentation.ui.search.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.domain.model.breed.BreedData
+import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.search.SearchData
+import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
@@ -14,6 +17,7 @@ import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.toSearchFilterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +28,8 @@ class SearchViewModel @Inject constructor(
     private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
     private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
     private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
-    private val deleteInterestReportAnimalUseCase: DeleteInterestReportAnimalUseCase
+    private val deleteInterestReportAnimalUseCase: DeleteInterestReportAnimalUseCase,
+    private val getBreedDataUseCase: GetBreedDataUseCase
 ) : ViewModel() {
 
     private var _allFilter: SearchFilterUiModel? = SearchFilterUiModel()
@@ -48,8 +53,20 @@ class SearchViewModel @Inject constructor(
     private val _protectSearchData = MutableStateFlow<List<SearchData>?>(null)
     val protectSearchData = _protectSearchData.asStateFlow()
 
+    private val _breedData = MutableStateFlow<BreedData?>(null)
+    val breedData: StateFlow<BreedData?> = _breedData
+
+    private val _selectedBreedList = MutableStateFlow<List<String>>(emptyList())
+    val selectedBreedList: StateFlow<List<String>> = _selectedBreedList
+
+    private val _selectedSpeciesType = MutableStateFlow<SpeciesType?>(null)
+
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
+
+    init {
+        fetchBreedData()
+    }
 
     fun getSearchAllData(
         lastProtectId: Long = Long.MAX_VALUE,
@@ -87,18 +104,6 @@ class SearchViewModel @Inject constructor(
                 }
             )
         }
-    }
-
-    fun setAllFilter(searchFilter: SearchFilterUiModel) {
-        _allFilter = searchFilter
-    }
-
-    fun setReportFilter(searchFilter: SearchFilterUiModel) {
-        _reportFilter = searchFilter
-    }
-
-    fun setProtectFilter(searchFilter: SearchFilterUiModel) {
-        _protectFilter = searchFilter
     }
 
     fun getSearchProtectData(
@@ -205,6 +210,34 @@ class SearchViewModel @Inject constructor(
                     }
                 )
             }
+        }
+    }
+
+    private fun fetchBreedData() {
+        viewModelScope.launch {
+            getBreedDataUseCase().fold(
+                onSuccess = { data ->
+                    _breedData.value = data
+                    _selectedBreedList.value = data.etcBreedList.map { it.breedName }
+                },
+                onFailure = {
+                    _errorMessage.value = it.message ?: "품종 데이터를 불러오는 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
+
+    fun selectSpeciesType(speciesType: SpeciesType) {
+        _selectedSpeciesType.value = speciesType
+        when (speciesType) {
+            SpeciesType.DOG -> _selectedBreedList.value =
+                _breedData.value?.dogBreedList?.map { it.breedName } ?: emptyList()
+
+            SpeciesType.CAT -> _selectedBreedList.value =
+                _breedData.value?.catBreedList?.map { it.breedName } ?: emptyList()
+
+            SpeciesType.ETC -> _selectedBreedList.value =
+                _breedData.value?.etcBreedList?.map { it.breedName } ?: emptyList()
         }
     }
 
