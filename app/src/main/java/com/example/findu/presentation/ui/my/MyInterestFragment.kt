@@ -26,12 +26,38 @@ class MyInterestFragment : Fragment() {
     private val myViewModel by viewModels<MyViewModel>()
     private val myInterestRvAdapter = MyInterestRvAdapter(
         onKeepClick = { animalId, interest, tag ->
-//            myViewModel.updateInterest(animalId, interest, tag)
+            myViewModel.setInterest(
+                id = animalId,
+                isInterest = interest,
+                tag = tag
+            )
         },
-        onItemClick = { animalId ->
-//            findNavController().navigate(
-//                MyInterestFragmentDirections.actionMyInterestFragmentToAnimalDetailFragment(animalId)
-//            )
+        onItemClick = { animalId, tag, name ->
+            when (tag) {
+                "실종신고" -> {
+                    findNavController().navigate(
+                        MyInterestFragmentDirections.actionFragmentMyKeepAnimalsToFragmentSearchDetailDisappear( // 실종
+                            id = animalId.toString(), tag = tag, name = name
+                        )
+                    )
+                }
+
+                "보호중" -> {
+                    findNavController().navigate(
+                        MyInterestFragmentDirections.actionFragmentMyKeepAnimalsToFragmentSearchDetailProtecting( // 보호
+                            id = animalId.toString(), tag = tag, name = name
+                        )
+                    )
+                }
+
+                "목격신고" -> {
+                    findNavController().navigate(
+                        MyInterestFragmentDirections.actionFragmentMyKeepAnimalsToFragmentSearchDetailWitness( // 목격
+                            id = animalId.toString(), tag = tag, name = name
+                        )
+                    )
+                }
+            }
         }
     )
 
@@ -67,6 +93,8 @@ class MyInterestFragment : Fragment() {
                 launch {
                     myViewModel.interestAnimals.collectLatest { data ->
                         myInterestRvAdapter.submitList(data)
+                        binding.rvMyKeepAnimals.scrollToPosition(0)
+                        binding.rvMyKeepAnimals.smoothScrollToPosition(0)
                     }
                 }
 
@@ -74,7 +102,8 @@ class MyInterestFragment : Fragment() {
                     myViewModel.errorMessage.collectLatest { message ->
                         message?.let {
                             Log.e("MyInterestFragment", it)
-                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show() }
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }

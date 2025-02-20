@@ -23,6 +23,7 @@ import com.example.findu.domain.usecase.my.GetNickNameUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
+import com.example.findu.domain.usecase.report.DeleteReportUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
@@ -157,4 +158,10 @@ object UseCaseModule {
     fun provideDeleteInterestProtectingAnimalUseCase(
         interestRepository: InterestRepository
     ): DeleteInterestProtectingAnimalUseCase = DeleteInterestProtectingAnimalUseCase(interestRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteReportUseCase(
+        reportRepository: ReportRepository
+    ): DeleteReportUseCase = DeleteReportUseCase(reportRepository)
 }

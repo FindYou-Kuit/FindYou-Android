@@ -100,7 +100,6 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         binding.btnSearchFilterConfirm.setOnClickListener { applyFilters() }
 
         binding.rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
-            Log.d("SearchFilterBottomSheet", "checkedId: $checkedId")
             when (checkedId) {
                 R.id.rb_search_filter_dog -> {
                     selectedSpecies = "개"
@@ -140,12 +139,6 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         } else {
             "$location $selectedDistrict"
         }
-        Log.d("SearchFilterBottomSheet", "selectedBreedList: ${selectedDistrict == "null"}")
-        Log.d("SearchFilterBottomSheet", "selectedBreedList: ${selectedDistrict.isNullOrEmpty()}")
-        Log.d(
-            "SearchFilterBottomSheet",
-            "location: $location , selectedCity: $selectedCity, selectedDistrict: $selectedDistrict"
-        )
 
         filterUiModel.location = location
         bundle.putSerializable(SELECTED_FILTER_DATA, filterUiModel)
@@ -260,7 +253,6 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun updateSelectedBreeds(breeds: String) {
-        Log.d("SearchFilterBottomSheet", "breeds: $breeds")
         val breedsToList = breeds.split(", ").filter {
             it.isNotBlank()
         }
@@ -276,7 +268,6 @@ class SearchFilterBottomSheet : BottomSheetDialogFragment() {
         }
 
         selectedBreedList = breedsToList
-        Log.d("SearchFilterBottomSheet", "updateSelectedBreeds: $selectedBreedList")
 
         binding.actvSearchFilterBreed.setText(selectedBreedList.joinToString(", "))
 

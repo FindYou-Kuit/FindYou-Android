@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,11 +19,12 @@ import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
-import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.SearchFragmentDirections
+import com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
@@ -101,38 +103,32 @@ class SearchRescueFragment : Fragment() {
     }
 
     private fun navigateToDetail(cardId: Long, tag: String, name: String) {
-        val fragment = when (tag) {
-            "보호중" -> SearchProtectingDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
+        when (tag) {
+            "보호중" ->
+                findNavController().navigate(
+                    SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailProtecting(
+                        id = cardId.toString(),
+                        tag = tag,
+                        name = name
+                    )
+                )
 
-            "목격신고" -> SearchWitnessDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
+            "목격신고" -> findNavController().navigate(
+                SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailWitness(
+                    id = cardId.toString(),
+                    tag = tag,
+                    name = name
+                )
+            )
 
-            "실종신고" -> SearchDisappearDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
-
-            else -> return
+            "실종신고" -> findNavController().navigate(
+                SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailDisappear(
+                    id = cardId.toString(),
+                    tag = tag,
+                    name = name
+                )
+            )
         }
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_main, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -299,18 +295,6 @@ class SearchRescueFragment : Fragment() {
                 }
             }
         })
-    }
-
-    private fun openDetailFragment(selectedItem: SearchRv) {
-        val detailFragment = SearchProtectingDetailFragment().apply {
-            arguments = Bundle().apply {
-                putSerializable("selectedItem", selectedItem)
-            }
-        }
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_main, detailFragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     private fun initToggleButton() {

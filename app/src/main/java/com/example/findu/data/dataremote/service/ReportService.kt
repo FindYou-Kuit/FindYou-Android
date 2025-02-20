@@ -6,9 +6,11 @@ import com.example.findu.data.dataremote.model.request.MissingReportRequestDto
 import com.example.findu.data.dataremote.model.request.WitnessReportRequestDto
 import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ReportService {
     @Multipart
@@ -25,6 +27,11 @@ interface ReportService {
     @POST("/api/v1/reports/new-witness-reports")
     suspend fun postWitnessReport(
         @Body request: WitnessReportRequestDto
+    ): NullableBaseResponse<Unit>
+
+    @DELETE("/api/v1/reports/{report_id}")
+    suspend fun deleteReport(
+        @Path("report_id") reportId: Long
     ): NullableBaseResponse<Unit>
 
 }

@@ -18,6 +18,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.findu.R
 import com.example.findu.databinding.ActivitySplashBinding
 import com.example.findu.presentation.ui.login.LoginActivity
+import com.example.findu.presentation.ui.main.MainActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -70,7 +71,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(this, LoginActivity::class.java))
+//        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }

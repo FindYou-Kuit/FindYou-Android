@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,11 +20,9 @@ import com.example.findu.databinding.FragmentSearchAllBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
-import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
@@ -92,8 +91,7 @@ class SearchAllFragment : Fragment() {
                 )
             }
         }
-        Log.d("SearchAllFragment", "isNewList: $isNewList")
-        if(isNewList) {
+        if (isNewList) {
             rvAdapter.submitList(searchList)
             isNewList = false
             binding.rvSearchAllHorizontalContent.scrollToPosition(0)
@@ -105,38 +103,34 @@ class SearchAllFragment : Fragment() {
     }
 
     private fun navigateToDetail(cardId: Long, tag: String, name: String) {
-        val fragment = when (tag) {
-            "보호중" -> SearchProtectingDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
 
-            "목격신고" -> SearchWitnessDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
+        when (tag) {
+            "보호중" ->
+                findNavController().navigate(
+                    SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailProtecting(
+                        id = cardId.toString(),
+                        tag = tag,
+                        name = name
+                    )
+                )
 
-            "실종신고" -> SearchDisappearDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
+            "목격신고" -> findNavController().navigate(
+                SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailWitness(
+                    id = cardId.toString(),
+                    tag = tag,
+                    name = name
+                )
+            )
 
-            else -> return
+            "실종신고" -> findNavController().navigate(
+                SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailDisappear(
+                    id = cardId.toString(),
+                    tag = tag,
+                    name = name
+                )
+            )
         }
 
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_main, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     private fun initFilterButton() {
@@ -215,22 +209,23 @@ class SearchAllFragment : Fragment() {
                 )
                 viewModel.allFilter?.location?.let {
                     if (it.isNotBlank()) {
-                    val locationChip =
-                        layoutInflater.inflate(
-                            R.layout.item_search_filter_chip,
-                            chipGroup,
-                            false
-                        ) as Chip
-                    locationChip.text = it
-                    locationChip.setOnCloseIconClickListener {
-                        isNewList = true
-                        chipGroup.removeView(chip)
-                        viewModel.updateAllFilterState(
-                            viewModel.reportFilter?.copy(location = null)
-                        )
+                        val locationChip =
+                            layoutInflater.inflate(
+                                R.layout.item_search_filter_chip,
+                                chipGroup,
+                                false
+                            ) as Chip
+                        locationChip.text = it
+                        locationChip.setOnCloseIconClickListener {
+                            isNewList = true
+                            chipGroup.removeView(chip)
+                            viewModel.updateAllFilterState(
+                                viewModel.reportFilter?.copy(location = null)
+                            )
+                        }
+                        chipGroup.addView(locationChip)
                     }
-                    chipGroup.addView(locationChip)
-                }}
+                }
             }
             chipGroup.addView(chip)
         }
@@ -283,25 +278,26 @@ class SearchAllFragment : Fragment() {
             adapter = rvAdapter
         }
 
-        binding.rvSearchAllHorizontalContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.rvSearchAllHorizontalContent.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                val rvPosition = when(recyclerView.layoutManager) {
+                val rvPosition = when (recyclerView.layoutManager) {
                     is LinearLayoutManager -> {
                         (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     }
+
                     else -> {
                         (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
                     }
                 }
 
                 val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
-        Log.d("SearchAllFragment", "rvPosition: $rvPosition, totalCount: $totalCount")
 
                 // 페이징 처리
-                if(rvPosition == totalCount) {
+                if (rvPosition == totalCount) {
                     viewModel.getSearchAllData(
                         lastProtectId,
                         lastReportId

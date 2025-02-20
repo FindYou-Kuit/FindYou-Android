@@ -12,8 +12,8 @@ import com.example.findu.presentation.model.MyViewedAnimalsRv
 import com.example.findu.presentation.type.AnimalStateType
 
 class MyViewedAnimalsRvAdapter(
-    private val onKeepClick: (Long, Boolean) -> Unit,
-    private val onItemClick: (Long) -> Unit = {}
+    private val onKeepClick: (Long, Boolean, String) -> Unit,
+    private val onItemClick: (Long, String, String) -> Unit
 ) : ListAdapter<MyViewedAnimalsRv, MyViewedAnimalsRvAdapter.MyListRvViewHolder>(diffUtil) {
 
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
@@ -58,7 +58,7 @@ class MyViewedAnimalsRvAdapter(
             with(binding) {
                 flMyHistoryKeep.setOnClickListener {
                     item.interest = !item.interest
-                    onKeepClick(item.cardId, item.interest)
+                    onKeepClick(item.cardId, item.interest, item.tag)
                     if (item.interest) {
                         binding.ivMyHistoryKeep.visibility = View.VISIBLE
                         binding.ivMyHistoryNonKeep.visibility = View.GONE
@@ -67,7 +67,13 @@ class MyViewedAnimalsRvAdapter(
                         binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
                     }
                 }
-                clMyHistoryContainer.setOnClickListener { onItemClick(item.cardId) }
+                clMyHistoryContainer.setOnClickListener {
+                    onItemClick(
+                        item.cardId,
+                        item.tag,
+                        item.title
+                    )
+                }
 
             }
         }
