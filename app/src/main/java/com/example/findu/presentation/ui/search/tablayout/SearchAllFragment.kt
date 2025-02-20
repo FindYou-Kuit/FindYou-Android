@@ -45,6 +45,8 @@ class SearchAllFragment : Fragment() {
     private var lastProtectId = Long.MAX_VALUE
     private var lastReportId = Long.MAX_VALUE
 
+    private var isNewList = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -90,9 +92,12 @@ class SearchAllFragment : Fragment() {
                 )
             }
         }
-        rvAdapter.addData(searchList)
-        if(lastReportId == Long.MAX_VALUE && lastProtectId == Long.MAX_VALUE) {
+        if(isNewList) {
+            rvAdapter.submitList(searchList)
+            isNewList = false
             binding.rvSearchAllHorizontalContent.scrollToPosition(0)
+        } else {
+            rvAdapter.addData(searchList)
         }
     }
 
@@ -184,9 +189,10 @@ class SearchAllFragment : Fragment() {
     private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchAllGroupFilters
         chipGroup.removeAllViews()
-        viewModel.updateAllFilterState(filters)
 
         if (filters == null) return
+        viewModel.updateAllFilterState(filters)
+        isNewList = true
 
         filters.species?.let { species ->
             if (species.isEmpty()) return

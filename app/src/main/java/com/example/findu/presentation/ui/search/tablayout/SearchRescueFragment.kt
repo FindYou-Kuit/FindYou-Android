@@ -44,6 +44,7 @@ class SearchRescueFragment : Fragment() {
     private val viewModel by viewModels<SearchViewModel>()
 
     private var lastProtectId = Long.MAX_VALUE
+    private var isNewList = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,9 +90,12 @@ class SearchRescueFragment : Fragment() {
                 )
             }
         }
-        rvAdapter.addData(searchList)
-        if (lastProtectId == Long.MAX_VALUE) {
+        if(isNewList) {
+            rvAdapter.submitList(searchList)
+            isNewList = false
             binding.rvSearchRescueHorizontalContent.scrollToPosition(0)
+        } else {
+            rvAdapter.addData(searchList)
         }
     }
 
@@ -174,9 +178,11 @@ class SearchRescueFragment : Fragment() {
     private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchRescueGroupFilters
         chipGroup.removeAllViews()
-        viewModel.updateProtectFilterState(filters)
 
         if (filters == null) return
+
+        viewModel.updateProtectFilterState(filters)
+        isNewList = true
 
         filters.species?.let { species ->
             if (species.isEmpty()) return

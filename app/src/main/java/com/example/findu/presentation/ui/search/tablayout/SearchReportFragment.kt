@@ -44,6 +44,7 @@ class SearchReportFragment : Fragment() {
     private val viewModel by viewModels<SearchViewModel>()
 
     private var lastReportId = Long.MAX_VALUE
+    private var isNewList = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -129,9 +130,12 @@ class SearchReportFragment : Fragment() {
                 )
             }
         }
-        rvAdapter.addData(searchList)
-        if (lastReportId == Long.MAX_VALUE) {
+        if(isNewList) {
+            rvAdapter.submitList(searchList)
+            isNewList = false
             binding.rvSearchHorizontalContent.scrollToPosition(0)
+        } else {
+            rvAdapter.addData(searchList)
         }
     }
 
@@ -166,9 +170,12 @@ class SearchReportFragment : Fragment() {
     private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchReportGroupFilters
         chipGroup.removeAllViews()
-        viewModel.updateReportFilterState(filters)
 
         if (filters == null) return
+
+        viewModel.updateReportFilterState(filters)
+        isNewList = true
+
 
         filters.species?.let { species ->
             if (species.isEmpty()) return
