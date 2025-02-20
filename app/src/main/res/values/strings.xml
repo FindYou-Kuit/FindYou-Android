@@ -15,8 +15,9 @@
     <string name="signup_email_title">이메일</string>
     <string name="signup_email_hint">example1234@gmail.com</string>
     <string name="signup_email_button">중복 확인</string>
-    <string name="signup_email_button_right">사옹 가능한 이메일 주소에요.</string>
+    <string name="signup_email_button_right">사용 가능한 이메일 주소에요.</string>
     <string name="signup_email_button_wrong">이미 가입된 이메일 주소에요.</string>
+    <string name="signup_email_invalid">올바른 이메일 주소를 작성해주세요.</string>
     <string name="signup_password_title">비밀번호</string>
     <string name="signup_password">사용할 비밀번호</string>
     <string name="signup_password_hint">8~20자리, 영문자, 숫자, 특수문자 포함</string>

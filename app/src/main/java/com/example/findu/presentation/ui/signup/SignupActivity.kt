@@ -6,16 +6,23 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.findu.R
 import com.example.findu.databinding.ActivitySignupBinding
+import com.example.findu.presentation.ui.signup.viewmodel.SignupViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private var isPasswordVisible = false
     private var isPasswordCheckVisible = false
     private var isEmailValid = false
+    private val signupViewModel: SignupViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +31,7 @@ class SignupActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initListener()
+        observeViewModel()
     }
 
     private fun initListener() {
@@ -55,6 +63,42 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            signupViewModel.emailCheckResult.collect { result ->
+                result?.let {
+                    if (it) {
+                        isEmailValid = true
+                        updateTextAlert(
+                            binding.tvSignupEmailAlert,
+                            getString(R.string.signup_email_button_right),
+                            R.color.green1
+                        )
+                    } else {
+                        isEmailValid = false
+                        updateTextAlert(
+                            binding.tvSignupEmailAlert,
+                            getString(R.string.signup_email_button_wrong),
+                            R.color.red1
+                        )
+                    }
+                    updateSignupButtonState()
+                }
+            }
+        }
+    }
+
+    private fun checkEmailAvailability() {
+        val email = binding.etSignupEmail.text.toString()
+
+        if (email.isNotEmpty() && email.contains("@")) {
+            signupViewModel.checkEmail(email)
+        } else {
+            isEmailValid = false
+            updateTextAlert(binding.tvSignupEmailAlert, getString(R.string.signup_email_invalid), R.color.red1)
+        }
+    }
+
     private fun togglePasswordVisibility(type: Int) {
         if (type == 0) {
             isPasswordVisible = !isPasswordVisible
@@ -81,23 +125,6 @@ class SignupActivity : AppCompatActivity() {
             }
 
             binding.etSignupPasswordCheck.setSelection(binding.etSignupPasswordCheck.text.length)
-        }
-    }
-
-    private fun checkEmailAvailability() {
-        val email = binding.etSignupEmail.text.toString()
-        val emailAlert = binding.tvSignupEmailAlert
-
-        if (email.isNotEmpty() && email.contains("@")) {
-            isEmailValid = true
-            updateTextAlert(
-                emailAlert,
-                getString(R.string.signup_email_button_right),
-                R.color.green1
-            )
-        } else {
-            isEmailValid = false
-            updateTextAlert(emailAlert, getString(R.string.signup_email_button_wrong), R.color.red1)
         }
     }
 

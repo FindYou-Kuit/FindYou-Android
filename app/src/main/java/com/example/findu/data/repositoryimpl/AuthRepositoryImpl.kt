@@ -1,6 +1,9 @@
 package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.dataremote.datasource.AuthRemoteDataSource
+import com.example.findu.data.dataremote.util.handleBaseResponse
+import com.example.findu.data.mapper.todomain.toDomain
+import com.example.findu.domain.model.CheckEmailData
 import com.example.findu.domain.repository.AuthRepository
 import retrofit2.Response
 import javax.inject.Inject
@@ -22,5 +25,10 @@ class AuthRepositoryImpl @Inject constructor(
             } else {
                 throw Exception("로그인 실패: ${response.code()}")
             }
+        }
+
+    override suspend fun postCheckEmail(email: String): Result<CheckEmailData> =
+        runCatching {
+            authRemoteDataSource.postCheckEmail(email).handleBaseResponse().getOrThrow().toDomain()
         }
 }

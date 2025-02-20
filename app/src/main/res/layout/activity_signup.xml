@@ -59,7 +59,7 @@
             android:id="@+id/tv_signup_email_alert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/signup_email_button_wrong"
+            android:text=""
             android:textAppearance="@style/TextAppearance.FindU.caption_12"
             android:textColor="@color/red1"
             app:layout_constraintStart_toStartOf="parent"
