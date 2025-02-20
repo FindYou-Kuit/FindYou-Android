@@ -3,6 +3,9 @@ package com.example.findu.presentation.ui.my
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetNickNameUseCase
@@ -26,7 +29,11 @@ class MyViewModel @Inject constructor(
     private val getViewedAnimalUseCase: GetViewedAnimalUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
     private val patchNickNameUseCase: PatchNickNameUseCase,
-    private val getNickNameUseCase: GetNickNameUseCase
+    private val getNickNameUseCase: GetNickNameUseCase,
+    private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
+    private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
+    private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
+    private val deleteInterestReportAnimalUseCase: PostInterestReportAnimalUseCase
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -130,6 +137,62 @@ class MyViewModel @Inject constructor(
                     _errorMessage.value = it.message ?: "닉네임을 불러오는 중 오류가 발생했습니다."
                 }
             )
+        }
+    }
+
+    fun setInterest(
+        id: Long,
+        isInterest: Boolean,
+        tag: String
+    ) {
+        when (tag) {
+            "보호중" -> postProtectInterest(id, isInterest)
+            "목격신고" -> postReportInterest(id, isInterest)
+            "실종신고" -> postReportInterest(id, isInterest)
+            else -> {
+                _errorMessage.value = "잘못된 태그 값입니다."
+            }
+        }
+
+    }
+
+    private fun postProtectInterest(id: Long, isInterest: Boolean) {
+        viewModelScope.launch {
+            if (isInterest) {
+                postInterestProtectingAnimalUseCase(id).fold(
+                    onSuccess = {},
+                    onFailure = {
+                        _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
+                    }
+                )
+            } else {
+                deleteInterestProtectingAnimalUseCase(id).fold(
+                    onSuccess = {},
+                    onFailure = {
+                        _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."
+                    }
+                )
+            }
+        }
+    }
+
+    private fun postReportInterest(id: Long, isInterest: Boolean) {
+        viewModelScope.launch {
+            if (isInterest) {
+                postInterestReportAnimalUseCase(id).fold(
+                    onSuccess = {},
+                    onFailure = {
+                        _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
+                    }
+                )
+            } else {
+                deleteInterestReportAnimalUseCase(id).fold(
+                    onSuccess = {},
+                    onFailure = {
+                        _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."
+                    }
+                )
+            }
         }
     }
 }

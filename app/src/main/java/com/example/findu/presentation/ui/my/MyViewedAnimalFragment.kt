@@ -24,13 +24,16 @@ class MyViewedAnimalFragment : Fragment() {
     private val myViewModel by viewModels<MyViewModel>()
 
     private val myRecentHistoryRvAdapter = MyViewedAnimalsRvAdapter(
-        onKeepClick = { cardId, interest ->
-//            myViewModel.patchInterest(cardId, interest)
+        onKeepClick = { animalId, interest, tag ->
+            myViewModel.setInterest(
+                id = animalId,
+                isInterest = interest,
+                tag = tag
+            )
         },
         onItemClick = { cardId, tag, name ->
             when(tag) {
                 "실종신고" -> {
-                    Log.d("MyViewedAnimalFragment", "tag = $tag, name = $name, cardId = $cardId")
                     findNavController().navigate(
                         MyViewedAnimalFragmentDirections.actionFragmentMyRecentHistoryToFragmentSearchDetailDisappear(
                             id = cardId.toString(), tag = tag, name = name
@@ -88,6 +91,7 @@ class MyViewedAnimalFragment : Fragment() {
                 launch {
                     myViewModel.viewedAnimals.collectLatest { viewedAnimals ->
                         myRecentHistoryRvAdapter.submitList(viewedAnimals)
+                        binding.rvMyRecentHistory.smoothScrollToPosition(0)
                     }
                 }
             }

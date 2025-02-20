@@ -26,7 +26,11 @@ class MyInterestFragment : Fragment() {
     private val myViewModel by viewModels<MyViewModel>()
     private val myInterestRvAdapter = MyInterestRvAdapter(
         onKeepClick = { animalId, interest, tag ->
-//            myViewModel.updateInterest(animalId, interest, tag)
+            myViewModel.setInterest(
+                id = animalId,
+                isInterest = interest,
+                tag = tag
+            )
         },
         onItemClick = { animalId, tag, name ->
             when (tag) {
@@ -89,6 +93,8 @@ class MyInterestFragment : Fragment() {
                 launch {
                     myViewModel.interestAnimals.collectLatest { data ->
                         myInterestRvAdapter.submitList(data)
+                        binding.rvMyKeepAnimals.scrollToPosition(0)
+                        binding.rvMyKeepAnimals.smoothScrollToPosition(0)
                     }
                 }
 

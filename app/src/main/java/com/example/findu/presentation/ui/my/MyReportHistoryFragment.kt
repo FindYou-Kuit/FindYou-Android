@@ -86,6 +86,7 @@ class MyReportHistoryFragment : Fragment() {
                 launch {
                     myViewModel.reportHistory.collectLatest { reportHistory ->
                         myReportHistoryAdapter.submitList(reportHistory)
+                        binding.rvMyReportHistory.smoothScrollToPosition(0)
                     }
                 }
             }
