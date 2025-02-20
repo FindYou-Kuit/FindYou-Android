@@ -5,5 +5,6 @@ class HomeRv(
     val name: String,
     val type: String,
     val date: String,
-    val location: String
+    val location: String,
+    val id: Int
 )

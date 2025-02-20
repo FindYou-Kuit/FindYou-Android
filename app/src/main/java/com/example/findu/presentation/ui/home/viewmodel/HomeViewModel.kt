@@ -17,7 +17,7 @@ class HomeViewModel @Inject constructor(
     private val _homeData = MutableStateFlow<HomeData?>(null)
     val homeData = _homeData.asStateFlow()
 
-    private val _errorMessage = MutableStateFlow<String?>(null)  // 오류 메시지 관리
+    private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
     fun getHomeData() {

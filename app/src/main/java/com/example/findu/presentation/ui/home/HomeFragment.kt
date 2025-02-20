@@ -13,6 +13,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
@@ -25,6 +26,9 @@ import com.example.findu.presentation.ui.home.adapter.HomeRVAdapter
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
 import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
+import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
+import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -104,7 +108,8 @@ class HomeFragment : Fragment() {
                 name = it.title,
                 type = AnimalStateType.fromTag(it.tag).state,
                 date = it.noticeStartDate,
-                location = it.careAddress
+                location = it.careAddress,
+                id = it.protectId
             )
         }
 
@@ -114,12 +119,17 @@ class HomeFragment : Fragment() {
                 name = it.title,
                 type = AnimalStateType.fromTag(it.tag).state,
                 date = it.registerDate,
-                location = it.happenLocation
+                location = it.happenLocation,
+                id = it.reportId
             )
         }
 
-        homeProtectAdapter = HomeRVAdapter(homeProtectList)
-        homeMissingAdapter = HomeRVAdapter(homeMissingList)
+        homeProtectAdapter = HomeRVAdapter(homeProtectList) { item ->
+            navigateToDetail(item)
+        }
+        homeMissingAdapter = HomeRVAdapter(homeMissingList) { item ->
+            navigateToDetail(item)
+        }
 
         binding.rvHomeProtect.apply {
             layoutManager =
@@ -138,6 +148,41 @@ class HomeFragment : Fragment() {
         val deco = SpaceDecoration(size, m_size)
         binding.rvHomeProtect.addItemDecoration(deco)
         binding.rvHomeMissing.addItemDecoration(deco)
+    }
+
+    private fun navigateToDetail(item: HomeRv) {
+        val fragment = when (item.type) {
+            "보호중" -> SearchProtectingDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("cardId", item.id.toLong())
+                    putString("tag", item.type)
+                    putString("name", item.name)
+                }
+            }
+
+            "목격신고" -> SearchWitnessDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("cardId", item.id.toLong())
+                    putString("tag", item.type)
+                    putString("name", item.name)
+                }
+            }
+
+            "실종신고" -> SearchDisappearDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong("cardId", item.id.toLong())
+                    putString("tag", item.type)
+                    putString("name", item.name)
+                }
+            }
+
+            else -> return
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fcv_main, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupTodayData(homeData: HomeData) {
