@@ -30,10 +30,15 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch {
-            delay(3000)
+            delay(1000)
+            setGif()
+            delay(2000)
             navigateToLogin()
         }
 
+
+    }
+    private fun setGif(){
         Glide.with(this)
             .asGif()
             .listener(object : RequestListener<GifDrawable> {
