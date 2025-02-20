@@ -87,7 +87,6 @@ class ReportViewModel @Inject constructor(
         val list = _imageUriList.value.toMutableList()
         list.add(uri)
         _imageUriList.value = list
-        Log.d("ReportViewModel", "addImageUri: ${_imageUriList.value}")
     }
 
     fun removeImageUriPosition(position: Int) {
@@ -169,14 +168,6 @@ class ReportViewModel @Inject constructor(
         location?.let { _location.value = it }
         date?.let { _selectedMissingDate.value = it }
 
-        Log.d("ReportViewModel", "_selectedSpeciesType: ${_selectedSpeciesType.value}")
-        Log.d("ReportViewModel", "_selectedBreedName: ${_selectedBreedName.value}")
-        Log.d("ReportViewModel", "_selectedSexType: ${_selectedSexType.value}")
-        Log.d("ReportViewModel", "_selectedFurColors: ${_selectedFurColors.value}")
-        Log.d("ReportViewModel", "_selectedFeatureIds: ${_selectedFeatureIds.value}")
-        Log.d("ReportViewModel", "_location: ${_location.value}")
-        Log.d("ReportViewModel", "_selectedMissingDate: ${_selectedMissingDate.value}")
-
         if (_selectedSpeciesType.value != null &&
             !_selectedBreedName.value.isNullOrEmpty() &&
             _selectedSexType.value != null &&
@@ -238,7 +229,6 @@ class ReportViewModel @Inject constructor(
     }
 
     private fun uploadMissingImages(description: String) {
-        Log.d("ReportViewModel", "uploadImages: $_imageUriList.value")
 
         viewModelScope.launch {
             uploadImagesUseCase(
@@ -296,7 +286,6 @@ class ReportViewModel @Inject constructor(
     }
 
     private fun uploadWitnessImages(description: String) {
-        Log.d("ReportViewModel", "uploadImages: $_imageUriList.value")
 
         viewModelScope.launch {
             uploadImagesUseCase(

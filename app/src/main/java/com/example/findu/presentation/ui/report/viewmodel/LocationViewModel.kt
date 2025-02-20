@@ -31,7 +31,6 @@ class LocationViewModel @Inject constructor(
                     _location.value = addressData.address
                 },
                 onFailure = { error ->
-                    Log.e("ReportLocationDialog", "getLocation: ${error.message}")
                     _errorMessage.value = error.message ?: "주소를 불러오는 중 오류가 발생했습니다."
                 }
             )

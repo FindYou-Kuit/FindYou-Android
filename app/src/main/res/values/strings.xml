@@ -1,6 +1,39 @@
 <resources>
     <string name="app_name">FindU</string>
 
+    <!-- login -->
+    <string name="login_description">유기동물 관심의 시작,</string>
+    <string name="login_app_name">찾아유</string>
+    <string name="login_email">이메일 주소</string>
+    <string name="login_password">비밀번호</string>
+    <string name="login_button">로그인</string>
+    <string name="login_signup">회원가입</string>
+    <string name="login_find_password">비밀번호 찾기</string>
+    <string name="login_social">또는</string>
+
+    <!--signup-->
+    <string name="signup_email_title">이메일</string>
+    <string name="signup_email_hint">example1234@gmail.com</string>
+    <string name="signup_email_button">중복 확인</string>
+    <string name="signup_email_button_right">사옹 가능한 이메일 주소에요.</string>
+    <string name="signup_email_button_wrong">이미 가입된 이메일 주소에요.</string>
+    <string name="signup_password_title">비밀번호</string>
+    <string name="signup_password">사용할 비밀번호</string>
+    <string name="signup_password_hint">8~20자리, 영문자, 숫자, 특수문자 포함</string>
+    <string name="signup_password_right">좋은 비밀번호예요!</string>
+    <string name="signup_password_wrong">조건에 맞지않는 비밀번호예요</string>
+    <string name="signup_password_check">비밀번호 확인</string>
+    <string name="signup_password_check_wrong">비밀번호가 일치하지 않아요:(</string>
+    <string name="signup_password_check_right">비밀번호가 완벽히 일치하네요:)</string>
+    <string name="signup_nickname_title">당신의 이름을 알려주세요!</string>
+    <string name="signup_nickname_hint">닉네임을 입력해주세요(최대 8글자)</string>
+    <string name="signup_button">다음</string>
+
+    <!--signup_success-->
+    <string name="signup_success_title">%s님,\n가입을 환영합니다!</string>
+    <string name="signup_success_description">유기동물에 관심을 가져주셔서 감사해요!</string>
+    <string name="signup_success_button">찾아유 시작하기</string>
+
     <!--  common -->
     <string name="slash">/</string>
     <string name="one">1</string>
