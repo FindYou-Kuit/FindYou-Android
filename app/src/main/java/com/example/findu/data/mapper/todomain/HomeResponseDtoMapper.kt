@@ -9,7 +9,7 @@ import com.example.findu.domain.model.ReportAnimal
 
 fun HomeResponseDto.toDomain() = HomeData(
     todayRescuedAnimalCount = yesterdayRescuedAnimalCount,
-    todayReportAnimalCount = yesterdayRescuedAnimalCount,
+    todayReportAnimalCount = yesterdayReportedAnimalCount,
     protectAnimalCards = protectAnimalCards.map { it.toDomain() },
     reportAnimalCards = reportAnimalCards.map { it.toDomain() }
 )

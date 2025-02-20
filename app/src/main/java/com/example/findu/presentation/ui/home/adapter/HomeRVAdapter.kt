@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.home.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -20,8 +21,10 @@ class HomeRVAdapter(
             binding.tvHomeDate.text = item.date
             binding.tvHomeLocation.text = item.location
 
+            Log.d("HomeRVAdapter", "bind: ${item.type}")
             binding.chipHomeAnimalState.text = item.type
             val stateType = AnimalStateType.entries.first { it.state == item.type }
+            Log.d("HomeRVAdapter", "bind: ${stateType}")
             binding.chipHomeAnimalState.setTextColor(
                 binding.root.context.getColor(stateType.textColor)
             )

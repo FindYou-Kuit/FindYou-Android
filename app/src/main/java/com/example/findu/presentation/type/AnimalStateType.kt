@@ -28,8 +28,8 @@ enum class AnimalStateType(
         fun fromTag(tag: String): AnimalStateType =
             when (tag) {
                 "보호중" -> Protect
-                "실종 신고" -> Missing
-                "목격 신고" -> Find
+                "실종신고" -> Missing
+                "목격신고" -> Find
                 else -> Protect
             }
     }
