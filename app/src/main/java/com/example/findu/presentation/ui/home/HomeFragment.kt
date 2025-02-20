@@ -100,7 +100,7 @@ class HomeFragment : Fragment() {
 
     private fun setupReportDialog() {
         binding.cvHomeReport.setOnClickListener {
-            val dialog = HomeReportDialog(requireContext())
+            val dialog = HomeReportDialog(requireContext(), findNavController())
             dialog.show()
         }
     }

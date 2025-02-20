@@ -9,7 +9,14 @@
         android:id="@+id/fragment_home"
         android:name="com.example.findu.presentation.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_witness_report"
+            app:destination="@id/fragment_witness_report" />
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_missing_report"
+            app:destination="@id/fragment_missing_report" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_search"
