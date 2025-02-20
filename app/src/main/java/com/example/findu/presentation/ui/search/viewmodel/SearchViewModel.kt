@@ -130,7 +130,6 @@ class SearchViewModel @Inject constructor(
         val newAllFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newAllFilter != _allFilter) {
             _allFilter = newAllFilter
-            Log.d("SearchViewModel", "updateAllFilterState: $newAllFilter")
             getSearchAllData()
         }
     }
@@ -141,7 +140,6 @@ class SearchViewModel @Inject constructor(
         val newReportFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newReportFilter != _reportFilter) {
             _reportFilter = newReportFilter
-            Log.d("SearchViewModel", "updateReportFilterState: $newReportFilter")
             getSearchReportData()
         }
     }
@@ -152,7 +150,6 @@ class SearchViewModel @Inject constructor(
         val newProtectFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newProtectFilter != _protectFilter) {
             _protectFilter = newProtectFilter
-            Log.d("SearchViewModel", "updateProtectFilterState: $newProtectFilter")
             getSearchProtectData()
         }
     }

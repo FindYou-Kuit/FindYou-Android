@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.bnvMain.visibility = when (destination.id) {
                 R.id.fragment_home, R.id.fragment_search, R.id.fragment_report, R.id.fragment_info, R.id.fragment_my -> View.VISIBLE
-                R.id.fragment_missing_report, R.id.fragment_witness_report -> View.VISIBLE
+                R.id.fragment_search_detail_witness, R.id.fragment_search_detail_disappear, R.id.fragment_search_detail_protecting -> View.VISIBLE
                 else -> View.GONE
             }
         }

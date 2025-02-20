@@ -1,9 +1,10 @@
-package com.example.findu.presentation.ui.search
+package com.example.findu.presentation.ui.search.detail
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,11 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
-import com.example.findu.databinding.FragmentSearchDetailWitnessBinding
+import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
@@ -25,32 +27,34 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchWitnessDetailFragment : Fragment() {
-    private lateinit var binding: FragmentSearchDetailWitnessBinding
+class SearchDisappearDetailFragment : Fragment() {
+
+    private lateinit var binding: FragmentSearchDetailDisappearBinding
     private val viewModel by viewModels<DetailReportViewModel>()
     private var cardId: Long = -1
     private var tag: String? = null
     private var name: String? = null
 
+    private val args :SearchDisappearDetailFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchDetailWitnessBinding.inflate(layoutInflater)
+        binding = FragmentSearchDetailDisappearBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            cardId = it.getLong("cardId", -1)
-            tag = it.getString("tag")
-            name = it.getString("name")
-        }
+        cardId = args.id.ifBlank { cardId.toString() }.toLong()
+        tag = args.tag.ifBlank { tag }
+        name = args.name.ifBlank { name }
 
         if (cardId == -1L || tag == null) {
             Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
+
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
@@ -58,7 +62,6 @@ class SearchWitnessDetailFragment : Fragment() {
         observeViewModel()
         fetchDetailData()
         initListener()
-
     }
 
     private fun fetchDetailData() {
@@ -92,12 +95,13 @@ class SearchWitnessDetailFragment : Fragment() {
             tvDetailTitleField.text = name
             tvDetailTagField.text = convertTagToKorean(data.tag.text)
             tvDetailBreedField.text = data.breed
+            tvDetailSexField.text = data.sex
             tvDetailFurColorField.text = data.furColor
             tvDetailUserNameField.text = data.userName
             tvDetailWriteDateField.text = data.writeDate
-            tvDetailWitnessDateField.text = data.eventDate
             tvDetailEventDateField.text = data.eventDate
-            tvDetailEventLocationField.text = data.eventLocation
+            tvDetailReportDateField.text = data.writeDate
+            tvDetailFoundLocationField.text = data.foundLocation
             tvDetailAdditionalDescriptionField.text = data.additionalDescription
 
             initViewPager(data.imageUrls)
@@ -119,18 +123,25 @@ class SearchWitnessDetailFragment : Fragment() {
         }
     }
 
+    private fun initMapButtons(data: DetailReportData) {
+        binding.btnViewLocation.setOnClickListener {
+            openNaverMap(data.eventLocation)
+        }
+        binding.btnShowFoundPlace.setOnClickListener {
+            openNaverMap(data.eventLocation)
+        }
+    }
 
     private fun initViewPager(imageList: List<String>) {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailImg.setCurrentItem(1, false)
-
         val indicatorCount = imageList.size
-        val pageIndicators = Array(indicatorCount) { View(requireContext()) }
+        val pageIndicator = Array(indicatorCount) { View(requireContext()) }
         val indicatorContainer = binding.llDotsContainer
 
         indicatorContainer.removeAllViews()
-        for (i in pageIndicators.indices) {
+        for (i in pageIndicator.indices) {
             val indicator = View(requireContext()).apply {
                 layoutParams = LinearLayout.LayoutParams(6, 6).apply {
                     marginStart = 3
@@ -139,9 +150,9 @@ class SearchWitnessDetailFragment : Fragment() {
                 setBackgroundResource(R.drawable.ic_search_indicator_inactive)
             }
             indicatorContainer.addView(indicator)
-            pageIndicators[i] = indicator
+            pageIndicator[i] = indicator
         }
-        pageIndicators[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
+        pageIndicator[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
 
         binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -153,9 +164,8 @@ class SearchWitnessDetailFragment : Fragment() {
                     imageList.size + 1 -> 0
                     else -> position - 1
                 }
-
-                pageIndicators.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
-                pageIndicators[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
+                pageIndicator.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
+                pageIndicator[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
 
                 binding.vpSearchDetailImg.postDelayed({
                     when (position) {
@@ -165,15 +175,6 @@ class SearchWitnessDetailFragment : Fragment() {
                 }, 200)
             }
         })
-    }
-
-    private fun initMapButtons(data: DetailReportData) {
-        binding.btnViewLocation.setOnClickListener {
-            openNaverMap(data.eventLocation)
-        }
-        binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(data.eventLocation)
-        }
     }
 
     private fun initListener() {
@@ -235,6 +236,7 @@ class SearchWitnessDetailFragment : Fragment() {
             }
         }
     }
+
 
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(

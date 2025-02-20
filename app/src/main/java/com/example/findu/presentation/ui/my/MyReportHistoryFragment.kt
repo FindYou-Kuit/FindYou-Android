@@ -28,13 +28,29 @@ class MyReportHistoryFragment : Fragment() {
         MyReportHistoryAdapter(
             onDeleteClick = { reportId, deleteItem ->
                 MyDeleteHistoryDialog(requireContext()) {
-//                    myViewModel.deleteReport(reportId)
+                    myViewModel.deleteReport(reportId)
                     deleteItem()
                 }.show()
 //                myViewModel.deleteReport(reportId)
             },
-            onItemClick = { reportId ->
-//                myViewModel.getReportDetail(reportId)
+            onItemClick = { reportId, tag, name ->
+                when (tag) {
+                    "실종신고" -> {
+                        findNavController().navigate(
+                            MyReportHistoryFragmentDirections.actionFragmentMyReportHistoryToFragmentSearchDetailDisappear(
+                                id = reportId.toString(), tag = tag, name = name
+                            )
+                        )
+                    }
+
+                    "목격신고" -> {
+                        findNavController().navigate(
+                            MyReportHistoryFragmentDirections.actionFragmentMyReportHistoryToFragmentSearchDetailWitness(
+                                id = reportId.toString(), tag = tag, name = name
+                            )
+                        )
+                    }
+                }
             }
         )
     }
@@ -70,6 +86,7 @@ class MyReportHistoryFragment : Fragment() {
                 launch {
                     myViewModel.reportHistory.collectLatest { reportHistory ->
                         myReportHistoryAdapter.submitList(reportHistory)
+                        binding.rvMyReportHistory.smoothScrollToPosition(0)
                     }
                 }
             }

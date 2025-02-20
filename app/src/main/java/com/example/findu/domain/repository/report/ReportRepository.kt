@@ -22,4 +22,6 @@ interface ReportRepository {
     suspend fun postWitnessReport(witnessReportData: WitnessReportData): Result<Unit>
 
     suspend fun getAddress(lat: Double, lng: Double): Result<AddressData>
+
+    suspend fun deleteReport(reportId: Long): Result<Unit>
 }

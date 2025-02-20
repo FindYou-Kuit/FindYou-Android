@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.dagger.hilt)
     id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.navigationSafeArgs)
 }
 
 val properties = Properties().apply {

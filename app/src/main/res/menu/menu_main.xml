@@ -11,11 +11,6 @@
         android:title="@string/bottom_nav_search" />
 
     <item
-        android:id="@+id/fragment_report"
-        android:icon="@drawable/img_bottom_nav_report"
-        android:title="@string/bottom_nav_report" />
-
-    <item
         android:id="@+id/fragment_info"
         android:icon="@drawable/img_bottom_nav_info"
         android:title="@string/bottom_nav_info" />

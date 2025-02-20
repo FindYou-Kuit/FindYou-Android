@@ -21,4 +21,7 @@ class ReportRemoteDataSourceImpl @Inject constructor(
     override suspend fun postWitnessReport(requestDto: WitnessReportRequestDto): NullableBaseResponse<Unit> =
         service.postWitnessReport(requestDto)
 
+    override suspend fun deleteReport(reportId: Long): NullableBaseResponse<Unit> =
+        service.deleteReport(reportId)
+
 }

@@ -14,7 +14,7 @@ import com.example.findu.presentation.util.ViewUtils.addUnderLine
 
 class MyReportHistoryAdapter(
     private val onDeleteClick: (Long, () -> Unit) -> Unit,
-    private val onItemClick: (Long) -> Unit = {}
+    private val onItemClick: (Long, String, String) -> Unit
 ) : ListAdapter<MyReportHistoryRv, MyReportHistoryAdapter.MyListRvViewHolder>(diffUtil) {
 
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
@@ -56,7 +56,7 @@ class MyReportHistoryAdapter(
                     }
                 }
                 clMyHistoryContainer.setOnClickListener {
-                    onItemClick(item.reportId)
+                    onItemClick(item.reportId, item.tag, item.title)
                 }
             }
         }

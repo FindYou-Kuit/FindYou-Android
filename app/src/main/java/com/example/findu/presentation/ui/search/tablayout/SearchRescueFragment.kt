@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,11 +19,12 @@ import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.SearchDisappearDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
-import com.example.findu.presentation.ui.search.SearchProtectingDetailFragment
+import com.example.findu.presentation.ui.search.SearchFragmentDirections
+import com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.SearchWitnessDetailFragment
+import com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
@@ -43,6 +45,9 @@ class SearchRescueFragment : Fragment() {
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
+    private var lastProtectId = Long.MAX_VALUE
+    private var isNewList = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,6 +65,7 @@ class SearchRescueFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.protectSearchData.collectLatest { searchResults ->
                 setupRV(searchResults ?: emptyList())
+                lastProtectId = searchResults?.firstOrNull()?.lastProtectId ?: Long.MAX_VALUE
             }
         }
 
@@ -86,43 +92,43 @@ class SearchRescueFragment : Fragment() {
                 )
             }
         }
-        rvAdapter.updateData(searchList)
-        binding.rvSearchRescueHorizontalContent.scrollToPosition(0)
+        if(isNewList) {
+            rvAdapter.submitList(searchList)
+            isNewList = false
+            binding.rvSearchRescueHorizontalContent.scrollToPosition(0)
+            binding.rvSearchRescueHorizontalContent.smoothScrollToPosition(0)
+        } else {
+            rvAdapter.addData(searchList)
+        }
     }
 
     private fun navigateToDetail(cardId: Long, tag: String, name: String) {
-        val fragment = when (tag) {
-            "보호중" -> SearchProtectingDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
+        when (tag) {
+            "보호중" ->
+                findNavController().navigate(
+                    SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailProtecting(
+                        id = cardId.toString(),
+                        tag = tag,
+                        name = name
+                    )
+                )
 
-            "목격신고" -> SearchWitnessDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
+            "목격신고" -> findNavController().navigate(
+                SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailWitness(
+                    id = cardId.toString(),
+                    tag = tag,
+                    name = name
+                )
+            )
 
-            "실종신고" -> SearchDisappearDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putLong("cardId", cardId)
-                    putString("tag", tag)
-                    putString("name", name)
-                }
-            }
-
-            else -> return
+            "실종신고" -> findNavController().navigate(
+                SearchFragmentDirections.actionFragmentSearchToFragmentSearchDetailDisappear(
+                    id = cardId.toString(),
+                    tag = tag,
+                    name = name
+                )
+            )
         }
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_main, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -136,6 +142,7 @@ class SearchRescueFragment : Fragment() {
                 } else {
                     bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
                 }
+            isNewList = true
             updateFilterChips(filterUiModel)
 
         }
@@ -153,7 +160,7 @@ class SearchRescueFragment : Fragment() {
                         binding.hsSearchRescueFilters.elevation = 0f
                     }
 
-                    rvAdapter.returnItemSize() == 0 -> {
+                    rvAdapter.itemCount == 0 -> {
                         binding.hsSearchRescueFilters.elevation = 0f
                     }
 
@@ -169,9 +176,10 @@ class SearchRescueFragment : Fragment() {
     private fun updateFilterChips(filters: SearchFilterUiModel?) {
         val chipGroup = binding.cgSearchRescueGroupFilters
         chipGroup.removeAllViews()
-        viewModel.updateProtectFilterState(filters)
 
         if (filters == null) return
+        viewModel.updateProtectFilterState(filters)
+        isNewList = true
 
         filters.species?.let { species ->
             if (species.isEmpty()) return
@@ -181,6 +189,7 @@ class SearchRescueFragment : Fragment() {
             chip.text = if (species == "개") "강아지" else species
             chip.setOnCloseIconClickListener {
                 chipGroup.removeAllViews()
+                isNewList = true
                 viewModel.updateProtectFilterState(
                     viewModel.protectFilter?.copy(
                         species = null,
@@ -188,6 +197,7 @@ class SearchRescueFragment : Fragment() {
                     )
                 )
                 viewModel.protectFilter?.location?.let {
+                    if (it.isNotBlank()) {
                     val locationChip =
                         layoutInflater.inflate(
                             R.layout.item_search_filter_chip,
@@ -195,8 +205,15 @@ class SearchRescueFragment : Fragment() {
                             false
                         ) as Chip
                     locationChip.text = it
+                    locationChip.setOnCloseIconClickListener {
+                        isNewList = true
+                        chipGroup.removeView(locationChip)
+                        viewModel.updateProtectFilterState(
+                            viewModel.protectFilter?.copy(location = null)
+                        )
+                    }
                     chipGroup.addView(locationChip)
-                }
+                }}
             }
             chipGroup.addView(chip)
         }
@@ -206,6 +223,7 @@ class SearchRescueFragment : Fragment() {
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
             chip.text = breed
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeView(chip)
                 viewModel.updateProtectFilterState(
                     viewModel.protectFilter?.copy(
@@ -222,6 +240,7 @@ class SearchRescueFragment : Fragment() {
                 layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
             chip.text = location
             chip.setOnCloseIconClickListener {
+                isNewList = true
                 chipGroup.removeView(chip)
                 viewModel.updateProtectFilterState(
                     viewModel.protectFilter?.copy(location = null)
@@ -240,29 +259,42 @@ class SearchRescueFragment : Fragment() {
 
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
-            items = emptyList(),
             onItemClick = { item ->
                 navigateToDetail(item.cardId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
             }
-        )
+        ).apply { submitList(items) }
         binding.rvSearchRescueHorizontalContent.adapter = rvAdapter
         binding.rvSearchRescueHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-    }
 
-    private fun openDetailFragment(selectedItem: SearchRv) {
-        val detailFragment = SearchProtectingDetailFragment().apply {
-            arguments = Bundle().apply {
-                putSerializable("selectedItem", selectedItem)
+        binding.rvSearchRescueHorizontalContent.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val rvPosition = when (recyclerView.layoutManager) {
+                    is LinearLayoutManager -> {
+                        (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    }
+
+                    else -> {
+                        (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+                    }
+                }
+
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
+                // 페이징 처리
+                if (rvPosition == totalCount) {
+                    viewModel.getSearchProtectData(
+                        lastProtectId,
+                    )
+                }
             }
-        }
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fcv_main, detailFragment)
-            .addToBackStack(null)
-            .commit()
+        })
     }
 
     private fun initToggleButton() {
