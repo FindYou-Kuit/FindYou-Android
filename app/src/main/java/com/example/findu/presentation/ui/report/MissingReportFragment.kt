@@ -15,6 +15,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -189,11 +190,18 @@ class MissingReportFragment : Fragment() {
     }
 
     private fun navigateToHistory() {
-        // TODO : 신고 내역으로 이동하는 기능 추가
+        findNavController().navigate(R.id.action_fragment_missing_report_to_fragment_my_report_history)
     }
 
     private fun navigateToHome() {
-        findNavController().popBackStack()
+        findNavController().navigate(
+            R.id.action_fragment_witness_report_to_fragment_home,
+            null,
+            NavOptions.Builder()
+                .setPopUpTo(R.id.fragment_witness_report, true) // fragment_witness_report 포함 이전 스택 제거
+                .setLaunchSingleTop(true) // 중복 생성 방지
+                .build()
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
