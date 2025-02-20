@@ -12,6 +12,7 @@ import com.example.findu.domain.usecase.my.GetNickNameUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
+import com.example.findu.domain.usecase.report.DeleteReportUseCase
 import com.example.findu.presentation.mapper.torvmodel.toRvModel
 import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.model.MyReportHistoryRv
@@ -33,7 +34,8 @@ class MyViewModel @Inject constructor(
     private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
     private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
     private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
-    private val deleteInterestReportAnimalUseCase: PostInterestReportAnimalUseCase
+    private val deleteInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
+    private val deleteReportUseCase: DeleteReportUseCase
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -193,6 +195,17 @@ class MyViewModel @Inject constructor(
                     }
                 )
             }
+        }
+    }
+
+    fun deleteReport(reportId: Long) {
+        viewModelScope.launch {
+            deleteReportUseCase(reportId).fold(
+                onSuccess = {},
+                onFailure = {
+                    _errorMessage.value = it.message ?: "신고 삭제 중 오류가 발생했습니다."
+                }
+            )
         }
     }
 }

@@ -28,7 +28,7 @@ class MyReportHistoryFragment : Fragment() {
         MyReportHistoryAdapter(
             onDeleteClick = { reportId, deleteItem ->
                 MyDeleteHistoryDialog(requireContext()) {
-//                    myViewModel.deleteReport(reportId)
+                    myViewModel.deleteReport(reportId)
                     deleteItem()
                 }.show()
 //                myViewModel.deleteReport(reportId)

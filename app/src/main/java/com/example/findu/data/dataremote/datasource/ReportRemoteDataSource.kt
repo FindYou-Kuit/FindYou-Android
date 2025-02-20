@@ -12,4 +12,6 @@ interface ReportRemoteDataSource {
     suspend fun postMissingReport(requestDto: MissingReportRequestDto) : NullableBaseResponse<Unit>
 
     suspend fun postWitnessReport(requestDto: WitnessReportRequestDto) : NullableBaseResponse<Unit>
+
+    suspend fun deleteReport(reportId: Long) : NullableBaseResponse<Unit>
 }

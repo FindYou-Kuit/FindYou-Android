@@ -69,4 +69,9 @@ class ReportRepositoryImpl @Inject constructor(
         runCatching {
             naverRemoteDataSource.getAddress("$lng,$lat").toDomain()
         }
+
+    override suspend fun deleteReport(reportId: Long): Result<Unit> =
+        runCatching {
+            reportRemoteDataSource.deleteReport(reportId).handleBaseResponse().getOrThrow()
+        }
 }
