@@ -11,10 +11,10 @@
         android:id="@+id/cl_my_history_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="15dp"
         android:background="@drawable/bg_white_rd_18"
         android:clipToOutline="true"
         android:elevation="4dp"
+        android:paddingBottom="15dp"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -85,6 +85,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="5dp"
+                android:ellipsize="end"
+                android:maxWidth="240dp"
+                android:maxLines="1"
                 android:text="@string/my_item_default_location"
                 android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12" />
 
@@ -98,8 +101,8 @@
             android:text="@string/my_item_delete"
             android:textAppearance="@style/TextAppearance.FindU.caption_11"
             android:textColor="@color/red1"
-            app:layout_constraintTop_toTopOf="@id/ll_my_history_address"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ll_my_history_address" />
 
         <FrameLayout
             android:id="@+id/fl_my_history_keep"

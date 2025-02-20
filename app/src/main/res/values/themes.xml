@@ -5,6 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:textColor">#111111</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@color/gray6</item>
     </style>
 
 

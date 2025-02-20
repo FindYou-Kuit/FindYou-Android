@@ -28,7 +28,7 @@
         android:background="@drawable/bg_bottom_nav"
         android:paddingTop="5dp"
         android:elevation="4dp"
-        android:paddingBottom="15dp"
+        android:paddingBottom="10dp"
         app:itemIconTint="@color/bottom_nav_color"
         app:itemRippleColor="@null"
         app:itemTextAppearanceActive="@style/TextAppearance.FindU.Home_SB_10"
