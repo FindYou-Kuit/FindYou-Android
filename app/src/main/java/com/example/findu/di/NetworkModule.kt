@@ -1,10 +1,15 @@
 package com.example.findu.di
 
+import android.content.Context
 import com.example.findu.BuildConfig
+import com.example.findu.BuildConfig.DEBUG
+import com.example.findu.data.datalocal.datasource.TokenLocalDataSource
+import com.example.findu.data.dataremote.util.AuthInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -33,19 +38,15 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
             connectTimeout(10, TimeUnit.SECONDS)
             writeTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
-            addInterceptor(loggingInterceptor)
-            addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("Accept", "*/*")
-                    .build()
-                chain.proceed(request)
-            }
+            if (DEBUG) addInterceptor(loggingInterceptor)
+            addInterceptor(authInterceptor)
         }.build()
 
     @Provides
@@ -54,6 +55,15 @@ object NetworkModule {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(
+        tokenLocalDataSource: TokenLocalDataSource,
+        @ApplicationContext context: Context
+    ): AuthInterceptor {
+        return AuthInterceptor(tokenLocalDataSource, context)
+    }
 
     @ExperimentalSerializationApi
     @Provides
