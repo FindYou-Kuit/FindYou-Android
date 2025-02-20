@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.my
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
@@ -19,12 +23,28 @@ import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
 import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
 import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MyFragment : Fragment() {
     private var _binding: FragmentMyBinding? = null
     private val binding get() = _binding!!
     private val myViewModel by viewModels<MyViewModel>()
+
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    Toast.makeText(requireContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,8 +53,8 @@ class MyFragment : Fragment() {
     ): View {
         _binding = FragmentMyBinding.inflate(inflater, container, false)
 
-
         initListener()
+        myViewModel.fetchNickName()
 
         return binding.root
     }
@@ -51,7 +71,7 @@ class MyFragment : Fragment() {
                 llMyNickname.visibility = View.VISIBLE
                 llMyEditNickname.visibility = View.INVISIBLE
 
-                // patch nickname api
+                myViewModel.updateNickName(etMyNickname.text.toString())
             }
 
             etMyNickname.addTextChangedListener { text ->
@@ -72,38 +92,63 @@ class MyFragment : Fragment() {
 
             clMyCameraPermission.setOnClickListener {
                 if (hasCameraPermission(requireContext())) {
-                    Toast.makeText(requireContext(), "카메라 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "카메라 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
-                    launchCameraRequestPermission()
-
+                    requestPermissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             }
 
             clMyLocationPermission.setOnClickListener {
                 if (hasLocationPermission(requireContext())) {
-                    Toast.makeText(requireContext(), "위치 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "위치 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
                     requestLocationPermission(requireActivity())
                 }
             }
 
             clMyWithdrawal.setOnClickListener {
-                MyWithdrawalDialog(requireContext()).show()
+                MyWithdrawalDialog(
+                    context = requireContext(),
+                    onWithdrawalClick = { myViewModel.deleteUserData() }).show()
             }
         }
     }
 
-    private fun launchCameraRequestPermission() {
-        val requestPermissionLauncher: ActivityResultLauncher<String> =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    Toast.makeText(requireContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    findNavController().popBackStack()
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    myViewModel.nickNameState.collect { nickName ->
+                        nickName?.let {
+                            binding.tvMyNickname.text = nickName
+                            binding.etMyNickname.setText(nickName)
+                        }
+                    }
+                }
+                launch {
+                    myViewModel.deleteUserMessage.collect { message ->
+                        message?.let {
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                launch {
+                    myViewModel.errorMessage.collect { message ->
+                        message?.let {
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
-        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
     }
 
     override fun onDestroyView() {

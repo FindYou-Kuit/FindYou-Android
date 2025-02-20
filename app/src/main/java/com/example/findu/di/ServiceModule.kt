@@ -8,6 +8,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.example.findu.data.dataremote.service.HomeService
 import com.example.findu.data.dataremote.service.InterestService
 import com.example.findu.data.dataremote.service.SearchService
+import com.example.findu.data.dataremote.service.MyService
 import com.example.findu.data.dataremote.service.NaverService
 import com.example.findu.data.dataremote.service.ReportService
 import dagger.Module
@@ -58,6 +59,11 @@ object ServiceModule {
     @Singleton
     fun provideInterestService(retrofit: Retrofit): InterestService =
         retrofit.create(InterestService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMyService(retrofit: Retrofit): MyService =
+        retrofit.create(MyService::class.java)
 
     @Provides
     @Singleton

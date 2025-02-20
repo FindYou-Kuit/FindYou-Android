@@ -8,6 +8,7 @@ import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.repository.InterestRepository
 import com.example.findu.domain.repository.SearchRepository
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
+import com.example.findu.domain.repository.MyRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
@@ -16,6 +17,12 @@ import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalU
 import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
+import com.example.findu.domain.usecase.my.DeleteUserUseCase
+import com.example.findu.domain.usecase.my.GetInterestUseCase
+import com.example.findu.domain.usecase.my.GetNickNameUseCase
+import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
+import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
+import com.example.findu.domain.usecase.my.PatchNickNameUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
@@ -90,6 +97,42 @@ object UseCaseModule {
     fun provideGetAddressUseCase(
         reportRepository: ReportRepository
     ): GetAddressUseCase = GetAddressUseCase(reportRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetInterestUseCase(
+        myRepository: MyRepository
+    ): GetInterestUseCase = GetInterestUseCase(myRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetReportHistoryUseCase(
+        myRepository: MyRepository
+    ): GetReportHistoryUseCase = GetReportHistoryUseCase(myRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetViewedAnimalUseCase(
+        myRepository: MyRepository
+    ): GetViewedAnimalUseCase = GetViewedAnimalUseCase(myRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteUserUseCase(
+        myRepository: MyRepository
+    ): DeleteUserUseCase = DeleteUserUseCase(myRepository)
+
+    @Provides
+    @Singleton
+    fun providePatchNickNameUseCase(
+        myRepository: MyRepository
+    ): PatchNickNameUseCase = PatchNickNameUseCase(myRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetNickNameUseCase(
+        myRepository: MyRepository
+    ): GetNickNameUseCase = GetNickNameUseCase(myRepository)
 
     @Provides
     @Singleton

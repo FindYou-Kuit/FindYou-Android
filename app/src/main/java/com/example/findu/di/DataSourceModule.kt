@@ -7,6 +7,7 @@ import com.example.findu.data.dataremote.datasource.HomeRemoteDataSource
 import com.example.findu.data.dataremote.datasource.BreedRemoteDataSource
 import com.example.findu.data.dataremote.datasourceimpl.BreedRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasource.GptRemoteDataSource
+import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
 import com.example.findu.data.dataremote.datasource.DetailSearchRemoteDataSource
 import com.example.findu.data.dataremote.datasource.InterestRemoteDataSource
 import com.example.findu.data.dataremote.datasource.SearchRemoteDataSource
@@ -18,6 +19,7 @@ import com.example.findu.data.dataremote.datasourceimpl.GptRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.HomeRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.InterestRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.SearchRemoteDataSourceImpl
+import com.example.findu.data.dataremote.datasourceimpl.MyRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.NaverRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.ReportRemoteDataSourceImpl
 import dagger.Binds
@@ -44,7 +46,7 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsHomeRemoteDataSource(homeRemoteDataSourceImpl: HomeRemoteDataSourceImpl): HomeRemoteDataSource
-
+    
     @Binds
     @Singleton
     abstract fun bindsGptRemoteDataSource(gptRemoteDataSourceImpl: GptRemoteDataSourceImpl): GptRemoteDataSource
@@ -68,4 +70,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsInterestRemoteDataSource(interestRemoteDataSourceImpl: InterestRemoteDataSourceImpl): InterestRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsMyRemoteDataSource(myRemoteDataSourceImpl: MyRemoteDataSourceImpl): MyRemoteDataSource
 }

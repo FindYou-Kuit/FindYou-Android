@@ -6,13 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyReportHistoryBinding
 import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.ui.my.adapter.MyReportHistoryAdapter
 import com.example.findu.presentation.ui.my.dialog.MyDeleteHistoryDialog
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MyReportHistoryFragment : Fragment() {
     private var _binding: FragmentMyReportHistoryBinding? = null
     private val binding get() = _binding!!
@@ -20,9 +26,10 @@ class MyReportHistoryFragment : Fragment() {
 
     private val myReportHistoryAdapter by lazy {
         MyReportHistoryAdapter(
-            onDeleteClick = { reportId ->
+            onDeleteClick = { reportId, deleteItem ->
                 MyDeleteHistoryDialog(requireContext()) {
 //                    myViewModel.deleteReport(reportId)
+                    deleteItem()
                 }.show()
 //                myViewModel.deleteReport(reportId)
             },
@@ -39,6 +46,7 @@ class MyReportHistoryFragment : Fragment() {
         _binding = FragmentMyReportHistoryBinding.inflate(inflater, container, false)
 
         initListener()
+        myViewModel.fetchReportHistory()
 
         return binding.root
     }
@@ -53,6 +61,19 @@ class MyReportHistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpAdapter()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(lifecycle.currentState) {
+                launch {
+                    myViewModel.reportHistory.collectLatest { reportHistory ->
+                        myReportHistoryAdapter.submitList(reportHistory)
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpAdapter() {
@@ -61,9 +82,6 @@ class MyReportHistoryFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
-        myReportHistoryAdapter.submitList(
-            MyReportHistoryRv.dummyItems
-        )
     }
 
     override fun onDestroyView() {

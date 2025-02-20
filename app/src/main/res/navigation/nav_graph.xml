@@ -123,9 +123,9 @@
 
     <fragment
         android:id="@+id/fragment_my_recent_history"
-        android:name="com.example.findu.presentation.ui.my.MyRecentHistoryFragment"
+        android:name="com.example.findu.presentation.ui.my.MyViewedAnimalFragment"
         android:label="My Recent History"
-        tools:layout="@layout/fragment_my_recent_history" />
+        tools:layout="@layout/fragment_my_viewed_animal" />
 
     <fragment
         android:id="@+id/fragment_my_report_history"

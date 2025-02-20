@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="마이페이지"
+            android:text="@string/my_page_title"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,14 +39,14 @@
             android:id="@+id/tv_my_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="닉네임"
+            android:text="@string/my_default_nickname"
             android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
-            android:text="님"
+            android:text="@string/my_nim"
             android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24" />
 
         <ImageView
@@ -73,7 +73,7 @@
             android:id="@+id/et_my_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="닉네임"
+            android:text="@string/my_default_nickname"
             android:textAppearance="@style/TextAppearance.FindU.Head1_SB_24" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -82,7 +82,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/bg_button_rd_10"
-            android:text="완료"
+            android:text="@string/my_done"
             android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
             android:textColor="@color/white" />
 
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
         android:layout_marginTop="75dp"
-        android:text="안녕하세요"
+        android:text="@string/my_hello_message"
         android:textAppearance="@style/TextAppearance.FindU.My_R_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_my_top_container" />
@@ -118,7 +118,7 @@
         android:elevation="2dp"
         android:gravity="start|center_vertical"
         android:paddingStart="30dp"
-        android:text="내 신고내역 조회"
+        android:text="@string/my_go_to_report_history"
         android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/iv_my_illust" />
@@ -145,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="22dp"
-            android:text="메뉴"
+            android:text="@string/my_menu"
             android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
             android:textColor="@color/gray4" />
 
@@ -160,7 +160,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="최근 본 동물"
+                android:text="@string/my_go_to_viewed_animals"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -189,7 +189,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="관심 동물"
+                android:text="@string/my_go_to_interest_animals"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -218,7 +218,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="위치 권한 설정"
+                android:text="@string/my_set_location_permission"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -247,7 +247,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="카메라 권한 설정"
+                android:text="@string/my_set_camera_permission"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -276,7 +276,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="알람 설정"
+                android:text="@string/my_set_alarm_permission"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -305,7 +305,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="문의하기"
+                android:text="@string/my_questions"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -334,7 +334,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="회원 탈퇴"
+                android:text="@string/my_go_to_withdrawal"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
