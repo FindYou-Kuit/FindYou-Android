@@ -13,4 +13,10 @@ interface AuthRemoteDataSource {
     suspend fun postCheckEmail(
         email: String
     ): BaseResponse<CheckEmailResponseDto>
+
+    suspend fun postSignup(
+        email: String,
+        password: String,
+        nickname: String
+    ): Response<Unit>
 }

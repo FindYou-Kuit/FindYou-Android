@@ -29,6 +29,7 @@
     <string name="signup_nickname_title">당신의 이름을 알려주세요!</string>
     <string name="signup_nickname_hint">닉네임을 입력해주세요(최대 8글자)</string>
     <string name="signup_button">다음</string>
+    <string name="signup_failed">회원가입에 실패했어요:( 다시 시도해보세요!</string>
 
     <!--signup_success-->
     <string name="signup_success_title">%s님,\n가입을 환영합니다!</string>

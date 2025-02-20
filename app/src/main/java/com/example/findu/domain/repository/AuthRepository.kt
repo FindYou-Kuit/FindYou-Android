@@ -11,4 +11,10 @@ interface AuthRepository {
     suspend fun postCheckEmail(
         email: String
     ): Result<CheckEmailData>
+
+    suspend fun postSignup(
+        email: String,
+        password: String,
+        nickname: String
+    ): Result<String>
 }

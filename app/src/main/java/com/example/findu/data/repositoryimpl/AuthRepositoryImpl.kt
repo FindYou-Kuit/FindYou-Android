@@ -31,4 +31,25 @@ class AuthRepositoryImpl @Inject constructor(
         runCatching {
             authRemoteDataSource.postCheckEmail(email).handleBaseResponse().getOrThrow().toDomain()
         }
+
+    override suspend fun postSignup(
+        email: String,
+        password: String,
+        nickname: String
+    ): Result<String> =
+        runCatching {
+            val response: Response<Unit> =
+                authRemoteDataSource.postSignup(email, password, nickname)
+
+            if (response.isSuccessful) {
+                val accessToken = response.headers()["Authorization"]?.removePrefix("Bearer ")
+                if (!accessToken.isNullOrEmpty()) {
+                    return@runCatching accessToken
+                } else {
+                    throw Exception("Access Token이 응답 헤더에 없음")
+                }
+            } else {
+                throw Exception("회원가입 실패: ${response.code()}")
+            }
+        }
 }

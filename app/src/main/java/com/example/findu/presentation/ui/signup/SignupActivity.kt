@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -53,13 +54,7 @@ class SignupActivity : AppCompatActivity() {
         binding.etSignupNickname.addTextChangedListener(inputWatcher)
 
         binding.clSignupButton.setOnClickListener {
-            if (isSignupValid()) {
-                val nickname = binding.etSignupNickname.text.toString()
-                val intent = Intent(this, SignupSuccessActivity::class.java)
-                intent.putExtra("nickname", nickname)
-                startActivity(intent)
-                finish()
-            }
+            attemptSignup()
         }
     }
 
@@ -86,6 +81,26 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            signupViewModel.signupResult.collect { result ->
+                result?.let {
+                    if (it) {
+                        navigateToSignupSuccess()
+                    } else {
+                        showToast(getString(R.string.signup_failed))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun navigateToSignupSuccess() {
+        val nickname = binding.etSignupNickname.text.toString()
+        val intent = Intent(this, SignupSuccessActivity::class.java)
+        intent.putExtra("nickname", nickname)
+        startActivity(intent)
+        finish()
     }
 
     private fun checkEmailAvailability() {
@@ -95,7 +110,12 @@ class SignupActivity : AppCompatActivity() {
             signupViewModel.checkEmail(email)
         } else {
             isEmailValid = false
-            updateTextAlert(binding.tvSignupEmailAlert, getString(R.string.signup_email_invalid), R.color.red1)
+            updateTextAlert(
+                binding.tvSignupEmailAlert,
+                getString(R.string.signup_email_invalid),
+                R.color.red1
+            )
+            updateSignupButtonState()
         }
     }
 
@@ -181,13 +201,21 @@ class SignupActivity : AppCompatActivity() {
         val confirmPassword = binding.etSignupPasswordCheck.text.toString()
         val nickname = binding.etSignupNickname.text.toString()
 
-        return isEmailValid && isValidPassword(password) && password == confirmPassword && isValidNickname(
-            nickname
-        )
+        return isEmailValid && isValidPassword(password) && password == confirmPassword && isValidNickname(nickname)
     }
 
     private fun updateSignupButtonState() {
         binding.clSignupButton.isEnabled = isSignupValid()
+    }
+
+    private fun attemptSignup() {
+        if (isSignupValid()) {
+            val email = binding.etSignupEmail.text.toString()
+            val password = binding.etSignupPassword.text.toString()
+            val nickname = binding.etSignupNickname.text.toString()
+
+            signupViewModel.postSignup(email, password, nickname)
+        }
     }
 
     private fun isValidPassword(password: String): Boolean {
@@ -210,5 +238,9 @@ class SignupActivity : AppCompatActivity() {
         }
 
         override fun afterTextChanged(s: Editable?) {}
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
