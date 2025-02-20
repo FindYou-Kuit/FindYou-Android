@@ -33,8 +33,24 @@ class MyReportHistoryFragment : Fragment() {
                 }.show()
 //                myViewModel.deleteReport(reportId)
             },
-            onItemClick = { reportId ->
-//                myViewModel.getReportDetail(reportId)
+            onItemClick = { reportId, tag, name ->
+                when (tag) {
+                    "실종신고" -> {
+                        findNavController().navigate(
+                            MyReportHistoryFragmentDirections.actionFragmentMyReportHistoryToFragmentSearchDetailDisappear(
+                                id = reportId.toString(), tag = tag, name = name
+                            )
+                        )
+                    }
+
+                    "목격신고" -> {
+                        findNavController().navigate(
+                            MyReportHistoryFragmentDirections.actionFragmentMyReportHistoryToFragmentSearchDetailWitness(
+                                id = reportId.toString(), tag = tag, name = name
+                            )
+                        )
+                    }
+                }
             }
         )
     }

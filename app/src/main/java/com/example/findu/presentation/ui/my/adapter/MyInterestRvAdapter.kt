@@ -13,7 +13,7 @@ import com.example.findu.presentation.type.AnimalStateType
 
 class MyInterestRvAdapter(
     private val onKeepClick: (Long, Boolean, String) -> Unit,
-    private val onItemClick: (Long) -> Unit = {}
+    private val onItemClick: (Long, String, String) -> Unit
 ) : ListAdapter<MyInterestRv, MyInterestRvAdapter.MyListRvViewHolder>(diffUtil) {
 
     inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
@@ -67,7 +67,7 @@ class MyInterestRvAdapter(
                         binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
                     }
                 }
-                clMyHistoryContainer.setOnClickListener { onItemClick(item.animalId) }
+                clMyHistoryContainer.setOnClickListener { onItemClick(item.animalId, item.tag, item.title) }
             }
         }
     }

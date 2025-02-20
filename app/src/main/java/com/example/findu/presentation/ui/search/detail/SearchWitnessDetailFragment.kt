@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
@@ -32,6 +34,8 @@ class SearchWitnessDetailFragment : Fragment() {
     private var tag: String? = null
     private var name: String? = null
 
+    private val args :SearchWitnessDetailFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +52,12 @@ class SearchWitnessDetailFragment : Fragment() {
             tag = it.getString("tag")
             name = it.getString("name")
         }
+
+        cardId = args.id.ifBlank { cardId.toString() }.toLong()
+        tag = args.tag.ifBlank { tag }
+        name = args.name.ifBlank { name }
+
+        Log.d("SearchWitnessDetailFragment", "cardId: $cardId, tag: $tag, name: $name")
 
         if (cardId == -1L || tag == null) {
             Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()

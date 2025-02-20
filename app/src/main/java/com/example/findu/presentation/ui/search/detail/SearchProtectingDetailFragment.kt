@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
@@ -31,6 +32,8 @@ class SearchProtectingDetailFragment : Fragment() {
     private var tag: String? = null
     private var name: String? = null
 
+    private val args: SearchProtectingDetailFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,6 +50,12 @@ class SearchProtectingDetailFragment : Fragment() {
             tag = it.getString("tag")
             name = it.getString("name")
         }
+
+        cardId = args.id.ifBlank { cardId.toString() }.toLong()
+        tag = args.tag.ifBlank { tag }
+        name = args.name.ifBlank { name }
+
+        Log.d("SearchWitnessDetailFragment", "cardId: $cardId, tag: $tag, name: $name")
 
         if (cardId == -1L || tag == null) {
             Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
