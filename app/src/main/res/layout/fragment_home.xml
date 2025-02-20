@@ -437,7 +437,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_bottom_protect"
                     android:layout_width="71dp"
-                    android:layout_height="71dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_home_bottom_title">
@@ -467,7 +467,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_bottom_center"
                     android:layout_width="71dp"
-                    android:layout_height="71dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     app:layout_constraintBottom_toBottomOf="@id/cl_home_bottom_protect"
                     app:layout_constraintStart_toEndOf="@id/cl_home_bottom_protect"
@@ -498,7 +498,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_bottom_part"
                     android:layout_width="71dp"
-                    android:layout_height="71dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     app:layout_constraintBottom_toBottomOf="@id/cl_home_bottom_protect"
                     app:layout_constraintStart_toEndOf="@id/cl_home_bottom_center"
