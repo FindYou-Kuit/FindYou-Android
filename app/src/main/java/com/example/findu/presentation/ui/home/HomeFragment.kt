@@ -40,9 +40,15 @@ class HomeFragment : Fragment() {
     private val homeViewModel by viewModels<HomeViewModel>()
 
     private val homeBannerImages = listOf(
-        R.drawable.img_banner_green,
-        R.drawable.img_banner_purple,
-        R.drawable.img_banner_blue
+        R.drawable.img_adopt_info,
+        R.drawable.img_volunteer_info,
+        R.drawable.img_report_info
+    )
+
+    private val homeBannerTexts = listOf(
+        R.string.home_banner_adopt,
+        R.string.home_banner_volunteer,
+        R.string.home_banner_report
     )
 
     override fun onCreateView(
@@ -203,12 +209,16 @@ class HomeFragment : Fragment() {
             false
         )
 
+        binding.tvHomeBanner.text = getString(homeBannerTexts[0])
+
         binding.vpHomeBanner.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val currentPage = (position % homeBannerImages.size) + 1
                 val totalPages = homeBannerImages.size
+
+                binding.tvHomeBanner.text = getString(homeBannerTexts[currentPage - 1])
                 binding.tvHomeBannerNum.text = getString(
                     R.string.home_banner_num,
                     currentPage,

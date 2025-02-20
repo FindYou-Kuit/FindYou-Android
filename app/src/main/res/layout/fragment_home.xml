@@ -117,6 +117,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/tv_home_banner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/home_banner"
+                android:textAppearance="@style/TextAppearance.FindU.Head2_SB_20"
+                app:layout_constraintBottom_toBottomOf="@id/vp_home_banner"
+                app:layout_constraintStart_toStartOf="@id/vp_home_banner"
+                android:textColor="@color/white" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
