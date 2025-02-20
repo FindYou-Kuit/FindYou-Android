@@ -4,15 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.findu.R
 import com.example.findu.databinding.ActivityLoginBinding
+import com.example.findu.presentation.ui.login.viewmodel.LoginViewModel
 import com.example.findu.presentation.ui.main.MainActivity
 import com.example.findu.presentation.ui.signup.SignupActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private var isPasswordVisible = false
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initListener()
+        observeLoginResult()
     }
 
     private fun initListener() {
@@ -57,20 +65,29 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.etLoginPassword.text.toString().trim()
 
         when {
-            email.isEmpty() -> {
-                Toast.makeText(this, "이메일을 입력해주세요", Toast.LENGTH_SHORT).show()
-            }
+            email.isEmpty() -> showToast("이메일을 입력해주세요")
+            password.isEmpty() -> showToast("비밀번호를 입력해주세요")
+            else -> loginViewModel.postLogin(email, password)
+        }
+    }
 
-            password.isEmpty() -> {
-                Toast.makeText(this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show()
-            }
-
-            else -> {
-                Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+    private fun observeLoginResult() {
+        lifecycleScope.launch {
+            loginViewModel.loginResult.collect { result ->
+                result?.let {
+                    if (it) {
+                        showToast("로그인 성공!")
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    } else {
+                        showToast("로그인 실패! 계정을 확인해주세요.")
+                    }
+                }
             }
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

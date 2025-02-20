@@ -1,5 +1,6 @@
 package com.example.findu.di
 
+import com.example.findu.domain.repository.AuthRepository
 import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.domain.repository.report.ReportRepository
@@ -9,10 +10,12 @@ import com.example.findu.domain.repository.InterestRepository
 import com.example.findu.domain.repository.SearchRepository
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import com.example.findu.domain.repository.MyRepository
+import com.example.findu.domain.repository.TokenRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
+import com.example.findu.domain.usecase.PostLoginUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
@@ -156,5 +159,13 @@ object UseCaseModule {
     @Singleton
     fun provideDeleteInterestProtectingAnimalUseCase(
         interestRepository: InterestRepository
-    ): DeleteInterestProtectingAnimalUseCase = DeleteInterestProtectingAnimalUseCase(interestRepository)
+    ): DeleteInterestProtectingAnimalUseCase =
+        DeleteInterestProtectingAnimalUseCase(interestRepository)
+
+    @Provides
+    @Singleton
+    fun providePostLoginUseCase(
+        authRepository: AuthRepository,
+        tokenRepository: TokenRepository
+    ): PostLoginUseCase = PostLoginUseCase(authRepository, tokenRepository)
 }

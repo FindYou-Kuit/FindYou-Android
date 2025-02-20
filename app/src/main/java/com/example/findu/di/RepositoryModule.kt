@@ -1,5 +1,6 @@
 package com.example.findu.di
 
+import com.example.findu.data.repositoryimpl.AuthRepositoryImpl
 import com.example.findu.data.repositoryimpl.DetailSearchRepositoryImpl
 import com.example.findu.data.repositoryimpl.BreedRepositoryImpl
 import com.example.findu.data.repositoryimpl.DummyRepositoryImpl
@@ -10,12 +11,15 @@ import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.data.repositoryimpl.MyRepositoryImpl
 import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.data.repositoryimpl.ReportRepositoryImpl
+import com.example.findu.data.repositoryimpl.TokenRepositoryImpl
+import com.example.findu.domain.repository.AuthRepository
 import com.example.findu.domain.repository.DummyRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.repository.InterestRepository
 import com.example.findu.domain.repository.SearchRepository
 import com.example.findu.domain.repository.MyRepository
+import com.example.findu.domain.repository.TokenRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -56,4 +60,12 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMyRepository(myRepositoryImpl: MyRepositoryImpl): MyRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTokenRepository(tokenRepositoryImpl: TokenRepositoryImpl): TokenRepository
 }

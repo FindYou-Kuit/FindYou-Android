@@ -1,5 +1,6 @@
 package com.example.findu.di
 
+import com.example.findu.data.dataremote.service.AuthService
 import com.example.findu.data.dataremote.service.DetailSearchService
 import com.example.findu.data.dataremote.service.BreedService
 import com.example.findu.data.dataremote.service.DummyService
@@ -44,7 +45,6 @@ object ServiceModule {
     fun provideDetailSearchService(retrofit: Retrofit): DetailSearchService =
         retrofit.create(DetailSearchService::class.java)
 
-
     @Provides
     @Singleton
     fun provideBreedService(retrofit: Retrofit): BreedService =
@@ -64,6 +64,11 @@ object ServiceModule {
     @Singleton
     fun provideMyService(retrofit: Retrofit): MyService =
         retrofit.create(MyService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAuthService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
 
     @Provides
     @Singleton
