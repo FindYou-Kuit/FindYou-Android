@@ -1,9 +1,6 @@
 package com.example.findu.presentation.ui.splash
 
 import android.content.Intent
-import android.graphics.drawable.AnimatedImageDrawable
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -12,13 +9,10 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
 import com.example.findu.R
 import com.example.findu.databinding.ActivitySplashBinding
 import com.example.findu.presentation.ui.login.LoginActivity
-import com.example.findu.presentation.ui.main.MainActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -71,8 +65,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateToLogin() {
-//        startActivity(Intent(this, LoginActivity::class.java))
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 }
