@@ -2,15 +2,18 @@ package com.example.findu.presentation.ui.search.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.findu.R
 import com.example.findu.databinding.SearchHorizontalContentItemBinding
 import com.example.findu.databinding.ItemSearchGridContentBinding
-import com.example.findu.presentation.ui.search.model.SearchData
+import com.example.findu.presentation.ui.search.model.SearchRv
 
 class SearchContentRVAdapter(
-    private val items: ArrayList<SearchData>,
-    private val onItemClick: (SearchData) -> Unit
+    private var items: List<SearchRv>,
+    private val onItemClick: (SearchRv) -> Unit,
+    private val onBookmarkClick: (Long, Boolean, String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -50,6 +53,10 @@ class SearchContentRVAdapter(
         }
     }
 
+    fun returnItemSize(): Int {
+        return items.size
+    }
+
     override fun getItemCount(): Int {
         return items.size
     }
@@ -62,75 +69,85 @@ class SearchContentRVAdapter(
         }
     }
 
+    fun updateData(newItems: List<SearchRv>) {
+        val diffCallback = object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = items.size
+            override fun getNewListSize(): Int = newItems.size
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition].name == newItems[newItemPosition].name
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition] == newItems[newItemPosition]
+            }
+        }
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
+    }
+
     inner class HorizontalViewHolder(private val binding: SearchHorizontalContentItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: SearchData) {
+        fun bind(item: SearchRv) {
+
+            initView(item)
+            initListener(item)
+        }
+
+        private fun initListener(item: SearchRv) {
+            with(binding) {
+                root.setOnClickListener { onItemClick(item) }
+                ivSearchContentBookmark.setOnClickListener {
+                    item.isBookmark = !item.isBookmark
+                    onBookmarkClick(item.cardId, item.isBookmark, item.tag.text)
+                    if (item.isBookmark) {
+                        binding.ivSearchContentBookmark.setImageResource(R.drawable.ic_search_fill_bookmark)
+                    } else {
+                        binding.ivSearchContentBookmark.setImageResource(R.drawable.ic_search_blank_bookmark)
+                    }
+                }
+            }
+        }
+
+        private fun initView(item: SearchRv) {
             with(binding) {
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
                 tvSearchContentAddress.text = item.address
-                ivSearchContent.setImageResource(item.image)
-
-                updateBookmark(item.isBookmark)
-                ivSearchContentBookmark.setOnClickListener {
-                    item.isBookmark = !item.isBookmark
-                    updateBookmark(item.isBookmark)
-                }
-                tvSearchContentStatus.text = item.status.text
-                tvSearchContentStatus.setTextColor(itemView.context.getColor(item.status.textColor))
-                tvSearchContentStatus.setBackgroundResource(item.status.backgroundRes)
-
-                root.setOnClickListener {
-                    onItemClick(item)
-                }
-            }
-
-        }
-
-        private fun updateBookmark(isBookmark: Boolean) {
-            with(binding) {
-                ivSearchContentBookmark.setImageResource(
-                    if (isBookmark) R.drawable.ic_search_fill_bookmark
-                    else R.drawable.ic_search_blank_bookmark
+                tvSearchContentStatus.text = item.tag.text
+                tvSearchContentStatus.setTextColor(
+                    binding.root.context.getColor(item.tag.textColor)
                 )
+                tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
+                if (item.isBookmark) {
+                    binding.ivSearchContentBookmark.setImageResource(R.drawable.ic_search_fill_bookmark)
+                } else {
+                    binding.ivSearchContentBookmark.setImageResource(R.drawable.ic_search_blank_bookmark)
+                }
+                Glide.with(binding.root.context)
+                    .load(item.image)
+                    .into(binding.ivSearchContent)
             }
         }
     }
 
     inner class GridViewHolder(private val binding: ItemSearchGridContentBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: SearchData) {
-            with(binding) {
-                tvSearchContentName.text = item.name
-                tvSearchContentDate.text = item.date
-                tvSearchContentAddress.text = item.address
-                ivSearchContent.setImageResource(item.image)
+        fun bind(item: SearchRv) {
+            binding.tvSearchContentName.text = item.name
+            binding.tvSearchContentDate.text = item.date
+            binding.tvSearchContentAddress.text = item.address
+            binding.tvSearchContentStatus.text = item.tag.text
 
-                updateBookmark(item.isBookmark)
-                ivSearchContentBookmark.setOnClickListener {
-                    item.isBookmark = !item.isBookmark
-                    updateBookmark(item.isBookmark)
-                }
+            binding.tvSearchContentStatus.setTextColor(
+                binding.root.context.getColor(item.tag.textColor)
+            )
+            binding.tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
 
-                tvSearchContentStatus.text = item.status.text
-                tvSearchContentStatus.setTextColor(itemView.context.getColor(item.status.textColor))
-                tvSearchContentStatus.setBackgroundResource(item.status.backgroundRes)
-                root.setOnClickListener {
-                    onItemClick(item)
-                }
-            }
-
+            Glide.with(binding.root.context)
+                .load(item.image)
+                .into(binding.ivSearchContent)
+            binding.root.setOnClickListener { onItemClick(item) }
         }
-
-        private fun updateBookmark(isBookmark: Boolean) {
-            with(binding) {
-                ivSearchContentBookmark.setImageResource(
-                    if (isBookmark) R.drawable.ic_search_fill_bookmark
-                    else R.drawable.ic_search_blank_bookmark_grid
-                )
-            }
-        }
-
-
     }
 }

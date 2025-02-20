@@ -1,14 +1,20 @@
 package com.example.findu.di
 
+import com.example.findu.data.repositoryimpl.DetailSearchRepositoryImpl
 import com.example.findu.data.repositoryimpl.BreedRepositoryImpl
 import com.example.findu.data.repositoryimpl.DummyRepositoryImpl
 import com.example.findu.data.repositoryimpl.HomeRepositoryImpl
+import com.example.findu.data.repositoryimpl.InterestRepositoryImpl
+import com.example.findu.data.repositoryimpl.SearchRepositoryImpl
+import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.data.repositoryimpl.MyRepositoryImpl
 import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.data.repositoryimpl.ReportRepositoryImpl
 import com.example.findu.domain.repository.DummyRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.repository.HomeRepository
+import com.example.findu.domain.repository.InterestRepository
+import com.example.findu.domain.repository.SearchRepository
 import com.example.findu.domain.repository.MyRepository
 import dagger.Binds
 import dagger.Module
@@ -29,11 +35,23 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
+    abstract fun bindSearchRepository(searchRepositoryImpl: SearchRepositoryImpl): SearchRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindDetailSearchRepository(detailSearchRepositoryImpl: DetailSearchRepositoryImpl): DetailSearchRepository
+
+    @Binds
+    @Singleton
     abstract fun bindBreedRepository(breedRepositoryImpl: BreedRepositoryImpl): BreedRepository
   
     @Binds
     @Singleton
     abstract fun bindReportRepository(reportRepositoryImpl: ReportRepositoryImpl): ReportRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindInterestRepository(interestRepositoryImpl: InterestRepositoryImpl): InterestRepository
 
     @Binds
     @Singleton

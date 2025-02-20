@@ -1,13 +1,22 @@
 package com.example.findu.di
 
+import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.repository.HomeRepository
+import com.example.findu.domain.repository.InterestRepository
+import com.example.findu.domain.repository.SearchRepository
+import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import com.example.findu.domain.repository.MyRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
+import com.example.findu.domain.usecase.GetSearchUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetNickNameUseCase
@@ -33,6 +42,19 @@ object UseCaseModule {
     fun provideGetHomeUseCase(
         homeRepository: HomeRepository
     ): GetHomeUseCase = GetHomeUseCase(homeRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSearchUseCase(
+        searchRepository: SearchRepository
+    ): GetSearchUseCase = GetSearchUseCase(searchRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetDetailSearchUseCase(
+        detailSearchRepository: DetailSearchRepository
+    ): GetDetailSearchUseCase = GetDetailSearchUseCase(detailSearchRepository)
+
 
     @Provides
     @Singleton
@@ -111,4 +133,28 @@ object UseCaseModule {
     fun provideGetNickNameUseCase(
         myRepository: MyRepository
     ): GetNickNameUseCase = GetNickNameUseCase(myRepository)
+
+    @Provides
+    @Singleton
+    fun providePostInterestReportAnimalUseCase(
+        interestRepository: InterestRepository
+    ): PostInterestReportAnimalUseCase = PostInterestReportAnimalUseCase(interestRepository)
+
+    @Provides
+    @Singleton
+    fun providePostInterestProtectingAnimalUseCase(
+        interestRepository: InterestRepository
+    ): PostInterestProtectingAnimalUseCase = PostInterestProtectingAnimalUseCase(interestRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteInterestReportAnimalUseCase(
+        interestRepository: InterestRepository
+    ): DeleteInterestReportAnimalUseCase = DeleteInterestReportAnimalUseCase(interestRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteInterestProtectingAnimalUseCase(
+        interestRepository: InterestRepository
+    ): DeleteInterestProtectingAnimalUseCase = DeleteInterestProtectingAnimalUseCase(interestRepository)
 }

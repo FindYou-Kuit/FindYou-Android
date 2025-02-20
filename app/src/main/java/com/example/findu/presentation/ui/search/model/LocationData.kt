@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.search.data
+package com.example.findu.presentation.ui.search.model
 
 object LocationData {
     val locationMap = mapOf(

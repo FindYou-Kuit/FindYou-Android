@@ -4,27 +4,32 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.findu.R
+import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
-import com.example.findu.presentation.ui.search.model.SearchDetailData
-import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.presentation.ui.search.model.SearchData
+import com.example.findu.domain.model.search.DetailProtectData
+import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailProtectingBinding
     private var isDetailVisible = false
-    private val imageList = listOf(
-        SearchDetailData(R.drawable.img_search_detail_witness_content),
-        SearchDetailData(R.drawable.img_search_detail),
-        SearchDetailData(R.drawable.img_search_detail),
-        SearchDetailData(R.drawable.img_search_detail_witness_content)
-    )
+    private val viewModel by viewModels<DetailSearchViewModel>()
+    private var cardId: Long = -1
+    private var tag: String? = null
+    private var name: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,67 +42,81 @@ class SearchProtectingDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item = arguments?.getSerializable("selectedItem") as? SearchData
-        if (item == null) {
+        arguments?.let {
+            cardId = it.getLong("cardId", -1)
+            tag = it.getString("tag")
+            name = it.getString("name")
+        }
+
+        if (cardId == -1L || tag == null) {
+            Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
-        initTagView(item)
-        initBookmarkUI(item)
+        observeViewModel()
+        fetchDetailData()
+
         setContentVisibility()
         initBackButton()
-        initMapButtons(item)
-        initCallButtons()
-        initViewPager()
 
     }
 
-    private fun initViewPager() {
-        val adapter = SearchDetailVPAdapter(imageList)
-        binding.vpSearchDetailImg.adapter = adapter
-        binding.vpSearchDetailImg.setCurrentItem(1, false)
-        val indicatorCount = imageList.size
-        val pageIndicators = Array(indicatorCount) { View(requireContext()) }
-        val indicatorContainer = binding.llDotsContainer
-
-        indicatorContainer.removeAllViews()
-        for (i in pageIndicators.indices) {
-            val indicator = View(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(6, 6).apply {
-                    marginStart = 3
-                    marginEnd = 3
-                }
-                setBackgroundResource(R.drawable.ic_search_indicator_inactive)
+    private fun fetchDetailData() {
+        when (tag) {
+            "보호중" -> viewModel.getDetailSearchProtect(cardId)
+            else -> {
+                Toast.makeText(requireContext(), "잘못된 태그 값입니다.", Toast.LENGTH_SHORT).show()
+                requireActivity().supportFragmentManager.popBackStack()
             }
-            indicatorContainer.addView(indicator)
-            pageIndicators[i] = indicator
         }
-        pageIndicators[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
+    }
 
-        binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                val realPosition = when (position) {
-                    0 -> imageList.size - 1
-                    imageList.size + 1 -> 0
-                    else -> position - 1
-                }
-
-                pageIndicators.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
-                pageIndicators[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
-
-                binding.vpSearchDetailImg.postDelayed({
-                    when (position) {
-                        0 -> binding.vpSearchDetailImg.setCurrentItem(imageList.size, false)
-                        imageList.size + 1 -> binding.vpSearchDetailImg.setCurrentItem(1, false)
-                    }
-                }, 200)
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.detailSearchData.collectLatest { data ->
+                data?.let { updateUI(it) }
             }
-        })
+        }
+
+        lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest { message ->
+                message?.let {
+                    Log.e("DetailSearchViewModel", it)
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun updateUI(data: DetailProtectData) {
+        binding.apply {
+            Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
+            tvSearchContentDetailTitle.text = name
+            tvDetailTagField.text = convertTagToKorean(data.tag.text)
+            tvDetailBreedField.text = data.breed
+            tvDetailAgeField.text = data.age
+            tvDetailWeightField.text = data.weight
+            tvDetailSexField.text = data.sex
+            tvDetailHappenDateField.text = data.happenDate
+            tvDetailFurColorField.text = data.furColor
+            tvDetailNeuteringField.text = data.neutering
+            tvDetailSignificantField.text = data.significant
+            tvDetailNoticeNumberField.text = data.noticeNumber
+            tvDetailNoticeDurationField.text = data.noticeDuration
+            tvDetailFoundLocationField.text = data.foundLocation
+            tvDetailCareNameField.text = data.careName
+            tvDetailCareTelField.text = data.careTel
+            tvDetailAuthorityField.text = data.authority
+            tvDetailAuthorityPhoneNumberField.text = data.authorityPhoneNumber
+
+            initTagView(data)
+            initBookmarkUI(data)
+            initCallButtons(data)
+            initMapButtons(data)
+        }
 
     }
+
 
     private fun initBackButton() {
         binding.ivSearchDetailBack.setOnClickListener {
@@ -105,13 +124,13 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initCallButtons() {
-        binding.tvProtectCenterPhoneNumber.setOnClickListener {
-            call(binding.tvProtectCenterPhoneNumber.text.toString())
+    private fun initCallButtons(data: DetailProtectData) {
+        binding.tvDetailCareTelField.setOnClickListener {
+            call(data.careTel)
         }
 
-        binding.tvJurisdictionPhoneNumber.setOnClickListener {
-            call(binding.tvJurisdictionPhoneNumber.text.toString())
+        binding.tvDetailAuthorityPhoneNumberField.setOnClickListener {
+            call(data.authorityPhoneNumber)
         }
     }
 
@@ -124,31 +143,39 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initMapButtons(item: SearchData) {
+    private fun initMapButtons(data: DetailProtectData) {
         binding.btnViewLocation.setOnClickListener {
-            openNaverMap(item.address)
+            openNaverMap(data.careAddr)
         }
         binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(item.address)
+            openNaverMap(data.foundLocation)
         }
     }
 
-    private fun initBookmarkUI(item: SearchData) {
-        updateBookmarkUI(item.isBookmark)
+    private fun initBookmarkUI(data: DetailProtectData) {
+        updateBookmarkUI(data.interest)
         binding.ivSearchDetailBookmark.setOnClickListener {
-            item.isBookmark = !item.isBookmark
-            updateBookmarkUI(item.isBookmark)
+            data.interest = !data.interest
+            viewModel.setInterestProtectingAnimal(cardId)
+            updateBookmarkUI(data.interest)
         }
     }
 
-    private fun initTagView(item: SearchData) {
-        item.let {
-            binding.tvSearchDetailTag.text = item.status.text
-            binding.tvSearchDetailTag.setTextColor(requireContext().getColor(item.status.textColor))
-            binding.tvSearchDetailTag.setBackgroundResource(item.status.backgroundRes)
-            binding.tvSearchDetailName.text = it.name
-            binding.tvSearchContentPostDate.text = it.date
-            binding.tvSearchContentDetailRescueLocation.text = it.address
+    private fun initTagView(data: DetailProtectData) {
+        val koreanTag = convertTagToKorean(data.tag.toString())
+        binding.tvDetailTagField.text = koreanTag
+
+        val tagInfo = data.tag.toDetailSearchRvTag()
+        binding.tvDetailTagField.setTextColor(requireContext().getColor(tagInfo.textColor))
+        binding.tvDetailTagField.setBackgroundResource(tagInfo.backgroundRes)
+    }
+
+    private fun convertTagToKorean(tag: String?): String {
+        return when (tag) {
+            "WITNESS" -> "목격신고"
+            "MISSING" -> "실종신고"
+            "PROTECTING" -> "보호중"
+            else -> tag ?: "알 수 없음"
         }
     }
 

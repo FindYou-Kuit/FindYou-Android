@@ -3,18 +3,24 @@ package com.example.findu.presentation.ui.search.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemSearchDetailImgBinding
-import com.example.findu.presentation.ui.search.model.SearchDetailData
+import com.example.findu.presentation.ui.search.model.DetailSearchRv
 
-class SearchDetailVPAdapter(private val images: List<SearchDetailData>) :
+class SearchDetailVPAdapter(private val images:List<String>) :
     RecyclerView.Adapter<SearchDetailVPAdapter.ViewHolder>() {
 
-    private val extendedImg = listOf(images.last()) + images + listOf(images.first())
-
+    private val extendedImg: List<String> = if (images.isNotEmpty()) {
+        listOf(images.last()) + images + listOf(images.first())
+    } else {
+        listOf("default_image_url")
+    }
     inner class ViewHolder(private val binding: ItemSearchDetailImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(imageData: SearchDetailData) {
-            binding.ivSearchDetailContent.setImageResource(imageData.image)
+        fun bind(imageUrl: String) {
+            Glide.with(binding.root.context)
+                .load(imageUrl)
+                .into(binding.ivSearchDetailContent)
         }
     }
 
@@ -27,10 +33,6 @@ class SearchDetailVPAdapter(private val images: List<SearchDetailData>) :
 
     override fun getItemCount(): Int {
         return extendedImg.size
-    }
-
-    fun getRealItemCount(): Int {
-        return images.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
