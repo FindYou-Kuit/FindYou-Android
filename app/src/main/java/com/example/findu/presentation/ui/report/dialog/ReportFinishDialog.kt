@@ -50,6 +50,7 @@ class ReportFinishDialog(
     private fun initListener() {
         binding.btnReportFinishDialogGoHistory.setOnClickListener {
             onGoHistoryClick()
+dismiss()
         }
 
         binding.btnReportFinishDialogGoHome.setOnClickListener {
