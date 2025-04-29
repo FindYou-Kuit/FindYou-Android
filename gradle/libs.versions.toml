@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-composeBom = "2025.04.01"
+composeBom = "2024.04.01"
 kotlin = "1.9.24"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -26,6 +26,7 @@ playServicesLocation = "21.3.0"
 cameraCore = "1.1.0-beta01"
 
 [libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-material = { module = "androidx.compose.material:material" }
