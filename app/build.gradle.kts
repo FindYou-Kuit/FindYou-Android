@@ -1,4 +1,5 @@
 import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -43,6 +44,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        compose = true
         buildConfig = true
     }
     compileOptions {
@@ -51,6 +53,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
 }
 
