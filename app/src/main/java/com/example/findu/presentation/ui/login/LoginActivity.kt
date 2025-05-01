@@ -1,12 +1,19 @@
 package com.example.findu.presentation.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.findu.presentation.ui.login.composeview.LoginScreen
 import com.example.findu.presentation.ui.login.viewmodel.LoginViewModel
+import com.example.findu.presentation.ui.main.MainActivity
+import com.example.findu.presentation.util.extension.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
@@ -18,8 +25,20 @@ class LoginActivity : ComponentActivity() {
         setContent {
             LoginScreen(
                 kakaoLoginButtonClicked = {},
-                withoutSignUpButtonClicked = {},
+                withoutSignUpButtonClicked = {
+                    this.showToast("가입없이 찾아유 실행")
+                    loginViewModel.startMainActivity()
+                },
             )
+        }
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                loginViewModel.startMainActivity.collect {
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finish()
+                }
+            }
         }
     }
 }
