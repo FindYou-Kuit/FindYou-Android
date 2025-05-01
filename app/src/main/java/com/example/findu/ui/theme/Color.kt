@@ -5,7 +5,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 // Main Color
-val MainColor = Color(0xFFFFA938)
+val MainColor = Color(0xFFFF9000)
 val MainColor2 = Color(0xFFFFEED9)
 
 // Red
