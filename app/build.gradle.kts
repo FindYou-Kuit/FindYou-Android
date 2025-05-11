@@ -1,4 +1,5 @@
 import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -43,6 +44,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        compose = true
         buildConfig = true
     }
     compileOptions {
@@ -52,6 +54,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    composeOptions { kotlinCompilerExtensionVersion = "1.5.14" }
 }
 
 dependencies {
@@ -84,13 +87,13 @@ dependencies {
 
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
-    
+
     // Indicator
     implementation("com.tbuonomo:dotsindicator:5.0")
-    
+
     // Material Components
     implementation("com.google.android.material:material:1.9.0")
- 
+
 
     // Naver Map
     implementation(libs.map.sdk)
@@ -100,10 +103,10 @@ dependencies {
 
     // Web View
     implementation(libs.androidx.webkit)
-    
+
     // Glide
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
-    
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
     // Calender
     implementation("io.github.architshah248.calendar:awesome-calendar:2.0.0")
 
@@ -116,4 +119,13 @@ dependencies {
 
     // Lottie
     implementation(libs.lottie)
+
+    // Jetpack Compose
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling)
+
 }
