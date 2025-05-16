@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.login.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.usecase.PostLoginUseCase
@@ -47,7 +48,7 @@ class LoginViewModel @Inject constructor(
 
         if (response){
             //TODO: 로그인 API 호출 후 응답으로 받은 accessToken 저장
-//            startMainActivity()
+            startMainActivity()
 //            startOnboardingActivity()
         }else{
             startOnboardingActivity()
