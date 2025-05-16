@@ -41,8 +41,8 @@ class SplashActivity : AppCompatActivity() {
             if (accessToken.isEmpty()) {
                 navigateToLogin()
             } else {
-//                navigateToLogin()
-                navigateToMain()
+                navigateToLogin()
+//                navigateToMain()
             }
         }
 
