@@ -47,7 +47,8 @@ class LoginViewModel @Inject constructor(
 
         if (response){
             //TODO: 로그인 API 호출 후 응답으로 받은 accessToken 저장
-            startMainActivity()
+//            startMainActivity()
+//            startOnboardingActivity()
         }else{
             startOnboardingActivity()
         }
@@ -62,7 +63,7 @@ class LoginViewModel @Inject constructor(
 
     private fun startOnboardingActivity() {
         viewModelScope.launch {
-            _startMainActivity.emit(Unit)
+            _startOnboardingActivity.emit(Unit)
         }
     }
 

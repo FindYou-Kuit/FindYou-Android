@@ -129,6 +129,8 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.coil.compose)
+
 
     // Kakao
     implementation(libs.bundles.kakao)

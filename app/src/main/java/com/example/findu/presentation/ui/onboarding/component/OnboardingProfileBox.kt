@@ -1,0 +1,68 @@
+package com.example.findu.presentation.ui.onboarding.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.findu.R
+import com.example.findu.presentation.type.DefaultProfileType
+import com.example.findu.presentation.ui.base.BaseVectorIcon
+import com.example.findu.ui.theme.FindUTheme
+
+@Composable
+fun OnboardingProfileBox(
+    cameraClicked:()->Unit,
+    modifier: Modifier = Modifier,
+    defaultProfileType: DefaultProfileType = DefaultProfileType.NONE,
+    profileImgUrl: String = "",
+) {
+    Box(modifier = modifier.size(145.dp)) {
+        if (profileImgUrl.isEmpty()) {
+            val drawableRes = when (defaultProfileType) {
+                DefaultProfileType.NONE -> R.drawable.img_onboarding_default_profile_none_68
+                DefaultProfileType.DOG -> R.drawable.img_onboarding_default_profile_dog_68
+                DefaultProfileType.CHICK -> R.drawable.img_onboarding_default_profile_chick_68
+                DefaultProfileType.PANDA -> R.drawable.img_onboarding_default_profile_panda_68
+            }
+            Image(painter = painterResource(drawableRes), contentDescription = null,modifier = Modifier.fillMaxSize())
+        } else {
+            AsyncImage(
+                model = profileImgUrl,
+                contentDescription = "Profile Image",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(R.drawable.img_onboarding_default_profile_none_68),
+                error = painterResource(R.drawable.img_onboarding_default_profile_none_68)
+            )
+        }
+
+        // 카메라 버튼
+        BaseVectorIcon(
+            vectorResource = R.drawable.ic_profile_camera_44,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun OnboardingProfileBoxPreview() {
+    FindUTheme { OnboardingProfileBox(
+        cameraClicked = {}
+    ) }
+}

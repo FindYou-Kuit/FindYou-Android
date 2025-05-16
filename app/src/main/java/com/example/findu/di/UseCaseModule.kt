@@ -33,6 +33,11 @@ import com.example.findu.domain.usecase.report.GetAddressUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
+import com.example.findu.domain.usecase.token.ClearTokenUseCase
+import com.example.findu.domain.usecase.token.GetAccessTokenUseCase
+import com.example.findu.domain.usecase.token.GetRefreshTokenUseCase
+import com.example.findu.domain.usecase.token.SetAccessTokenUseCase
+import com.example.findu.domain.usecase.token.SetRefreshTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -190,4 +195,34 @@ object UseCaseModule {
     fun provideDeleteReportUseCase(
         reportRepository: ReportRepository
     ): DeleteReportUseCase = DeleteReportUseCase(reportRepository)
+
+    @Provides
+    @Singleton
+    fun provideSetAccessTokenUseCase(
+        tokenRepository: TokenRepository
+    ): SetAccessTokenUseCase = SetAccessTokenUseCase(tokenRepository)
+
+    @Provides
+    @Singleton
+    fun provideSetRefreshTokenUseCase(
+        tokenRepository: TokenRepository
+    ): SetRefreshTokenUseCase = SetRefreshTokenUseCase(tokenRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetAccessTokenUseCase(
+        tokenRepository: TokenRepository
+    ): GetAccessTokenUseCase = GetAccessTokenUseCase(tokenRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetRefreshTokenUseCase(
+        tokenRepository: TokenRepository
+    ): GetRefreshTokenUseCase = GetRefreshTokenUseCase(tokenRepository)
+
+    @Provides
+    @Singleton
+    fun provideClearTokenUseCase(
+        tokenRepository: TokenRepository
+    ): ClearTokenUseCase = ClearTokenUseCase(tokenRepository)
 }

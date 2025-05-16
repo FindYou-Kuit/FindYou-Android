@@ -15,10 +15,12 @@ import com.example.findu.databinding.ActivitySplashBinding
 import com.example.findu.domain.usecase.token.GetAccessTokenUseCase
 import com.example.findu.presentation.ui.login.LoginActivity
 import com.example.findu.presentation.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     @Inject
@@ -39,6 +41,7 @@ class SplashActivity : AppCompatActivity() {
             if (accessToken.isEmpty()) {
                 navigateToLogin()
             } else {
+//                navigateToLogin()
                 navigateToMain()
             }
         }
