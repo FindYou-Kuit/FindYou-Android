@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +15,6 @@ import com.example.findu.presentation.ui.main.MainActivity
 import com.example.findu.presentation.util.extension.showToast
 import com.example.findu.presentation.util.kakao.KakaoLoginHelper
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

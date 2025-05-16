@@ -9,14 +9,21 @@ class TokenLocalDataSourceImpl @Inject constructor(
     @TokenPrefs private val sharedPreferences: SharedPreferences
 ) : TokenLocalDataSource {
     override var accessToken: String
-        get() = sharedPreferences.getString(ACCESS_TOKEN, "") ?: ""
+        get() = sharedPreferences.getString(ACCESS_TOKEN, INITIAL_VALUE) ?: INITIAL_VALUE
         set(value) = sharedPreferences.edit().putString(ACCESS_TOKEN, value).apply()
 
-    override fun clearInfo() {
+    override var refreshToken: String
+        get() = sharedPreferences.getString(REFRESH_TOKEN, INITIAL_VALUE) ?: INITIAL_VALUE
+        set(value) = sharedPreferences.edit().putString(REFRESH_TOKEN, value).apply()
+
+    override fun clearToken() {
         sharedPreferences.edit().clear().apply()
     }
 
     companion object {
         private const val ACCESS_TOKEN = "ACCESS_TOKEN"
+        private const val REFRESH_TOKEN = "REFRESH_TOKEN"
+        private const val INITIAL_VALUE = ""
+
     }
 }

@@ -13,6 +13,6 @@ class PostSignupUseCase(
         nickname: String
     ): Result<Unit> =
         authRepository.postSignup(email, password, nickname).mapCatching { accessToken ->
-            tokenRepository.setTokens(accessToken)
+            tokenRepository.setAccessToken(accessToken)
         }
 }

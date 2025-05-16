@@ -14,6 +14,6 @@ class PostLoginUseCase(
         email = email,
         password = password
     ).mapCatching { accessToken ->
-        tokenRepository.setTokens(accessToken)
+        tokenRepository.setAccessToken(accessToken)
     }
 }
