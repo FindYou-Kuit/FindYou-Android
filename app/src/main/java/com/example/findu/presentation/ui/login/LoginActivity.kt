@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.findu.presentation.ui.login.composeview.LoginScreen
 import com.example.findu.presentation.ui.login.viewmodel.LoginViewModel
 import com.example.findu.presentation.ui.main.MainActivity
+import com.example.findu.presentation.ui.onboarding.OnboardingActivity
 import com.example.findu.presentation.util.extension.showToast
 import com.example.findu.presentation.util.kakao.KakaoLoginHelper
 import com.kakao.sdk.auth.model.OAuthToken
@@ -20,6 +21,11 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
+
+    companion object {
+        private const val TAG = "LoginActivity"
+    }
+
     private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,8 +34,8 @@ class LoginActivity : ComponentActivity() {
         setContent {
             val callback: (OAuthToken?, Throwable?) -> Unit = { oAuthToken, _ ->
                 if (oAuthToken != null) {
-                    Log.d("ㅋㅋ","토큰: ${oAuthToken.accessToken}")
-//                    viewModel.setKakaoAccessToken(oAuthToken.accessToken)
+                    Log.d(TAG, "토큰: ${oAuthToken.accessToken}")
+                    loginViewModel.checkRegisteredUser(oAuthToken.accessToken)
                 }
             }
             LoginScreen(
@@ -44,16 +50,25 @@ class LoginActivity : ComponentActivity() {
                     loginViewModel.startMainActivity()
                 },
             )
+
         }
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                loginViewModel.startMainActivity.collect {
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                    finish()
+                launch {
+                    loginViewModel.startMainActivity.collect {
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    }
+                }
+
+                launch {
+                    loginViewModel.startOnboardingActivity.collect {
+                        startActivity(Intent(this@LoginActivity, OnboardingActivity::class.java))
+                        finish()
+                    }
                 }
             }
         }
     }
-
 }
