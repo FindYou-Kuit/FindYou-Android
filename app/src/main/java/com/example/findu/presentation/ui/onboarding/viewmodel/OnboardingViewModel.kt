@@ -16,10 +16,10 @@ import javax.inject.Inject
 
 data class OnboardingUiState(
     val pageState: Int = 1,
-    val profileImageUrl:String = "",
+    val profileImageUrl: String = "",
     val defaultProfileType: DefaultProfileType = DefaultProfileType.NONE,
-    val nickName:String = "",
-    val nickNameValidState:NicknameValidType = NicknameValidType.IDLE,
+    val nickname: String = "",
+    val nickNameValidState: NicknameValidType = NicknameValidType.IDLE,
     val isNextButtonEnabled: Boolean = true,
 )
 
@@ -51,9 +51,39 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun changeDefaultProfile(defaultProfileType: DefaultProfileType){
+    fun changeDefaultProfile(defaultProfileType: DefaultProfileType) {
         viewModelScope.launch {
             _uiState.update { it.copy(defaultProfileType = defaultProfileType) }
+        }
+    }
+
+    fun onNicknameValueChanged(nickname: String) {
+        val validState = when {
+            nickname.isEmpty() -> NicknameValidType.EMPTY_INVALID
+            containsSpecialCharacter(nickname) -> NicknameValidType.FORMAT_INVALID
+            else -> NicknameValidType.FOCUS
+        }
+        viewModelScope.launch {
+            _uiState.update { it.copy(nickname = nickname, nickNameValidState = validState) }
+        }
+    }
+
+    private fun change
+
+    fun focusChanged(isFocused: Boolean) {
+        if (isFocused) {
+            if (_uiState.value.nickNameValidState == NicknameValidType.IDLE)
+                viewModelScope.launch { _uiState.update { it.copy(nickNameValidState = NicknameValidType.FOCUS) } }
+        } else {
+            if (_uiState.value.nickNameValidState == NicknameValidType.FOCUS)
+                viewModelScope.launch { _uiState.update { it.copy(nickNameValidState = NicknameValidType.IDLE) } }
+        }
+    }
+
+    fun nicknameDuplicateCheck() {
+        viewModelScope.launch {
+            //TODO: 닉네임 중복체크 API 나오면 추가 후 Valid 상태 변경
+            _uiState.update { it.copy(nickNameValidState = NicknameValidType.VALID, isNextButtonEnabled = true) }
         }
     }
 
@@ -61,6 +91,11 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             _startMainActivity.emit(Unit)
         }
+    }
+
+    private fun containsSpecialCharacter(input: String): Boolean {
+        val regex = Regex("[^a-zA-Z0-9가-힣]")
+        return regex.containsMatchIn(input)
     }
 
     companion object {

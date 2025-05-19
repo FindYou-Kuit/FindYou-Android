@@ -30,9 +30,16 @@ class OnboardingActivity : ComponentActivity() {
             val uiState by onboardingViewModel.uiState.collectAsState()
             OnboardingScreen(
                 uiState = uiState,
-                backButtonClicked = {onboardingViewModel.onBackButtonClicked()},
-                nextButtonClicked = {onboardingViewModel.onNextClicked()},
-                defaultProfileClicked = {onboardingViewModel.changeDefaultProfile(it)},
+                backButtonClicked = { onboardingViewModel.onBackButtonClicked() },
+                nextButtonClicked = { onboardingViewModel.onNextClicked() },
+                defaultProfileClicked = { profile ->
+                    onboardingViewModel.changeDefaultProfile(profile)
+                },
+                nicknameValueChanged = { nickname ->
+                    onboardingViewModel.onNicknameValueChanged(nickname)
+                },
+                nicknameDuplicateCheck = { onboardingViewModel.nicknameDuplicateCheck() },
+                focusChanged = {onboardingViewModel.focusChanged(it)},
             )
         }
 

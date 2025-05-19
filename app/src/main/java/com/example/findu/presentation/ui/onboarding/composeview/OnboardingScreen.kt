@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
@@ -25,13 +26,22 @@ fun OnboardingScreen(
     uiState: OnboardingUiState,
     backButtonClicked: () -> Unit,
     nextButtonClicked: () -> Unit,
+    focusChanged: (Boolean) -> Unit,
+    nicknameValueChanged: (String) -> Unit,
+    nicknameDuplicateCheck:()->Unit,
     defaultProfileClicked: (defaultProfileType: DefaultProfileType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(color = FindUTheme.colors.white)
+            .noRippleClickable {
+                focusManager.clearFocus()
+            }
     ) {
         BaseVectorIcon(
             vectorResource = R.drawable.ic_arrow_back_24,
@@ -46,9 +56,17 @@ fun OnboardingScreen(
                 defaultProfileType = uiState.defaultProfileType,
                 defaultProfileClicked = defaultProfileClicked
             )
+
             2 -> OnboardingNickname(
                 modifier = Modifier.padding(horizontal = 20.dp),
-                )
+                nicknameValueChanged = { nickname ->
+                    nicknameValueChanged(nickname)
+                },
+                nickname = uiState.nickname,
+                nicknameValidState = uiState.nickNameValidState,
+                nicknameDuplicateCheck = nicknameDuplicateCheck,
+                focusChanged = { focusChanged(it) }
+            )
         }
         Spacer(modifier = Modifier.weight(1f))
         OnboardingButton(
@@ -68,5 +86,8 @@ private fun OnboardingScreenPreview() {
         nextButtonClicked = {},
         uiState = OnboardingUiState(),
         defaultProfileClicked = {},
+        nicknameValueChanged = {},
+        nicknameDuplicateCheck = {},
+        focusChanged={}
     )
 }

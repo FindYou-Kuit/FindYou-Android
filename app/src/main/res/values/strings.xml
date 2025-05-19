@@ -403,4 +403,12 @@
     <string name="my_item_default_location">성산구 내동 111–1</string>
     <string name="my_item_delete">삭제</string>
 
+    <!--onboarding-->
+    <string name="nickname_validate_text_idle"> </string>
+    <string name="nickname_validate_text_focus">(최대 8글자)</string>
+    <string name="nickname_validate_text_valid">사용 가능한 닉네임이에요.</string>
+    <string name="nickname_validate_text_empty">닉네임이 비어있어요.</string>
+    <string name="nickname_validate_text_format">특수문자는 들어갈 수 없어요.</string>
+    <string name="nickname_validate_text_duplicate">이미 존재하는 닉네임이에요.</string>
+
 </resources>
