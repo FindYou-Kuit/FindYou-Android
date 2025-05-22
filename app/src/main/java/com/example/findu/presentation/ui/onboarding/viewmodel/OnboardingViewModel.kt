@@ -67,9 +67,7 @@ class OnboardingViewModel @Inject constructor(
             _uiState.update { it.copy(nickname = nickname, nickNameValidState = validState) }
         }
     }
-
-    private fun change
-
+    
     fun focusChanged(isFocused: Boolean) {
         if (isFocused) {
             if (_uiState.value.nickNameValidState == NicknameValidType.IDLE)
