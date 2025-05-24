@@ -88,6 +88,12 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
+    fun setProfileImage(uri: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(profileImageUrl = uri) }
+        }
+    }
+
     private fun changeNextButtonEnabled(enabled:Boolean){
         when(enabled){
             true -> {

@@ -24,6 +24,8 @@ import com.example.findu.ui.theme.FindUTheme
 @Composable
 fun OnboardingScreen(
     uiState: OnboardingUiState,
+    cameraIconClicked:()->Unit,
+    clearProfileImage:()->Unit,
     backButtonClicked: () -> Unit,
     nextButtonClicked: () -> Unit,
     focusChanged: (Boolean) -> Unit,
@@ -54,7 +56,10 @@ fun OnboardingScreen(
             1 -> OnboardingProfile(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 defaultProfileType = uiState.defaultProfileType,
-                defaultProfileClicked = defaultProfileClicked
+                defaultProfileClicked = defaultProfileClicked,
+                cameraIconClicked = cameraIconClicked,
+                profileImgUrl = uiState.profileImageUrl,
+                clearProfileImage = clearProfileImage
             )
 
             2 -> OnboardingNickname(
@@ -88,6 +93,8 @@ private fun OnboardingScreenPreview() {
         defaultProfileClicked = {},
         nicknameValueChanged = {},
         nicknameDuplicateCheck = {},
-        focusChanged={}
+        focusChanged = {},
+        cameraIconClicked = {},
+        clearProfileImage = {},
     )
 }

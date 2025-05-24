@@ -26,6 +26,9 @@ import com.example.findu.ui.theme.FindUTheme
 
 @Composable
 fun OnboardingProfile(
+    cameraIconClicked: () -> Unit,
+    profileImgUrl: String,
+    clearProfileImage: () -> Unit,
     defaultProfileClicked: (defaultProfileType: DefaultProfileType) -> Unit,
     modifier: Modifier = Modifier,
     defaultProfileType: DefaultProfileType = DefaultProfileType.NONE
@@ -52,8 +55,9 @@ fun OnboardingProfile(
         )
         Spacer(modifier = Modifier.height(35.dp))
         OnboardingProfileBox(
+            profileImgUrl = profileImgUrl,
             defaultProfileType = defaultProfileType,
-            cameraClicked = {},
+            cameraClicked = cameraIconClicked,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(35.dp))
@@ -66,22 +70,42 @@ fun OnboardingProfile(
             Image(
                 painter = painterResource(R.drawable.img_onboarding_default_profile_none_68),
                 contentDescription = null,
-                Modifier.size(68.dp).noRippleClickable { defaultProfileClicked(DefaultProfileType.NONE) }
+                Modifier
+                    .size(68.dp)
+                    .noRippleClickable {
+                        clearProfileImage()
+                        defaultProfileClicked(DefaultProfileType.NONE)
+                    }
             )
             Image(
                 painter = painterResource(R.drawable.img_onboarding_default_profile_dog_68),
                 contentDescription = null,
-                Modifier.size(68.dp).noRippleClickable { defaultProfileClicked(DefaultProfileType.DOG) }
+                Modifier
+                    .size(68.dp)
+                    .noRippleClickable {
+                        clearProfileImage()
+                        defaultProfileClicked(DefaultProfileType.DOG)
+                    }
             )
             Image(
                 painter = painterResource(R.drawable.img_onboarding_default_profile_chick_68),
                 contentDescription = null,
-                Modifier.size(68.dp).noRippleClickable { defaultProfileClicked(DefaultProfileType.CHICK) }
+                Modifier
+                    .size(68.dp)
+                    .noRippleClickable {
+                        clearProfileImage()
+                        defaultProfileClicked(DefaultProfileType.CHICK)
+                    }
             )
             Image(
                 painter = painterResource(R.drawable.img_onboarding_default_profile_panda_68),
                 contentDescription = null,
-                Modifier.size(68.dp).noRippleClickable { defaultProfileClicked(DefaultProfileType.PANDA) }
+                Modifier
+                    .size(68.dp)
+                    .noRippleClickable {
+                        clearProfileImage()
+                        defaultProfileClicked(DefaultProfileType.PANDA)
+                    }
             )
         }
 
@@ -93,6 +117,9 @@ fun OnboardingProfile(
 @Composable
 private fun OnboardingProfilePreview() {
     OnboardingProfile(
-        defaultProfileClicked = {}
+        defaultProfileClicked = {},
+        cameraIconClicked = {},
+        profileImgUrl = "",
+        clearProfileImage = {},
     )
 }

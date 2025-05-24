@@ -17,6 +17,7 @@ import coil.compose.AsyncImage
 import com.example.findu.R
 import com.example.findu.presentation.type.DefaultProfileType
 import com.example.findu.presentation.ui.base.BaseVectorIcon
+import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
@@ -24,7 +25,7 @@ fun OnboardingProfileBox(
     cameraClicked:()->Unit,
     modifier: Modifier = Modifier,
     defaultProfileType: DefaultProfileType = DefaultProfileType.NONE,
-    profileImgUrl: String = "",
+    profileImgUrl: String,
 ) {
     Box(modifier = modifier.size(145.dp)) {
         if (profileImgUrl.isEmpty()) {
@@ -48,10 +49,10 @@ fun OnboardingProfileBox(
             )
         }
 
-        // 카메라 버튼
         BaseVectorIcon(
             vectorResource = R.drawable.ic_profile_camera_44,
             modifier = Modifier
+                .noRippleClickable { cameraClicked() }
                 .align(Alignment.BottomEnd)
         )
     }
@@ -61,6 +62,7 @@ fun OnboardingProfileBox(
 @Composable
 private fun OnboardingProfileBoxPreview() {
     FindUTheme { OnboardingProfileBox(
-        cameraClicked = {}
+        cameraClicked = {},
+        profileImgUrl = ""
     ) }
 }

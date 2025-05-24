@@ -2,8 +2,11 @@ package com.example.findu.presentation.ui.onboarding
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,6 +23,8 @@ import kotlinx.coroutines.launch
 class OnboardingActivity : ComponentActivity() {
     companion object {
         private const val TAG = "Onboarding"
+        private const val MIME_TYPE_IMAGE = "image/*"
+        private const val EMPTY_STRING=""
     }
 
     private val onboardingViewModel: OnboardingViewModel by viewModels()
@@ -28,6 +33,11 @@ class OnboardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val uiState by onboardingViewModel.uiState.collectAsState()
+            val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                uri?.let {
+                    onboardingViewModel.setProfileImage(it.toString())
+                }
+            }
             OnboardingScreen(
                 uiState = uiState,
                 backButtonClicked = { onboardingViewModel.onBackButtonClicked() },
@@ -39,7 +49,9 @@ class OnboardingActivity : ComponentActivity() {
                     onboardingViewModel.onNicknameValueChanged(nickname)
                 },
                 nicknameDuplicateCheck = { onboardingViewModel.nicknameDuplicateCheck() },
-                focusChanged = {onboardingViewModel.focusChanged(it)},
+                focusChanged = { onboardingViewModel.focusChanged(it) },
+                cameraIconClicked = {launcher.launch(MIME_TYPE_IMAGE)},
+                clearProfileImage = {onboardingViewModel.setProfileImage(EMPTY_STRING)}
             )
         }
 
