@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +38,7 @@ fun OnboardingProfile(
         BaseVectorIcon(vectorResource = R.drawable.ic_onboarding_page_first)
         Spacer(modifier = Modifier.height(40.dp))
         Text(
-            text = "프로필을",
+            text = stringResource(R.string.onboarding_profile_title_first),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             lineHeight = 20.sp,
@@ -46,7 +47,7 @@ fun OnboardingProfile(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "정해주세요!",
+            text = stringResource(R.string.onboarding_profile_title_second),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             lineHeight = 20.sp,

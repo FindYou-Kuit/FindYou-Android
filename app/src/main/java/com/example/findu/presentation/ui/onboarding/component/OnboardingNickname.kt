@@ -56,7 +56,7 @@ fun OnboardingNickname(
         BaseVectorIcon(vectorResource = R.drawable.ic_onboarding_page_last, modifier = Modifier.padding(start = 4.dp))
         Spacer(modifier = Modifier.height(40.dp))
         Text(
-            text = "닉네임을",
+            text = stringResource(R.string.onboarding_nickname_title_first),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             lineHeight = 20.sp,
@@ -65,7 +65,7 @@ fun OnboardingNickname(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "정해주세요!",
+            text = stringResource(R.string.onboarding_nickname_title_second),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             lineHeight = 20.sp,
@@ -101,7 +101,7 @@ fun OnboardingNickname(
                 decorationBox = { innerTextField ->
                     if (nickname.isEmpty()) {
                         Text(
-                            text = "닉네임을 입력해주세요",
+                            text = stringResource(R.string.nickname_placeholder),
                             style = FindUTheme.typography.body2Regular14.copy(color = FindUTheme.colors.gray4)
                         )
                     }
@@ -112,7 +112,7 @@ fun OnboardingNickname(
                 NicknameValidType.FOCUS -> {
                     Text(
                         modifier = Modifier.noRippleClickable(nicknameDuplicateCheck),
-                        text = "중복확인",
+                        text = stringResource(R.string.nickname_duplicate_check),
                         style = FindUTheme.typography.body2Regular14,
                         color = FindUTheme.colors.mainColor
                     )

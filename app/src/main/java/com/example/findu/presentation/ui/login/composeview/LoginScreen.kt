@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,21 +39,21 @@ fun LoginScreen(
     ) {
         Spacer(modifier = Modifier.weight(1.1f))
         Text(
-            text = "작은 관심이" ,
+            text = stringResource(R.string.login_title_first),
             style = FindUTheme.typography.head1SemiBold24,
             color = FindUTheme.colors.gray6,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(5.dp))
         Text(
-            text = "누군가의 세상이 됩니다." ,
+            text = stringResource(R.string.login_title_second),
             style = FindUTheme.typography.head1SemiBold24,
             color = FindUTheme.colors.gray6,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "유기동물 관련 어플리케이션",
+            text = stringResource(R.string.login_description_text),
             style = FindUTheme.typography.body2Regular14,
             color = FindUTheme.colors.gray4,
             modifier = Modifier.fillMaxWidth()
@@ -73,7 +74,7 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(15.dp))
         Text(
-            "가입없이 시작하기",
+            text = stringResource(R.string.login_without_signup),
             textAlign = TextAlign.Center,
             style = FindUTheme.typography.body1SemiBold16,
             color = FindUTheme.colors.gray5,

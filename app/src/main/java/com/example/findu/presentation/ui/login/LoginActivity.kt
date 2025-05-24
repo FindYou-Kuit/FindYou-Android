@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.findu.R
 import com.example.findu.presentation.ui.login.composeview.LoginScreen
 import com.example.findu.presentation.ui.login.viewmodel.LoginViewModel
 import com.example.findu.presentation.ui.main.MainActivity
@@ -34,7 +35,7 @@ class LoginActivity : ComponentActivity() {
         setContent {
             val callback: (OAuthToken?, Throwable?) -> Unit = { oAuthToken, _ ->
                 if (oAuthToken != null) {
-                    Log.d(TAG, "토큰: ${oAuthToken.accessToken}")
+                    Log.d(TAG, "oAuth_AccessToken: ${oAuthToken.accessToken}")
                     loginViewModel.checkRegisteredUser(oAuthToken.accessToken)
                 }
             }
@@ -46,7 +47,7 @@ class LoginActivity : ComponentActivity() {
                     )
                 },
                 withoutSignUpButtonClicked = {
-                    this.showToast("가입없이 찾아유 실행")
+                    this.showToast(message = getString(R.string.login_without_signup_toast_message))
                     loginViewModel.startMainActivity()
                 },
             )
