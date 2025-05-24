@@ -36,9 +36,9 @@ import com.example.findu.ui.theme.FindUTheme
 @Composable
 fun OnboardingNickname(
     nicknameValueChanged: (String) -> Unit,
-    nicknameDuplicateCheck:()->Unit,
+    nicknameDuplicateCheck: () -> Unit,
     modifier: Modifier = Modifier,
-    focusChanged:(Boolean)->Unit,
+    focusChanged: (Boolean) -> Unit,
     nickname: String = "",
     nicknameValidState: NicknameValidType = NicknameValidType.IDLE,
 ) {
@@ -52,7 +52,8 @@ fun OnboardingNickname(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        BaseVectorIcon(vectorResource = R.drawable.ic_onboarding_page_last)
+        // NOTE: 페이지 아이콘 첫/끝 요소 여백 불균형으로 임시 여백 삽입 (디자인 수정 시 제거 예정)
+        BaseVectorIcon(vectorResource = R.drawable.ic_onboarding_page_last, modifier = Modifier.padding(start = 4.dp))
         Spacer(modifier = Modifier.height(40.dp))
         Text(
             text = "닉네임을",
@@ -75,7 +76,11 @@ fun OnboardingNickname(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(width = 1.dp, shape = RoundedCornerShape(30.dp), color = colorResource(nicknameValidState.colorRes))
+                .border(
+                    width = 1.dp,
+                    shape = RoundedCornerShape(30.dp),
+                    color = colorResource(nicknameValidState.colorRes)
+                )
                 .roundedBackgroundWithPadding(
                     cornerRadius = 30.dp,
                     backgroundColor = FindUTheme.colors.white,
@@ -104,7 +109,7 @@ fun OnboardingNickname(
                 }
             )
             when (nicknameValidState) {
-                NicknameValidType.FOCUS  -> {
+                NicknameValidType.FOCUS -> {
                     Text(
                         modifier = Modifier.noRippleClickable(nicknameDuplicateCheck),
                         text = "중복확인",
@@ -112,7 +117,8 @@ fun OnboardingNickname(
                         color = FindUTheme.colors.mainColor
                     )
                 }
-                NicknameValidType.VALID, NicknameValidType.IDLE  -> {}
+
+                NicknameValidType.VALID, NicknameValidType.IDLE -> {}
                 else -> {
                     BaseVectorIcon(
                         vectorResource = R.drawable.ic_nickname_information_24
@@ -124,7 +130,9 @@ fun OnboardingNickname(
         Text(
             text = stringResource(nicknameValidState.stringRes),
             modifier = Modifier.padding(start = 23.dp),
-            color = if (nicknameValidState == NicknameValidType.FOCUS) FindUTheme.colors.gray4 else colorResource(nicknameValidState.colorRes),
+            color = if (nicknameValidState == NicknameValidType.FOCUS) FindUTheme.colors.gray4 else colorResource(
+                nicknameValidState.colorRes
+            ),
             style = FindUTheme.typography.captionRegular12
         )
     }

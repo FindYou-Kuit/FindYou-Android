@@ -36,7 +36,7 @@ class OnboardingViewModel @Inject constructor(
     fun onNextClicked() {
         viewModelScope.launch {
             if (_uiState.value.pageState == LAST_PAGE) {
-                _startMainActivity.emit(Unit)
+                startMainActivity()
             } else {
                 _uiState.update { it.copy(pageState = LAST_PAGE, isNextButtonEnabled = false) }
             }
@@ -64,10 +64,11 @@ class OnboardingViewModel @Inject constructor(
             else -> NicknameValidType.FOCUS
         }
         viewModelScope.launch {
+            changeNextButtonEnabled(false)
             _uiState.update { it.copy(nickname = nickname, nickNameValidState = validState) }
         }
     }
-    
+
     fun focusChanged(isFocused: Boolean) {
         if (isFocused) {
             if (_uiState.value.nickNameValidState == NicknameValidType.IDLE)
@@ -81,11 +82,28 @@ class OnboardingViewModel @Inject constructor(
     fun nicknameDuplicateCheck() {
         viewModelScope.launch {
             //TODO: 닉네임 중복체크 API 나오면 추가 후 Valid 상태 변경
-            _uiState.update { it.copy(nickNameValidState = NicknameValidType.VALID, isNextButtonEnabled = true) }
+            _uiState.update { it.copy(nickNameValidState = NicknameValidType.VALID) }
+            changeNextButtonEnabled(true)
+            focusChanged(false)
         }
     }
 
-    fun startMainActivity() {
+    private fun changeNextButtonEnabled(enabled:Boolean){
+        when(enabled){
+            true -> {
+                if (!_uiState.value.isNextButtonEnabled){
+                    _uiState.update { it.copy(isNextButtonEnabled = true) }
+                }
+            }
+            false -> {
+                if (_uiState.value.isNextButtonEnabled){
+                    _uiState.update { it.copy(isNextButtonEnabled = false) }
+                }
+            }
+        }
+    }
+
+    private fun startMainActivity() {
         viewModelScope.launch {
             _startMainActivity.emit(Unit)
         }
