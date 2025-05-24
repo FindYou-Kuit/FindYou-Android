@@ -24,13 +24,13 @@ import com.example.findu.ui.theme.FindUTheme
 @Composable
 fun OnboardingScreen(
     uiState: OnboardingUiState,
-    cameraIconClicked:()->Unit,
-    clearProfileImage:()->Unit,
+    cameraIconClicked: () -> Unit,
+    clearProfileImage: () -> Unit,
     backButtonClicked: () -> Unit,
     nextButtonClicked: () -> Unit,
     focusChanged: (Boolean) -> Unit,
     nicknameValueChanged: (String) -> Unit,
-    nicknameDuplicateCheck:()->Unit,
+    nicknameDuplicateCheck: () -> Unit,
     defaultProfileClicked: (defaultProfileType: DefaultProfileType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -69,7 +69,10 @@ fun OnboardingScreen(
                 },
                 nickname = uiState.nickname,
                 nicknameValidState = uiState.nickNameValidState,
-                nicknameDuplicateCheck = nicknameDuplicateCheck,
+                nicknameDuplicateCheck = {
+                    focusManager.clearFocus()
+                    nicknameDuplicateCheck()
+                },
                 focusChanged = { focusChanged(it) }
             )
         }
