@@ -423,6 +423,7 @@
     <string name="onboarding_nickname_title_second">정해주세요!</string>
     <string name="onboarding_profile_title_first">프로필을</string>
     <string name="onboarding_profile_title_second">정해주세요!</string>
+    <string name="onboarding_next_button_text">다음</string>
 
 
 </resources>

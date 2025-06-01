@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.findu.R
 import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.presentation.util.extension.roundedBackgroundWithPadding
 import com.example.findu.ui.theme.FindUTheme
@@ -33,7 +35,7 @@ fun OnboardingButton(
     }
 
     Text(
-        text = "다음", textAlign = TextAlign.Center,style = FindUTheme.typography.head3SemiBold18, color = textColor, modifier = modifier
+        text = stringResource(R.string.onboarding_next_button_text), textAlign = TextAlign.Center,style = FindUTheme.typography.head3SemiBold18, color = textColor, modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .roundedBackgroundWithPadding(
