@@ -12,11 +12,20 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.findu.R
 import com.example.findu.databinding.ActivitySplashBinding
+import com.example.findu.domain.usecase.token.GetAccessTokenUseCase
 import com.example.findu.presentation.ui.login.LoginActivity
+import com.example.findu.presentation.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var getAccessTokenUseCase: GetAccessTokenUseCase
+
     private lateinit var binding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +34,16 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch {
+            val accessToken = getAccessTokenUseCase()
             delay(1000)
             setGif()
             delay(2000)
-            navigateToLogin()
+            if (accessToken.isEmpty()) {
+                navigateToLogin()
+            } else {
+                navigateToLogin()
+//                navigateToMain()
+            }
         }
 
 
@@ -66,6 +81,11 @@ class SplashActivity : AppCompatActivity() {
 
     private fun navigateToLogin() {
         startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+    }
+
+    private fun navigateToMain() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }

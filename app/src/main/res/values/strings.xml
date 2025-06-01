@@ -10,6 +10,13 @@
     <string name="login_signup">회원가입</string>
     <string name="login_find_password">비밀번호 찾기</string>
     <string name="login_social">또는</string>
+    <string name="login_title_first">작은 관심이</string>
+    <string name="login_title_second">누군가의 세상이 됩니다.</string>
+    <string name="login_description_text">유기동물 관련 어플리케이션</string>
+    <string name="login_without_signup">가입없이 시작하기</string>
+    <string name="login_without_signup_toast_message">가입없이 찾아유 실행</string>
+
+
 
     <!--signup-->
     <string name="signup_email_title">이메일</string>
@@ -402,5 +409,21 @@
     <string name="my_item_default_date">2024–11–04</string>
     <string name="my_item_default_location">성산구 내동 111–1</string>
     <string name="my_item_delete">삭제</string>
+
+    <!--onboarding-->
+    <string name="nickname_placeholder">닉네임을 입력해주세요</string>
+    <string name="nickname_duplicate_check">중복확인</string>
+    <string name="nickname_validate_text_idle"> </string>
+    <string name="nickname_validate_text_focus">(최대 8글자)</string>
+    <string name="nickname_validate_text_valid">사용 가능한 닉네임이에요.</string>
+    <string name="nickname_validate_text_empty">닉네임이 비어있어요.</string>
+    <string name="nickname_validate_text_format">특수문자는 들어갈 수 없어요.</string>
+    <string name="nickname_validate_text_duplicate">이미 존재하는 닉네임이에요.</string>
+    <string name="onboarding_nickname_title_first">닉네임을</string>
+    <string name="onboarding_nickname_title_second">정해주세요!</string>
+    <string name="onboarding_profile_title_first">프로필을</string>
+    <string name="onboarding_profile_title_second">정해주세요!</string>
+    <string name="onboarding_next_button_text">다음</string>
+
 
 </resources>

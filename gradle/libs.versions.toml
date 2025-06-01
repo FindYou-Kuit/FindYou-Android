@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.3"
+coilCompose = "2.5.0"
 composeBom = "2024.04.01"
 kotlin = "1.9.24"
 coreKtx = "1.15.0"
@@ -13,6 +14,7 @@ mapSdk = "3.20.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
+
 # Third Party
 okhttp = "4.11.0"
 retrofit = "2.9.0"
@@ -24,6 +26,8 @@ navigationUiKtx = "2.8.3"
 webkit = "1.12.1"
 playServicesLocation = "21.3.0"
 cameraCore = "1.1.0-beta01"
+kakao = "2.20.3"
+
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose" }
@@ -34,6 +38,7 @@ androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -44,6 +49,7 @@ map-sdk = { module = "com.naver.maps:map-sdk", version.ref = "mapSdk" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
 # Third Party
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp" }
@@ -61,6 +67,12 @@ androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "
 androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraCore" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCore" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
+kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
+kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakao" }
+kakao-talk = { group = "com.kakao.sdk", name = "v2-talk", version.ref = "kakao" }
+kakao-friend = { group = "com.kakao.sdk", name = "v2-friend", version.ref = "kakao" }
+kakao-navi = { group = "com.kakao.sdk", name = "v2-navi", version.ref = "kakao" }
+kakao-cert = { group = "com.kakao.sdk", name = "v2-cert", version.ref = "kakao" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -72,5 +84,14 @@ navigationSafeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref =
 [bundles]
 hilt = [
     "hilt"
+]
+
+kakao = [
+    "kakao-v2-user",
+    "kakao-share",
+    "kakao-talk",
+    "kakao-friend",
+    "kakao-navi",
+    "kakao-cert"
 ]
 

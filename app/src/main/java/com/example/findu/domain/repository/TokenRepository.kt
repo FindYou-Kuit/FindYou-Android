@@ -2,6 +2,8 @@ package com.example.findu.domain.repository
 
 interface TokenRepository {
     fun getAccessToken(): String
-    fun setTokens(accessToken: String)
-    fun clearInfo()
+    fun setAccessToken(accessToken: String)
+    fun getRefreshToken(): String
+    fun setRefreshToken(refreshToken: String)
+    fun clearToken()
 }
