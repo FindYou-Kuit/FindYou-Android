@@ -1,6 +1,7 @@
 package com.example.findu.data.datalocal.datasourceimpl
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.example.findu.data.datalocal.datasource.TokenLocalDataSource
 import com.example.findu.di.qualifier.TokenPrefs
 import javax.inject.Inject
@@ -10,11 +11,11 @@ class TokenLocalDataSourceImpl @Inject constructor(
 ) : TokenLocalDataSource {
     override var accessToken: String
         get() = sharedPreferences.getString(ACCESS_TOKEN, INITIAL_VALUE) ?: INITIAL_VALUE
-        set(value) = sharedPreferences.edit().putString(ACCESS_TOKEN, value).apply()
+        set(value) = sharedPreferences.edit { putString(ACCESS_TOKEN, value) }
 
     override var refreshToken: String
         get() = sharedPreferences.getString(REFRESH_TOKEN, INITIAL_VALUE) ?: INITIAL_VALUE
-        set(value) = sharedPreferences.edit().putString(REFRESH_TOKEN, value).apply()
+        set(value) = sharedPreferences.edit { putString(REFRESH_TOKEN, value) }
 
     override fun clearToken() {
         sharedPreferences.edit().clear().apply()
