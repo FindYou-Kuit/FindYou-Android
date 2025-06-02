@@ -25,41 +25,41 @@ import com.google.accompanist.pager.PagerState
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeBannerPager(bannerList:List< HomeBannerType>,pagerState:PagerState, modifier: Modifier = Modifier) {
-    HorizontalPager(
-        count = bannerList.size,
-        state = pagerState,
-        contentPadding = PaddingValues(horizontal = 20.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) { page ->
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .fillMaxWidth()
-                .aspectRatio(30f / 14f)
-                .clip(RoundedCornerShape(12.dp))
-        ) {
+fun HomeBannerPager(bannerList: List<HomeBannerType>, pagerState: PagerState, modifier: Modifier = Modifier) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        HorizontalPager(
+            count = bannerList.size,
+            state = pagerState,
+            contentPadding = PaddingValues(horizontal = 20.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) { page ->
             Image(
                 painter = painterResource(bannerList[page].imgRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-
-            Text(
-                text = "${pagerState.currentPage + 1}/${bannerList.size}",
-                style = FindUTheme.typography.captionRegular11,
-                color = FindUTheme.colors.white,
                 modifier = Modifier
-                    .padding(end = 12.dp, bottom = 10.dp)
-                    .roundedBackgroundWithPadding(
-                        backgroundColor = FindUTheme.colors.gray5.copy(alpha = 0.5f),
-                        cornerRadius = 10.dp,
-                        padding = PaddingValues(vertical = 3.dp, horizontal = 7.dp)
-                    )
-                    .align(Alignment.BottomEnd)
+                    .padding(horizontal = 8.dp)
+                    .fillMaxSize()
+                    .aspectRatio(30f / 14f)
+                    .clip(RoundedCornerShape(12.dp))
             )
         }
+        Text(
+            text = "${pagerState.currentPage + 1}/${bannerList.size}",
+            style = FindUTheme.typography.captionRegular11,
+            color = FindUTheme.colors.white,
+            modifier = Modifier
+                .padding(end = 42.dp, bottom = 10.dp)
+                .roundedBackgroundWithPadding(
+                    backgroundColor = FindUTheme.colors.gray5.copy(alpha = 0.5f),
+                    cornerRadius = 10.dp,
+                    padding = PaddingValues(vertical = 3.dp, horizontal = 7.dp)
+                )
+                .align(Alignment.BottomEnd)
+        )
     }
 }
 
