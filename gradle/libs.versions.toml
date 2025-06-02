@@ -14,6 +14,8 @@ mapSdk = "3.20.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
+accompanistPager = "0.25.0"
+pagingCommonAndroid = "3.3.2"
 
 # Third Party
 okhttp = "4.11.0"
@@ -49,6 +51,9 @@ map-sdk = { module = "com.naver.maps:map-sdk", version.ref = "mapSdk" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-paging-common-android = { group = "androidx.paging", name = "paging-common-android", version.ref = "pagingCommonAndroid" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPager" }
 
 # Third Party
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
@@ -93,5 +98,11 @@ kakao = [
     "kakao-friend",
     "kakao-navi",
     "kakao-cert"
+]
+
+pager = [
+    "androidx-paging-common-android",
+    "accompanist-pager",
+    "accompanist-pager-indicators"
 ]
 
