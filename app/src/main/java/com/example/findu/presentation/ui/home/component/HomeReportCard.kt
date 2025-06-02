@@ -33,9 +33,7 @@ import com.example.findu.ui.theme.FindUTheme
 
 @Composable
 fun HomeReportCard(
-    homeReportData: HomeReportData,
-    indicatorClicked: (String) -> Unit,
-    modifier: Modifier = Modifier
+    homeReportData: HomeReportData, indicatorClicked: (String) -> Unit, modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -47,21 +45,17 @@ fun HomeReportCard(
             )
     ) {
         Text(
-            text = "유기동물 통계",
-            style = FindUTheme.typography.head2SemiBold20,
-            modifier = Modifier.padding(start = 20.dp)
+            text = "유기동물 통계", style = FindUTheme.typography.head2SemiBold20, modifier = Modifier.padding(start = 20.dp)
         )
         Spacer(modifier = Modifier.height(14.dp))
         HomeReportCardIndicator(
-            modifier = Modifier.padding(horizontal = 15.dp),
-            indicatorClicked = indicatorClicked
+            modifier = Modifier.padding(horizontal = 15.dp), indicatorClicked = indicatorClicked
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             homeReportData.reports.forEachIndexed { index, data ->
                 Column(
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
@@ -100,13 +94,10 @@ fun HomeReportCardIndicator(
         modifier = modifier
             .fillMaxWidth()
             .border(
-                width = 1.dp,
-                shape = RoundedCornerShape(10.dp),
-                color = FindUTheme.colors.gray3
+                width = 1.dp, shape = RoundedCornerShape(10.dp), color = FindUTheme.colors.gray3
             )
             .roundedBackgroundWithPadding(
-                backgroundColor = FindUTheme.colors.white,
-                cornerRadius = 10.dp
+                backgroundColor = FindUTheme.colors.white, cornerRadius = 10.dp
             )
     ) {
         listOf("7일", "3개월", "1년").forEach { label ->
