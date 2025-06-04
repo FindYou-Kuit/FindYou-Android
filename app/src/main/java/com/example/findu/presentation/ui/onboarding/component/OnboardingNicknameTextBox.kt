@@ -12,16 +12,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.findu.R
 import com.example.findu.presentation.util.extension.roundedBackgroundWithPadding
 import com.example.findu.presentation.util.shape.TriangleShape
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun OnboardingNicknameTextBox(modifier: Modifier = Modifier,isVisible:Boolean = false) {
-    if (isVisible){
+fun OnboardingNicknameTextBox(modifier: Modifier = Modifier, isVisible: Boolean = false) {
+    if (isVisible) {
         Column(modifier = modifier) {
             Spacer(
                 modifier = Modifier
@@ -41,10 +43,7 @@ fun OnboardingNicknameTextBox(modifier: Modifier = Modifier,isVisible:Boolean = 
                     .align(Alignment.End)
             ) {
                 Text(
-                    text = "다음과 같은 경우에 불가능해요.\n" +
-                            " 1. 중복된 닉네임인 경우\n" +
-                            " 2. 띄어쓰기만 있는 닉네임인 경우\n" +
-                            " 3. 특수문자(!@#\$,.^)가 포함되어 있는 경우",
+                    text = stringResource(R.string.onboarding_invalid_text_box),
                     style = FindUTheme.typography.captionRegular12.copy(
                         lineHeight = 20.sp
                     ),
