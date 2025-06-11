@@ -27,7 +27,7 @@ import com.google.accompanist.pager.PagerState
 @Composable
 fun HomeBannerPager(bannerList: List<HomeBannerType>, pagerState: PagerState, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         HorizontalPager(
