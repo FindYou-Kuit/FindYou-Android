@@ -8,22 +8,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.findu.domain.model.search.SearchStatus
+import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.util.extension.roundedBackgroundWithPadding
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun SearchTagChip(searchStatus: SearchStatus, modifier: Modifier = Modifier) {
+fun SearchTagChip(animalStateType: AnimalStateType, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.roundedBackgroundWithPadding(
-            backgroundColor = colorResource(searchStatus.backgroundColorRes),
+            backgroundColor = colorResource(animalStateType.backgroundChipColor),
             padding = PaddingValues(vertical = 2.dp, horizontal = 6.dp),
             cornerRadius = 10.dp
         )
     ) {
         Text(
-            text = searchStatus.text,
-            color = colorResource(searchStatus.textColor),
+            text = animalStateType.state,
+            color = colorResource(animalStateType.textColor),
             style = FindUTheme.typography.tag1SemiBold12
         )
     }
@@ -33,6 +33,6 @@ fun SearchTagChip(searchStatus: SearchStatus, modifier: Modifier = Modifier) {
 @Composable
 private fun SearchTagChipPreview() {
     SearchTagChip(
-        searchStatus = SearchStatus.PROTECTING
+        animalStateType = AnimalStateType.Protect
     )
 }

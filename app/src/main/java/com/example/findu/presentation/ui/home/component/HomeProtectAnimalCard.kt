@@ -24,15 +24,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.findu.R
-import com.example.findu.domain.model.search.SearchAnimal
-import com.example.findu.domain.model.search.SearchStatus
+import com.example.findu.domain.model.ProtectAnimal
+import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.ui.base.BaseVectorIcon
 import com.example.findu.presentation.ui.base.SearchTagChip
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun HomeAdoptableCard(
-    animal: SearchAnimal,
+fun HomeProtectAnimalCard(
+    animal: ProtectAnimal,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -57,7 +57,7 @@ fun HomeAdoptableCard(
             SearchTagChip(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(5.dp), searchStatus = SearchStatus.PROTECTING
+                    .padding(5.dp), animalStateType = AnimalStateType.fromTag(animal.tag)
             )
         }
         Column(modifier = Modifier.padding(vertical = 10.dp, horizontal = 12.dp)) {
@@ -74,7 +74,7 @@ fun HomeAdoptableCard(
                 BaseVectorIcon(R.drawable.icon_home_location)
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(
-                    text = animal.location,
+                    text = animal.careAddress,
                     style = FindUTheme.typography.homeSemiBold10,
                     color = FindUTheme.colors.gray5,
                     maxLines = 1,
@@ -87,16 +87,15 @@ fun HomeAdoptableCard(
 
 @Preview
 @Composable
-private fun HomeAdoptableCardPreview() {
-    HomeAdoptableCard(
-        animal = SearchAnimal(
-            cardId = 1,
+private fun HomeProtectAnimalCardPreview() {
+    HomeProtectAnimalCard(
+        animal = ProtectAnimal(
             thumbnailImageUrl = "",
             title = "콩이",
-            tag = SearchStatus.PROTECTING,
-            date = "",
-            location = "우리 집",
-            interest = false
+            tag = "보호중",
+            protectId = 1,
+            noticeStartDate = "",
+            careAddress = "서울시 송파구"
         )
     )
 }

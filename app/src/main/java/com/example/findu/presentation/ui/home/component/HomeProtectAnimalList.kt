@@ -18,22 +18,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
-import com.example.findu.domain.model.search.SearchAnimal
-import com.example.findu.domain.model.search.SearchStatus
+import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.presentation.ui.base.BaseVectorIcon
 import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun HomeAdoptableList(
+fun HomeProtectAnimalList(
     nickname: String,
     navigationToSearch: () -> Unit,
-    animalCards: List<SearchAnimal>,
+    animalCards: List<ProtectAnimal>,
     modifier: Modifier = Modifier
 ) {
-    Column (modifier = modifier
-        .background(color = FindUTheme.colors.white)
-        .padding(bottom = 30.dp)){
+    Column(
+        modifier = modifier
+            .background(color = FindUTheme.colors.white)
+            .padding(bottom = 30.dp)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -43,7 +44,11 @@ fun HomeAdoptableList(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(R.string.home_adoptable_list_title), style = FindUTheme.typography.head2SemiBold20, color = FindUTheme.colors.gray6)
+                Text(
+                    text = stringResource(R.string.home_adoptable_list_title),
+                    style = FindUTheme.typography.head2SemiBold20,
+                    color = FindUTheme.colors.gray6
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 BaseVectorIcon(vectorResource = R.drawable.ic_report_arrow_right_14)
             }
@@ -61,10 +66,10 @@ fun HomeAdoptableList(
         ) {
             items(
                 count = animalCards.size,
-                key = { index -> animalCards[index].cardId },
+                key = { index -> animalCards[index].protectId },
                 contentType = { "animal_card" }
             ) { index ->
-                HomeAdoptableCard(
+                HomeProtectAnimalCard(
                     animal = animalCards[index]
                 )
             }
@@ -74,57 +79,58 @@ fun HomeAdoptableList(
 
 @Preview
 @Composable
-private fun HomeAdoptableListPreview() {
+private fun HomeProtectAnimalListPreview() {
     val dummyAnimalCards = listOf(
-        SearchAnimal(
-            cardId = 1,
+        ProtectAnimal(
+            protectId = 1,
             thumbnailImageUrl = "",
             title = "강아지 댕댕댕댕댕댕댕이",
-            location = "서울시 강남구",
-            tag = SearchStatus.PROTECTING,
-            date = "",
-            interest = false
+            tag = "보호중",
+            noticeStartDate = "",
+            careAddress = "서울시 강남구"
         ),
-        SearchAnimal(
-            cardId = 2,
+        ProtectAnimal(
+            protectId = 2,
             thumbnailImageUrl = "",
             title = "고양이 야옹이",
-            location = "서울시 마포구",
-            tag = SearchStatus.PROTECTING,
-            date = "",
-            interest = false
+            tag = "보호중",
+            noticeStartDate = "",
+            careAddress = "서울시 마포구"
         ),
-        SearchAnimal(
-            cardId = 3,
+        ProtectAnimal(
+            protectId = 3,
             thumbnailImageUrl = "",
             title = "햄스터 하몽이",
-            location = "부산시 해운대구",
-            tag = SearchStatus.PROTECTING,
-            date = "",
-            interest = false
-        )
-        ,
-        SearchAnimal(
-            cardId = 4,
+            tag = "보호중",
+            noticeStartDate = "",
+            careAddress = "부산시 해운대구"
+        ),
+        ProtectAnimal(
+            protectId = 4,
             thumbnailImageUrl = "",
-            title = "햄스터 하몽이",
-            location = "부산시 해운대구",
-            tag = SearchStatus.PROTECTING,
-            date = "",
-            interest = false
-        )
-        ,
-        SearchAnimal(
-            cardId = 5,
+            title = "토끼 깡총이",
+            tag = "보호중",
+            noticeStartDate = "",
+            careAddress = "대구시 중구"
+        ),
+        ProtectAnimal(
+            protectId = 5,
             thumbnailImageUrl = "",
-            title = "햄스터 하몽이",
-            location = "부산시 해운대구",
-            tag = SearchStatus.PROTECTING,
-            date = "",
-            interest = false
+            title = "앵무새 찡찡이",
+            tag = "보호중",
+            noticeStartDate = "",
+            careAddress = "광주시 서구"
+        ),
+        ProtectAnimal(
+            protectId = 6,
+            thumbnailImageUrl = "",
+            title = "고슴도치 도치",
+            tag = "보호중",
+            noticeStartDate = "",
+            careAddress = "인천시 계양구"
         )
     )
-    HomeAdoptableList(
+    HomeProtectAnimalList(
         nickname = "신민석",
         navigationToSearch = {},
         animalCards = dummyAnimalCards,
