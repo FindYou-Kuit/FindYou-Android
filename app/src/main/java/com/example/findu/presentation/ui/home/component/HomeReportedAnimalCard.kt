@@ -29,7 +29,7 @@ import com.example.findu.presentation.ui.base.SearchTagChip
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun HomeReportedCard(
+fun HomeReportedAnimalCard(
     animal: ReportAnimal,
     modifier: Modifier = Modifier
 ) {
@@ -95,8 +95,8 @@ fun HomeReportedCard(
 
 @Preview
 @Composable
-private fun HomeReportedCardPreview() {
-    HomeReportedCard(
+private fun HomeReportedAnimalCardPreview() {
+    HomeReportedAnimalCard(
         animal = ReportAnimal(
             reportId = 1,
             thumbnailImageUrl = "",
