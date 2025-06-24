@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,7 +37,7 @@ fun HomeReportedAnimalCard(
     Column(
         modifier = modifier
             .width(224.dp)
-            .border(width = 1.dp, color = FindUTheme.colors.gray4, shape = RoundedCornerShape(10.dp))
+            .border(width = 1.dp, color = FindUTheme.colors.gray3, shape = RoundedCornerShape(10.dp))
             .background(shape = RoundedCornerShape(10.dp), color = FindUTheme.colors.white)
     ) {
         AsyncImage(
@@ -45,7 +46,8 @@ fun HomeReportedAnimalCard(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(224f / 133f),
+                .aspectRatio(224f / 133f)
+                .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
             placeholder = painterResource(R.drawable.img_findu_logo),
             error = painterResource(R.drawable.img_findu_logo)
         )

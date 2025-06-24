@@ -16,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.presentation.ui.base.BaseVectorIcon
+import com.example.findu.presentation.util.WebViewUrl.CENTER_URL
+import com.example.findu.presentation.util.WebViewUrl.PART_URL
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
@@ -35,24 +37,28 @@ fun HomeWebLinkList(modifier: Modifier = Modifier) {
         HomeWebLinkButton(
             modifier = Modifier.fillMaxWidth(),
             buttonText = "동물정보보호시스템 바로가기",
-            webUrl = ""
+            webUrl = PART_URL
         )
         Spacer(modifier = Modifier.height(10.dp))
         HomeWebLinkButton(
             modifier = Modifier.fillMaxWidth(),
             buttonText = "동물자유연대 바로가기",
-            webUrl = ""
+            webUrl = CENTER_URL
         )
         Spacer(modifier = Modifier.height(10.dp))
         HomeWebLinkButton(
             modifier = Modifier.fillMaxWidth(),
             buttonText = "종합유기견보호센터 바로가기",
-            webUrl = ""
+            webUrl = CENTER_URL
         )
         Spacer(modifier = Modifier.height(60.dp))
-        Text(text = "서비스 관련 정보 \n" +
-                "문의처는 어쩌고 저쩌고 \n" +
-                "전화번호 00-10-3-20442", style = FindUTheme.typography.captionRegular12, color = FindUTheme.colors.gray5)
+        Text(
+            text = "서비스 관련 정보 \n" +
+                    "문의처는 어쩌고 저쩌고 \n" +
+                    "전화번호 00-10-3-20442",
+            style = FindUTheme.typography.captionRegular12,
+            color = FindUTheme.colors.gray5
+        )
 
     }
 }

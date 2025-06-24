@@ -3,7 +3,6 @@ package com.example.findu.presentation.ui.home.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,23 +42,22 @@ fun HomeBannerPager(bannerList: List<HomeBannerType>, pagerState: PagerState, mo
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .fillMaxSize()
-                    .aspectRatio(30f / 14f)
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(20.dp))
+            )
+            Text(
+                text = "${pagerState.currentPage + 1}/${bannerList.size}",
+                style = FindUTheme.typography.captionRegular11,
+                color = FindUTheme.colors.white,
+                modifier = Modifier
+                    .padding(end = 20.dp, bottom = 10.dp)
+                    .roundedBackgroundWithPadding(
+                        backgroundColor = FindUTheme.colors.gray5.copy(alpha = 0.5f),
+                        cornerRadius = 10.dp,
+                        padding = PaddingValues(vertical = 3.dp, horizontal = 7.dp)
+                    )
+                    .align(Alignment.BottomEnd)
             )
         }
-        Text(
-            text = "${pagerState.currentPage + 1}/${bannerList.size}",
-            style = FindUTheme.typography.captionRegular11,
-            color = FindUTheme.colors.white,
-            modifier = Modifier
-                .padding(end = 42.dp, bottom = 10.dp)
-                .roundedBackgroundWithPadding(
-                    backgroundColor = FindUTheme.colors.gray5.copy(alpha = 0.5f),
-                    cornerRadius = 10.dp,
-                    padding = PaddingValues(vertical = 3.dp, horizontal = 7.dp)
-                )
-                .align(Alignment.BottomEnd)
-        )
     }
 }
 

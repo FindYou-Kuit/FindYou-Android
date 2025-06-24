@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
-import com.example.findu.domain.model.HomeData
 import com.example.findu.domain.model.HomeReportData
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
@@ -40,19 +39,21 @@ import com.example.findu.presentation.ui.home.component.HomeReportedAnimalList
 import com.example.findu.presentation.ui.home.component.HomeScrollToTopButton
 import com.example.findu.presentation.ui.home.component.HomeTopBar
 import com.example.findu.presentation.ui.home.component.HomeWebLinkList
+import com.example.findu.presentation.ui.home.viewmodel.HomeUiState
 import com.example.findu.ui.theme.FindUTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
+    uiState: HomeUiState = HomeUiState(),
     reportButtonClicked: () -> Unit,
     homeReportData: HomeReportData,
     indicatorClicked: (String) -> Unit,
-    homeData: HomeData,
     navigationToSearch: () -> Unit,
     userNickname: String,
     modifier: Modifier = Modifier,
@@ -129,7 +130,7 @@ fun HomeScreen(
                     HomeProtectAnimalList(
                         nickname = userNickname,
                         navigationToSearch = navigationToSearch,
-                        animalCards = homeData.protectAnimalCards,
+                        animalCards = uiState.homeData!!.protectAnimalCards,
                     )
                 }
                 item {
@@ -142,7 +143,7 @@ fun HomeScreen(
                     HomeReportedAnimalList(
                         nickname = userNickname,
                         navigationToSearch = navigationToSearch,
-                        animalCards = homeData.reportAnimalCards
+                        animalCards = uiState.homeData!!.reportAnimalCards
                     )
 
                 }
@@ -287,12 +288,6 @@ private fun HomeScreenPreview() {
         homeReportData = homeReportData,
         indicatorClicked = { clickedLabel -> selected = clickedLabel },
         navigationToSearch = {},
-        userNickname = "신민석",
-        homeData = HomeData(
-            todayRescuedAnimalCount = 1,
-            todayReportAnimalCount = 1,
-            protectAnimalCards = dummyProtectAnimalCards,
-            reportAnimalCards = dummyReportedAnimalCards
-        )
+        userNickname = "신민석"
     )
 }
