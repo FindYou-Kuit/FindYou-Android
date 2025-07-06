@@ -429,7 +429,10 @@
     <string name="onboarding_profile_title_first">프로필을</string>
     <string name="onboarding_profile_title_second">정해주세요!</string>
     <string name="onboarding_next_button_text">다음</string>
-
+    <string name="home_button_protect_center">보호소</string>
+    <string name="home_button_hospital">동물 병원</string>
+    <string name="home_button_protect_part">보호 부서</string>
+    <string name="home_button_volunteer">봉사</string>
 
 
 </resources>
