@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.home.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -15,9 +16,19 @@ import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun HomeScrollToTopButton(onClick:()->Unit,modifier: Modifier = Modifier) {
-    Box(modifier = modifier.background(shape = CircleShape, color = FindUTheme.colors.mainColor).padding(12.dp).noRippleClickable(onClick), contentAlignment = Alignment.Center){
-        BaseVectorIcon(vectorResource = R.drawable.ic_arrow_top_white_24)
+fun HomeScrollToTopButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .background(shape = CircleShape, color = FindUTheme.colors.white)
+            .border(
+                width = 1.dp,
+                color = FindUTheme.colors.gray3,
+                shape = CircleShape
+            )
+            .padding(11.dp)
+            .noRippleClickable(onClick), contentAlignment = Alignment.Center
+    ) {
+        BaseVectorIcon(vectorResource = R.drawable.ic_arrow_top_white_24, tint = FindUTheme.colors.gray4)
     }
 }
 
