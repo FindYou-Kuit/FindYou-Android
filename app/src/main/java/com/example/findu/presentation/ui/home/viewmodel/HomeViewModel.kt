@@ -12,15 +12,17 @@ import com.example.findu.presentation.type.view.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class HomeUiState(
     val loadState: LoadState = LoadState.Idle,
     val homeData: HomeData? = null,
-    val reportDataDuration : HomeReportDurationType = HomeReportDurationType.WEEK,
+    val reportDataDuration: HomeReportDurationType = HomeReportDurationType.WEEK,
     val errorMessage: String? = null,
     val isRefreshing: Boolean = false,
     val bannerCurrentPage: Int = 0,
@@ -60,14 +62,20 @@ class HomeViewModel @Inject constructor(
     private val homeUseCase: GetHomeUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState = _uiState.asStateFlow()
 
     private val _uiEffect = Channel<HomeUiEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
+    
+    val uiState = _uiState
+        .onStart {
+            loadHomeData()
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = HomeUiState()
+        )
 
-    init {
-        handleEvent(HomeUiEvent.LoadHomeData)
-    }
 
     fun handleEvent(event: HomeUiEvent) {
         when (event) {
@@ -173,7 +181,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun changeReportDuration(duration: HomeReportDurationType){
+    private fun changeReportDuration(duration: HomeReportDurationType) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(reportDataDuration = duration)
         }
