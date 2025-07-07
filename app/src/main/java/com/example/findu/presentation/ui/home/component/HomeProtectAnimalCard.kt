@@ -29,11 +29,13 @@ import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.ui.base.BaseVectorIcon
 import com.example.findu.presentation.ui.base.SearchTagChip
+import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
 fun HomeProtectAnimalCard(
     animal: ProtectAnimal,
+    navigateToProtectDetail:(ProtectAnimal)->Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -41,6 +43,7 @@ fun HomeProtectAnimalCard(
             .width(120.dp)
             .border(width = 1.dp, color = FindUTheme.colors.gray3, shape = RoundedCornerShape(10.dp))
             .background(shape = RoundedCornerShape(10.dp), color = FindUTheme.colors.white)
+            .noRippleClickable { navigateToProtectDetail(animal) }
     ) {
         Box(
             modifier = Modifier.size(height = 100.dp, width = 120.dp),
@@ -98,6 +101,7 @@ private fun HomeProtectAnimalCardPreview() {
             protectId = 1,
             noticeStartDate = "",
             careAddress = "서울시 송파구"
-        )
+        ),
+        navigateToProtectDetail = {}
     )
 }

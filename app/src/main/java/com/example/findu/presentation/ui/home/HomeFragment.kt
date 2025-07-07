@@ -92,18 +92,6 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-                val homeReportData = HomeReportData(
-                    reports = listOf(
-                        ReportItem(
-                            type = ReportDataType.RESCUE,
-                            count = uiState.homeData?.todayRescuedAnimalCount ?: 0
-                        ),
-                        ReportItem(
-                            type = ReportDataType.REPORT,
-                            count = uiState.homeData?.todayReportAnimalCount ?: 0
-                        )
-                    )
-                )
 
                 when (uiState.loadState) {
                     LoadState.Idle -> Unit
@@ -117,14 +105,20 @@ class HomeFragment : Fragment() {
                             alarmButtonClicked = {
                                 homeViewModel.handleEvent(HomeUiEvent.OnAlarmButtonClick)
                             },
-                            homeReportData = homeReportData,
+                            homeReportData =  uiState.homeReportData,
                             indicatorClicked = { reportDurationType ->
                                 homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
                             },
                             navigationToSearch = {
                                 homeViewModel.handleEvent(HomeUiEvent.OnFindDialogClick)
                             },
-                            userNickname = "사용자"
+                            userNickname = "사용자",
+                            navigateToProtectDetail = { protectAnimal ->
+                                homeViewModel.handleEvent(HomeUiEvent.OnProtectAnimalClick(protectAnimal))
+                            },
+                            navigateToReportDetail = { reportAnimal ->
+                                homeViewModel.handleEvent(HomeUiEvent.OnReportAnimalClick(reportAnimal))
+                            },
                         )
                     }
 

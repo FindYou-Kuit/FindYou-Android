@@ -27,6 +27,7 @@ import com.example.findu.ui.theme.FindUTheme
 fun HomeReportedAnimalList(
     nickname: String,
     navigationToSearch: () -> Unit,
+    navigateToReportDetail:(ReportAnimal)->Unit,
     animalCards: List<ReportAnimal>,
     modifier: Modifier = Modifier
 ) {
@@ -70,7 +71,8 @@ fun HomeReportedAnimalList(
                 contentType = { "animal_card" }
             ) { index ->
                 HomeReportedAnimalCard(
-                    animal = animalCards[index]
+                    animal = animalCards[index],
+                    navigateToReportDetail = navigateToReportDetail,
                 )
             }
         }
@@ -133,6 +135,7 @@ private fun HomeReportedAnimalListPreview() {
     HomeReportedAnimalList(
         nickname = "신민석",
         navigationToSearch = {},
-        animalCards =dummyAnimalCards,
+        animalCards = dummyAnimalCards,
+        navigateToReportDetail = {},
     )
 }

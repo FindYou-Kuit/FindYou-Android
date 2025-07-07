@@ -28,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.HomeReportData
+import com.example.findu.domain.model.ProtectAnimal
+import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.domain.model.ReportDataType
 import com.example.findu.domain.model.ReportItem
 import com.example.findu.presentation.type.HomeBannerType
@@ -55,6 +57,8 @@ fun HomeScreen(
     reportButtonClicked: () -> Unit,
     alarmButtonClicked: () -> Unit,
     homeReportData: HomeReportData,
+    navigateToProtectDetail: (ProtectAnimal) -> Unit,
+    navigateToReportDetail: (ReportAnimal) -> Unit,
     indicatorClicked: (HomeReportDurationType) -> Unit,
     navigationToSearch: () -> Unit,
     userNickname: String,
@@ -154,6 +158,7 @@ fun HomeScreen(
                         nickname = userNickname,
                         navigationToSearch = navigationToSearch,
                         animalCards = uiState.homeData!!.protectAnimalCards,
+                        navigateToProtectDetail = navigateToProtectDetail
                     )
                 }
                 item {
@@ -166,7 +171,8 @@ fun HomeScreen(
                     HomeReportedAnimalList(
                         nickname = userNickname,
                         navigationToSearch = navigationToSearch,
-                        animalCards = uiState.homeData!!.reportAnimalCards
+                        animalCards = uiState.homeData!!.reportAnimalCards,
+                        navigateToReportDetail = navigateToReportDetail
                     )
 
                 }
@@ -209,7 +215,9 @@ private fun HomeScreenPreview() {
             homeReportData = homeReportData,
             indicatorClicked = { clickedLabel -> selected = clickedLabel },
             navigationToSearch = {},
-            userNickname = "신민석"
+            userNickname = "신민석",
+            navigateToProtectDetail = {},
+            navigateToReportDetail = {}
         )
     }
 }

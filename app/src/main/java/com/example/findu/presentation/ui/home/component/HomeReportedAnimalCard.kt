@@ -27,11 +27,14 @@ import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.ui.base.BaseVectorIcon
 import com.example.findu.presentation.ui.base.SearchTagChip
+import com.example.findu.presentation.ui.home.viewmodel.HomeUiEffect
+import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
 fun HomeReportedAnimalCard(
     animal: ReportAnimal,
+    navigateToReportDetail: (ReportAnimal) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -39,6 +42,7 @@ fun HomeReportedAnimalCard(
             .width(224.dp)
             .border(width = 1.dp, color = FindUTheme.colors.gray3, shape = RoundedCornerShape(10.dp))
             .background(shape = RoundedCornerShape(10.dp), color = FindUTheme.colors.white)
+            .noRippleClickable { navigateToReportDetail(animal) }
     ) {
         AsyncImage(
             model = animal.thumbnailImageUrl,
@@ -105,6 +109,7 @@ private fun HomeReportedAnimalCardPreview() {
             tag = "보호중",
             registerDate = "",
             happenLocation = "서울시 송파구"
-        )
+        ),
+        navigateToReportDetail = {}
     )
 }

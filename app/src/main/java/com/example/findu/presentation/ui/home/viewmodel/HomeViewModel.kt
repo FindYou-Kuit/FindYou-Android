@@ -3,8 +3,11 @@ package com.example.findu.presentation.ui.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.HomeData
+import com.example.findu.domain.model.HomeReportData
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
+import com.example.findu.domain.model.ReportDataType
+import com.example.findu.domain.model.ReportItem
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.type.HomeReportDurationType
@@ -22,7 +25,14 @@ import javax.inject.Inject
 data class HomeUiState(
     val loadState: LoadState = LoadState.Idle,
     val homeData: HomeData? = null,
-    val reportDataDuration: HomeReportDurationType = HomeReportDurationType.WEEK,
+    val homeReportData: HomeReportData = HomeReportData(
+        reports = listOf(
+            ReportItem(type = ReportDataType.RESCUE, count = 0),
+            ReportItem(type = ReportDataType.PROTECTION, count = 0),
+            ReportItem(type = ReportDataType.ADOPTION, count = 0),
+            ReportItem(type = ReportDataType.REPORT, count = 0)
+        )
+    ),    val reportDataDuration: HomeReportDurationType = HomeReportDurationType.WEEK,
     val errorMessage: String? = null,
     val isRefreshing: Boolean = false,
     val bannerCurrentPage: Int = 0,
@@ -65,7 +75,7 @@ class HomeViewModel @Inject constructor(
 
     private val _uiEffect = Channel<HomeUiEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
-    
+
     val uiState = _uiState
         .onStart {
             loadHomeData()
@@ -105,6 +115,9 @@ class HomeViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(
                         loadState = LoadState.Success,
                         homeData = data,
+                        homeReportData = with(homeUseCase) {
+                            data.toHomeReportData()
+                        },
                         errorMessage = null
                     )
                 },
