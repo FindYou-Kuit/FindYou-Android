@@ -33,6 +33,6 @@ fun SearchTagChip(animalStateType: AnimalStateType, modifier: Modifier = Modifie
 @Composable
 private fun SearchTagChipPreview() {
     SearchTagChip(
-        animalStateType = AnimalStateType.Protect
+        animalStateType = AnimalStateType.PROTECT
     )
 }

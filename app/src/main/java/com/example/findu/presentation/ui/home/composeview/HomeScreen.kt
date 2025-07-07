@@ -31,6 +31,7 @@ import com.example.findu.domain.model.HomeReportData
 import com.example.findu.domain.model.ReportDataType
 import com.example.findu.domain.model.ReportItem
 import com.example.findu.presentation.type.HomeBannerType
+import com.example.findu.presentation.type.HomeReportDurationType
 import com.example.findu.presentation.ui.home.component.HomeBannerPager
 import com.example.findu.presentation.ui.home.component.HomeButtonList
 import com.example.findu.presentation.ui.home.component.HomeProtectAnimalList
@@ -52,8 +53,9 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     uiState: HomeUiState = HomeUiState(),
     reportButtonClicked: () -> Unit,
+    alarmButtonClicked: () -> Unit,
     homeReportData: HomeReportData,
-    indicatorClicked: (String) -> Unit,
+    indicatorClicked: (HomeReportDurationType) -> Unit,
     navigationToSearch: () -> Unit,
     userNickname: String,
     modifier: Modifier = Modifier,
@@ -92,7 +94,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            HomeTopBar(reportButtonClicked = reportButtonClicked)
+            HomeTopBar(reportButtonClicked = reportButtonClicked, alarmButtonClicked = alarmButtonClicked)
             LazyColumn(
                 state = listState,
                 modifier = Modifier
@@ -103,7 +105,8 @@ fun HomeScreen(
                     HomeReportCard(
                         modifier = Modifier.padding(15.dp),
                         homeReportData = homeReportData,
-                        indicatorClicked = indicatorClicked
+                        indicatorClicked = indicatorClicked,
+                        homeReportDuration = uiState.reportDataDuration
                     )
                 }
                 item {
@@ -190,7 +193,7 @@ fun HomeScreen(
 @Preview
 @Composable
 private fun HomeScreenPreview() {
-    var selected by remember { mutableStateOf("7일") }
+    var selected by remember { mutableStateOf(HomeReportDurationType.WEEK) }
     val homeReportData = HomeReportData(
         reports = listOf(
             ReportItem(ReportDataType.RESCUE, 1833),
@@ -202,6 +205,7 @@ private fun HomeScreenPreview() {
     FindUTheme {
         HomeScreen(
             reportButtonClicked = {},
+            alarmButtonClicked = {},
             homeReportData = homeReportData,
             indicatorClicked = { clickedLabel -> selected = clickedLabel },
             navigationToSearch = {},

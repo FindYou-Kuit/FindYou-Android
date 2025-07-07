@@ -20,6 +20,7 @@ import com.example.findu.databinding.FragmentHomeBinding
 import com.example.findu.domain.model.HomeReportData
 import com.example.findu.domain.model.ReportDataType
 import com.example.findu.domain.model.ReportItem
+import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.home.composeview.HomeScreen
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
@@ -79,16 +80,11 @@ class HomeFragment : Fragment() {
                                 is HomeUiEffect.ShowToast -> {
                                     Toast.makeText(requireContext(), sideEffect.message, Toast.LENGTH_SHORT).show()
                                 }
-
-                                is HomeUiEffect.ScrollToTop -> {
-                                    // ScrollToTop은 HomeScreen 내부에서 처리됩니다
-                                }
                             }
                         }
                 }
 
 
-                // 에러 메시지 처리
                 uiState.errorMessage?.let { message ->
                     LaunchedEffect(message) {
                         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -96,7 +92,6 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-                // HomeReportData 생성 - 실제 데이터에 맞게 수정 필요
                 val homeReportData = HomeReportData(
                     reports = listOf(
                         ReportItem(
@@ -119,19 +114,12 @@ class HomeFragment : Fragment() {
                             reportButtonClicked = {
                                 homeViewModel.handleEvent(HomeUiEvent.OnReportDialogClick)
                             },
+                            alarmButtonClicked = {
+                                homeViewModel.handleEvent(HomeUiEvent.OnAlarmButtonClick)
+                            },
                             homeReportData = homeReportData,
-                            indicatorClicked = { reportType ->
-                                // ReportDataType에 따른 처리
-                                when (reportType) {
-                                    ReportDataType.PROTECTION.label -> {
-                                        // 보호중 화면으로 이동
-                                    }
-
-                                    ReportDataType.REPORT.label -> {
-                                        // 신고 화면으로 이동
-                                    }
-                                    // 필요한 경우 추가
-                                }
+                            indicatorClicked = { reportDurationType ->
+                                homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
                             },
                             navigationToSearch = {
                                 homeViewModel.handleEvent(HomeUiEvent.OnFindDialogClick)
@@ -149,7 +137,7 @@ class HomeFragment : Fragment() {
 
     private fun navigateToProtectDetail(id: String, tag: String, name: String) {
         when (tag) {
-            "보호중" -> {
+            AnimalStateType.PROTECT.state -> {
                 findNavController().navigate(
                     HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailProtecting(
                         id = id,
@@ -163,7 +151,7 @@ class HomeFragment : Fragment() {
 
     private fun navigateToReportDetail(id: String, tag: String, name: String) {
         when (tag) {
-            "실종신고" -> {
+            AnimalStateType.MISSING.state -> {
                 findNavController().navigate(
                     HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailDisappear(
                         id = id,
@@ -173,7 +161,7 @@ class HomeFragment : Fragment() {
                 )
             }
 
-            "목격신고" -> {
+            AnimalStateType.FIND.state -> {
                 findNavController().navigate(
                     HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailWitness(
                         id = id,

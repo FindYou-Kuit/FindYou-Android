@@ -7,6 +7,7 @@ import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.presentation.type.AnimalStateType
+import com.example.findu.presentation.type.HomeReportDurationType
 import com.example.findu.presentation.type.view.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 data class HomeUiState(
     val loadState: LoadState = LoadState.Idle,
     val homeData: HomeData? = null,
+    val reportDataDuration : HomeReportDurationType = HomeReportDurationType.WEEK,
     val errorMessage: String? = null,
     val isRefreshing: Boolean = false,
     val bannerCurrentPage: Int = 0,
@@ -33,13 +35,14 @@ sealed class HomeUiEvent {
     data class OnProtectAnimalClick(val animal: ProtectAnimal) : HomeUiEvent()
     data class OnReportAnimalClick(val animal: ReportAnimal) : HomeUiEvent()
     data object OnReportDialogClick : HomeUiEvent()
+    data object OnAlarmButtonClick : HomeUiEvent()
     data object OnFindDialogClick : HomeUiEvent()
     data class OnWebLinkClick(val url: String) : HomeUiEvent()
+    data class OnHomeReportDurationClick(val duration: HomeReportDurationType) : HomeUiEvent()
 
     data class OnBannerPageChanged(val page: Int) : HomeUiEvent()
 
     data class OnScrollPositionChanged(val firstVisibleItemIndex: Int) : HomeUiEvent()
-    data object OnScrollToTopClick : HomeUiEvent()
 }
 
 sealed class HomeUiEffect {
@@ -49,7 +52,6 @@ sealed class HomeUiEffect {
     data object ShowFindDialog : HomeUiEffect()
     data class OpenWebLink(val url: String) : HomeUiEffect()
 
-    data object ScrollToTop : HomeUiEffect()
     data class ShowToast(val message: String) : HomeUiEffect()
 }
 
@@ -81,7 +83,8 @@ class HomeViewModel @Inject constructor(
 
             is HomeUiEvent.OnBannerPageChanged -> updateBannerPage(event.page)
             is HomeUiEvent.OnScrollPositionChanged -> updateScrollToTopVisibility(event.firstVisibleItemIndex)
-            is HomeUiEvent.OnScrollToTopClick -> scrollToTop()
+            is HomeUiEvent.OnAlarmButtonClick -> alarmButtonClicked()
+            is HomeUiEvent.OnHomeReportDurationClick -> changeReportDuration(event.duration)
         }
     }
 
@@ -170,6 +173,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun changeReportDuration(duration: HomeReportDurationType){
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(reportDataDuration = duration)
+        }
+    }
+
+    private fun alarmButtonClicked() {
+        //TODO: 추후 기능 추가
+    }
+
     private fun showFindDialog() {
         viewModelScope.launch {
             _uiEffect.send(HomeUiEffect.ShowFindDialog)
@@ -189,12 +202,6 @@ class HomeViewModel @Inject constructor(
     private fun updateScrollToTopVisibility(firstVisibleItemIndex: Int) {
         val isVisible = firstVisibleItemIndex > 2 // 3번째 아이템 이후에 보이기
         _uiState.value = _uiState.value.copy(isScrollToTopVisible = isVisible)
-    }
-
-    private fun scrollToTop() {
-        viewModelScope.launch {
-            _uiEffect.send(HomeUiEffect.ScrollToTop)
-        }
     }
 
 }
