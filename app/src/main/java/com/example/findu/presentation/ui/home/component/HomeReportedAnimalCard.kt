@@ -61,7 +61,6 @@ fun HomeReportedAnimalCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                BaseVectorIcon(vectorResource = R.drawable.ic_reported_card_gender_male_20)
                 Spacer(modifier = Modifier.width(5.dp))
                 SearchTagChip(
                     animalStateType = AnimalStateType.fromTag(animal.tag)
