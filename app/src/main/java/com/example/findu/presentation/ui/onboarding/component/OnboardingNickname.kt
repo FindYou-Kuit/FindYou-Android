@@ -43,6 +43,12 @@ fun OnboardingNickname(
     nicknameValidState: NicknameValidType = NicknameValidType.IDLE,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val nicknameTextBoxVisible =
+        nicknameValidState in setOf(
+            NicknameValidType.EMPTY_INVALID,
+            NicknameValidType.FORMAT_INVALID,
+            NicknameValidType.DUPLICATE_INVALID
+        )
     val isFocused by interactionSource.collectIsFocusedAsState()
 
     LaunchedEffect(isFocused) {
@@ -135,6 +141,7 @@ fun OnboardingNickname(
             ),
             style = FindUTheme.typography.captionRegular12
         )
+        OnboardingNicknameTextBox(modifier = Modifier.align(Alignment.End), isVisible = nicknameTextBoxVisible)
     }
 }
 
