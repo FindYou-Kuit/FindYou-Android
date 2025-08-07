@@ -121,9 +121,9 @@ class MyFragment : Fragment() {
                 findNavController().navigate(R.id.action_fragment_my_to_fragment_my_keep_animals)
             }
 
-//            clMyInquire.setOnClickListener {
-//                findNavController().navigate(R.id.action_fragment_my_to_fragment_inquire)
-//            }
+            clMyInquire.setOnClickListener {
+                findNavController().navigate(R.id.action_fragment_my_to_fragment_inquire)
+            }
 
             clMyLogout.setOnClickListener {
                 MyLogoutDialog(
