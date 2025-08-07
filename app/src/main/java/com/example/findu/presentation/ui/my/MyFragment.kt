@@ -1,9 +1,8 @@
 package com.example.findu.presentation.ui.my
 
-import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +20,9 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
 import com.example.findu.presentation.ui.login.LoginActivity
 import com.example.findu.presentation.ui.my.dialog.MyLogoutDialog
+import com.example.findu.presentation.ui.my.dialog.MyNicknameDialog
+import com.example.findu.presentation.ui.my.dialog.MyProfileImageDialog
 import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
-import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
 import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
 import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +35,8 @@ class MyFragment : Fragment() {
     private val myViewModel by viewModels<MyViewModel>()
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
+    private var myProfileImageDialog: MyProfileImageDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,7 @@ class MyFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMyBinding.inflate(inflater, container, false)
 
@@ -66,15 +68,41 @@ class MyFragment : Fragment() {
 
         with(binding) {
             llMyNickname.setOnClickListener {
-                llMyNickname.visibility = View.INVISIBLE
-                llMyEditNickname.visibility = View.VISIBLE
+                MyNicknameDialog(
+                    context = requireContext(),
+                    onNicknameChange = { newNickname ->
+                        myViewModel.updateNickName(newNickname)
+                    }
+                ).show()
             }
 
-            btnMyDoneEdit.setOnClickListener {
-                llMyNickname.visibility = View.VISIBLE
-                llMyEditNickname.visibility = View.INVISIBLE
+            galleryLauncher =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        val uri = result.data?.data
+                        uri?.let {
+                            myProfileImageDialog?.setGalleryImage(it)
+                        }
+                    }
+                }
 
-                myViewModel.updateNickName(etMyNickname.text.toString())
+            clMyProflieImage.setOnClickListener {
+                myProfileImageDialog = MyProfileImageDialog(
+                    context = requireContext(),
+                    onDrawableSelected = { resId ->
+                        myViewModel.updateProfileImage(resId)
+                    },
+                    onGallerySelected = { uri ->
+                        myViewModel.updateProfileImageFromGallery(uri)
+                    },
+                    launchGallery = {
+                        val intent = Intent(Intent.ACTION_PICK).apply {
+                            type = "image/*"
+                        }
+                        galleryLauncher.launch(intent)
+                    }
+                )
+                myProfileImageDialog?.show()
             }
 
             etMyNickname.addTextChangedListener { text ->
@@ -93,23 +121,9 @@ class MyFragment : Fragment() {
                 findNavController().navigate(R.id.action_fragment_my_to_fragment_my_keep_animals)
             }
 
-            clMyCameraPermission.setOnClickListener {
-                if (hasCameraPermission(requireContext())) {
-                    Toast.makeText(requireContext(), "카메라 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-                }
-            }
-
-            clMyLocationPermission.setOnClickListener {
-                if (hasLocationPermission(requireContext())) {
-                    Toast.makeText(requireContext(), "위치 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    requestLocationPermission(requireActivity())
-                }
-            }
+//            clMyInquire.setOnClickListener {
+//                findNavController().navigate(R.id.action_fragment_my_to_fragment_inquire)
+//            }
 
             clMyLogout.setOnClickListener {
                 MyLogoutDialog(
@@ -168,6 +182,20 @@ class MyFragment : Fragment() {
                     myViewModel.errorMessage.collect { message ->
                         message?.let {
                             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                launch {
+                    myViewModel.selectedImageResId.collect { resId ->
+                        resId?.let {
+                            binding.ivMyIllust.setImageResource(it)
+                        }
+                    }
+                }
+                launch {
+                    myViewModel.selectedProfileImageUri.collect { uri ->
+                        uri?.let {
+                            binding.ivMyIllust.setImageURI(it)
                         }
                     }
                 }
