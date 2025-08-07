@@ -122,14 +122,14 @@
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tfi_inquire_title"
             android:layout_width="0dp"
-            android:layout_height="44dp"
+            android:layout_height="52dp"
             android:layout_marginTop="10dp"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
+            app:hintEnabled="false"
             app:boxCornerRadiusTopStart="8dp"
-            app:boxStrokeColor="@color/gray3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_inquire_title_label">
@@ -164,7 +164,7 @@
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
-            app:boxStrokeColor="@color/gray3"
+            app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_inquire_content_label">
@@ -172,11 +172,12 @@
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tf_inquire_content"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:gravity="top|start"
                 android:hint="내용을 입력해주세요."
+                android:minLines="5"
+                android:maxLines="17"
                 android:inputType="textMultiLine"
-                android:maxLines="10"
                 android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
                 android:textColorHint="@color/gray3" />
     </com.google.android.material.textfield.TextInputLayout>
