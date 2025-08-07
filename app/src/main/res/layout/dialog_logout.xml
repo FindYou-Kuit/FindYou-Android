@@ -8,8 +8,7 @@
         android:clipToPadding="false">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="288dp"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
@@ -45,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/gray5"
                 android:textAppearance="@style/TextAppearance.FindU.Body1_R_16"
                 app:layout_constraintTop_toBottomOf="@id/tv_logout_dialog_mention"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
                     android:layout_width="match_parent"
                     android:textColor="@color/white"
                     android:layout_height="50dp"
-                    android:background="@drawable/bg_button_logout_cancel"
+                    android:background="@drawable/bg_button_report_dialog"
                     android:backgroundTint="@color/main_color"
                     android:text="취소"
                     android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:textColor="@color/gray6"
-                    android:background="@drawable/bg_button_logout_confirm"
+                    android:background="@drawable/bg_button_my_dialog_stroked"
                     android:backgroundTint="@null"
                     android:text="로그아웃"
                     android:layout_marginBottom="20dp"
