@@ -2,9 +2,12 @@ package com.example.findu.presentation.ui.my
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -44,6 +47,19 @@ class MyInquireFragment : Fragment() {
         }
 
         binding.btnInquireCheck.setOnClickListener {
+            val title = binding.tfInquireTitle.text?.toString()?.trim()
+            val content = binding.tfInquireContent.text?.toString()?.trim()
+            val hasSelectedChip = listOf(
+                binding.chipBug,
+                binding.chipFeedback,
+                binding.chipEtc
+            ).any { it.isChecked }
+
+            if (title.isNullOrEmpty() || content.isNullOrEmpty() || !hasSelectedChip) {
+                showCustomToast("모든 내용을 채워주세요!")
+                return@setOnClickListener
+            }
+
             parentFragmentManager.popBackStack()
         }
 
@@ -94,6 +110,20 @@ class MyInquireFragment : Fragment() {
 
             chip.apply { minHeight = 54 }
         }
+    }
+
+    private fun showCustomToast(message: String) {
+        val toastView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.item_toast_inquire, null)
+
+        val tvToastText = toastView.findViewById<TextView>(R.id.tv_toast_text)
+        tvToastText.text = message
+
+        Toast(requireContext()).apply {
+            duration = Toast.LENGTH_SHORT
+            view = toastView
+            setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 150)
+        }.show()
     }
 
 

@@ -63,8 +63,8 @@
 
                 <ImageView
                     android:id="@+id/iv_my_edit_pen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="2dp"
                     android:src="@drawable/ic_my_edit_pen" />
