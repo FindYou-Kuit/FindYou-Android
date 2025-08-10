@@ -3,13 +3,17 @@ package com.example.findu.presentation.ui.my.dialog
 import android.app.AlertDialog
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.example.findu.R
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 
 class MyNicknameDialog(
     context: Context,
@@ -31,12 +35,14 @@ class MyNicknameDialog(
         .setView(dialogView)
         .create()
 
+    private var errorPopup: PopupWindow? = null
+
     private var isFormatValid = false
     private var isDuplicateChecked = false
 
     init {
         setupListeners(context)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     private fun setupListeners(context: Context) {
@@ -84,13 +90,22 @@ class MyNicknameDialog(
                 tvState.setTextColor(ContextCompat.getColor(context, R.color.green1))
                 ivWarning.visibility = View.GONE
                 isDuplicateChecked = true
+                tvCheckDuplicate.visibility = View.GONE
             }
 
             updateChangeButtonState(context)
         }
 
+        ivWarning.setOnClickListener {
+            if (errorPopup?.isShowing == true) {
+                errorPopup?.dismiss()
+            } else {
+                showErrorPopup(context, ivWarning)
+            }
+        }
+
         btnChange.setOnClickListener {
-            if(isDuplicateChecked){
+            if (isDuplicateChecked) {
                 onNicknameChange(etNickname.text.toString())
                 dialog.dismiss()
             }
@@ -115,6 +130,38 @@ class MyNicknameDialog(
             )
         )
     }
+
+    private fun showErrorPopup(context: Context, anchorView: View) {
+        val popupView = LayoutInflater.from(context)
+            .inflate(R.layout.item_my_nickname_error, null)
+
+        errorPopup = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            isOutsideTouchable = true
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        popupView.measure(
+            View.MeasureSpec.UNSPECIFIED,
+            View.MeasureSpec.UNSPECIFIED
+        )
+        val popupW = popupView.measuredWidth
+        val anchorW = anchorView.width
+
+        val xOffset = -(popupW / 2) + (anchorW / 2)
+
+        val yOffset = -dpToPx(2, context)
+
+        errorPopup?.showAsDropDown(anchorView, xOffset, yOffset)
+    }
+
+    private fun dpToPx(dp: Int, ctx: Context) =
+        (dp * ctx.resources.displayMetrics.density).toInt()
+
 
     fun show() {
         dialog.show()
