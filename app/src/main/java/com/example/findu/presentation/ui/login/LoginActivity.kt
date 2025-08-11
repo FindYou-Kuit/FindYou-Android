@@ -17,6 +17,7 @@ import com.example.findu.presentation.ui.onboarding.OnboardingActivity
 import com.example.findu.presentation.util.extension.showToast
 import com.example.findu.presentation.util.kakao.KakaoLoginHelper
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -36,7 +37,20 @@ class LoginActivity : ComponentActivity() {
             val callback: (OAuthToken?, Throwable?) -> Unit = { oAuthToken, _ ->
                 if (oAuthToken != null) {
                     Log.d(TAG, "oAuth_AccessToken: ${oAuthToken.accessToken}")
-                    loginViewModel.checkRegisteredUser(oAuthToken.accessToken)
+
+                    UserApiClient.instance.me { user, error ->
+                        if (error != null) {
+                            Log.e(TAG, "사용자 정보 요청 실패", error)
+                            return@me
+                        }
+
+                        val kakaoId = user?.id
+                        if (kakaoId != null) {
+                            loginViewModel.postLogin(kakaoId = kakaoId)
+                        } else {
+                            Log.w(TAG, "KakaoId is null")
+                        }
+                    }
                 }
             }
             LoginScreen(

@@ -6,7 +6,8 @@ import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 fun <T> BaseResponse<T>.handleBaseResponse(): Result<T> =
     when (this.code) {
         in 20000..29999 -> {
-            Result.success(this.data)
+            data?.let { Result.success(it) }
+                ?: Result.failure(IllegalStateException("data is null"))
         }
 
         in 40400..40499 -> {
