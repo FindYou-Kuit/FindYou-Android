@@ -174,8 +174,7 @@ object UseCaseModule {
     @Singleton
     fun providePostLoginUseCase(
         authRepository: AuthRepository,
-        tokenRepository: TokenRepository
-    ): PostLoginUseCase = PostLoginUseCase(authRepository, tokenRepository)
+    ): PostLoginUseCase = PostLoginUseCase(authRepository)
 
     @Provides
     @Singleton
