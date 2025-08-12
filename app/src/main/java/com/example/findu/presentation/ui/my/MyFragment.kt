@@ -1,7 +1,9 @@
 package com.example.findu.presentation.ui.my
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +19,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.findu.BuildConfig
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
 import com.example.findu.presentation.ui.login.LoginActivity
@@ -65,7 +69,6 @@ class MyFragment : Fragment() {
     }
 
     private fun initListener() {
-
         with(binding) {
             llMyNickname.setOnClickListener {
                 MyNicknameDialog(
@@ -125,17 +128,33 @@ class MyFragment : Fragment() {
                 findNavController().navigate(R.id.action_fragment_my_to_fragment_inquire)
             }
 
-            clMyLogout.setOnClickListener {
+            val logoutClickListener = View.OnClickListener {
                 MyLogoutDialog(
                     context = requireContext(),
                     onLogoutClick = {
                         with(requireActivity()) {
-                            startActivity(
-                                Intent(requireContext(), LoginActivity::class.java)
-                            )
+                            startActivity(Intent(requireContext(), LoginActivity::class.java))
                             finish()
                         }
-                    }).show()
+                    }
+                ).show()
+            }
+
+            binding.clMyLogout.setOnClickListener(logoutClickListener)
+            binding.tvMyVersionInfo.setOnClickListener(logoutClickListener)
+            binding.chipMyVersion.setOnClickListener(logoutClickListener)
+
+            binding.clMyGotoUpdate.setOnClickListener{
+                val pkg = requireContext().packageName
+                try {
+                    startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$pkg"))
+                    )
+                } catch (e: ActivityNotFoundException) {
+                    startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$pkg"))
+                    )
+                }
             }
 
             clMyWithdrawal.setOnClickListener {
@@ -151,6 +170,15 @@ class MyFragment : Fragment() {
                         }
                     }).show()
             }
+
+            val currentVersion = BuildConfig.VERSION_NAME
+            binding.tvMyVersionInfo.text = "버전 정보 $currentVersion"
+            val latest = "1.0"
+            val isLatest = currentVersion.replace(".", "").toInt() >= latest.replace(".", "").toInt()
+            binding.clMyVersionChip.isVisible = isLatest
+            binding.clMyGotoUpdate.isVisible = !isLatest
+
+
         }
     }
 

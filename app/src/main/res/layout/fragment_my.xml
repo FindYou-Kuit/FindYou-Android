@@ -329,17 +329,47 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        android:id="@+id/tv_my_version_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="버전 정보"
+                        android:text="버전 정보 1.0"
                         android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_my_version_chip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_my_version_info"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_my_version"
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="42dp"
+                            android:text="최신버전"
+                            android:textAppearance="@style/TextAppearance.FindU.Tag1_SB_12"
+                            android:textColor="@color/gray4"
+                            app:chipBackgroundColor="@color/gray1"
+                            app:chipCornerRadius="10dp"
+                            app:chipEndPadding="1dp"
+                            app:chipStartPadding="0dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_my_goto_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
