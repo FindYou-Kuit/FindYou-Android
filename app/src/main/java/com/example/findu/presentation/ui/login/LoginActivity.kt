@@ -61,8 +61,9 @@ class LoginActivity : ComponentActivity() {
                     )
                 },
                 withoutSignUpButtonClicked = {
-                    this.showToast(message = getString(R.string.login_without_signup_toast_message))
-                    loginViewModel.startMainActivity()
+                    loginViewModel.postGuestLogin{
+                        this.showToast(message = getString(R.string.login_without_signup_toast_message))
+                    }
                 },
             )
 

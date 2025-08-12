@@ -16,6 +16,7 @@ import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
 import com.example.findu.domain.usecase.PostCheckEmailUseCase
+import com.example.findu.domain.usecase.PostGuestLoginUseCase
 import com.example.findu.domain.usecase.PostLoginUseCase
 import com.example.findu.domain.usecase.PostSignupUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
@@ -175,6 +176,12 @@ object UseCaseModule {
     fun providePostLoginUseCase(
         authRepository: AuthRepository,
     ): PostLoginUseCase = PostLoginUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun providePostGuestLoginUseCase(
+        authRepository: AuthRepository,
+    ): PostGuestLoginUseCase = PostGuestLoginUseCase(authRepository)
 
     @Provides
     @Singleton

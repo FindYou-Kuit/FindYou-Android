@@ -14,6 +14,11 @@ data class LoginData(
     val userInfo: UserInfo?
 )
 
+data class GuestLoginData(
+    val userId: Long,
+    val accessToken: String
+)
+
 data class UserInfo(
     val userId: Long,
     val nickname: String,
