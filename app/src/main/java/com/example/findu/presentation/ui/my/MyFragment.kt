@@ -5,11 +5,13 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -39,20 +41,21 @@ class MyFragment : Fragment() {
     private val myViewModel by viewModels<MyViewModel>()
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
-    private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private var myProfileImageDialog: MyProfileImageDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    Toast.makeText(requireContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    findNavController().popBackStack()
-                }
+        pickMedia = registerForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri: Uri? ->
+            if (uri != null) {
+                myProfileImageDialog?.setGalleryImage(uri)
+            } else {
+                Toast.makeText(requireContext(), "이미지가 선택되지 않았어요.", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 
     override fun onCreateView(
@@ -79,15 +82,6 @@ class MyFragment : Fragment() {
                 ).show()
             }
 
-            galleryLauncher =
-                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    if (result.resultCode == Activity.RESULT_OK) {
-                        val uri = result.data?.data
-                        uri?.let {
-                            myProfileImageDialog?.setGalleryImage(it)
-                        }
-                    }
-                }
 
             clMyProflieImage.setOnClickListener {
                 myProfileImageDialog = MyProfileImageDialog(
@@ -99,10 +93,9 @@ class MyFragment : Fragment() {
                         myViewModel.updateProfileImageFromGallery(uri)
                     },
                     launchGallery = {
-                        val intent = Intent(Intent.ACTION_PICK).apply {
-                            type = "image/*"
-                        }
-                        galleryLauncher.launch(intent)
+                        pickMedia.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
                     }
                 )
                 myProfileImageDialog?.show()
@@ -177,7 +170,7 @@ class MyFragment : Fragment() {
             val isLatest = currentVersion.replace(".", "").toInt() >= latest.replace(".", "").toInt()
             binding.clMyVersionChip.isVisible = isLatest
             binding.clMyGotoUpdate.isVisible = !isLatest
-
+            Log.d("VERSION_CHECK", "currentVersion = '$currentVersion', latest = '$latest'")
 
         }
     }

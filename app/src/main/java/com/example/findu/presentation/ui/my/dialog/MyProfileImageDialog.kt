@@ -41,22 +41,22 @@ class MyProfileImageDialog(
         ivProfileImgDafult.setOnClickListener {
             selectedImageResId = R.drawable.img_my_profile_default
             selectedUri = null
-            binding.ivMyIllust.setImageResource(selectedImageResId)
+            ivMyIllust.setImageResource(selectedImageResId)
         }
         ivProfileImg1.setOnClickListener {
             selectedImageResId = R.drawable.img_my_profile1
             selectedUri = null
-            binding.ivMyIllust.setImageResource(selectedImageResId)
+            ivMyIllust.setImageResource(selectedImageResId)
         }
         ivProfileImg2.setOnClickListener {
             selectedImageResId = R.drawable.img_my_profile2
             selectedUri = null
-            binding.ivMyIllust.setImageResource(selectedImageResId)
+            ivMyIllust.setImageResource(selectedImageResId)
         }
         ivProfileImg3.setOnClickListener {
             selectedImageResId = R.drawable.img_my_profile3
             selectedUri = null
-            binding.ivMyIllust.setImageResource(selectedImageResId)
+            ivMyIllust.setImageResource(selectedImageResId)
         }
 
         binding.btnChangeProfileImage.setOnClickListener {
