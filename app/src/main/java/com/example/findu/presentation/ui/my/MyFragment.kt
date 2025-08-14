@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.my
 
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -29,8 +28,6 @@ import com.example.findu.presentation.ui.my.dialog.MyLogoutDialog
 import com.example.findu.presentation.ui.my.dialog.MyNicknameDialog
 import com.example.findu.presentation.ui.my.dialog.MyProfileImageDialog
 import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
-import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
-import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,7 +37,6 @@ class MyFragment : Fragment() {
     private val binding get() = _binding!!
     private val myViewModel by viewModels<MyViewModel>()
 
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private var myProfileImageDialog: MyProfileImageDialog? = null
 
@@ -81,7 +77,6 @@ class MyFragment : Fragment() {
                     }
                 ).show()
             }
-
 
             clMyProflieImage.setOnClickListener {
                 myProfileImageDialog = MyProfileImageDialog(
@@ -133,11 +128,11 @@ class MyFragment : Fragment() {
                 ).show()
             }
 
-            binding.clMyLogout.setOnClickListener(logoutClickListener)
-            binding.tvMyVersionInfo.setOnClickListener(logoutClickListener)
-            binding.chipMyVersion.setOnClickListener(logoutClickListener)
+            clMyLogout.setOnClickListener(logoutClickListener)
+            tvMyVersionInfo.setOnClickListener(logoutClickListener)
+            chipMyVersion.setOnClickListener(logoutClickListener)
 
-            binding.clMyGotoUpdate.setOnClickListener{
+            clMyGotoUpdate.setOnClickListener {
                 val pkg = requireContext().packageName
                 try {
                     startActivity(
@@ -145,7 +140,10 @@ class MyFragment : Fragment() {
                     )
                 } catch (e: ActivityNotFoundException) {
                     startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$pkg"))
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=$pkg")
+                        )
                     )
                 }
             }
@@ -164,15 +162,22 @@ class MyFragment : Fragment() {
                     }).show()
             }
 
-            val currentVersion = BuildConfig.VERSION_NAME
-            binding.tvMyVersionInfo.text = "버전 정보 $currentVersion"
-            val latest = "1.0"
-            val isLatest = currentVersion.replace(".", "").toInt() >= latest.replace(".", "").toInt()
-            binding.clMyVersionChip.isVisible = isLatest
-            binding.clMyGotoUpdate.isVisible = !isLatest
-            Log.d("VERSION_CHECK", "currentVersion = '$currentVersion', latest = '$latest'")
+            clMyAlarmSetting.setOnClickListener {
+                myViewModel.toggleAlarmSetting()
+            }
 
+            setupVersion()
         }
+    }
+
+    private fun setupVersion() = with(binding) {
+        val currentVersion = BuildConfig.VERSION_NAME
+        val latest = "1.0"
+        tvMyVersionInfo.text = "버전 정보 $currentVersion"
+
+        val isLatest = currentVersion.replace(".", "").toInt() >= latest.replace(".", "").toInt()
+        clMyVersionChip.isVisible = isLatest
+        clMyGotoUpdate.isVisible = !isLatest
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -218,6 +223,13 @@ class MyFragment : Fragment() {
                         uri?.let {
                             binding.ivMyIllust.setImageURI(it)
                         }
+                    }
+                }
+                launch {
+                    myViewModel.alarmEnabled.collect { enabled ->
+                        binding.ivMyAlarmIcon.setImageResource(
+                            if (enabled) R.drawable.img_my_alarm_on else R.drawable.img_my_alarm_off
+                        )
                     }
                 }
             }
