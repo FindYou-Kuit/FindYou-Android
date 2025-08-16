@@ -78,7 +78,7 @@ class HomeViewModel @Inject constructor(
 
     val uiState = _uiState
         .onStart {
-            loadHomeData()
+            handleEvent(HomeUiEvent.LoadHomeData)
         }
         .stateIn(
             scope = viewModelScope,
