@@ -24,8 +24,4 @@ enum class HomeButtonType(
         imageRes = R.drawable.img_home_volunteer,
         nameRes = R.string.home_button_volunteer
     );
-
-    companion object {
-        val ALL_ITEMS = entries
-    }
 }

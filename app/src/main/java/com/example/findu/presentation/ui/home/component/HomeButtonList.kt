@@ -34,7 +34,7 @@ fun HomeButtonList(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        HomeButtonType.ALL_ITEMS.forEach { homeButton ->
+        HomeButtonType.entries.forEach { homeButton ->
             val navigation = when (homeButton) {
                 HomeButtonType.PROTECT_CENTER -> navigateToProtectCenter
                 HomeButtonType.HOSPITAL -> navigateToHospital
