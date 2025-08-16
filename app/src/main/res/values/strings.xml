@@ -429,6 +429,7 @@
     <string name="onboarding_profile_title_first">프로필을</string>
     <string name="onboarding_profile_title_second">정해주세요!</string>
     <string name="onboarding_next_button_text">다음</string>
+    <string name="onboarding_invalid_text_box">다음과 같은 경우에 불가능해요.\n 1. 중복된 닉네임인 경우\n 2. 띄어쓰기만 있는 닉네임인 경우\n 3. 특수문자(!@#$,.^)가 포함되어 있는 경우</string>
     <string name="home_button_protect_center">보호소</string>
     <string name="home_button_hospital">동물 병원</string>
     <string name="home_button_protect_part">보호 부서</string>
