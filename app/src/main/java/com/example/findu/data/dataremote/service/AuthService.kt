@@ -8,12 +8,17 @@ import com.example.findu.data.dataremote.model.request.SignupRequestDto
 import com.example.findu.data.dataremote.model.response.CheckNicknameResponseDto
 import com.example.findu.data.dataremote.model.response.auth.GuestLoginResponseDto
 import com.example.findu.data.dataremote.model.response.auth.LoginResponseDto
+import com.example.findu.data.dataremote.model.response.auth.UserInfoDto
 import com.example.findu.data.dataremote.util.ApiConstraints.API
 import com.example.findu.data.dataremote.util.ApiConstraints.AUTH
 import com.example.findu.data.dataremote.util.ApiConstraints.VERSION
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface AuthService {
     @POST("/$API/$VERSION/$AUTH/login/kakao")
@@ -31,8 +36,12 @@ interface AuthService {
         @Body checkNicknameRequestDto: CheckNicknameRequestDto
     ): BaseResponse<CheckNicknameResponseDto>
 
-    @POST("/$API/$VERSION/$AUTH/signup")
+    @Multipart
+    @POST("/$API/$VERSION/user")
     suspend fun postSignup(
-        @Body signupRequestBody: SignupRequestDto
-    ): Response<Unit>
+        @Part profileImage: MultipartBody.Part?,
+        @Part("defaultProfileImageName") defaultImageName: RequestBody?,
+        @Part("nickname") nickname: RequestBody,
+        @Part("kakaoId") kakaoId: RequestBody
+    ): BaseResponse<UserInfoDto>
 }
