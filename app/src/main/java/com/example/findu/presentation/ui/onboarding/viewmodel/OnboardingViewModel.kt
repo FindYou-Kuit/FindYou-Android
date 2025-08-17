@@ -1,7 +1,9 @@
 package com.example.findu.presentation.ui.onboarding.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.domain.usecase.PostCheckNicknameUseCase
 import com.example.findu.presentation.type.DefaultProfileType
 import com.example.findu.presentation.type.NicknameValidType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +27,7 @@ data class OnboardingUiState(
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-
+    private val postCheckNicknameUseCase: PostCheckNicknameUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OnboardingUiState())
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
@@ -81,10 +83,21 @@ class OnboardingViewModel @Inject constructor(
 
     fun nicknameDuplicateCheck() {
         viewModelScope.launch {
-            //TODO: 닉네임 중복체크 API 나오면 추가 후 Valid 상태 변경
-            _uiState.update { it.copy(nickNameValidState = NicknameValidType.VALID) }
-            changeNextButtonEnabled(true)
-            focusChanged(false)
+            if (uiState.value.nickname.isEmpty()) {
+                _uiState.update { it.copy(nickNameValidState = NicknameValidType.EMPTY_INVALID) }
+            } else {
+                postCheckNicknameUseCase(uiState.value.nickname).onSuccess { isDuplicate ->
+                    if (isDuplicate) {
+                        _uiState.update { it.copy(nickNameValidState = NicknameValidType.DUPLICATE_INVALID) }
+                    } else {
+                        _uiState.update { it.copy(nickNameValidState = NicknameValidType.VALID) }
+                        changeNextButtonEnabled(true)
+                    }
+                }.onFailure { e ->
+                    Log.d("http", "Error Message: : $e")
+                }
+                focusChanged(false)
+            }
         }
     }
 
@@ -94,15 +107,16 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    private fun changeNextButtonEnabled(enabled:Boolean){
-        when(enabled){
+    private fun changeNextButtonEnabled(enabled: Boolean) {
+        when (enabled) {
             true -> {
-                if (!_uiState.value.isNextButtonEnabled){
+                if (!_uiState.value.isNextButtonEnabled) {
                     _uiState.update { it.copy(isNextButtonEnabled = true) }
                 }
             }
+
             false -> {
-                if (_uiState.value.isNextButtonEnabled){
+                if (_uiState.value.isNextButtonEnabled) {
                     _uiState.update { it.copy(isNextButtonEnabled = false) }
                 }
             }
