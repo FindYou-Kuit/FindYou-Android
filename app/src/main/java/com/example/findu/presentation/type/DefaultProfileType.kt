@@ -1,8 +1,8 @@
 package com.example.findu.presentation.type
 
-enum class DefaultProfileType {
-    NONE,
-    DOG,
-    CHICK,
-    PANDA
+enum class DefaultProfileType(val string: String) {
+    DEFAULT("default"),
+    PUPPY("puppy"),
+    CHICK("chick"),
+    PANDA("panda");
 }
