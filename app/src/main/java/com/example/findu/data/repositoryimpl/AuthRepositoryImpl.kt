@@ -4,7 +4,6 @@ import com.example.findu.data.dataremote.datasource.AuthRemoteDataSource
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.toDomain
 import com.example.findu.data.mapper.torequest.toRequestDto
-import com.example.findu.domain.model.CheckEmailData
 import com.example.findu.domain.model.GuestLoginData
 import com.example.findu.domain.model.LoginData
 import com.example.findu.domain.model.LoginInfo
@@ -25,9 +24,9 @@ class AuthRepositoryImpl @Inject constructor(
             authRemoteDataSource.postGuestLogin(guestLoginRequestDto = deviceId.toRequestDto()).handleBaseResponse().getOrThrow().toDomain()
         }
 
-    override suspend fun postCheckEmail(email: String): Result<CheckEmailData> =
+    override suspend fun postCheckNickname(nickname: String): Result<Boolean> =
         runCatching {
-            authRemoteDataSource.postCheckEmail(email).handleBaseResponse().getOrThrow().toDomain()
+            authRemoteDataSource.postCheckNickname(nickname=nickname).handleBaseResponse().getOrThrow().isDuplicate
         }
 
     override suspend fun postSignup(

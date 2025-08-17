@@ -1,6 +1,5 @@
 package com.example.findu.domain.repository
 
-import com.example.findu.domain.model.CheckEmailData
 import com.example.findu.domain.model.GuestLoginData
 import com.example.findu.domain.model.LoginData
 import com.example.findu.domain.model.LoginInfo
@@ -14,9 +13,9 @@ interface AuthRepository {
         deviceId: String
     ): Result<GuestLoginData>
 
-    suspend fun postCheckEmail(
-        email: String
-    ): Result<CheckEmailData>
+    suspend fun postCheckNickname(
+        nickname: String
+    ): Result<Boolean>
 
     suspend fun postSignup(
         email: String,
