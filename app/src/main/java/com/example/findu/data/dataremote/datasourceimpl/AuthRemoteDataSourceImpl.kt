@@ -2,12 +2,11 @@ package com.example.findu.data.dataremote.datasourceimpl
 
 import com.example.findu.data.dataremote.datasource.AuthRemoteDataSource
 import com.example.findu.data.dataremote.model.base.BaseResponse
-import com.example.findu.data.dataremote.model.base.NullableBaseResponse
-import com.example.findu.data.dataremote.model.request.CheckEmailRequestDto
+import com.example.findu.data.dataremote.model.request.CheckNicknameRequestDto
 import com.example.findu.data.dataremote.model.request.GuestLoginRequestDto
 import com.example.findu.data.dataremote.model.request.LoginRequestDto
 import com.example.findu.data.dataremote.model.request.SignupRequestDto
-import com.example.findu.data.dataremote.model.response.CheckEmailResponseDto
+import com.example.findu.data.dataremote.model.response.CheckNicknameResponseDto
 import com.example.findu.data.dataremote.model.response.auth.GuestLoginResponseDto
 import com.example.findu.data.dataremote.model.response.auth.LoginResponseDto
 import com.example.findu.data.dataremote.service.AuthService
@@ -23,8 +22,8 @@ class AuthRemoteDataSourceImpl @Inject constructor(
     override suspend fun postGuestLogin(guestLoginRequestDto: GuestLoginRequestDto): BaseResponse<GuestLoginResponseDto> =
         authService.postGuestLogin(guestLoginRequestDto=guestLoginRequestDto)
 
-    override suspend fun postCheckEmail(email: String): BaseResponse<CheckEmailResponseDto> =
-        authService.postCheckEmail(CheckEmailRequestDto(email))
+    override suspend fun postCheckNickname(nickname: String): BaseResponse<CheckNicknameResponseDto> =
+        authService.postCheckNickname(CheckNicknameRequestDto(nickname))
 
     override suspend fun postSignup(
         email: String,
