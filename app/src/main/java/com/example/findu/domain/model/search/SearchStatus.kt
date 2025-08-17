@@ -6,7 +6,7 @@ import java.io.Serializable
 
 enum class SearchStatus(
     val text: String,
-    @ColorRes val textColor: Int,
+    @ColorRes val textColorRes: Int,
     @ColorRes val backgroundColorRes: Int
 ) : Serializable {
     PROTECTING("보호중", R.color.green1, R.color.green2),
