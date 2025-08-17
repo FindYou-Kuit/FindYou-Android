@@ -15,7 +15,7 @@ import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
-import com.example.findu.domain.usecase.PostCheckEmailUseCase
+import com.example.findu.domain.usecase.PostCheckNicknameUseCase
 import com.example.findu.domain.usecase.PostGuestLoginUseCase
 import com.example.findu.domain.usecase.PostLoginUseCase
 import com.example.findu.domain.usecase.PostSignupUseCase
@@ -187,7 +187,7 @@ object UseCaseModule {
     @Singleton
     fun providePostCheckEmailUseCase(
         authRepository: AuthRepository
-    ): PostCheckEmailUseCase = PostCheckEmailUseCase(authRepository)
+    ): PostCheckNicknameUseCase = PostCheckNicknameUseCase(authRepository)
 
     @Provides
     @Singleton
