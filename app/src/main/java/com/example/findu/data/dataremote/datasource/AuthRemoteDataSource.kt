@@ -6,7 +6,9 @@ import com.example.findu.data.dataremote.model.request.LoginRequestDto
 import com.example.findu.data.dataremote.model.response.CheckNicknameResponseDto
 import com.example.findu.data.dataremote.model.response.auth.GuestLoginResponseDto
 import com.example.findu.data.dataremote.model.response.auth.LoginResponseDto
+import com.example.findu.data.dataremote.model.response.auth.UserInfoDto
 import retrofit2.Response
+import java.io.File
 
 interface AuthRemoteDataSource {
     suspend fun postLogin(
@@ -22,8 +24,9 @@ interface AuthRemoteDataSource {
     ): BaseResponse<CheckNicknameResponseDto>
 
     suspend fun postSignup(
-        email: String,
-        password: String,
-        nickname: String
-    ): Response<Unit>
+        profileImageFile: File?,
+        defaultImageName: String?,
+        nickname: String,
+        kakaoId: Long
+    ): BaseResponse<UserInfoDto>
 }
