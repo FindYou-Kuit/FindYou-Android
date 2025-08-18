@@ -118,6 +118,7 @@
     <string name="search_filter_date">날짜</string>
     <string name="search_filter_date_input_start">시작 날짜 선택</string>
     <string name="search_filter_date_input_end">종료 날짜 선택</string>
+    <string name="search_filter_date_input">날짜 선택</string>
     <string name="search_filter_type">축종</string>
     <string name="search_filter_breed">품종</string>
     <string name="search_filter_location">위치</string>

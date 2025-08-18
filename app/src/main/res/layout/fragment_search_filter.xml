@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_search_filter"
     android:layout_marginHorizontal="20dp"
     tools:context=".presentation.ui.search.SearchFilterFragment">
 
@@ -105,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="6dp"
                     android:text="~"
+                    android:textColor="@color/gray6"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     app:layout_constraintBottom_toBottomOf="@id/cl_search_filter_date_start"
                     app:layout_constraintEnd_toStartOf="@id/cl_search_filter_date_end"
@@ -182,6 +184,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:textColor="@color/gray6"
                         android:text="@string/search_species_dog"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
 
@@ -192,6 +195,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:textColor="@color/gray6"
                         android:text="@string/search_species_cat"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
 
@@ -202,6 +206,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:textColor="@color/gray6"
                         android:text="@string/search_species_etc"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
                 </RadioGroup>

@@ -133,8 +133,7 @@ class SearchAllFragment : Fragment() {
 
     private fun initFilterButton() {
         binding.ibSearchFilter.setOnClickListener {
-            val bottomSheet = SearchFilterBottomSheet()
-            bottomSheet.show(childFragmentManager, bottomSheet.tag)
+            findNavController().navigate(R.id.action_fragment_search_to_fragment_search_filter)
         }
     }
 
