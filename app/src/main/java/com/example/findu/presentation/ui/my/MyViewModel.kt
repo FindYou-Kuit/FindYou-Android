@@ -140,10 +140,6 @@ class MyViewModel @Inject constructor(
         _alarmEnabled.value = !_alarmEnabled.value
     }
 
-    fun setAlarmEnabled(enabled: Boolean) {
-        _alarmEnabled.value = enabled
-    }
-
     fun updateNickName(newNickName: String) {
         _nickNameState.value = newNickName
 
