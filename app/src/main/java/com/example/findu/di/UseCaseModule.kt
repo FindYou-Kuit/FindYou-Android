@@ -3,6 +3,7 @@ package com.example.findu.di
 import com.example.findu.domain.repository.AuthRepository
 import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.domain.repository.BreedRepository
+import com.example.findu.domain.repository.DeviceRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.repository.HomeRepository
@@ -175,13 +176,16 @@ object UseCaseModule {
     @Singleton
     fun providePostLoginUseCase(
         authRepository: AuthRepository,
-    ): PostLoginUseCase = PostLoginUseCase(authRepository)
+        deviceRepository: DeviceRepository
+    ): PostLoginUseCase = PostLoginUseCase(authRepository = authRepository, deviceRepository = deviceRepository)
 
     @Provides
     @Singleton
     fun providePostGuestLoginUseCase(
         authRepository: AuthRepository,
-    ): PostGuestLoginUseCase = PostGuestLoginUseCase(authRepository)
+        deviceRepository: DeviceRepository
+    ): PostGuestLoginUseCase =
+        PostGuestLoginUseCase(authRepository = authRepository, deviceRepository = deviceRepository)
 
     @Provides
     @Singleton
@@ -193,7 +197,8 @@ object UseCaseModule {
     @Singleton
     fun providePostSignupUseCase(
         authRepository: AuthRepository,
-    ): PostSignupUseCase = PostSignupUseCase(authRepository)
+        deviceRepository: DeviceRepository
+    ): PostSignupUseCase = PostSignupUseCase(authRepository = authRepository, deviceRepository = deviceRepository)
 
     @Provides
     @Singleton
