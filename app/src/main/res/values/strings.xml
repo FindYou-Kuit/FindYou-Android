@@ -17,7 +17,6 @@
     <string name="login_without_signup_toast_message">가입없이 찾아유 실행</string>
 
 
-
     <!--signup-->
     <string name="signup_email_title">이메일</string>
     <string name="signup_email_hint">example1234@gmail.com</string>
@@ -117,13 +116,14 @@
     <string name="search_detail_jurisdiction">창원유기동물보호소</string>
     <string name="search_detail_jurisdiction_value">055–930–3562</string>
     <string name="search_filter_date">날짜</string>
-    <string name="search_filter_date_input">날짜 입력</string>
+    <string name="search_filter_date_input_start">시작 날짜 선택</string>
+    <string name="search_filter_date_input_end">종료 날짜 선택</string>
     <string name="search_filter_type">축종</string>
     <string name="search_filter_breed">품종</string>
     <string name="search_filter_location">위치</string>
-    <string name="search_filter_location_city">시/구</string>
-    <string name="search_filter_location_gu">시/구/군</string>
-    <string name="search_filter_breed_hint">품종을 입력하세요</string>
+    <string name="search_filter_location_city">시/도 선택</string>
+    <string name="search_filter_location_gu">시/구/군 선택</string>
+    <string name="search_filter_breed_hint">품종을 선택하거나 입력해주세요.</string>
     <string name="search_species_dog">강아지</string>
     <string name="search_species_cat">고양이</string>
     <string name="search_species_etc">기타</string>
