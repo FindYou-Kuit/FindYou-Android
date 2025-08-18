@@ -19,17 +19,13 @@ import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
-import com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
-import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -40,7 +36,6 @@ class SearchRescueFragment : Fragment() {
     private var _binding: FragmentSearchRescueBinding? = null
     private val binding get() = _binding!!
 
-    private var items = ArrayList<SearchRv>()
     private lateinit var rvAdapter: SearchContentRVAdapter
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
@@ -52,7 +47,7 @@ class SearchRescueFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchRescueBinding.inflate(layoutInflater)
+        _binding = FragmentSearchRescueBinding.inflate(inflater, container, false)
         initRVAdapter()
         observeViewModel()
         viewModel.getSearchProtectData()
@@ -95,8 +90,8 @@ class SearchRescueFragment : Fragment() {
         if(isNewList) {
             rvAdapter.submitList(searchList)
             isNewList = false
-            binding.rvSearchRescueHorizontalContent.scrollToPosition(0)
-            binding.rvSearchRescueHorizontalContent.smoothScrollToPosition(0)
+            binding.rvSearchHorizontalContent.scrollToPosition(0)
+            binding.rvSearchHorizontalContent.smoothScrollToPosition(0)
         } else {
             rvAdapter.addData(searchList)
         }
@@ -133,125 +128,29 @@ class SearchRescueFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        childFragmentManager.setFragmentResultListener(FILTER_RESULTS, this) { _, bundle ->
 
-            binding.cgSearchRescueGroupFilters.removeAllViews()
-            val filterUiModel: SearchFilterUiModel? =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
-                } else {
-                    bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
-                }
+        childFragmentManager.setFragmentResultListener(FILTER_RESULTS, viewLifecycleOwner) { _, bundle ->
+            val selected: SearchFilterUiModel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
+            }
+
+            viewModel.updateProtectFilterState(selected)
+
             isNewList = true
-            updateFilterChips(filterUiModel)
+            lastProtectId = Long.MAX_VALUE
 
-        }
+            rvAdapter.submitList(emptyList())
+            binding.rvSearchHorizontalContent.scrollToPosition(0)
 
-        binding.rvSearchRescueHorizontalContent.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                when {
-                    firstVisibleItemPosition == 0 -> {
-                        binding.hsSearchRescueFilters.elevation = 0f
-                    }
-
-                    rvAdapter.itemCount == 0 -> {
-                        binding.hsSearchRescueFilters.elevation = 0f
-                    }
-
-                    else -> {
-                        binding.hsSearchRescueFilters.elevation = 8f
-                    }
-                }
-            }
-        })
-
-    }
-
-    private fun updateFilterChips(filters: SearchFilterUiModel?) {
-        val chipGroup = binding.cgSearchRescueGroupFilters
-        chipGroup.removeAllViews()
-
-        if (filters == null) return
-        viewModel.updateProtectFilterState(filters)
-        isNewList = true
-
-        filters.species?.let { species ->
-            if (species.isEmpty()) return
-            val chip =
-                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
-
-            chip.text = if (species == "개") "강아지" else species
-            chip.setOnCloseIconClickListener {
-                chipGroup.removeAllViews()
-                isNewList = true
-                viewModel.updateProtectFilterState(
-                    viewModel.protectFilter?.copy(
-                        species = null,
-                        breeds = null
-                    )
-                )
-                viewModel.protectFilter?.location?.let {
-                    if (it.isNotBlank()) {
-                    val locationChip =
-                        layoutInflater.inflate(
-                            R.layout.item_search_filter_chip,
-                            chipGroup,
-                            false
-                        ) as Chip
-                    locationChip.text = it
-                    locationChip.setOnCloseIconClickListener {
-                        isNewList = true
-                        chipGroup.removeView(locationChip)
-                        viewModel.updateProtectFilterState(
-                            viewModel.protectFilter?.copy(location = null)
-                        )
-                    }
-                    chipGroup.addView(locationChip)
-                }}
-            }
-            chipGroup.addView(chip)
-        }
-
-        filters.breeds?.forEach { breed ->
-            val chip =
-                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
-            chip.text = breed
-            chip.setOnCloseIconClickListener {
-                isNewList = true
-                chipGroup.removeView(chip)
-                viewModel.updateProtectFilterState(
-                    viewModel.protectFilter?.copy(
-                        breeds = viewModel.protectFilter?.breeds?.filter { it != breed }
-                    )
-                )
-            }
-            chipGroup.addView(chip)
-        }
-
-        filters.location?.let { location ->
-            if (location.isEmpty()) return
-            val chip =
-                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
-            chip.text = location
-            chip.setOnCloseIconClickListener {
-                isNewList = true
-                chipGroup.removeView(chip)
-                viewModel.updateProtectFilterState(
-                    viewModel.protectFilter?.copy(location = null)
-                )
-            }
-            chipGroup.addView(chip)
+            viewModel.getSearchProtectData()
         }
     }
 
     private fun initFilterButton() {
-        binding.ibSearchRescueFilter.setOnClickListener {
+        binding.ibSearchFilter.setOnClickListener {
             val bottomSheet = SearchFilterBottomSheet()
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
@@ -265,12 +164,12 @@ class SearchRescueFragment : Fragment() {
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
             }
-        ).apply { submitList(items) }
-        binding.rvSearchRescueHorizontalContent.adapter = rvAdapter
-        binding.rvSearchRescueHorizontalContent.layoutManager =
+        ).apply { submitList(emptyList()) }
+        binding.rvSearchHorizontalContent.adapter = rvAdapter
+        binding.rvSearchHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        binding.rvSearchRescueHorizontalContent.addOnScrollListener(object :
+        binding.rvSearchHorizontalContent.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -298,7 +197,7 @@ class SearchRescueFragment : Fragment() {
     }
 
     private fun initToggleButton() {
-        binding.ibSearchRescueHorizontalSort.setOnClickListener {
+        binding.ibSearchHorizontalSort.setOnClickListener {
             toggleLayoutMode()
         }
     }
@@ -307,27 +206,27 @@ class SearchRescueFragment : Fragment() {
         isGridMode = !isGridMode
 
         if (isGridMode) {
-            while (binding.rvSearchRescueHorizontalContent.itemDecorationCount > 0) {
-                binding.rvSearchRescueHorizontalContent.removeItemDecorationAt(0)
+            while (binding.rvSearchHorizontalContent.itemDecorationCount > 0) {
+                binding.rvSearchHorizontalContent.removeItemDecorationAt(0)
             }
 
-            binding.rvSearchRescueHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
-            binding.rvSearchRescueHorizontalContent.layoutManager =
+            binding.rvSearchHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
+            binding.rvSearchHorizontalContent.layoutManager =
                 GridLayoutManager(requireContext(), 2)
             rvAdapter.setGridMode(true)
-            binding.ibSearchRescueHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
+            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
 
         } else {
-            binding.rvSearchRescueHorizontalContent.layoutManager =
+            binding.rvSearchHorizontalContent.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rvAdapter.setGridMode(false)
-            binding.ibSearchRescueHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
+            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.cgSearchRescueGroupFilters.removeAllViews()
+        binding.rvSearchHorizontalContent.adapter = null
         _binding = null
     }
 

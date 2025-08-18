@@ -2,7 +2,6 @@ package com.example.findu.presentation.ui.search.tablayout
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +26,6 @@ import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
-import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -50,7 +48,7 @@ class SearchAllFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchAllBinding.inflate(layoutInflater)
+        _binding = FragmentSearchAllBinding.inflate(inflater, container, false)
         initRVAdapter()
         observeViewModel()
         viewModel.getSearchAllData()
@@ -94,8 +92,8 @@ class SearchAllFragment : Fragment() {
         if (isNewList) {
             rvAdapter.submitList(searchList)
             isNewList = false
-            binding.rvSearchAllHorizontalContent.scrollToPosition(0)
-            binding.rvSearchAllHorizontalContent.smoothScrollToPosition(0)
+            binding.rvSearchHorizontalContent.scrollToPosition(0)
+            binding.rvSearchHorizontalContent.smoothScrollToPosition(0)
 
         } else {
             rvAdapter.addData(searchList)
@@ -134,7 +132,7 @@ class SearchAllFragment : Fragment() {
     }
 
     private fun initFilterButton() {
-        binding.ibSearchAllFilter.setOnClickListener {
+        binding.ibSearchFilter.setOnClickListener {
             val bottomSheet = SearchFilterBottomSheet()
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
@@ -142,125 +140,26 @@ class SearchAllFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        childFragmentManager.setFragmentResultListener(FILTER_RESULTS, this) { _, bundle ->
 
-            binding.cgSearchAllGroupFilters.removeAllViews()
+        childFragmentManager.setFragmentResultListener(FILTER_RESULTS, viewLifecycleOwner) { _, bundle ->
+            val selected: SearchFilterUiModel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
+            }
 
-            val filterUiModel: SearchFilterUiModel? =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
-                } else {
-                    bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
-                }
+            viewModel.updateAllFilterState(selected)
+
             isNewList = true
-            updateFilterChips(filterUiModel)
+            lastReportId = Long.MAX_VALUE
+            lastProtectId = Long.MAX_VALUE
 
+            rvAdapter.submitList(emptyList())
+            binding.rvSearchHorizontalContent.scrollToPosition(0)
+
+            viewModel.getSearchAllData()
         }
-
-        binding.rvSearchAllHorizontalContent.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                when {
-                    firstVisibleItemPosition == 0 -> {
-                        binding.hsSearchAllFilters.elevation = 0f
-                    }
-
-                    rvAdapter.itemCount == 0 -> {
-                        binding.hsSearchAllFilters.elevation = 0f
-                    }
-
-                    else -> {
-                        binding.hsSearchAllFilters.elevation = 8f
-                    }
-                }
-            }
-        })
-
-
-    }
-
-    private fun updateFilterChips(filters: SearchFilterUiModel?) {
-        val chipGroup = binding.cgSearchAllGroupFilters
-        chipGroup.removeAllViews()
-
-        if (filters == null) return
-        viewModel.updateAllFilterState(filters)
-        isNewList = true
-
-        filters.species?.let { species ->
-            if (species.isEmpty()) return
-            val chip =
-                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
-
-            chip.text = if (species == "개") "강아지" else species
-            chip.setOnCloseIconClickListener {
-                chipGroup.removeAllViews()
-                isNewList = true
-                viewModel.updateAllFilterState(
-                    viewModel.allFilter?.copy(
-                        species = null,
-                        breeds = null
-                    )
-                )
-                viewModel.allFilter?.location?.let {
-                    if (it.isNotBlank()) {
-                        val locationChip =
-                            layoutInflater.inflate(
-                                R.layout.item_search_filter_chip,
-                                chipGroup,
-                                false
-                            ) as Chip
-                        locationChip.text = it
-                        locationChip.setOnCloseIconClickListener {
-                            isNewList = true
-                            chipGroup.removeView(chip)
-                            viewModel.updateAllFilterState(
-                                viewModel.reportFilter?.copy(location = null)
-                            )
-                        }
-                        chipGroup.addView(locationChip)
-                    }
-                }
-            }
-            chipGroup.addView(chip)
-        }
-
-        filters.breeds?.forEach { breed ->
-            val chip =
-                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
-            chip.text = breed
-            chip.setOnCloseIconClickListener {
-                isNewList = true
-                chipGroup.removeView(chip)
-                viewModel.updateAllFilterState(
-                    viewModel.allFilter?.copy(
-                        breeds = viewModel.allFilter?.breeds?.filter { it != breed }
-                    )
-                )
-            }
-            chipGroup.addView(chip)
-        }
-
-        filters.location?.let { location ->
-            if (location.isEmpty()) return
-            val chip =
-                layoutInflater.inflate(R.layout.item_search_filter_chip, chipGroup, false) as Chip
-            chip.text = location
-            chip.setOnCloseIconClickListener {
-                isNewList = true
-                chipGroup.removeView(chip)
-                viewModel.updateAllFilterState(
-                    viewModel.reportFilter?.copy(location = null)
-                )
-            }
-            chipGroup.addView(chip)
-        }
-
     }
 
     private fun initRVAdapter() {
@@ -272,13 +171,13 @@ class SearchAllFragment : Fragment() {
                 viewModel.setInterest(cardId, isBookmark, tag)
             }
         ).apply { submitList(emptyList()) }
-        binding.rvSearchAllHorizontalContent.apply {
+        binding.rvSearchHorizontalContent.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = rvAdapter
         }
 
-        binding.rvSearchAllHorizontalContent.addOnScrollListener(object :
+        binding.rvSearchHorizontalContent.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -308,7 +207,7 @@ class SearchAllFragment : Fragment() {
     }
 
     private fun initToggleButton() {
-        binding.ibSearchAllHorizontalSort.setOnClickListener {
+        binding.ibSearchHorizontalSort.setOnClickListener {
             toggleLayoutMode()
         }
     }
@@ -317,27 +216,27 @@ class SearchAllFragment : Fragment() {
         isGridMode = !isGridMode
 
         if (isGridMode) {
-            while (binding.rvSearchAllHorizontalContent.itemDecorationCount > 0) {
-                binding.rvSearchAllHorizontalContent.removeItemDecorationAt(0)
+            while (binding.rvSearchHorizontalContent.itemDecorationCount > 0) {
+                binding.rvSearchHorizontalContent.removeItemDecorationAt(0)
             }
 
-            binding.rvSearchAllHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
-            binding.rvSearchAllHorizontalContent.layoutManager =
+            binding.rvSearchHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
+            binding.rvSearchHorizontalContent.layoutManager =
                 GridLayoutManager(requireContext(), 2)
             rvAdapter.setGridMode(true)
-            binding.ibSearchAllHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
+            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
         } else {
-            binding.rvSearchAllHorizontalContent.layoutManager =
+            binding.rvSearchHorizontalContent.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rvAdapter.setGridMode(false)
-            binding.ibSearchAllHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
+            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
 
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.cgSearchAllGroupFilters.removeAllViews()
+        binding.rvSearchHorizontalContent.adapter = null
         _binding = null
     }
 }
