@@ -1,7 +1,6 @@
 package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.dataremote.datasource.AuthRemoteDataSource
-import com.example.findu.data.dataremote.model.response.auth.UserInfoDto
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.toDomain
 import com.example.findu.data.mapper.torequest.toRequestDto
@@ -10,7 +9,6 @@ import com.example.findu.domain.model.LoginData
 import com.example.findu.domain.model.LoginInfo
 import com.example.findu.domain.model.UserInfo
 import com.example.findu.domain.repository.AuthRepository
-import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
 
@@ -36,13 +34,15 @@ class AuthRepositoryImpl @Inject constructor(
         profileImageFile: File?,
         defaultImageName: String?,
         nickname: String,
-        kakaoId: Long
+        kakaoId: Long,
+        deviceId: String
     ): Result<UserInfo> = runCatching {
         authRemoteDataSource.postSignup(
             profileImageFile = profileImageFile,
             defaultImageName = defaultImageName,
             nickname = nickname,
-            kakaoId = kakaoId
+            kakaoId = kakaoId,
+            deviceId = deviceId
         ).handleBaseResponse().getOrThrow().toDomain()
     }
 }

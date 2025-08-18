@@ -1,6 +1,5 @@
 package com.example.findu.domain.repository
 
-import com.example.findu.data.dataremote.model.response.auth.UserInfoDto
 import com.example.findu.domain.model.GuestLoginData
 import com.example.findu.domain.model.LoginData
 import com.example.findu.domain.model.LoginInfo
@@ -24,6 +23,7 @@ interface AuthRepository {
         profileImageFile: File?,
         defaultImageName: String?,
         nickname: String,
-        kakaoId: Long
+        kakaoId: Long,
+        deviceId: String
     ): Result<UserInfo>
 }

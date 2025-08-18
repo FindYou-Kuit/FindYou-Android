@@ -27,6 +27,7 @@ interface AuthRemoteDataSource {
         profileImageFile: File?,
         defaultImageName: String?,
         nickname: String,
-        kakaoId: Long
+        kakaoId: Long,
+        deviceId: String
     ): BaseResponse<UserInfoDto>
 }

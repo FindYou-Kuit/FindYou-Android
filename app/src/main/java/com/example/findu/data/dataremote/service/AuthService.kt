@@ -37,11 +37,12 @@ interface AuthService {
     ): BaseResponse<CheckNicknameResponseDto>
 
     @Multipart
-    @POST("/$API/$VERSION/user")
+    @POST("/$API/$VERSION/users")
     suspend fun postSignup(
         @Part profileImage: MultipartBody.Part?,
         @Part("defaultProfileImageName") defaultImageName: RequestBody?,
         @Part("nickname") nickname: RequestBody,
-        @Part("kakaoId") kakaoId: RequestBody
+        @Part("kakaoId") kakaoId: RequestBody,
+        @Part("deviceId") deviceId: RequestBody
     ): BaseResponse<UserInfoDto>
 }

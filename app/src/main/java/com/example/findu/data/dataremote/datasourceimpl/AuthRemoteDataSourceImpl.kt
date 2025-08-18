@@ -5,7 +5,6 @@ import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.request.CheckNicknameRequestDto
 import com.example.findu.data.dataremote.model.request.GuestLoginRequestDto
 import com.example.findu.data.dataremote.model.request.LoginRequestDto
-import com.example.findu.data.dataremote.model.request.SignupRequestDto
 import com.example.findu.data.dataremote.model.response.CheckNicknameResponseDto
 import com.example.findu.data.dataremote.model.response.auth.GuestLoginResponseDto
 import com.example.findu.data.dataremote.model.response.auth.LoginResponseDto
@@ -15,7 +14,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
 
@@ -35,7 +33,8 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         profileImageFile: File?,
         defaultImageName: String?,
         nickname: String,
-        kakaoId: Long
+        kakaoId: Long,
+        deviceId: String
     ): BaseResponse<UserInfoDto> = authService.postSignup(
         profileImage = profileImageFile?.let {
             MultipartBody.Part.createFormData(
@@ -46,6 +45,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         },
         defaultImageName = defaultImageName?.toRequestBody("text/plain".toMediaTypeOrNull()),
         nickname = nickname.toRequestBody("text/plain".toMediaTypeOrNull()),
-        kakaoId = kakaoId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        kakaoId = kakaoId.toString().toRequestBody("text/plain".toMediaTypeOrNull()),
+        deviceId = deviceId.toRequestBody("text/plain".toMediaTypeOrNull())
     )
 }
