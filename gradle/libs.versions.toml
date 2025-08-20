@@ -14,6 +14,8 @@ mapSdk = "3.20.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
+accompanistPager = "0.25.0"
+pagingCommonAndroid = "3.3.2"
 
 # Third Party
 okhttp = "4.11.0"
@@ -21,6 +23,7 @@ retrofit = "2.9.0"
 retrofitKotlinSerializationConverter = "1.0.0"
 kotlinxSerializationJson = "1.6.3"
 daggerHilt = "2.52"
+hiltNavigationCompose = "1.2.0"
 navigationFragmentKtx = "2.8.3"
 navigationUiKtx = "2.8.3"
 webkit = "1.12.1"
@@ -49,6 +52,9 @@ map-sdk = { module = "com.naver.maps:map-sdk", version.ref = "mapSdk" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-paging-common-android = { group = "androidx.paging", name = "paging-common-android", version.ref = "pagingCommonAndroid" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPager" }
 
 # Third Party
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
@@ -59,6 +65,7 @@ retrofit-kotlin-serialization-converter = { group = "com.jakewharton.retrofit", 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerHilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
@@ -83,7 +90,9 @@ navigationSafeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref =
 
 [bundles]
 hilt = [
-    "hilt"
+    "hilt",
+    "hilt-navigation-compose"
+
 ]
 
 kakao = [
@@ -93,5 +102,11 @@ kakao = [
     "kakao-friend",
     "kakao-navi",
     "kakao-cert"
+]
+
+pager = [
+    "androidx-paging-common-android",
+    "accompanist-pager",
+    "accompanist-pager-indicators"
 ]
 

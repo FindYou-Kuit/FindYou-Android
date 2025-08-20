@@ -24,3 +24,19 @@ data class ReportAnimal(
     val registerDate: String,
     val happenLocation: String
 )
+
+data class ReportItem(
+    val type: ReportDataType,
+    val count: Int
+)
+
+data class HomeReportData(
+    val reports: List<ReportItem>
+)
+
+enum class ReportDataType(val label: String) {
+    RESCUE("구조"),
+    PROTECTION("보호중"),
+    ADOPTION("입양"),
+    REPORT("신고")
+}

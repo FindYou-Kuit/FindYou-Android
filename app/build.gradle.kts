@@ -131,7 +131,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.coil.compose)
 
-
     // Kakao
     implementation(libs.bundles.kakao)
+
+    // View Pager
+    implementation(libs.bundles.pager)
 }

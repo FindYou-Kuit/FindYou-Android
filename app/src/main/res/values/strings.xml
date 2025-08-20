@@ -222,6 +222,11 @@
     <string name="home_bottom_protect">유기동물\n보호소 조회</string>
     <string name="home_bottom_center">동물보호\n센터 조회</string>
     <string name="home_bottom_part">동물보호\n부서 조회</string>
+    <string name="home_banner_title">오늘도 찾아유랑 1분 지식 충전🔥</string>
+    <string name="home_adoptable_list_title">입양 가능 동물</string>
+    <string name="home_adoptable_list_description">%1$s 님의 주변 보호소에서 입양가능한 동물들이에요.</string>
+    <string name="home_reported_list_description">%1$s 님의 주변에서 신고 접수된 아이들이에요.</string>
+    <string name="home_reported_list_title">도움이 필요해요!</string>
 
     <!--dialog home-->
     <string name="dialog_home_report">목격 신고</string>
@@ -425,6 +430,12 @@
     <string name="onboarding_profile_title_second">정해주세요!</string>
     <string name="onboarding_next_button_text">다음</string>
     <string name="onboarding_invalid_text_box">다음과 같은 경우에 불가능해요.\n 1. 중복된 닉네임인 경우\n 2. 띄어쓰기만 있는 닉네임인 경우\n 3. 특수문자(!@#$,.^)가 포함되어 있는 경우</string>
+    <string name="home_button_protect_center">보호소</string>
+    <string name="home_button_hospital">동물 병원</string>
+    <string name="home_button_protect_part">보호 부서</string>
+    <string name="home_button_volunteer">봉사</string>
+    <string name="home_report_card_title">유기동물 통계</string>
+    <string name="home_report_button_text">제보하기</string>
 
 
 </resources>

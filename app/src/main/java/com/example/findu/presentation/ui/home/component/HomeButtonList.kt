@@ -1,0 +1,63 @@
+package com.example.findu.presentation.ui.home.component
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.findu.presentation.type.HomeButtonType
+import com.example.findu.presentation.util.extension.noRippleClickable
+import com.example.findu.ui.theme.FindUTheme
+
+
+@Composable
+fun HomeButtonList(
+    modifier: Modifier = Modifier,
+    navigateToProtectCenter: () -> Unit = {},
+    navigateToHospital: () -> Unit = {},
+    navigateToProtectPart: () -> Unit = {},
+    navigateToVolunteer: () -> Unit = {},
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        HomeButtonType.entries.forEach { homeButton ->
+            val navigation = when (homeButton) {
+                HomeButtonType.PROTECT_CENTER -> navigateToProtectCenter
+                HomeButtonType.HOSPITAL -> navigateToHospital
+                HomeButtonType.PROTECT_PART -> navigateToProtectPart
+                HomeButtonType.VOLUNTEER -> navigateToVolunteer
+            }
+
+            Column(
+                modifier = Modifier.noRippleClickable { navigation() },
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(painterResource(homeButton.imageRes), contentDescription = null, tint = Color.Unspecified)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = stringResource(homeButton.nameRes), style = FindUTheme.typography.body2Regular14)
+            }
+
+
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun HomeButtonListPreview() {
+    HomeButtonList(modifier = Modifier.fillMaxWidth().padding(horizontal = 33.dp))
+}
