@@ -179,7 +179,7 @@
 
                     <RadioButton
                         android:id="@+id/rb_search_filter_dog"
-                        style="@style/searchCustomRadioButtonLeft"
+                        style="@style/searchCustomRadioButtonMiddle"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -201,7 +201,7 @@
 
                     <RadioButton
                         android:id="@+id/rb_search_filter_etc"
-                        style="@style/searchCustomRadioButtonRight"
+                        style="@style/searchCustomRadioButtonMiddle"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -388,8 +388,8 @@
         android:id="@+id/cl_search_filter_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="207dp"
-        app:layout_constraintTop_toBottomOf="@id/sv_search_filter">
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="103dp"
