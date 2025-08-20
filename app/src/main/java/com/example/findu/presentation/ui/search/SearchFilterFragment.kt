@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBinding
+import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.ui.search.dialog.SearchFilterDateDialog
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.Type
@@ -21,6 +22,9 @@ class SearchFilterFragment : Fragment() {
 
     private val fmt = DateTimeFormatter.ISO_DATE
     private val filterModel = SearchFilterUiModel()
+
+    private var selectedSpecies: String? = null
+    private var breedList: List<String> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +71,61 @@ class SearchFilterFragment : Fragment() {
                 )
             }.show(parentFragmentManager, "date_end")
         }
+
+        rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
+            val defaultColor = ContextCompat.getColor(requireContext(), R.color.gray4)
+            val defaultStyle = R.style.TextAppearance_FindU_Body2_SB_14
+
+            with(rbSearchFilterDog) {
+                setTextAppearance(defaultStyle)
+                setTextColor(defaultColor)
+            }
+            with(rbSearchFilterCat) {
+                setTextAppearance(defaultStyle)
+                setTextColor(defaultColor)
+            }
+            with(rbSearchFilterEtc) {
+                setTextAppearance(defaultStyle)
+                setTextColor(defaultColor)
+            }
+
+            when (checkedId) {
+                R.id.rb_search_filter_dog -> {
+                    // viewModel.selectSpeciesType(SpeciesType.DOG)
+                    selectedSpecies = "개"
+                    filterModel.species = SpeciesType.DOG.name
+                    with(rbSearchFilterDog){
+                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
+                        setTextColor( ContextCompat.getColor(requireContext(), R.color.main_color))
+                    }
+
+                }
+
+                R.id.rb_search_filter_cat -> {
+                    // viewModel.selectSpeciesType(SpeciesType.CAT)
+                    selectedSpecies = "고양이"
+                    filterModel.species = SpeciesType.CAT.name
+                    with(rbSearchFilterCat){
+                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
+                        setTextColor( ContextCompat.getColor(requireContext(), R.color.main_color))
+                    }
+                }
+
+                R.id.rb_search_filter_etc -> {
+                    // viewModel.selectSpeciesType(SpeciesType.ETC)
+                    selectedSpecies = "기타"
+                    filterModel.species = SpeciesType.ETC.name
+                    with(rbSearchFilterEtc){
+                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
+                        setTextColor( ContextCompat.getColor(requireContext(), R.color.main_color))
+                    }
+                }
+            }
+        }
+
+
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
