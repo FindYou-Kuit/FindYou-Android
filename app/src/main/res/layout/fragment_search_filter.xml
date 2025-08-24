@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_search_filter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_search_filter"
     android:layout_marginHorizontal="20dp"
     tools:context=".presentation.ui.search.SearchFilterFragment">
 
@@ -37,12 +37,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_search_filter"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
+        android:scrollbars="none"
         android:fillViewport="true"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/cl_search_filter_confirm"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_search_filter_top">
 
@@ -106,8 +109,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="6dp"
                     android:text="~"
-                    android:textColor="@color/gray6"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                    android:textColor="@color/gray6"
                     app:layout_constraintBottom_toBottomOf="@id/cl_search_filter_date_start"
                     app:layout_constraintEnd_toStartOf="@id/cl_search_filter_date_end"
                     app:layout_constraintStart_toEndOf="@id/cl_search_filter_date_start"
@@ -184,9 +187,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@color/gray6"
                         android:text="@string/search_species_dog"
-                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColor="@color/gray6" />
 
                     <RadioButton
                         android:id="@+id/rb_search_filter_cat"
@@ -195,9 +198,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@color/gray6"
                         android:text="@string/search_species_cat"
-                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColor="@color/gray6" />
 
                     <RadioButton
                         android:id="@+id/rb_search_filter_etc"
@@ -206,9 +209,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@color/gray6"
                         android:text="@string/search_species_etc"
-                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14" />
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColor="@color/gray6" />
                 </RadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -237,13 +240,13 @@
                     android:background="@drawable/bg_search_radius_8"
                     android:completionThreshold="1"
                     android:cursorVisible="false"
-                    android:textColorHint="@color/gray4"
                     android:drawableEnd="@drawable/ic_search_filter_drop"
                     android:dropDownHeight="248dp"
                     android:hint="@string/search_filter_breed_hint"
                     android:inputType="text"
                     android:paddingHorizontal="16dp"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                    android:textColorHint="@color/gray4"
                     app:layout_constraintTop_toBottomOf="@id/tv_search_filter_breed" />
 
                 <LinearLayout
@@ -296,7 +299,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_search_filter_breed">
 
@@ -328,20 +330,29 @@
                         android:focusable="false"
                         android:hint="@string/search_filter_location_city"
                         android:inputType="text"
-                        android:textColorHint="@color/gray4"
                         android:paddingHorizontal="16dp"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColorHint="@color/gray4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_search_filter_city"
-                        android:layout_width="match_parent"
-                        android:layout_height="273dp"
-                        android:background="@drawable/bg_search_radius_8_down"
+                    <FrameLayout
+                        android:id="@+id/fl_filter_city_container"
+                        android:layout_width="155dp"
+                        android:layout_height="wrap_content"
                         android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/actv_search_filter_city"
-                        tools:listitem="@layout/item_search_location" />
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_search_filter_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:scrollbars="vertical"
+                            android:nestedScrollingEnabled="true"
+                            android:overScrollMode="always"
+                            android:background="@drawable/bg_search_radius_8_down"/>
+                    </FrameLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -362,27 +373,36 @@
                         android:drawableEnd="@drawable/ic_search_filter_drop"
                         android:dropDownHeight="248dp"
                         android:focusable="false"
-                        android:textColorHint="@color/gray4"
                         android:hint="@string/search_filter_location_gu"
                         android:inputType="text"
                         android:paddingHorizontal="16dp"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColorHint="@color/gray4"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_search_filter_district"
-                        android:layout_width="match_parent"
-                        android:layout_height="273dp"
-                        android:background="@drawable/bg_search_radius_8_down"
+                    <FrameLayout
+                        android:id="@+id/fl_filter_district_container"
+                        android:layout_width="155dp"
+                        android:layout_height="wrap_content"
                         android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/actv_search_filter_district"
-                        tools:listitem="@layout/item_search_location" />
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_search_filter_district"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:nestedScrollingEnabled="true"
+                            android:overScrollMode="always"
+                            android:scrollbars="vertical"
+                            android:background="@drawable/bg_search_radius_8_down"/>
+                    </FrameLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_filter_confirm"

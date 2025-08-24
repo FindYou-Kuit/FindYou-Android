@@ -27,6 +27,8 @@ class SearchFilterDateDialog(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.searchFilterBaseBottomSheetDialog)
+
+
     }
 
     override fun onCreateView(
@@ -34,6 +36,7 @@ class SearchFilterDateDialog(
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+
         _binding = DialogSearchFilterDateBinding.inflate(inflater, container, false)
         return binding.root
     }
