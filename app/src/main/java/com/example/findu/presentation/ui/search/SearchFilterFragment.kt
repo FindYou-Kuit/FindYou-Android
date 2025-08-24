@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBinding
 import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
+import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
 import com.example.findu.presentation.ui.search.dialog.SearchFilterDateDialog
 import com.example.findu.presentation.ui.search.model.LocationData
@@ -36,7 +38,7 @@ class SearchFilterFragment : Fragment() {
 
     private val cityList =
         listOf(
-            "전체", "서울특별시", "부산광역시","인천광역시", "세종특별자치시", "대전광역시", "울산광역시", "경기도", "강원특별자치도", "충청북도",
+            "전체", "서울특별시", "부산광역시", "인천광역시", "세종특별자치시", "대전광역시", "울산광역시", "경기도", "강원특별자치도", "충청북도",
             "충청남도", "전북특별자치도", "전라남도", "경상북도", "경상남도", "제주특별자치도",
         )
 
@@ -55,14 +57,81 @@ class SearchFilterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-
+        initViews()
         initListener()
-        setUpLocationSelector()
-        setUpCalender()
-
     }
 
-    private fun setUpCalender()  = with(binding){
+    private fun initViews() {
+        setUpLocationSelector()
+        setUpCalender()
+        setUpSpecies()
+        setUpBreeds()
+    }
+
+    private fun setUpBreeds() = with(binding) {
+        actvSearchFilterBreed.isEnabled = false
+        actvSearchFilterBreed.setText("")
+        tvSearchFilterBreedCount.text = getString(R.string.search_bottom_sheet_breed_count, 0)
+        cgSearchFilterFeatures.removeAllViews()
+    }
+
+    private fun setUpSpecies() = with(binding) {
+        rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
+            val defaultColor = ContextCompat.getColor(requireContext(), R.color.gray6)
+            val defaultStyle = R.style.TextAppearance_FindU_Body2_SB_14
+
+            with(rbSearchFilterDog) {
+                setTextAppearance(defaultStyle)
+                setTextColor(defaultColor)
+            }
+            with(rbSearchFilterCat) {
+                setTextAppearance(defaultStyle)
+                setTextColor(defaultColor)
+            }
+            with(rbSearchFilterEtc) {
+                setTextAppearance(defaultStyle)
+                setTextColor(defaultColor)
+            }
+
+            when (checkedId) {
+                R.id.rb_search_filter_dog -> {
+                    // viewModel.selectSpeciesType(SpeciesType.DOG)
+                    selectedSpecies = "개"
+                    filterModel.species = SpeciesType.DOG.name
+                    with(rbSearchFilterDog) {
+                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.main_color))
+                    }
+
+                }
+
+                R.id.rb_search_filter_cat -> {
+                    // viewModel.selectSpeciesType(SpeciesType.CAT)
+                    selectedSpecies = "고양이"
+                    filterModel.species = SpeciesType.CAT.name
+                    with(rbSearchFilterCat) {
+                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.main_color))
+                    }
+                }
+
+                R.id.rb_search_filter_etc -> {
+                    // viewModel.selectSpeciesType(SpeciesType.ETC)
+                    selectedSpecies = "기타"
+                    filterModel.species = SpeciesType.ETC.name
+                    with(rbSearchFilterEtc) {
+                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.main_color))
+                    }
+                }
+
+
+            }
+
+        }
+    }
+
+    private fun setUpCalender() = with(binding) {
         clSearchFilterDateStart.setOnClickListener {
             SearchFilterDateDialog(Type.DATE_START, filterModel) { updated ->
                 tvSearchFilterDateStart.text = updated.startDate
@@ -95,7 +164,7 @@ class SearchFilterFragment : Fragment() {
 
     }
 
-    private fun setUpLocationSelector() = with(binding){
+    private fun setUpLocationSelector() = with(binding) {
         actvSearchFilterDistrict.isEnabled = false
 
         cityAdapter = SearchFilterLocationRVAdapter(cityList, selectedCity) { newCity ->
@@ -145,7 +214,7 @@ class SearchFilterFragment : Fragment() {
         }
     }
 
-    private fun toggleRecyclerViewVisibility(container: View, triggerView: View) = with(binding){
+    private fun toggleRecyclerViewVisibility(container: View, triggerView: View) = with(binding) {
         if (container.visibility == View.GONE) {
             container.visibility = View.VISIBLE
             triggerView.setBackgroundResource(R.drawable.bg_search_radius_8_up)
@@ -164,64 +233,91 @@ class SearchFilterFragment : Fragment() {
     }
 
     private fun initListener() = with(binding) {
+        ivSearchFilterCloseBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
-        rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
-            val defaultColor = ContextCompat.getColor(requireContext(), R.color.gray6)
-            val defaultStyle = R.style.TextAppearance_FindU_Body2_SB_14
+        btnSearchFilterConfirm.setOnClickListener {
+            applyFilters()
+        }
 
-            with(rbSearchFilterDog) {
-                setTextAppearance(defaultStyle)
-                setTextColor(defaultColor)
-            }
-            with(rbSearchFilterCat) {
-                setTextAppearance(defaultStyle)
-                setTextColor(defaultColor)
-            }
-            with(rbSearchFilterEtc) {
-                setTextAppearance(defaultStyle)
-                setTextColor(defaultColor)
-            }
-
-            when (checkedId) {
-                R.id.rb_search_filter_dog -> {
-                    // viewModel.selectSpeciesType(SpeciesType.DOG)
-                    selectedSpecies = "개"
-                    filterModel.species = SpeciesType.DOG.name
-                    with(rbSearchFilterDog){
-                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
-                        setTextColor( ContextCompat.getColor(requireContext(), R.color.main_color))
-                    }
-
-                }
-
-                R.id.rb_search_filter_cat -> {
-                    // viewModel.selectSpeciesType(SpeciesType.CAT)
-                    selectedSpecies = "고양이"
-                    filterModel.species = SpeciesType.CAT.name
-                    with(rbSearchFilterCat){
-                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
-                        setTextColor( ContextCompat.getColor(requireContext(), R.color.main_color))
-                    }
-                }
-
-                R.id.rb_search_filter_etc -> {
-                    // viewModel.selectSpeciesType(SpeciesType.ETC)
-                    selectedSpecies = "기타"
-                    filterModel.species = SpeciesType.ETC.name
-                    with(rbSearchFilterEtc){
-                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
-                        setTextColor( ContextCompat.getColor(requireContext(), R.color.main_color))
-                    }
-                }
-
-
-            }
+        btnSearchFilterReset.setOnClickListener {
+            resetFilters()
         }
     }
 
+    private fun resetFilters() = with(binding) {
+        filterModel.startDate = null
+        filterModel.endDate = null
+        filterModel.species = null
+        selectedSpecies = null
+
+        selectedCity = null
+        selectedDistrict = null
+
+        cityAdapter.updateSelected(null)
+        districtAdapter.updateSelected(null)
+
+        tvSearchFilterDateStart.text = getString(R.string.search_filter_date_input_start)
+        tvSearchFilterDateStart.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray4))
+        tvSearchFilterDateEnd.text = getString(R.string.search_filter_date_input_end)
+        tvSearchFilterDateEnd.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray4))
+
+        rgSearchSpeciesType.clearCheck()
+        val defaultColor = ContextCompat.getColor(requireContext(), R.color.gray6)
+        val defaultStyle = R.style.TextAppearance_FindU_Body2_SB_14
+        with(rbSearchFilterDog) { setTextAppearance(defaultStyle); setTextColor(defaultColor) }
+        with(rbSearchFilterCat) { setTextAppearance(defaultStyle); setTextColor(defaultColor) }
+        with(rbSearchFilterEtc) { setTextAppearance(defaultStyle); setTextColor(defaultColor) }
+
+        actvSearchFilterCity.setText("")
+        actvSearchFilterDistrict.setText("")
+        actvSearchFilterDistrict.isEnabled = false
+
+        flFilterCityContainer.visibility = View.GONE
+        flFilterDistrictContainer.visibility = View.GONE
+        actvSearchFilterCity.setBackgroundResource(R.drawable.bg_search_radius_8)
+        actvSearchFilterDistrict.setBackgroundResource(R.drawable.bg_search_radius_8)
+    }
+
+    private fun applyFilters() = with(binding) {
+        val normalizedSpecies: String? = filterModel.species ?: when (selectedSpecies) {
+            "개" -> SpeciesType.DOG.name
+            "고양이" -> SpeciesType.CAT.name
+            "기타" -> SpeciesType.ETC.name
+            else -> null
+        }
+
+        val result = SearchFilterUiModel(
+            startDate = filterModel.startDate,
+            endDate   = filterModel.endDate,
+            species   = normalizedSpecies,
+            breeds    = null,
+            location  = buildLocation()
+        )
+
+        val bundle = Bundle().apply {
+            putSerializable(SELECTED_FILTER_DATA, result)
+        }
+        parentFragmentManager.setFragmentResult(FILTER_RESULTS, bundle)
+        parentFragmentManager.popBackStack()
+
+    }
+
+    private fun buildLocation(): String? {
+        val city = selectedCity?.takeUnless { it.isBlank() || it == "전체" }
+        val district = selectedDistrict?.takeUnless { it.isBlank() || it == "전체" }
+
+        return when {
+            city == null -> null
+            district == null -> city
+            else -> "$city $district"
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 }

@@ -27,6 +27,12 @@ class SearchFilterLocationRVAdapter(
 
     override fun getItemCount(): Int = locations.size
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateSelected(newSelected: String?) {
+        selectedLocation = newSelected
+        notifyDataSetChanged()
+    }
+
     inner class LocationViewHolder(private val binding: ItemSearchLocationBinding) :
         RecyclerView.ViewHolder(binding.root) {
 

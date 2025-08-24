@@ -412,6 +412,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_search_filter_reset"
             android:layout_width="103dp"
             android:layout_height="51dp"
             android:background="@drawable/bg_search_filter_initial"
@@ -425,6 +426,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_search_filter_confirm"
             android:layout_width="212dp"
             android:layout_height="51dp"
             android:background="@drawable/bg_search_filter_check"
