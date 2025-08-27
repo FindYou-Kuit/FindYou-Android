@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_search_protect"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.search.detail.SearchProtectingDetailFragment">
+    tools:context=".presentation.ui.search.detail.SearchDisappearDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_detail_top"
@@ -31,7 +30,8 @@
             android:layout_marginTop="18dp"
             android:layout_marginEnd="21dp"
             android:layout_marginBottom="17dp"
-            android:src="@drawable/ic_search_blank_bookmark"
+            android:background="@drawable/bg_search_rounded_box"
+            android:src="@drawable/ic_search_detail_blank_bookmark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -40,6 +40,7 @@
         android:id="@+id/sv_search_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_search_detail_top">
 
@@ -47,46 +48,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_search_detail_img"
-                android:layout_width="401dp"
-                android:layout_height="467dp"
-                android:scaleType="center"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_search_detail_img"
+                android:layout_width="320dp"
+                android:layout_height="303dp"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/ll_dots_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="149dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@id/iv_search_detail_img"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cv_search_detail_info"
+                android:id="@+id/cl_search_detail_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-134dp"
-                android:background="@drawable/bg_search_card_round"
-                app:cardCornerRadius="0dp"
                 app:cardElevation="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_search_detail_img">
-
+                app:layout_constraintTop_toBottomOf="@id/vp_search_detail_img">
 
                 <TextView
-                    android:id="@+id/tv_detail_breed_field"
+                    android:id="@+id/tv_detail_title_field"
                     style="@style/TextAppearance.FindU.Head1_SB_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="31dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/search_name_welshcorgi"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,563 +81,536 @@
                     style="@style/TextAppearance.FindU.Tag1_SB_12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/bg_search_protecting_tag"
-                    android:text="보호중"
+                    android:text="@string/search_protect_detail"
                     android:textColor="@color/green1"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_detail_breed_field"
-                    app:layout_constraintStart_toEndOf="@id/tv_detail_breed_field"
-                    app:layout_constraintTop_toTopOf="@id/tv_detail_breed_field" />
+                    app:layout_constraintStart_toStartOf="@id/tv_detail_title_field"
+                    app:layout_constraintTop_toBottomOf="@id/tv_detail_title_field" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_view_location"
-                    style="@style/TextAppearance.FindU.Body1_SB_16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:paddingHorizontal="11dp"
-                    android:text="@string/search_detail_see_shelter_location"
-                    android:textColor="@color/main_color"
-                    app:cornerRadius="10dp"
-                    app:icon="@drawable/ic_search_detail_location"
-                    app:iconSize="15dp"
-                    app:iconTint="@null"
+                <View
+                    android:id="@+id/view_search_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_detail_breed_field"
-                    app:strokeColor="@color/main_color"
-                    app:strokeWidth="1dp" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_detail_tag_field" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cv_search_detail_three_info"
-                    android:layout_width="318dp"
+                <LinearLayout
+                    android:id="@+id/ll_search_detail_info"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="22dp"
-                    android:background="@drawable/bg_search_detail_card_shadow"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btn_view_location">
+                    android:orientation="vertical"
+                    android:paddingHorizontal="24dp"
+                    android:paddingTop="30dp"
+                    android:paddingBottom="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/view_search_divider">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="93dp"
-                        android:orientation="horizontal"
-                        android:paddingStart="15dp"
-                        android:paddingTop="14dp"
-                        android:paddingEnd="15dp"
-                        android:paddingBottom="14dp"
-                        android:weightSum="3"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_age"
-                                android:textColor="@color/main_color" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_age_field"
-                                style="@style/TextAppearance.FindU.Body1_SB_16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/gray6" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray2" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_weight"
-                                android:textColor="@color/main_color" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_weight_field"
-                                style="@style/TextAppearance.FindU.Body1_SB_16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/gray6" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray2" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_gender"
-                                android:textColor="@color/main_color" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_sex_field"
-                                style="@style/TextAppearance.FindU.Body1_SB_16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_search_show_more"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cv_search_detail_three_info">
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_search_content_detail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cl_search_show_more">
-
-                    <View
-                        android:id="@+id/v_search_content_dividing_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp"
-                        android:background="@color/gray1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/v_search_content_dividing_line">
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_search_content_detail_title"
-                            style="@style/TextAppearance.FindU.Head3_SB_18"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_age"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
+
+                        <TextView
+                            android:id="@+id/tv_value_age"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            android:text="@string/search_detail_detail_info"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:text="@string/search_detail_age_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_upload_date"
-                            android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_search_content_detail_title">
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_weight"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                android:maxWidth="218dp"
-                                android:text="@string/search_detail_post_date"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_happenDate_field"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_hair_color"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_value_weight"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_upload_date">
+                            android:text="@string/search_detail_weight_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_hair_color"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tv_detail_furColor_field"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:maxLines="1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:maxWidth="218dp"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_neuter"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_hair_color">
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_hair_color"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_neuter"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_neutering_field"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_neuter_value"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_special_note"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_value_hair_color"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_neuter">
+                            android:text="@string/search_detail_hair_color_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_special_note"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/cl_search_detail_special_note_btn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
-
-                                <TextView
-                                    android:id="@+id/tv_search_detail_special_note"
-                                    style="@style/TextAppearance.FindU.Body2_R_14"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="18dp"
-                                    android:text="@string/search_detail_see"
-                                    android:textColor="@color/gray4"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <ImageView
-                                    android:id="@+id/iv_search_detail_special_note_icon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_search_content_show_more_drop"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/cl_search_detail_special_note_description"
-                                android:layout_width="320dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:background="@drawable/bg_search_rounded_box"
-                                android:visibility="gone"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/cl_search_detail_special_note_btn">
-
-                                <TextView
-                                    android:id="@+id/tv_detail_significant_field"
-                                    style="@style/TextAppearance.FindU.Tag1_SB_12"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:padding="11dp"
-                                    android:text="@string/search_detail_special_note_value"
-                                    android:textColor="@color/gray4"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_noti_num"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_special_note">
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_gender"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_noti_num"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_noticeNumber_field"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:maxLines="1"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:maxWidth="218dp"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_noti_date"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_value_gender"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_noti_num">
+                            android:text="@string/search_detail_gender_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_noti_date"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tv_detail_noticeDuration_field"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_rescue_location"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_noti_date">
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_neuter"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_rescue_location"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_foundLocation_field"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:maxLines="1"
-                                android:maxWidth="218dp"
-                                android:text=""
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_show_found_place"
-                                style="@style/TextAppearance.FindU.Body1_SB_16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:backgroundTint="@android:color/transparent"
-                                android:paddingHorizontal="11dp"
-                                android:text="@string/search_detail_see_location"
-                                android:textColor="@color/main_color"
-                                app:cornerRadius="10dp"
-                                app:icon="@drawable/ic_search_detail_location"
-                                app:iconSize="15dp"
-                                app:iconTint="@null"
-                                app:layout_constraintEnd_toEndOf="@id/tv_detail_foundLocation_field"
-                                app:layout_constraintTop_toBottomOf="@id/tv_detail_foundLocation_field"
-                                app:strokeColor="@color/main_color"
-                                app:strokeWidth="1dp" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_shelter"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_value_neuter"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_rescue_location">
+                            android:text="@string/search_detail_neuter_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
 
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_shelter"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tv_label_note"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="특이사항"
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                        android:textColor="@color/gray6" />
 
-                            <TextView
-                                android:id="@+id/tv_detail_careName_field"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                android:maxWidth="218dp"
-                                android:text=""
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tv_value_note"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_search_detail_special_note"
+                        android:padding="12dp"
+                        android:text="수로에 빠져서 119구조. 몸이 엉망이라 목욕 후, 수로에서 나오려고 힘을 많이 썼는지 누워있음."
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                        android:textColor="@color/gray5" />
+                </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/tv_detail_careTel_field"
-                                style="@style/TextAppearance.FindU.Body2_R_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:autoLink="phone"
-                                android:linksClickable="true"
-                                android:text="@string/search_detail_shelter_phone_num"
-                                android:textColor="@color/main_color"
-                                app:layout_constraintEnd_toEndOf="@id/tv_detail_careName_field"
-                                app:layout_constraintTop_toBottomOf="@id/tv_detail_careName_field" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="102dp"
-                                android:src="@drawable/ic_search_call"
-                                app:layout_constraintBottom_toBottomOf="@id/tv_detail_careTel_field"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@id/tv_detail_careTel_field" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_search_content_detail_jurisdiction"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            android:layout_marginBottom="100dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cl_search_content_detail_shelter">
-
-                            <TextView
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/search_detail_shelter_phone_num_value"
-                                android:textColor="@color/gray5"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_authority_field"
-                                style="@style/TextAppearance.FindU.Body2_SB_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:maxLines="1"
-                                android:maxWidth="218dp"
-                                android:text="@string/search_detail_jurisdiction"
-                                android:textColor="@color/gray6"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_detail_authorityPhoneNumber_field"
-                                style="@style/TextAppearance.FindU.Body2_R_14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:linksClickable="true"
-                                android:text="@string/search_detail_jurisdiction_value"
-                                android:textColor="@color/main_color"
-                                app:layout_constraintEnd_toEndOf="@id/tv_detail_authority_field"
-                                app:layout_constraintTop_toBottomOf="@id/tv_detail_authority_field" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="102dp"
-                                android:src="@drawable/ic_search_call"
-                                app:layout_constraintBottom_toBottomOf="@id/tv_detail_authorityPhoneNumber_field"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@id/tv_detail_authorityPhoneNumber_field" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:id="@+id/view_search_divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@color/gray2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_search_detail_info" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_search_detail_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_search_detail_info">
 
+                <TextView
+                    android:id="@+id/tv_shelter_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@string/search_detail_shelter_location"
+                    android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_search_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/red1"
+                    app:circularflow_defaultRadius="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_shelter_location" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_search_detail_location_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:paddingHorizontal="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_search_map">
+
+                    <TextView
+                        android:id="@+id/tv_value_protect_location_around"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="임성중학교"
+                        android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+                        android:textColor="@color/main_color"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="에서 보호 중이에요."
+                        android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_value_protect_location_around"
+                        app:layout_constraintStart_toEndOf="@id/tv_value_protect_location_around"
+                        app:layout_constraintTop_toTopOf="@id/tv_value_protect_location_around" />
+
+                    <TextView
+                        android:id="@+id/tv_value_protect_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상"
+                        android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                        android:textColor="@color/gray5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_value_protect_location_around" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_protect_location_copy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_value_protect_location"
+                        app:layout_constraintStart_toEndOf="@id/tv_value_protect_location"
+                        app:layout_constraintTop_toTopOf="@id/tv_value_protect_location">
+
+                        <ImageView
+                            android:id="@+id/iv_search_copy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/img_search_detail_copy"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="복사"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                            android:textColor="#00D1CA"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_search_copy"
+                            app:layout_constraintStart_toEndOf="@id/iv_search_copy"
+                            app:layout_constraintTop_toTopOf="@id/iv_search_copy" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/view_search_divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="36dp"
+                    android:background="@color/gray2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_search_detail_location_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_search_detail_location">
+
+                <TextView
+                    android:id="@+id/tv_detail_particulars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="세부 사항"
+                    android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/ll_search_detail_particulars"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_detail_particulars">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_shelter_phone_num"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                            android:textColor="@color/gray5" />
+
+                        <TextView
+                            android:id="@+id/tv_value_shelter_phone_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/search_detail_shelter_phone_num_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_found_date"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
+
+                        <TextView
+                            android:id="@+id/tv_value_phone_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/search_detail_found_date_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_found_location"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
+
+                        <TextView
+                            android:id="@+id/tv_value_found_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/search_detail_found_location_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_noti_date"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
+
+                        <TextView
+                            android:id="@+id/tv_value_noti_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/search_detail_noti_date_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_noti_num"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
+
+                        <TextView
+                            android:id="@+id/tv_value_noti_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/search_detail_noti_num_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/search_detail_jurisdiction"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                            android:textColor="@color/gray5" />
+
+                        <TextView
+                            android:id="@+id/tv_value_jurisdiction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/search_detail_jurisdiction_value"
+                            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+                            android:textColor="@color/gray6" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_search_bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_search_bottom_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_send_message"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:src="@drawable/ic_search_phone"
+                        app:tint="@color/main_color" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="전화 걸기"
+                        android:textAppearance="@style/TextAppearance.FindU.Body1_R_16"
+                        android:textColor="@color/gray5" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="25dp"
+                    android:background="@color/gray3" />
+
+                <LinearLayout
+                    android:id="@+id/ll_view_map"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_marginStart="-10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:src="@drawable/ic_search_map"
+                        app:tint="@color/main_color" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="지도 보기"
+                        android:textAppearance="@style/TextAppearance.FindU.Body1_R_16"
+                        android:textColor="@color/gray5" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
