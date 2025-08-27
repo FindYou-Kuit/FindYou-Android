@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -96,6 +97,11 @@ class SearchFilterFragment : Fragment() {
 
     private fun token(): String = binding.actvSearchFilterBreed.text?.toString().orEmpty().substringAfterLast(",").trim()
 
+    private fun rotateArrow(view: ImageView, open: Boolean) {
+        val target = if (open) 180f else 0f
+        view.animate().rotation(target).setDuration(150).start()
+    }
+
     private fun renderBreedText() = with(binding) {
         suppressBreedTextWatcher = true
         actvSearchFilterBreed.setText(selectedBreedList.joinToString(", "))
@@ -139,6 +145,7 @@ class SearchFilterFragment : Fragment() {
     private fun setBreedDropdown(open: Boolean) = with(binding) {
         flFilterBreedContainer.isVisible = open
         actvSearchFilterBreed.setBackgroundResource(if (open) R.drawable.bg_search_radius_8_up else R.drawable.bg_search_radius_8)
+        rotateArrow(ivBreedArrow, open)
         isBreedDropdownOpen = open
     }
 
@@ -334,7 +341,8 @@ class SearchFilterFragment : Fragment() {
         actvSearchFilterCity.setOnClickListener {
             toggleRecyclerViewVisibility(
                 flFilterCityContainer,
-                actvSearchFilterCity
+                actvSearchFilterCity,
+                ivCityArrow
             )
         }
         rvSearchFilterDistrict.layoutManager = LinearLayoutManager(requireContext())
@@ -343,19 +351,17 @@ class SearchFilterFragment : Fragment() {
         actvSearchFilterDistrict.setOnClickListener {
             toggleRecyclerViewVisibility(
                 flFilterDistrictContainer,
-                actvSearchFilterDistrict
+                actvSearchFilterDistrict,
+                ivDistrictArrow
             )
         }
     }
 
-    private fun toggleRecyclerViewVisibility(container: View, triggerView: View) = with(binding) {
-        if (container.visibility == View.GONE) {
-            container.visibility = View.VISIBLE
-            triggerView.setBackgroundResource(R.drawable.bg_search_radius_8_up)
-        } else {
-            container.visibility = View.GONE
-            triggerView.setBackgroundResource(R.drawable.bg_search_radius_8)
-        }
+    private fun toggleRecyclerViewVisibility(container: View, triggerView: View, arrow: ImageView) = with(binding) {
+        val open = container.visibility == View.GONE
+        container.visibility = if (open) View.VISIBLE else View.GONE
+        triggerView.setBackgroundResource(if (open) R.drawable.bg_search_radius_8_up else R.drawable.bg_search_radius_8)
+        rotateArrow(arrow, open)
     }
 
     private fun updateSelectedLocation() = with(binding) {
@@ -417,6 +423,10 @@ class SearchFilterFragment : Fragment() {
         flFilterDistrictContainer.visibility = View.GONE
         actvSearchFilterCity.setBackgroundResource(R.drawable.bg_search_radius_8)
         actvSearchFilterDistrict.setBackgroundResource(R.drawable.bg_search_radius_8)
+
+        rotateArrow(ivCityArrow, false)
+        rotateArrow(ivDistrictArrow, false)
+        rotateArrow(ivBreedArrow, false)
 
         selectedBreedList.clear()
         updateBreedChipsAndCounter()

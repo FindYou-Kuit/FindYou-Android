@@ -241,7 +241,6 @@
                     android:completionThreshold="1"
                     android:focusable="true"
                     android:cursorVisible="true"
-                    android:drawableEnd="@drawable/ic_search_filter_drop"
                     android:dropDownHeight="248dp"
                     android:hint="@string/search_filter_breed_hint"
                     android:inputType="text"
@@ -249,6 +248,16 @@
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     android:textColorHint="@color/gray4"
                     app:layout_constraintTop_toBottomOf="@id/tv_search_filter_breed" />
+
+                <ImageView
+                    android:id="@+id/iv_breed_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search_filter_drop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/actv_search_filter_breed"
+                    app:layout_constraintBottom_toBottomOf="@id/actv_search_filter_breed"
+                    android:layout_marginEnd="12dp"/>
 
                 <FrameLayout
                     android:id="@+id/fl_filter_breed_container"
@@ -344,7 +353,6 @@
                         android:background="@drawable/bg_search_radius_8"
                         android:completionThreshold="1"
                         android:cursorVisible="false"
-                        android:drawableEnd="@drawable/ic_search_filter_drop"
                         android:dropDownHeight="248dp"
                         android:focusable="false"
                         android:hint="@string/search_filter_location_city"
@@ -354,6 +362,16 @@
                         android:textColorHint="@color/gray4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_city_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_search_filter_drop"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/actv_search_filter_city"
+                        app:layout_constraintBottom_toBottomOf="@id/actv_search_filter_city"
+                        android:layout_marginEnd="12dp"/>
 
                     <FrameLayout
                         android:id="@+id/fl_filter_city_container"
@@ -389,7 +407,6 @@
                         android:background="@drawable/bg_search_radius_8"
                         android:completionThreshold="1"
                         android:cursorVisible="false"
-                        android:drawableEnd="@drawable/ic_search_filter_drop"
                         android:dropDownHeight="248dp"
                         android:focusable="false"
                         android:hint="@string/search_filter_location_gu"
@@ -399,6 +416,17 @@
                         android:textColorHint="@color/gray4"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                    android:id="@+id/iv_district_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search_filter_drop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/actv_search_filter_district"
+                    app:layout_constraintBottom_toBottomOf="@id/actv_search_filter_district"
+                    android:layout_marginEnd="12dp"/>
+
 
                     <FrameLayout
                         android:id="@+id/fl_filter_district_container"
