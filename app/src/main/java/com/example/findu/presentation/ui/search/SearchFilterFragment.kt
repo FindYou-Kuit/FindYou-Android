@@ -1,10 +1,15 @@
 package com.example.findu.presentation.ui.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
@@ -12,11 +17,13 @@ import com.example.findu.databinding.FragmentSearchFilterBinding
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
+import com.example.findu.presentation.ui.search.adapter.SearchBreedRVAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
 import com.example.findu.presentation.ui.search.dialog.SearchFilterDateDialog
 import com.example.findu.presentation.ui.search.model.LocationData
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.Type
+import com.google.android.material.chip.Chip
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -29,7 +36,6 @@ class SearchFilterFragment : Fragment() {
     private val filterModel = SearchFilterUiModel()
 
     private var selectedSpecies: String? = null
-    private var breedList: List<String> = emptyList()
 
     private lateinit var cityAdapter: SearchFilterLocationRVAdapter
     private lateinit var districtAdapter: SearchFilterLocationRVAdapter
@@ -45,6 +51,24 @@ class SearchFilterFragment : Fragment() {
     private val districtsList =
         listOf("전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
     private val locationMap = LocationData.locationMap
+
+    private val breedsBySpecies: Map<SpeciesType, List<String>> = mapOf(
+        SpeciesType.DOG to listOf(
+            "말티즈", "푸들", "포메라니안", "시바", "코기", "진돗개", "리트리버", "치와와", "비숑", "시츄", "그레이하운드"
+        ),
+        SpeciesType.CAT to listOf(
+            "코리안숏헤어", "러시안블루", "스코티쉬폴드", "먼치킨", "노르웨이지안숲", "터키시앙고라", "렉돌", "페르시안"
+        ),
+        SpeciesType.ETC to listOf(
+            "햄스터", "고슴도치", "앵무새", "토끼", "페럿", "거북이"
+        )
+    )
+
+    private val selectedBreedList = mutableListOf<String>()
+    private val maxBreedCount = 10
+    private lateinit var breedRvAdapter: SearchBreedRVAdapter
+    private var isBreedDropdownOpen = false
+    private var suppressBreedTextWatcher = false
 
 
     override fun onCreateView(
@@ -65,70 +89,180 @@ class SearchFilterFragment : Fragment() {
         setUpLocationSelector()
         setUpCalender()
         setUpSpecies()
-        setUpBreeds()
+        setUpBreedSelector()
+        setBreedFieldEnabled(false)
+        renderBreedText()
     }
 
-    private fun setUpBreeds() = with(binding) {
-        actvSearchFilterBreed.isEnabled = false
-        actvSearchFilterBreed.setText("")
+    private fun token(): String = binding.actvSearchFilterBreed.text?.toString().orEmpty().substringAfterLast(",").trim()
+
+    private fun renderBreedText() = with(binding) {
+        suppressBreedTextWatcher = true
+        actvSearchFilterBreed.setText(selectedBreedList.joinToString(", "))
+        actvSearchFilterBreed.setSelection(actvSearchFilterBreed.text?.length ?: 0)
+        suppressBreedTextWatcher = false
+    }
+
+    private fun setBreedFieldEnabled(enabled: Boolean) = with(binding) {
+        actvSearchFilterBreed.isEnabled = enabled
+        actvSearchFilterBreed.alpha = if (enabled) 1f else 0.5f
+        if (!enabled) setBreedDropdown(false)
+    }
+
+    private fun setUpBreedSelector() = with(binding) {
+        rvSearchFilterBreed.layoutManager = LinearLayoutManager(requireContext())
         tvSearchFilterBreedCount.text = getString(R.string.search_bottom_sheet_breed_count, 0)
-        cgSearchFilterFeatures.removeAllViews()
+        cgSelectedBreeds.removeAllViews()
+
+        actvSearchFilterBreed.setOnClickListener {
+            flFilterCityContainer.isGone = true
+            flFilterDistrictContainer.isGone = true
+            if (!actvSearchFilterBreed.isEnabled || !this@SearchFilterFragment::breedRvAdapter.isInitialized) return@setOnClickListener
+            breedRvAdapter.filter.filter(token())
+            setBreedDropdown(!flFilterBreedContainer.isVisible)
+        }
+
+        actvSearchFilterBreed.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (suppressBreedTextWatcher || !actvSearchFilterBreed.isEnabled || !this@SearchFilterFragment::breedRvAdapter.isInitialized) {
+                    setBreedDropdown(false); return
+                }
+                breedRvAdapter.filter.filter(token())
+                setBreedDropdown(true)
+            }
+        })
+
+    }
+
+    private fun setBreedDropdown(open: Boolean) = with(binding) {
+        flFilterBreedContainer.isVisible = open
+        actvSearchFilterBreed.setBackgroundResource(if (open) R.drawable.bg_search_radius_8_up else R.drawable.bg_search_radius_8)
+        isBreedDropdownOpen = open
     }
 
     private fun setUpSpecies() = with(binding) {
-        rgSearchSpeciesType.setOnCheckedChangeListener { _, checkedId ->
-            val defaultColor = ContextCompat.getColor(requireContext(), R.color.gray6)
-            val defaultStyle = R.style.TextAppearance_FindU_Body2_SB_14
+        val defaultColor = ContextCompat.getColor(requireContext(), R.color.gray6)
+        val defaultStyle = R.style.TextAppearance_FindU_Body2_SB_14
+        val hiColor = ContextCompat.getColor(requireContext(), R.color.main_color)
+        val hiStyle = R.style.TextAppearance_FindU_Body1_SB_16
 
-            with(rbSearchFilterDog) {
-                setTextAppearance(defaultStyle)
-                setTextColor(defaultColor)
-            }
-            with(rbSearchFilterCat) {
-                setTextAppearance(defaultStyle)
-                setTextColor(defaultColor)
-            }
-            with(rbSearchFilterEtc) {
-                setTextAppearance(defaultStyle)
-                setTextColor(defaultColor)
-            }
-
-            when (checkedId) {
-                R.id.rb_search_filter_dog -> {
-                    // viewModel.selectSpeciesType(SpeciesType.DOG)
-                    selectedSpecies = "개"
-                    filterModel.species = SpeciesType.DOG.name
-                    with(rbSearchFilterDog) {
-                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
-                        setTextColor(ContextCompat.getColor(requireContext(), R.color.main_color))
-                    }
-
-                }
-
-                R.id.rb_search_filter_cat -> {
-                    // viewModel.selectSpeciesType(SpeciesType.CAT)
-                    selectedSpecies = "고양이"
-                    filterModel.species = SpeciesType.CAT.name
-                    with(rbSearchFilterCat) {
-                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
-                        setTextColor(ContextCompat.getColor(requireContext(), R.color.main_color))
-                    }
-                }
-
-                R.id.rb_search_filter_etc -> {
-                    // viewModel.selectSpeciesType(SpeciesType.ETC)
-                    selectedSpecies = "기타"
-                    filterModel.species = SpeciesType.ETC.name
-                    with(rbSearchFilterEtc) {
-                        setTextAppearance(R.style.TextAppearance_FindU_Body1_SB_16)
-                        setTextColor(ContextCompat.getColor(requireContext(), R.color.main_color))
-                    }
-                }
-
-
-            }
-
+        fun styleDefault() {
+            rbSearchFilterDog.setTextAppearance(defaultStyle); rbSearchFilterDog.setTextColor(defaultColor)
+            rbSearchFilterCat.setTextAppearance(defaultStyle); rbSearchFilterCat.setTextColor(defaultColor)
+            rbSearchFilterEtc.setTextAppearance(defaultStyle); rbSearchFilterEtc.setTextColor(defaultColor)
         }
+
+        fun applySpecies(species: SpeciesType?) {
+            selectedBreedList.clear()
+            updateBreedChipsAndCounter()
+            setBreedFieldEnabled(species != null)
+            setBreedDropdown(false)
+
+            styleDefault()
+            when (species) {
+                SpeciesType.DOG -> {
+                    selectedSpecies = "개"; filterModel.species = SpeciesType.DOG.name
+                    rbSearchFilterDog.setTextAppearance(hiStyle); rbSearchFilterDog.setTextColor(hiColor)
+                    setBreedData(breedsBySpecies[SpeciesType.DOG].orEmpty())
+                }
+                SpeciesType.CAT -> {
+                    selectedSpecies = "고양이"; filterModel.species = SpeciesType.CAT.name
+                    rbSearchFilterCat.setTextAppearance(hiStyle); rbSearchFilterCat.setTextColor(hiColor)
+                    setBreedData(breedsBySpecies[SpeciesType.CAT].orEmpty())
+                }
+                SpeciesType.ETC -> {
+                    selectedSpecies = "기타"; filterModel.species = SpeciesType.ETC.name
+                    rbSearchFilterEtc.setTextAppearance(hiStyle); rbSearchFilterEtc.setTextColor(hiColor)
+                    setBreedData(breedsBySpecies[SpeciesType.ETC].orEmpty())
+                }
+                null -> {
+                    selectedSpecies = null; filterModel.species = null
+                    if (this@SearchFilterFragment::breedRvAdapter.isInitialized) rvSearchFilterBreed.adapter = null
+                }
+            }
+        }
+
+        rgSearchSpeciesType.setOnCheckedChangeListener { _, id ->
+            applySpecies(
+                when (id) {
+                    R.id.rb_search_filter_dog -> SpeciesType.DOG
+                    R.id.rb_search_filter_cat -> SpeciesType.CAT
+                    R.id.rb_search_filter_etc -> SpeciesType.ETC
+                    else -> null
+                }
+            )
+        }
+
+        when (rgSearchSpeciesType.checkedRadioButtonId) {
+            R.id.rb_search_filter_dog -> applySpecies(SpeciesType.DOG)
+            R.id.rb_search_filter_cat -> applySpecies(SpeciesType.CAT)
+            R.id.rb_search_filter_etc -> applySpecies(SpeciesType.ETC)
+            else -> applySpecies(null)
+        }
+    }
+
+
+    private fun showBreedHintAndClear() = with(binding) {
+        actvSearchFilterBreed.setText("")
+        actvSearchFilterBreed.hint = getString(R.string.search_filter_breed_hint)
+    }
+
+
+    private fun setBreedData(breeds: List<String>) = with(binding) {
+        setBreedFieldEnabled(true)
+
+        breedRvAdapter = SearchBreedRVAdapter(
+            allItems = breeds,
+            isSelected = { name -> selectedBreedList.contains(name) },
+            onPick = { picked ->
+                if (picked in selectedBreedList) removeBreed(picked) else addBreed(picked)
+                breedRvAdapter.refreshSelections()
+                setBreedDropdown(true)
+            }
+        )
+        rvSearchFilterBreed.adapter = breedRvAdapter
+        breedRvAdapter.filter.filter(token())
+
+    }
+
+    private fun clearBreedAdapter() = with(binding) {
+        if (this@SearchFilterFragment::breedRvAdapter.isInitialized) {
+            rvSearchFilterBreed.adapter = null
+        }
+    }
+
+    private fun addBreed(breed: String) {
+        if (selectedBreedList.contains(breed)) return
+        if (selectedBreedList.size >= maxBreedCount) {
+            Toast.makeText(requireContext(), "최대 10개까지 선택할 수 있어요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        selectedBreedList.add(breed)
+        updateBreedChipsAndCounter()
+    }
+
+    private fun updateBreedChipsAndCounter() = with(binding) {
+        tvSearchFilterBreedCount.text = getString(R.string.search_bottom_sheet_breed_count, selectedBreedList.size)
+        cgSelectedBreeds.removeAllViews()
+        selectedBreedList.forEach { b ->
+            val chip = layoutInflater.inflate(R.layout.item_search_breed_chip, cgSelectedBreeds, false) as Chip
+            chip.text = b
+            chip.isCloseIconVisible = true
+            chip.setOnCloseIconClickListener { removeBreed(b) }
+            cgSelectedBreeds.addView(chip)
+        }
+        renderBreedText()
+    }
+
+    private fun removeBreed(breed: String) {
+        selectedBreedList.remove(breed)
+        updateBreedChipsAndCounter()
+        if (this::breedRvAdapter.isInitialized) {
+            breedRvAdapter.refreshSelections()
+        }
+        if (isBreedDropdownOpen) setBreedDropdown(true)
     }
 
     private fun setUpCalender() = with(binding) {
@@ -259,7 +393,12 @@ class SearchFilterFragment : Fragment() {
         districtAdapter.updateSelected(null)
 
         tvSearchFilterDateStart.text = getString(R.string.search_filter_date_input_start)
-        tvSearchFilterDateStart.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray4))
+        tvSearchFilterDateStart.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.gray4
+            )
+        )
         tvSearchFilterDateEnd.text = getString(R.string.search_filter_date_input_end)
         tvSearchFilterDateEnd.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray4))
 
@@ -278,6 +417,13 @@ class SearchFilterFragment : Fragment() {
         flFilterDistrictContainer.visibility = View.GONE
         actvSearchFilterCity.setBackgroundResource(R.drawable.bg_search_radius_8)
         actvSearchFilterDistrict.setBackgroundResource(R.drawable.bg_search_radius_8)
+
+        selectedBreedList.clear()
+        updateBreedChipsAndCounter()
+        showBreedHintAndClear()
+        clearBreedAdapter()
+        setBreedFieldEnabled(false)
+        setBreedDropdown(false)
     }
 
     private fun applyFilters() = with(binding) {
@@ -290,10 +436,11 @@ class SearchFilterFragment : Fragment() {
 
         val result = SearchFilterUiModel(
             startDate = filterModel.startDate,
-            endDate   = filterModel.endDate,
-            species   = normalizedSpecies,
-            breeds    = null,
-            location  = buildLocation()
+            endDate = filterModel.endDate,
+            species = normalizedSpecies,
+            breeds = if (selectedBreedList.isEmpty()) null
+                else selectedBreedList.toList(),
+            location = buildLocation()
         )
 
         val bundle = Bundle().apply {

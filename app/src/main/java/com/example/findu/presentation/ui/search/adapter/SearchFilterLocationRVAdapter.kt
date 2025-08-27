@@ -47,11 +47,11 @@ class SearchFilterLocationRVAdapter(
                             R.color.main_color
                         )
                     )
-                    tvLocationName.setTextAppearance(R.style.TextAppearance_FindU_Tag1_SB_12)
+                    tvLocationName.setTextAppearance(R.style.TextAppearance_FindU_Body2_SB_14)
                     tvLocationName.setTextColor(ContextCompat.getColor(root.context, R.color.main_color))
                 } else {
                     tvLocationName.setTextColor(ContextCompat.getColor(root.context, R.color.gray6))
-                    tvLocationName.setTextAppearance(R.style.TextAppearance_FindU_caption_12)
+                    tvLocationName.setTextAppearance(R.style.TextAppearance_FindU_Body2_R_14)
                 }
                 root.setOnClickListener {
                     if (selectedLocation != location) {

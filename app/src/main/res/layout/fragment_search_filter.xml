@@ -239,7 +239,8 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_search_radius_8"
                     android:completionThreshold="1"
-                    android:cursorVisible="false"
+                    android:focusable="true"
+                    android:cursorVisible="true"
                     android:drawableEnd="@drawable/ic_search_filter_drop"
                     android:dropDownHeight="248dp"
                     android:hint="@string/search_filter_breed_hint"
@@ -248,6 +249,24 @@
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     android:textColorHint="@color/gray4"
                     app:layout_constraintTop_toBottomOf="@id/tv_search_filter_breed" />
+
+                <FrameLayout
+                    android:id="@+id/fl_filter_breed_container"
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/actv_search_filter_breed"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_search_filter_breed"
+                        android:layout_width="match_parent"
+                        android:layout_height="264dp"
+                        android:nestedScrollingEnabled="true"
+                        android:overScrollMode="always"
+                        android:scrollbars="vertical"
+                        android:background="@drawable/bg_search_radius_8_down"/>
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -282,15 +301,15 @@
                 </LinearLayout>
 
                 <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/cg_search_filter_features"
+                    android:id="@+id/cg_selected_breeds"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:chipSpacingHorizontal="2dp"
                     app:chipSpacingVertical="0dp"
+                    app:singleLine="false"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/actv_search_filter_breed"
-                    app:singleLine="false" />
+                    app:layout_constraintTop_toBottomOf="@id/fl_filter_breed_container" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -347,7 +366,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_search_filter_city"
                             android:layout_width="match_parent"
-                            android:layout_height="180dp"
+                            android:layout_height="200dp"
                             android:scrollbars="vertical"
                             android:nestedScrollingEnabled="true"
                             android:overScrollMode="always"
@@ -392,7 +411,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_search_filter_district"
                             android:layout_width="match_parent"
-                            android:layout_height="180dp"
+                            android:layout_height="200dp"
                             android:nestedScrollingEnabled="true"
                             android:overScrollMode="always"
                             android:scrollbars="vertical"
