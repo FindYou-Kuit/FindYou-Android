@@ -1,7 +1,5 @@
 package com.example.findu.presentation.ui.report.missing
 
-import android.R.attr.name
-import android.app.ProgressDialog.show
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,11 +18,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentNewMissingReportBinding
-import com.example.findu.presentation.ui.home.HomeFragmentDirections
 import com.example.findu.presentation.ui.report.dialog.ReportLocationActivity
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog.Companion.POST_TAG
+import com.example.findu.presentation.ui.report.missing.component.MissingReportRoute
 import com.example.findu.presentation.ui.report.missing.navigation.MissingReportNavHost
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEffect
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
@@ -54,13 +51,17 @@ class NewMissingReportFragment : Fragment() {
             setContent {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 val lifecycleOwner = LocalLifecycleOwner.current
+                val navController = rememberNavController()
                 LaunchedEffect(viewModel.uiEffect, lifecycleOwner) {
                     viewModel.uiEffect.flowWithLifecycle(
                         lifecycle = lifecycleOwner.lifecycle
                     ).collect { sideEffect ->
                         when (sideEffect) {
                             MissingReportUiEffect.NavigateToAddressSearch -> navigateToAddressSearch()
-                            MissingReportUiEffect.NavigateToAnimalInfo -> {}
+                            MissingReportUiEffect.NavigateToAnimalInfo -> {
+                                navController.navigate(MissingReportRoute.AnimalInfo)
+                            }
+
                             is MissingReportUiEffect.ShowToast -> {
                                 Toast.makeText(
                                     requireContext(), sideEffect.message, Toast.LENGTH_SHORT
@@ -71,7 +72,7 @@ class NewMissingReportFragment : Fragment() {
                 }
 
                 MissingReportNavHost(
-                    navController = rememberNavController(),
+                    navController = navController,
                     onEvent = { event -> viewModel.handleEvent(event) },
                     uiState = uiState,
                 )
