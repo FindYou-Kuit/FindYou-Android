@@ -9,6 +9,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.presentation.ui.base.FindUTopAppBar
+import com.example.findu.presentation.ui.base.VerticalSpacer
+import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
 import com.example.findu.presentation.ui.report.missing.component.ReportImageComponent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
@@ -31,6 +33,13 @@ fun MissingReportScreen(
         ReportImageComponent(
             imgUriList = uiState.imageUriList,
             onOpenDialogClick = { onEvent(MissingReportUiEvent.OnAddImageClick) }
+        )
+        VerticalSpacer(30.dp)
+        MissingAnimalInfoComponent(
+            speciesType = uiState.speciesType,
+            breed = uiState.breed?.name,
+            age = uiState.age.text.toString().toIntOrNull(),
+            onSelectAnimalInfoClick = { onEvent(MissingReportUiEvent.OnSelectAnimalInfoClick) }
         )
     }
 }

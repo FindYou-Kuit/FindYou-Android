@@ -52,6 +52,7 @@
     <string name="five">5</string>
     <string name="Maltese">말티즈</string>
     <string name="dummy_location_address">서울특별시 광진구 화양동 000–0</string>
+    <string name="asterisk">*</string>
 
     <!-- bottom navigation-->
     <string name="bottom_nav_home">홈</string>
@@ -154,6 +155,19 @@
     <string name="report_missing">실종신고</string>
     <string name="report_title">신고하기</string>
     <string name="report_upload_image_title">사진을 등록해주세요!</string>
+    <string name="report_upload_image_subtitle">사진은 최대 5장까지 등록할 수 있어요.</string>
+    <string name="report_goto_info_button">선택하기  ></string>
+    <string name="report_species">축종</string>
+    <string name="report_species_placeholder">축종을 선택해주세요.</string>
+    <string name="report_species_introduction">어떤 동물인가요?</string>
+    <string name="report_breed">품종</string>
+    <string name="report_breed_placeholder">품종을 선택해주세요.</string>
+    <string name="report_breed_input_placeholder">품종을 입력하거나 선택해주세요.</string>
+    <string name="report_breed_introduction">어떤 품종인가요?</string>
+    <string name="report_age">나이</string>
+    <string name="report_age_placeholder">__ 살</string>
+    <string name="report_age_unit">%d 살</string>
+    <string name="report_age_introduction">나이를 선택해주세요.</string>
     <string name="report_species_title">어떤 동물인가요?</string>
     <string name="report_species_dog">강아지</string>
     <string name="report_species_cat">고양이</string>
