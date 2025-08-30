@@ -259,4 +259,21 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/fragment_new_missing_report"
+        android:name="com.example.findu.presentation.ui.report.missing.NewMissingReportFragment"
+        android:label="New Missing Report"
+        tools:layout="@layout/fragment_new_missing_report">
+        <action
+            android:id="@+id/action_fragment_new_missing_report_to_fragment_home"
+            app:destination="@id/fragment_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_new_missing_report_to_fragment_report_camera"
+            app:destination="@id/fragment_report_camera" />
+        <action
+            android:id="@+id/action_fragment_new_missing_report_to_fragment_my_report_history"
+            app:destination="@id/fragment_my_report_history" />
+    </fragment>
+
 </navigation>
