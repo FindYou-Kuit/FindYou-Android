@@ -6,8 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.findu.presentation.ui.report.missing.MissingReportScreen
-import com.example.findu.presentation.ui.report.missing.component.MissingReportRoute
+import com.example.findu.presentation.ui.report.missing.screen.MissingReportScreen
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
 

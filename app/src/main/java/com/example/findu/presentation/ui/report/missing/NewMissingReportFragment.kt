@@ -21,7 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.findu.databinding.FragmentNewMissingReportBinding
 import com.example.findu.presentation.ui.report.dialog.ReportLocationActivity
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog.Companion.POST_TAG
-import com.example.findu.presentation.ui.report.missing.component.MissingReportRoute
+import com.example.findu.presentation.ui.report.missing.navigation.MissingReportRoute
 import com.example.findu.presentation.ui.report.missing.navigation.MissingReportNavHost
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEffect
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent

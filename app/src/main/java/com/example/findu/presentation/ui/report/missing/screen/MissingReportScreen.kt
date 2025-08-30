@@ -1,7 +1,6 @@
-package com.example.findu.presentation.ui.report.missing
+package com.example.findu.presentation.ui.report.missing.screen
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
