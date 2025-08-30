@@ -2,11 +2,15 @@ package com.example.findu.presentation.ui.report.missing
 
 import android.R.attr.name
 import android.app.ProgressDialog.show
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -15,10 +19,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentNewMissingReportBinding
 import com.example.findu.presentation.ui.home.HomeFragmentDirections
+import com.example.findu.presentation.ui.report.dialog.ReportLocationActivity
+import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog.Companion.POST_TAG
+import com.example.findu.presentation.ui.report.missing.navigation.MissingReportNavHost
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEffect
+import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.NewMissingReportViewModel
 
 class NewMissingReportFragment : Fragment() {
@@ -26,6 +35,7 @@ class NewMissingReportFragment : Fragment() {
     private var _binding: FragmentNewMissingReportBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<NewMissingReportViewModel>()
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
 
     override fun onCreateView(
@@ -60,21 +70,14 @@ class NewMissingReportFragment : Fragment() {
                     }
                 }
 
-                MissingReportScreen(
-                    uiState = uiState,
+                MissingReportNavHost(
+                    navController = rememberNavController(),
                     onEvent = { event -> viewModel.handleEvent(event) },
+                    uiState = uiState,
                 )
             }
         }
     }
 
-    fun navigateToAddressSearch() {
-        findNavController().navigate(
-            HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailProtecting(
-//                id = id,
-//                tag = tag,
-//                name = name
-            )
-        )
-    }
+
 }
