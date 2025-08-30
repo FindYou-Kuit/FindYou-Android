@@ -9,8 +9,6 @@ import com.example.findu.domain.model.report.FurColorType
 import com.kakao.sdk.user.model.Gender
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,14 +18,14 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 data class MissingReportUiState(
-    val imageUriList: List<Uri> = persistentListOf(),
+    val imageUriList: List<Uri> = emptyList(),
     val speciesType: SpeciesType? = null,
     val breedSearchText: TextFieldState = TextFieldState(),
     val breed: Breed? = null,
     val age: TextFieldState = TextFieldState(),
     val gender: Gender = Gender.MALE,
     val rfidNumber: String = "",
-    val furColorType: ImmutableList<FurColorType> = persistentListOf(),
+    val furColorType: List<FurColorType> = emptyList(),
     val missingDate: LocalDateTime = LocalDateTime.now(),
     val description: String = "",
     val address: String = "",

@@ -136,7 +136,4 @@ dependencies {
 
     // View Pager
     implementation(libs.bundles.pager)
-
-    // immutable collection
-    implementation(libs.kotlinx.collections.immutable)
 }

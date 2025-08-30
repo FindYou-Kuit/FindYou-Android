@@ -30,7 +30,6 @@ webkit = "1.12.1"
 playServicesLocation = "21.3.0"
 cameraCore = "1.1.0-beta01"
 kakao = "2.20.3"
-kotlinx-collections-immutable = "0.4.0"
 
 
 [libraries]
@@ -81,7 +80,6 @@ kakao-talk = { group = "com.kakao.sdk", name = "v2-talk", version.ref = "kakao" 
 kakao-friend = { group = "com.kakao.sdk", name = "v2-friend", version.ref = "kakao" }
 kakao-navi = { group = "com.kakao.sdk", name = "v2-navi", version.ref = "kakao" }
 kakao-cert = { group = "com.kakao.sdk", name = "v2-cert", version.ref = "kakao" }
-kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
