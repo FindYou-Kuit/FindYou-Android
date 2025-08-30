@@ -1,0 +1,96 @@
+package com.example.findu.presentation.ui.report.missing.viewmodel
+
+import android.net.Uri
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.lifecycle.ViewModel
+import com.example.findu.domain.model.breed.Breed
+import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.domain.model.report.FurColorType
+import com.kakao.sdk.user.model.Gender
+import com.naver.maps.geometry.LatLng
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import java.time.LocalDateTime
+import javax.inject.Inject
+
+data class MissingReportUiState(
+    val imageUriList: List<Uri> = persistentListOf(),
+    val speciesType: SpeciesType? = null,
+    val breedSearchText: TextFieldState = TextFieldState(),
+    val breed: Breed? = null,
+    val age: TextFieldState = TextFieldState(),
+    val gender: Gender = Gender.MALE,
+    val rfidNumber: String = "",
+    val furColorType: ImmutableList<FurColorType> = persistentListOf(),
+    val missingDate: LocalDateTime = LocalDateTime.now(),
+    val description: String = "",
+    val address: String = "",
+    val currentLatLng: LatLng? = null,
+    val nearPlace: String = "",
+)
+
+sealed class MissingReportUiEvent {
+    data object OnAddImageClick : MissingReportUiEvent()
+    data object OnOpenCameraClick : MissingReportUiEvent()
+    data object OnOpenGalleryClick : MissingReportUiEvent()
+    data object OnSelectAnimalInfoClick : MissingReportUiEvent()
+    data class OnSpeciesClick(val speciesType: SpeciesType) : MissingReportUiEvent()
+    data class OnBreedInputFieldClick(val input: String) : MissingReportUiEvent()
+    data class OnBreedClick(val breed: Breed) : MissingReportUiEvent()
+    data object OnInfoFinishButtonClick : MissingReportUiEvent()
+    data class OnGenderClick(val gender: Gender) : MissingReportUiEvent()
+    data class OnFurColorSelected(
+        val furColorType: FurColorType,
+        val flag: Boolean,
+    ) : MissingReportUiEvent()
+
+    data class OnDateSelected(val dateTime: LocalDateTime) : MissingReportUiEvent()
+    data object OnAddressSearchClick : MissingReportUiEvent()
+    data class OnMapPinMoved(val latLng: LatLng) : MissingReportUiEvent()
+    data object OnReportFinishButtonClick : MissingReportUiEvent()
+    data object OnNavigateReportHistoryClick : MissingReportUiEvent()
+    data object OnNavigateHomeClick : MissingReportUiEvent()
+}
+
+sealed class MissingReportUiEffect {
+    data object NavigateToAnimalInfo : MissingReportUiEffect()
+    data object NavigateToAddressSearch : MissingReportUiEffect()
+    data class ShowToast(val message: String) : MissingReportUiEffect()
+}
+
+@HiltViewModel
+class NewMissingReportViewModel @Inject constructor() : ViewModel() {
+    private val _uiState = MutableStateFlow(MissingReportUiState())
+    val uiState: StateFlow<MissingReportUiState>
+        get() = _uiState.asStateFlow()
+
+    private val _uiEffect = Channel<MissingReportUiEffect>()
+    val uiEffect = _uiEffect.receiveAsFlow()
+
+    fun handleEvent(event: MissingReportUiEvent) {
+        when (event) {
+            MissingReportUiEvent.OnAddImageClick -> {}
+            MissingReportUiEvent.OnAddressSearchClick -> {}
+            is MissingReportUiEvent.OnBreedClick -> {}
+            is MissingReportUiEvent.OnBreedInputFieldClick -> {}
+            is MissingReportUiEvent.OnDateSelected -> {}
+            is MissingReportUiEvent.OnFurColorSelected -> {}
+            is MissingReportUiEvent.OnGenderClick -> {}
+            MissingReportUiEvent.OnInfoFinishButtonClick -> {}
+            is MissingReportUiEvent.OnMapPinMoved -> {}
+            MissingReportUiEvent.OnNavigateHomeClick -> {}
+            MissingReportUiEvent.OnNavigateReportHistoryClick -> {}
+            MissingReportUiEvent.OnOpenCameraClick -> {}
+            MissingReportUiEvent.OnOpenGalleryClick -> {}
+            MissingReportUiEvent.OnReportFinishButtonClick -> {}
+            MissingReportUiEvent.OnSelectAnimalInfoClick -> {}
+            is MissingReportUiEvent.OnSpeciesClick -> {}
+        }
+    }
+}
