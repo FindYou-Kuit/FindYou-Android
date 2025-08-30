@@ -52,6 +52,7 @@ sealed class MissingReportUiEvent {
 
     data class OnDateSelected(val dateTime: LocalDateTime) : MissingReportUiEvent()
     data object OnAddressSearchClick : MissingReportUiEvent()
+    data class OnAddressUpdated(val address: String) : MissingReportUiEvent()
     data class OnMapPinMoved(val latLng: LatLng) : MissingReportUiEvent()
     data object OnReportFinishButtonClick : MissingReportUiEvent()
     data object OnNavigateReportHistoryClick : MissingReportUiEvent()
@@ -77,6 +78,7 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
         when (event) {
             MissingReportUiEvent.OnAddImageClick -> {}
             MissingReportUiEvent.OnAddressSearchClick -> {}
+            is MissingReportUiEvent.OnAddressUpdated -> {}
             is MissingReportUiEvent.OnBreedClick -> {}
             is MissingReportUiEvent.OnBreedInputFieldClick -> {}
             is MissingReportUiEvent.OnDateSelected -> {}

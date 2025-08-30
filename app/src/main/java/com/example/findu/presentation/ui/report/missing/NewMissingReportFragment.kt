@@ -59,7 +59,7 @@ class NewMissingReportFragment : Fragment() {
                         lifecycle = lifecycleOwner.lifecycle
                     ).collect { sideEffect ->
                         when (sideEffect) {
-                            MissingReportUiEffect.NavigateToAddressSearch -> {}
+                            MissingReportUiEffect.NavigateToAddressSearch -> navigateToAddressSearch()
                             MissingReportUiEffect.NavigateToAnimalInfo -> {}
                             is MissingReportUiEffect.ShowToast -> {
                                 Toast.makeText(
@@ -79,5 +79,15 @@ class NewMissingReportFragment : Fragment() {
         }
     }
 
-
+    private fun navigateToAddressSearch() {
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                    val data = result.data?.getStringExtra(POST_TAG)
+                    viewModel.handleEvent(MissingReportUiEvent.OnAddressUpdated(data ?: "주소 찾기 실패"))
+                }
+            }
+        val intent = Intent(context, ReportLocationActivity::class.java)
+        resultLauncher.launch(intent)
+    }
 }
