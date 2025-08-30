@@ -34,6 +34,7 @@ data class MissingReportUiState(
 )
 
 sealed class MissingReportUiEvent {
+    data object OnBackPressed : MissingReportUiEvent()
     data object OnAddImageClick : MissingReportUiEvent()
     data object OnOpenCameraClick : MissingReportUiEvent()
     data object OnOpenGalleryClick : MissingReportUiEvent()
@@ -74,6 +75,7 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
 
     fun handleEvent(event: MissingReportUiEvent) {
         when (event) {
+            MissingReportUiEvent.OnBackPressed -> {}
             MissingReportUiEvent.OnAddImageClick -> {}
             MissingReportUiEvent.OnAddressSearchClick -> {}
             is MissingReportUiEvent.OnAddressUpdated -> {}
