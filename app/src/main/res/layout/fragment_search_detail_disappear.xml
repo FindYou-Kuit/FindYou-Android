@@ -40,7 +40,6 @@
         android:id="@+id/sv_search_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_search_detail_top">
 
@@ -50,10 +49,12 @@
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_search_detail_img"
-                android:layout_width="320dp"
+                android:layout_width="match_parent"
                 android:layout_height="303dp"
+                android:layout_marginTop="11dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:nestedScrollingEnabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,7 +92,7 @@
                 <View
                     android:id="@+id/view_search_divider"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="30dp"
                     android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"
@@ -222,7 +223,7 @@
                 <View
                     android:id="@+id/view_search_divider2"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="30dp"
                     android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"
@@ -333,7 +334,7 @@
                 <View
                     android:id="@+id/view_search_divider3"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="36dp"
                     android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"

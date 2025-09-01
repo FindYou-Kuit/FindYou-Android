@@ -51,7 +51,9 @@
                 android:id="@+id/iv_search_detail_img"
                 android:layout_width="320dp"
                 android:layout_height="303dp"
+                android:layout_marginTop="11dp"
                 android:nestedScrollingEnabled="false"
+                android:src="@drawable/img_search_detail_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -90,7 +92,7 @@
                 <View
                     android:id="@+id/view_search_divider"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="30dp"
                     android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"
@@ -244,7 +246,7 @@
                 <View
                     android:id="@+id/view_search_divider2"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="30dp"
                     android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"
@@ -355,7 +357,7 @@
                 <View
                     android:id="@+id/view_search_divider3"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="36dp"
                     android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"

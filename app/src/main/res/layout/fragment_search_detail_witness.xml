@@ -29,9 +29,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:layout_marginEnd="21dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="17dp"
             android:background="@drawable/bg_search_rounded_box"
-            android:src="@drawable/ic_search_blank_bookmark"
+            android:src="@drawable/ic_search_detail_bookmark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -50,11 +51,12 @@
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_search_detail_img"
-                android:layout_width="320dp"
+                android:layout_width="match_parent"
                 android:layout_height="303dp"
+                android:paddingStart="20dp"
+                android:layout_marginTop="11dp"
+                android:paddingEnd="20dp"
                 android:nestedScrollingEnabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

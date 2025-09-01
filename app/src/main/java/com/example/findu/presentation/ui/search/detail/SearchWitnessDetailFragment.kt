@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
@@ -57,11 +58,21 @@ class SearchWitnessDetailFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
+        initDummyImages()
 
         observeViewModel()
         fetchDetailData()
         initListener()
 
+    }
+
+    private fun initDummyImages() {
+        val dummyImages = listOf(
+            R.drawable.img_search_detail_content,
+            R.drawable.img_search_detail_content,
+            R.drawable.img_search_detail_content
+        )
+        initViewPager(dummyImages)
     }
 
     private fun fetchDetailData() {
@@ -102,17 +113,29 @@ class SearchWitnessDetailFragment : Fragment() {
             tvWitnessDate.text = data.eventDate
 
 
-            initViewPager(data.imageUrls)
+//            initViewPager(data.imageUrls)
             initTagView(data)
             initBookmarkUI(data)
 //            initMapButtons(data)
         }
     }
 
-    private fun initViewPager(imageList: List<String>) {
+    private fun initViewPager(imageList: List<Int>) {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
-        binding.vpSearchDetailImg.setCurrentItem(1, false)
+        binding.vpSearchDetailImg.setCurrentItem(0, false)
+
+        binding.vpSearchDetailImg.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 2
+
+            setPageTransformer(
+                MarginPageTransformer(
+                    resources.getDimensionPixelOffset(R.dimen.SEARCH_IMAGE_MARGIN)
+                )
+            )
+        }
 
     }
 
