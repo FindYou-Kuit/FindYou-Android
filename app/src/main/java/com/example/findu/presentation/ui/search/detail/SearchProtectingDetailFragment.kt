@@ -61,7 +61,7 @@ class SearchProtectingDetailFragment : Fragment() {
         fetchDetailData()
         initBookmarkUI()
 //        setContentVisibility()
-        initBackButton()
+        initListener()
 
     }
 
@@ -119,21 +119,23 @@ class SearchProtectingDetailFragment : Fragment() {
     }
 
 
-    private fun initBackButton() {
-        binding.ivSearchDetailBack.setOnClickListener {
+    private fun initListener() = with(binding) {
+        ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
+        }
+        initBookmarkUI()
+
+        llCallPhone.setOnClickListener {
+            val phoneNumber = binding.tvValueShelterPhoneNumber.text.toString()
+            call(phoneNumber)
+        }
+
+        llViewMap.setOnClickListener {
+            val address = binding.tvValueProtectLocation.text.toString()
+            openNaverMap(address)
         }
     }
 
-//    private fun initCallButtons(data: DetailProtectData) {
-//        binding.tvDetailCareTelField.setOnClickListener {
-//            call(data.careTel)
-//        }
-//
-//        binding.tvDetailAuthorityPhoneNumberField.setOnClickListener {
-//            call(data.authorityPhoneNumber)
-//        }
-//    }
 
     private fun call(phoneNumber: String) {
         if (phoneNumber.isNotEmpty()) {

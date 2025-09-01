@@ -153,11 +153,21 @@ class SearchDisappearDetailFragment : Fragment() {
     }
 
 
-    private fun initListener() {
-        binding.ivSearchDetailBack.setOnClickListener {
+    private fun initListener() = with(binding) {
+        ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
         initBookmarkUI()
+
+        llSendMessage.setOnClickListener {
+            Toast.makeText(requireContext(), "준비 중이에요!", Toast.LENGTH_SHORT).show()
+        }
+
+        llViewMap.setOnClickListener {
+            val address = binding.tvValueLostLocation.text.toString()
+            openNaverMap(address)
+        }
+
     }
 
     private fun initBookmarkUI() {
