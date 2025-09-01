@@ -94,90 +94,36 @@ class SearchWitnessDetailFragment : Fragment() {
         binding.apply {
             tvDetailTitleField.text = name
             tvDetailTagField.text = convertTagToKorean(data.tag.text)
-            tvDetailBreedField.text = data.breed
-            tvDetailFurColorField.text = data.furColor
-            tvDetailUserNameField.text = data.userName
-            tvDetailWriteDateField.text = data.writeDate
-            tvDetailWitnessDateField.text = data.eventDate
-            tvDetailEventDateField.text = data.eventDate
-            tvDetailEventLocationField.text = data.eventLocation
-            tvDetailAdditionalDescriptionField.text = data.additionalDescription
+            tvValueHairColor.text = data.furColor
+            tvSpecialNote.text = data.specialNote
+            tvWitnessLocation.text = data.eventLocation
+            tvValueWitnessLocationAround.text = data.surroundPlace
+            tvValueReporterName.text = data.userName
+            tvWitnessDate.text = data.eventDate
+
 
             initViewPager(data.imageUrls)
             initTagView(data)
             initBookmarkUI(data)
-            initMapButtons(data)
-            initFeatureChips(data.features)
+//            initMapButtons(data)
         }
     }
-
-    private fun initFeatureChips(features: List<String>) {
-        val chipGroup = binding.cgSearchGroupFeature
-        chipGroup.removeAllViews()
-
-        features.forEach { feature ->
-            val chip = layoutInflater.inflate(R.layout.item_search_features_chip, chipGroup, false) as Chip
-            chip.text = feature
-            chipGroup.addView(chip)
-        }
-    }
-
 
     private fun initViewPager(imageList: List<String>) {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailImg.setCurrentItem(1, false)
 
-        val indicatorCount = imageList.size
-        val pageIndicators = Array(indicatorCount) { View(requireContext()) }
-        val indicatorContainer = binding.llDotsContainer
-
-        indicatorContainer.removeAllViews()
-        for (i in pageIndicators.indices) {
-            val indicator = View(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(6, 6).apply {
-                    marginStart = 3
-                    marginEnd = 3
-                }
-                setBackgroundResource(R.drawable.ic_search_indicator_inactive)
-            }
-            indicatorContainer.addView(indicator)
-            pageIndicators[i] = indicator
-        }
-        pageIndicators[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
-
-        binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                val realPosition = when (position) {
-                    0 -> imageList.size - 1
-                    imageList.size + 1 -> 0
-                    else -> position - 1
-                }
-
-                pageIndicators.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
-                pageIndicators[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
-
-                binding.vpSearchDetailImg.postDelayed({
-                    when (position) {
-                        0 -> binding.vpSearchDetailImg.setCurrentItem(imageList.size, false)
-                        imageList.size + 1 -> binding.vpSearchDetailImg.setCurrentItem(1, false)
-                    }
-                }, 200)
-            }
-        })
     }
 
-    private fun initMapButtons(data: DetailReportData) {
-        binding.btnViewLocation.setOnClickListener {
-            openNaverMap(data.eventLocation)
-        }
-        binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(data.eventLocation)
-        }
-    }
+//    private fun initMapButtons(data: DetailReportData) {
+//        binding.btnViewLocation.setOnClickListener {
+//            openNaverMap(data.eventLocation)
+//        }
+//        binding.btnShowFoundPlace.setOnClickListener {
+//            openNaverMap(data.eventLocation)
+//        }
+//    }
 
     private fun initListener() {
         binding.ivSearchDetailBack.setOnClickListener {

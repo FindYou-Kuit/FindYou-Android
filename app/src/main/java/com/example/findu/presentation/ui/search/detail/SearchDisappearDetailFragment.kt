@@ -92,89 +92,40 @@ class SearchDisappearDetailFragment : Fragment() {
 
     private fun updateUI(data: DetailReportData) {
         binding.apply {
-            tvDetailTitleField.text = name
-            tvDetailTagField.text = convertTagToKorean(data.tag.text)
-            tvDetailBreedField.text = data.breed
-            tvDetailSexField.text = data.sex
-            tvDetailFurColorField.text = data.furColor
-            tvDetailUserNameField.text = data.userName
-            tvDetailWriteDateField.text = data.writeDate
-            tvDetailEventDateField.text = data.eventDate
-            tvDetailReportDateField.text = data.writeDate
-            tvDetailFoundLocationField.text = data.foundLocation
-            tvDetailAdditionalDescriptionField.text = data.additionalDescription
+//            tvDetailTitleField.text = name
+//            tvDetailTagField.text = convertTagToKorean(data.tag.text)
+            tvValueAge.text = data.age
+            tvValueGender.text = data.sex
+            tvValueLostDate.text = data.eventDate
+            tvValueRfid.text = data.rfid
+            tvSpecialNote.text = data.specialNote
+            tvValueLostLocationAround.text = data.surroundPlace
+            tvValueLostLocation.text = data.eventLocation
+            tvValueReporterName.text = data.userName
+            tvValuePhoneNumber.text = data.userPhone
 
             initViewPager(data.imageUrls)
             initTagView(data)
             initBookmarkUI(data)
-            initMapButtons(data)
-            initFeatureChips(data.features)
+//            initMapButtons(data)
         }
     }
 
-    private fun initFeatureChips(features: List<String>) {
-        val chipGroup = binding.cgSearchGroupFeature
-        chipGroup.removeAllViews()
 
-        features.forEach { feature ->
-            val chip = layoutInflater.inflate(R.layout.item_search_features_chip, chipGroup, false) as Chip
-            chip.text = feature
-            chipGroup.addView(chip)
-        }
-    }
-
-    private fun initMapButtons(data: DetailReportData) {
-        binding.btnViewLocation.setOnClickListener {
-            openNaverMap(data.eventLocation)
-        }
-        binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(data.eventLocation)
-        }
-    }
+//    private fun initMapButtons(data: DetailReportData) {
+//        binding.btnViewLocation.setOnClickListener {
+//            openNaverMap(data.eventLocation)
+//        }
+//        binding.btnShowFoundPlace.setOnClickListener {
+//            openNaverMap(data.eventLocation)
+//        }
+//    }
 
     private fun initViewPager(imageList: List<String>) {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailImg.setCurrentItem(1, false)
-        val indicatorCount = imageList.size
-        val pageIndicator = Array(indicatorCount) { View(requireContext()) }
-        val indicatorContainer = binding.llDotsContainer
 
-        indicatorContainer.removeAllViews()
-        for (i in pageIndicator.indices) {
-            val indicator = View(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(6, 6).apply {
-                    marginStart = 3
-                    marginEnd = 3
-                }
-                setBackgroundResource(R.drawable.ic_search_indicator_inactive)
-            }
-            indicatorContainer.addView(indicator)
-            pageIndicator[i] = indicator
-        }
-        pageIndicator[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
-
-        binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                val realPosition = when (position) {
-                    0 -> imageList.size - 1
-                    imageList.size + 1 -> 0
-                    else -> position - 1
-                }
-                pageIndicator.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
-                pageIndicator[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
-
-                binding.vpSearchDetailImg.postDelayed({
-                    when (position) {
-                        0 -> binding.vpSearchDetailImg.setCurrentItem(imageList.size, false)
-                        imageList.size + 1 -> binding.vpSearchDetailImg.setCurrentItem(1, false)
-                    }
-                }, 200)
-            }
-        })
     }
 
     private fun initListener() {

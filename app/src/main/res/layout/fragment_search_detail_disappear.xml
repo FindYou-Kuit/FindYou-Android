@@ -208,7 +208,7 @@
                         android:textColor="@color/gray6" />
 
                     <TextView
-                        android:id="@+id/tv_value_note"
+                        android:id="@+id/tv_special_note"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"

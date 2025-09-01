@@ -6,9 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchReportBinding
-import com.example.findu.domain.model.search.SearchData
+import com.example.findu.domain.model.search.SearchAnimal
+import com.example.findu.domain.model.search.SearchStatus
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
@@ -27,8 +25,6 @@ import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchReportFragment : Fragment() {
@@ -43,29 +39,100 @@ class SearchReportFragment : Fragment() {
     private var lastReportId = Long.MAX_VALUE
     private var isNewList = false
 
+    private var items = ArrayList<SearchAnimal>()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSearchReportBinding.inflate(inflater, container, false)
         initRVAdapter()
-        observeViewModel()
-        viewModel.getSearchReportData()
+//        observeViewModel()
+//        viewModel.getSearchReportData()
+        initDummyItems()
+        setupRV(items)
         initFilterButton()
         initToggleButton()
         return binding.root
     }
 
+    private fun initDummyItems() {
+        items.addAll(
+            arrayListOf(
+                SearchAnimal(
+                    cardId = 1,
+                    thumbnailImageUrl = "https://picsum.photos/200/300",
+                    title = "말티즈",
+                    tag = SearchStatus.PROTECTING,
+                    date = "2024-11-23",
+                    location = "성신구 내동 628-1",
+                    interest = true
+                ),
+                SearchAnimal(
+                    cardId = 2,
+                    thumbnailImageUrl = "https://picsum.photos/200/301",
+                    title = "믹스견",
+                    tag = SearchStatus.WITNESS,
+                    date = "2024-11-24",
+                    location = "성신구 내동 628-1",
+                    interest = false
+                ),
+                SearchAnimal(
+                    cardId = 3,
+                    thumbnailImageUrl = "https://picsum.photos/200/302",
+                    title = "웰시코기",
+                    tag = SearchStatus.MISSING,
+                    date = "2024-11-25",
+                    location = "성신구 내동 628-1",
+                    interest = false
+                ),
+                SearchAnimal(
+                    cardId = 4,
+                    thumbnailImageUrl = "https://picsum.photos/200/300",
+                    title = "말티즈",
+                    tag = SearchStatus.PROTECTING,
+                    date = "2024-11-23",
+                    location = "성신구 내동 628-1",
+                    interest = true
+                ),
+                SearchAnimal(
+                    cardId = 5,
+                    thumbnailImageUrl = "https://picsum.photos/200/301",
+                    title = "믹스견",
+                    tag = SearchStatus.WITNESS,
+                    date = "2024-11-24",
+                    location = "성신구 내동 628-1",
+                    interest = false
+                ),
+                SearchAnimal(
+                    cardId = 6,
+                    thumbnailImageUrl = "https://picsum.photos/200/302",
+                    title = "웰시코기",
+                    tag = SearchStatus.MISSING,
+                    date = "2024-11-25",
+                    location = "성신구 내동 628-1",
+                    interest = false
+                )
+            )
+        )
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        childFragmentManager.setFragmentResultListener(FILTER_RESULTS, viewLifecycleOwner) { _, bundle ->
-            val selected: SearchFilterUiModel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
-            }
+        childFragmentManager.setFragmentResultListener(
+            FILTER_RESULTS,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val selected: SearchFilterUiModel? =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
+                }
 
             viewModel.updateReportFilterState(selected)
 
@@ -79,38 +146,19 @@ class SearchReportFragment : Fragment() {
         }
     }
 
-
-    private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.reportSearchData.collectLatest { searchResults ->
-                setupRV(searchResults ?: emptyList())
-                lastReportId = searchResults?.firstOrNull()?.lastReportId ?: Long.MAX_VALUE
-            }
+    private fun setupRV(searchDataList: List<SearchAnimal>) {
+        val searchList = searchDataList.map { item ->
+            SearchRv(
+                image = item.thumbnailImageUrl,
+                name = item.title,
+                date = item.date,
+                address = item.location,
+                isBookmark = item.interest,
+                tag = item.tag.toSearchRvTag(),
+                cardId = item.cardId
+            )
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.errorMessage.collectLatest { errorMessage ->
-                errorMessage?.let {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun setupRV(searchDataList: List<SearchData>) {
-        val searchList = searchDataList.flatMap { data ->
-            data.cards.map {
-                SearchRv(
-                    image = it.thumbnailImageUrl,
-                    name = it.title,
-                    date = it.date,
-                    address = it.location,
-                    isBookmark = it.interest,
-                    tag = it.tag.toSearchRvTag(),
-                    cardId = it.cardId
-                )
-            }
-        }
         if (isNewList) {
             rvAdapter.submitList(searchList)
             isNewList = false
@@ -153,8 +201,7 @@ class SearchReportFragment : Fragment() {
 
     private fun initFilterButton() {
         binding.ibSearchFilter.setOnClickListener {
-            val bottomSheet = SearchFilterBottomSheet()
-            bottomSheet.show(childFragmentManager, bottomSheet.tag)
+            findNavController().navigate(R.id.action_fragment_search_to_fragment_search_filter)
         }
     }
 

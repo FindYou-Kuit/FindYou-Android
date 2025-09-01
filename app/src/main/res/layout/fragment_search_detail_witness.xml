@@ -41,7 +41,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toTopOf="@id/card_search_bottom_buttons"
         app:layout_constraintTop_toBottomOf="@id/cl_search_detail_top">
 
@@ -55,6 +54,7 @@
                 android:layout_height="303dp"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -92,7 +92,7 @@
                 <View
                     android:id="@+id/view_search_divider"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="30dp"
                     android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +140,7 @@
                         android:textColor="@color/gray6" />
 
                     <TextView
-                        android:id="@+id/tv_value_note"
+                        android:id="@+id/tv_special_note"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -154,7 +154,7 @@
                 <View
                     android:id="@+id/view_search_divider2"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="30dp"
                     android:background="@color/gray2"
                     app:layout_constraintStart_toStartOf="parent"
@@ -267,7 +267,7 @@
             <View
                 android:id="@+id/view_search_divider3"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="1dp"
                 android:layout_marginTop="36dp"
                 android:background="@color/gray2"
                 app:layout_constraintStart_toStartOf="parent"
@@ -279,6 +279,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="24dp"
+                android:paddingBottom="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_search_divider3">
 
@@ -337,7 +338,7 @@
                             android:textColor="@color/gray5" />
 
                         <TextView
-                            android:id="@+id/tv_value_phone_number"
+                            android:id="@+id/tv_witness_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/search_detail_found_date_value"

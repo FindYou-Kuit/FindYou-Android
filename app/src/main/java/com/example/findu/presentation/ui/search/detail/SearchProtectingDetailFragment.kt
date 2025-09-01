@@ -58,7 +58,7 @@ class SearchProtectingDetailFragment : Fragment() {
         observeViewModel()
         fetchDetailData()
 
-        setContentVisibility()
+//        setContentVisibility()
         initBackButton()
 
     }
@@ -94,26 +94,24 @@ class SearchProtectingDetailFragment : Fragment() {
         binding.apply {
             Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
             tvDetailTagField.text = convertTagToKorean(data.tag.text)
-            tvDetailBreedField.text = data.breed
-            tvDetailAgeField.text = data.age
-            tvDetailWeightField.text = data.weight
-            tvDetailSexField.text = data.sex
-            tvDetailHappenDateField.text = data.happenDate
-            tvDetailFurColorField.text = data.furColor
-            tvDetailNeuteringField.text = data.neutering
-            tvDetailSignificantField.text = data.significant
-            tvDetailNoticeNumberField.text = data.noticeNumber
-            tvDetailNoticeDurationField.text = data.noticeDuration
-            tvDetailFoundLocationField.text = data.foundLocation
-            tvDetailCareNameField.text = data.careName
-            tvDetailCareTelField.text = data.careTel
-            tvDetailAuthorityField.text = data.authority
-            tvDetailAuthorityPhoneNumberField.text = data.authorityPhoneNumber
+            tvValueName.text = data.breed
+            tvValueAge.text = data.age
+            tvValueWeight.text = data.weight
+            tvValueGender.text = data.sex
+            tvValueNeuter.text = data.happenDate
+            tvValueHairColor.text = data.furColor
+            tvSpecialNote.text = data.specialNote
+            tvShelterLocation.text = data.careAddr
+            tvValueShelterName.text = data.careName
+            tvValueNotiDate.text = data.noticeDuration
+            tvValueNotiNum.text = data.noticeNumber
+            tvValueShelterPhoneNumber.text = data.careTel
+            tvValueJurisdiction.text = data.authority
 
             initTagView(data)
             initBookmarkUI(data)
-            initCallButtons(data)
-            initMapButtons(data)
+//            initCallButtons(data)
+//            initMapButtons(data)
         }
 
     }
@@ -125,15 +123,15 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initCallButtons(data: DetailProtectData) {
-        binding.tvDetailCareTelField.setOnClickListener {
-            call(data.careTel)
-        }
-
-        binding.tvDetailAuthorityPhoneNumberField.setOnClickListener {
-            call(data.authorityPhoneNumber)
-        }
-    }
+//    private fun initCallButtons(data: DetailProtectData) {
+//        binding.tvDetailCareTelField.setOnClickListener {
+//            call(data.careTel)
+//        }
+//
+//        binding.tvDetailAuthorityPhoneNumberField.setOnClickListener {
+//            call(data.authorityPhoneNumber)
+//        }
+//    }
 
     private fun call(phoneNumber: String) {
         if (phoneNumber.isNotEmpty()) {
@@ -144,14 +142,14 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initMapButtons(data: DetailProtectData) {
-        binding.btnViewLocation.setOnClickListener {
-            openNaverMap(data.careAddr)
-        }
-        binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(data.foundLocation)
-        }
-    }
+//    private fun initMapButtons(data: DetailProtectData) {
+//        binding.btnViewLocation.setOnClickListener {
+//            openNaverMap(data.careAddr)
+//        }
+//        binding.btnShowFoundPlace.setOnClickListener {
+//            openNaverMap(data.foundLocation)
+//        }
+//    }
 
     private fun initBookmarkUI(data: DetailProtectData) {
         updateBookmarkUI(data.interest)
@@ -215,32 +213,32 @@ class SearchProtectingDetailFragment : Fragment() {
         )
     }
 
-    private fun setContentVisibility() {
-        binding.clSearchShowMore.setOnClickListener {
-            binding.clSearchContentDetail.visibility = View.VISIBLE
-            binding.clSearchShowMore.visibility = View.INVISIBLE
-        }
-
-        binding.clSearchDetailSpecialNoteBtn.setOnClickListener {
-            isDetailVisible = !isDetailVisible
-            binding.clSearchDetailSpecialNoteDescription.visibility = if (isDetailVisible) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-
-            binding.tvSearchDetailSpecialNote.text = if (isDetailVisible) {
-                "접기"
-            } else {
-                "보기"
-            }
-
-            binding.ivSearchDetailSpecialNoteIcon.rotation = if (isDetailVisible) {
-                180f
-            } else {
-                0f
-            }
-        }
-
-    }
+//    private fun setContentVisibility() {
+//        binding.clSearchShowMore.setOnClickListener {
+//            binding.clSearchContentDetail.visibility = View.VISIBLE
+//            binding.clSearchShowMore.visibility = View.INVISIBLE
+//        }
+//
+//        binding.clSearchDetailSpecialNoteBtn.setOnClickListener {
+//            isDetailVisible = !isDetailVisible
+//            binding.clSearchDetailSpecialNoteDescription.visibility = if (isDetailVisible) {
+//                View.VISIBLE
+//            } else {
+//                View.GONE
+//            }
+//
+//            binding.tvSearchDetailSpecialNote.text = if (isDetailVisible) {
+//                "접기"
+//            } else {
+//                "보기"
+//            }
+//
+//            binding.ivSearchDetailSpecialNoteIcon.rotation = if (isDetailVisible) {
+//                180f
+//            } else {
+//                0f
+//            }
+//        }
+//
+//    }
 }

@@ -40,7 +40,6 @@
         android:id="@+id/sv_search_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_search_detail_top">
 
@@ -48,8 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vp_search_detail_img"
+            <ImageView
+                android:id="@+id/iv_search_detail_img"
                 android:layout_width="320dp"
                 android:layout_height="303dp"
                 android:nestedScrollingEnabled="false"
@@ -63,10 +62,10 @@
                 android:layout_height="wrap_content"
                 app:cardElevation="4dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vp_search_detail_img">
+                app:layout_constraintTop_toBottomOf="@id/iv_search_detail_img">
 
                 <TextView
-                    android:id="@+id/tv_detail_title_field"
+                    android:id="@+id/tv_value_name"
                     style="@style/TextAppearance.FindU.Head1_SB_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,8 +84,8 @@
                     android:background="@drawable/bg_search_protecting_tag"
                     android:text="@string/search_protect_detail"
                     android:textColor="@color/green1"
-                    app:layout_constraintStart_toStartOf="@id/tv_detail_title_field"
-                    app:layout_constraintTop_toBottomOf="@id/tv_detail_title_field" />
+                    app:layout_constraintStart_toStartOf="@id/tv_value_name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_value_name" />
 
                 <View
                     android:id="@+id/view_search_divider"
@@ -223,7 +222,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/tv_label_note"
+                        android:id="@+id/tv_special_note"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="특이사항"
@@ -292,7 +291,7 @@
                     app:layout_constraintTop_toBottomOf="@id/cl_search_map">
 
                     <TextView
-                        android:id="@+id/tv_value_protect_location_around"
+                        android:id="@+id/tv_value_shelter_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="임성중학교"
@@ -307,9 +306,9 @@
                         android:layout_marginStart="4dp"
                         android:text="에서 보호 중이에요."
                         android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_value_protect_location_around"
-                        app:layout_constraintStart_toEndOf="@id/tv_value_protect_location_around"
-                        app:layout_constraintTop_toTopOf="@id/tv_value_protect_location_around" />
+                        app:layout_constraintBottom_toBottomOf="@id/tv_value_shelter_name"
+                        app:layout_constraintStart_toEndOf="@id/tv_value_shelter_name"
+                        app:layout_constraintTop_toTopOf="@id/tv_value_shelter_name" />
 
                     <TextView
                         android:id="@+id/tv_value_protect_location"
@@ -320,7 +319,7 @@
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
                         android:textColor="@color/gray5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_value_protect_location_around" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_value_shelter_name" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_protect_location_copy"
@@ -369,6 +368,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="24dp"
+                android:paddingBottom="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_search_detail_location">
 
@@ -565,9 +565,9 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_marginStart="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:layout_marginEnd="6dp"
                         android:src="@drawable/ic_search_phone"
                         app:tint="@color/main_color" />
@@ -594,9 +594,9 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_marginStart="-10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="-10dp"
                         android:layout_marginEnd="6dp"
                         android:src="@drawable/ic_search_map"
                         app:tint="@color/main_color" />

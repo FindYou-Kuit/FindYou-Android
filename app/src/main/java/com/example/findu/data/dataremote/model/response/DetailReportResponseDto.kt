@@ -30,7 +30,17 @@ data class DetailReportResponseDto(
     @SerialName("additionalDescription")
     val additionalDescription: String,
     @SerialName("interest")
-    val interest: Boolean
+    val interest: Boolean,
+    @SerialName("age")
+    val age: String? = null,
+    @SerialName("rfid")
+    val rfid: String? = null,
+    @SerialName("userPhone")
+    val userPhone: String? = null,
+    @SerialName("surroundPlace")
+    val surroundPlace: String? = null,
+
+
 ){
     val location: String
         get() = foundLocation ?: eventLocation ?: "위치 정보 없음"
