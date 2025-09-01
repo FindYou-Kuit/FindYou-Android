@@ -187,6 +187,9 @@
     <string name="report_description_title_additional">(옵션)</string>
     <string name="report_description_placeholder">특이사항이 있다면 작성해주세요.</string>
     <string name="report_location">주소를 입력해주세요</string>
+    <string name="report_location_title">위치가 맞는지 확인해주세요!</string>
+    <string name="report_missing_near_location_title">실종 지점 주변 장소를 입력해주세요.</string>
+    <string name="report_missing_near_location_placeholder">실종된 아이를 찾는데 도움이 돼요!</string>
     <string name="report_image_count">%d</string>
     <string name="report_cannot_distinction">품종을 인식하지 못했습니다.</string>
 
@@ -212,7 +215,6 @@
     <string name="report_option">(옵션)</string>
     <string name="report_description_hint">자유롭게 추가 설명을 작성해주세요!\n\n\n</string>
     <string name="report_ai_distinction">AI 판별</string>
-    <string name="report_location_title">위치가 맞는지 확인해주세요!</string>
     <string name="report_confirm">확인</string>
     <string name="report_witness_date">발견 날짜</string>
     <!--<string name="report_missing_date_title">실종 날짜</string>-->

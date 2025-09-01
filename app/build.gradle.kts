@@ -99,6 +99,7 @@ dependencies {
 
     // Naver Map
     implementation(libs.map.sdk)
+    implementation(libs.naver.map.compose)
 
     // Location Provider Client
     implementation(libs.play.services.location)

@@ -34,7 +34,7 @@ data class MissingReportUiState(
     val description: TextFieldState = TextFieldState(),
     val address: String = "",
     val currentLatLng: LatLng? = null,
-    val nearPlace: String = "",
+    val nearPlace: TextFieldState = TextFieldState(),
 )
 
 sealed class MissingReportUiEvent {

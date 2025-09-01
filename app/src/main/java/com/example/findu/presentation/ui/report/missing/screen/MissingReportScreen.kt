@@ -15,8 +15,8 @@ import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
 import com.example.findu.presentation.ui.report.component.ReportImageComponent
+import com.example.findu.presentation.ui.report.component.ReportInputComponent
 import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
-import com.example.findu.presentation.ui.report.missing.component.RFIDComponent
 import com.example.findu.presentation.ui.report.missing.component.ReportGenderComponent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
@@ -59,8 +59,10 @@ fun MissingReportScreen(
                 onGenderSelected = { onEvent(MissingReportUiEvent.OnGenderSelected(it)) }
             )
             VerticalSpacer(30.dp)
-            RFIDComponent(
-                rfidState = uiState.rfidNumber,
+            ReportInputComponent(
+                titleRes = R.string.report_rfid_title,
+                placeHolderRes = R.string.report_rfid_placeholder,
+                state = uiState.rfidNumber,
                 onKeyboardAction = KeyboardActionHandler {
                     onEvent(MissingReportUiEvent.OnDismissKeyboard)
                 }
@@ -88,6 +90,7 @@ fun MissingReportScreen(
                     onEvent(MissingReportUiEvent.OnDismissKeyboard)
                 }
             )
+            VerticalSpacer(30.dp)
         }
     }
 }
