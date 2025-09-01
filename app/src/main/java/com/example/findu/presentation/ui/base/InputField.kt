@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,13 +40,7 @@ fun RectangleInputField(
         interactionSource = interactionSource,
         lineLimits = if (singleLine) TextFieldLineLimits.SingleLine else TextFieldLineLimits.MultiLine(),
         decorator = { innerTextField ->
-            if (state.text.isEmpty()) {
-                Text(
-                    text = stringResource(placeHolderRes),
-                    style = FindUTheme.typography.tag1SemiBold12,
-                    color = FindUTheme.colors.gray4,
-                )
-            }
+
             Box(
                 modifier = modifier
                     .fillMaxWidth()
@@ -57,7 +52,15 @@ fun RectangleInputField(
                     )
                     .padding(horizontal = 16.dp, vertical = 12.dp),
             ) {
-                innerTextField()
+                if (state.text.isEmpty()) {
+                    Text(
+                        text = stringResource(placeHolderRes),
+                        style = FindUTheme.typography.tag1SemiBold12,
+                        color = FindUTheme.colors.gray4,
+                    )
+                } else {
+                    innerTextField()
+                }
             }
         },
     )

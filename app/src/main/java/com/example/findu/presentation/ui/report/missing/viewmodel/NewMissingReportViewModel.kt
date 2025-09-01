@@ -3,6 +3,7 @@ package com.example.findu.presentation.ui.report.missing.viewmodel
 import android.net.Uri
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -24,7 +26,7 @@ data class MissingReportUiState(
     val breed: Breed? = null,
     val age: TextFieldState = TextFieldState(),
     val gender: Gender = Gender.MALE,
-    val rfidNumber: String = "",
+    val rfidNumber: TextFieldState = TextFieldState(),
     val furColorType: List<FurColorType> = emptyList(),
     val missingDate: LocalDateTime = LocalDateTime.now(),
     val description: String = "",
@@ -56,12 +58,14 @@ sealed class MissingReportUiEvent {
     data object OnReportFinishButtonClick : MissingReportUiEvent()
     data object OnNavigateReportHistoryClick : MissingReportUiEvent()
     data object OnNavigateHomeClick : MissingReportUiEvent()
+    data object OnDismissKeyboard : MissingReportUiEvent()
 }
 
 sealed class MissingReportUiEffect {
     data object NavigateToAnimalInfo : MissingReportUiEffect()
     data object NavigateToAddressSearch : MissingReportUiEffect()
     data class ShowToast(val message: String) : MissingReportUiEffect()
+    data object DismissKeyboard : MissingReportUiEffect()
 }
 
 @HiltViewModel
@@ -93,6 +97,11 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             MissingReportUiEvent.OnReportFinishButtonClick -> {}
             MissingReportUiEvent.OnSelectAnimalInfoClick -> {}
             is MissingReportUiEvent.OnSpeciesClick -> {}
+            MissingReportUiEvent.OnDismissKeyboard -> {
+                viewModelScope.launch {
+                    _uiEffect.send(MissingReportUiEffect.DismissKeyboard)
+                }
+            }
         }
     }
 }

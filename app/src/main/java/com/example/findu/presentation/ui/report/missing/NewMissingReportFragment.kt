@@ -11,6 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -52,6 +54,9 @@ class NewMissingReportFragment : Fragment() {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 val lifecycleOwner = LocalLifecycleOwner.current
                 val navController = rememberNavController()
+                val keyboardController = LocalSoftwareKeyboardController.current
+                val focusManager = LocalFocusManager.current
+
                 LaunchedEffect(viewModel.uiEffect, lifecycleOwner) {
                     viewModel.uiEffect.flowWithLifecycle(
                         lifecycle = lifecycleOwner.lifecycle
@@ -66,6 +71,11 @@ class NewMissingReportFragment : Fragment() {
                                 Toast.makeText(
                                     requireContext(), sideEffect.message, Toast.LENGTH_SHORT
                                 ).show()
+                            }
+
+                            MissingReportUiEffect.DismissKeyboard -> {
+                                keyboardController?.hide()
+                                focusManager.clearFocus()
                             }
                         }
                     }
