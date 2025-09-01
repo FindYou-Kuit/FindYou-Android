@@ -11,7 +11,7 @@ import com.example.findu.R
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
-import com.example.findu.presentation.ui.report.missing.component.ReportImageComponent
+import com.example.findu.presentation.ui.report.component.ReportImageComponent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
 import com.example.findu.ui.theme.FindUTheme
@@ -41,6 +41,7 @@ fun MissingReportScreen(
             age = uiState.age.text.toString().toIntOrNull(),
             onSelectAnimalInfoClick = { onEvent(MissingReportUiEvent.OnSelectAnimalInfoClick) }
         )
+        VerticalSpacer(30.dp)
     }
 }
 

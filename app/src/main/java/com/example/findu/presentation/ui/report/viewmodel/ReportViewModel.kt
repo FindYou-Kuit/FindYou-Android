@@ -2,7 +2,6 @@ package com.example.findu.presentation.ui.report.viewmodel
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.BreedData
@@ -11,7 +10,7 @@ import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.model.report.GptData
 import com.example.findu.domain.model.report.MissingReportData
-import com.example.findu.domain.model.report.SexType
+import com.example.findu.domain.model.report.Gender
 import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
@@ -69,7 +68,7 @@ class ReportViewModel @Inject constructor(
 
     private val _selectedSpeciesType = MutableStateFlow<SpeciesType?>(null)
     private val _selectedBreedName = MutableStateFlow<String?>(null)
-    private val _selectedSexType = MutableStateFlow<SexType?>(null)
+    private val _selectedGender = MutableStateFlow<Gender?>(null)
     private val _selectedFurColors = MutableStateFlow<MutableList<FurColorType>>(mutableListOf())
     private val _selectedFeatureIds = MutableStateFlow<MutableList<Int>>(mutableListOf())
     private val _location = MutableStateFlow<String?>(null)
@@ -159,7 +158,7 @@ class ReportViewModel @Inject constructor(
         imageUris: Uri? = null,
         speciesType: SpeciesType? = null,
         breedName: String? = null,
-        sexType: SexType? = null,
+        gender: Gender? = null,
         furColor: FurColorType? = null,
         featureIds: Int? = null,
         location: String? = null,
@@ -168,7 +167,7 @@ class ReportViewModel @Inject constructor(
         imageUris?.let { addImageUri(it) }
         speciesType?.let { selectSpeciesType(it) }
         breedName?.let { _selectedBreedName.value = it }
-        sexType?.let { _selectedSexType.value = it }
+        gender?.let { _selectedGender.value = it }
         furColor?.let { updateSelectedFurColors(it) }
         featureIds?.let { updateSelectedFeatureIds(it) }
         location?.let { _location.value = it }
@@ -176,7 +175,7 @@ class ReportViewModel @Inject constructor(
 
         if (_selectedSpeciesType.value != null &&
             !_selectedBreedName.value.isNullOrEmpty() &&
-            _selectedSexType.value != null &&
+            _selectedGender.value != null &&
             _selectedFurColors.value.isNotEmpty() &&
             _selectedFeatureIds.value.isNotEmpty() &&
             !_location.value.isNullOrEmpty() &&
@@ -195,7 +194,7 @@ class ReportViewModel @Inject constructor(
                     "https://findyoubucket.s3.ap-northeast-2.amazonaws.com/5b947ba4-b5f4-4588-8ae3-0c324fee3a66.jpg"
                 ),
                 breedId = 1,
-                sex = SexType.MALE,
+                sex = Gender.MALE,
                 furColors = listOf(
                     FurColorType.GRAY, FurColorType.WHITE, FurColorType.BLACK, FurColorType.BROWN
                 ),
@@ -263,7 +262,7 @@ class ReportViewModel @Inject constructor(
                 MissingReportData(
                     imageUrls = imageUrls,
                     breedId = breedId,
-                    sex = _selectedSexType.value!!,
+                    sex = _selectedGender.value!!,
                     furColors = _selectedFurColors.value,
                     location = _location.value!!,
                     featureIds = _selectedFeatureIds.value,

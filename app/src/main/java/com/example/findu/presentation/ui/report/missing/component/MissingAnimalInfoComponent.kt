@@ -39,7 +39,7 @@ fun MissingAnimalInfoComponent(
             .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
             .padding(vertical = 20.dp)
             .padding(start = 30.dp, end = 27.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Row(
             modifier = Modifier

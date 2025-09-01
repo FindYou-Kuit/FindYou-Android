@@ -23,7 +23,7 @@ import com.archit.calendardaterangepicker.customviews.CalendarListener
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMissingReportBinding
 import com.example.findu.domain.model.breed.SpeciesType
-import com.example.findu.domain.model.report.SexType
+import com.example.findu.domain.model.report.Gender
 import com.example.findu.presentation.ui.report.model.ReportUiState
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
@@ -169,21 +169,16 @@ class MissingReportFragment : Fragment() {
             when (checkedId) {
                 R.id.rb_missing_report_male_button -> {
                     reportViewModel.updateReportData(
-                        sexType = SexType.MALE
+                        gender = Gender.MALE
                     )
                 }
 
                 R.id.rb_missing_report_female_button -> {
                     reportViewModel.updateReportData(
-                        sexType = SexType.FEMALE
+                        gender = Gender.FEMALE
                     )
                 }
 
-                R.id.rb_missing_report_unknown_button -> {
-                    reportViewModel.updateReportData(
-                        sexType = SexType.UNKNOWN
-                    )
-                }
             }
         }
 

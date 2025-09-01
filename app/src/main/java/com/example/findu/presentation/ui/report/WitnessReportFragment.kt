@@ -2,7 +2,6 @@ package com.example.findu.presentation.ui.report
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +24,6 @@ import com.example.findu.R
 import com.example.findu.databinding.FragmentWitnessReportBinding
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.GptData
-import com.example.findu.domain.model.report.SexType
-import com.example.findu.presentation.ui.report.model.GptUiState
-import com.example.findu.presentation.ui.report.model.ReportUiState
 import com.example.findu.presentation.type.report.CharacterFeatureType
 import com.example.findu.presentation.type.report.ExternalFeatureType
 import com.example.findu.presentation.type.report.PhysicalFeatureType
@@ -37,13 +33,15 @@ import com.example.findu.presentation.ui.report.adapter.ReportBreedAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportColorAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportFeatureAdapter
 import com.example.findu.presentation.ui.report.adapter.ReportImageAdapter
+import com.example.findu.presentation.ui.report.constants.ReportConstants
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_RESULT_KEY
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_URI
-import com.example.findu.presentation.ui.report.viewmodel.ReportViewModel
-import com.example.findu.presentation.ui.report.constants.ReportConstants
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportImageDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
+import com.example.findu.presentation.ui.report.model.GptUiState
+import com.example.findu.presentation.ui.report.model.ReportUiState
+import com.example.findu.presentation.ui.report.viewmodel.ReportViewModel
 import com.example.findu.presentation.util.ViewUtils.addUnderLine
 import com.example.findu.presentation.util.ViewUtils.dpToPx
 import com.example.findu.presentation.util.ViewUtils.hideKeyboard
@@ -80,7 +78,7 @@ class WitnessReportFragment : Fragment() {
 
         initListener()
         reportViewModel.updateReportData(
-            sexType = SexType.UNKNOWN
+//            gender = Gender.UNKNOWN
         )
         getCapturedUri()
         getUploadedUri()

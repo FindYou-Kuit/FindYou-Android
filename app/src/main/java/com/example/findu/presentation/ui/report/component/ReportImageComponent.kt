@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.missing.component
+package com.example.findu.presentation.ui.report.component
 
 import android.net.Uri
 import androidx.compose.animation.core.animateDpAsState
@@ -27,7 +27,6 @@ import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalPagerApi::class)

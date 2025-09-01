@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
-import com.kakao.sdk.user.model.Gender
+import com.example.findu.domain.model.report.Gender
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
