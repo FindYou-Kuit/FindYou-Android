@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,11 +42,19 @@ fun ReportDateComponent(
                 .padding(horizontal = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = stringResource(titleRes),
-                style = FindUTheme.typography.body2SemiBold14,
-                color = FindUTheme.colors.gray6,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(titleRes),
+                    style = FindUTheme.typography.body2SemiBold14,
+                    color = FindUTheme.colors.gray6,
+                )
+                Text(
+                    text = stringResource(R.string.asterisk),
+                    style = FindUTheme.typography.body2SemiBold14.copy(color = FindUTheme.colors.red1)
+                )
+            }
             Text(
                 text = nowDate,
                 style = FindUTheme.typography.body2SemiBold14,

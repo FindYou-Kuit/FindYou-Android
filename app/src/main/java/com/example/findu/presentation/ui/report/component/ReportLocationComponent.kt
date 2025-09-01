@@ -1,7 +1,9 @@
 package com.example.findu.presentation.ui.report.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,7 +37,6 @@ import com.naver.maps.map.compose.MarkerComposable
 import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 
-//@OptIn(ExperimentalNaverMapApi::class)
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun ReportLocationComponent(
@@ -43,6 +44,7 @@ fun ReportLocationComponent(
     address: String,
     cameraPositionState: CameraPositionState,
     nearPlace: TextFieldState,
+    onAddressClick: () -> Unit = { },
     dismissKeyboard: () -> Unit = { },
 ) {
     Column(
@@ -65,14 +67,14 @@ fun ReportLocationComponent(
             )
             Text(
                 text = stringResource(R.string.asterisk),
-                style = FindUTheme.typography.body2SemiBold14,
-                color = FindUTheme.colors.red1,
+                style = FindUTheme.typography.body2SemiBold14.copy(color = FindUTheme.colors.red1)
             )
         }
         VerticalSpacer(13.dp)
         Row(
+            modifier = Modifier.clickable { onAddressClick() },
             horizontalArrangement = Arrangement.spacedBy(5.dp),
-            verticalAlignment = Alignment.Bottom,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_report_location),
@@ -81,7 +83,7 @@ fun ReportLocationComponent(
             )
             Text(
                 text = address,
-                style = FindUTheme.typography.tag1SemiBold12,
+                style = FindUTheme.typography.body2SemiBold14,
                 color = FindUTheme.colors.gray4,
                 textDecoration = TextDecoration.Underline,
             )
@@ -91,33 +93,43 @@ fun ReportLocationComponent(
             )
         }
         VerticalSpacer(5.dp)
-        NaverMap(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(124.dp),
-            cameraPositionState = cameraPositionState,
-            uiSettings = MapUiSettings(
-                isTiltGesturesEnabled = false,
-                isStopGesturesEnabled = false,
-                isCompassEnabled = false,
-                isLocationButtonEnabled = false,
-                isLogoClickEnabled = false,
-            )
+            contentAlignment = Alignment.Center
         ) {
-            MarkerComposable(
-                keys = arrayOf(cameraPositionState.position),
-                state = remember {
-                    MarkerState(
-                        position = cameraPositionState.position.target
+            NaverMap(
+                modifier = Modifier.matchParentSize(),
+                cameraPositionState = cameraPositionState,
+                uiSettings = MapUiSettings(
+                    isTiltGesturesEnabled = false,
+                    isStopGesturesEnabled = false,
+                    isCompassEnabled = false,
+                    isLocationButtonEnabled = false,
+                    isLogoClickEnabled = false,
+                )
+            ) {
+                MarkerComposable(
+                    keys = arrayOf(cameraPositionState.position),
+                    state = remember {
+                        MarkerState(
+                            position = cameraPositionState.position.target
+                        )
+                    }
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_pin),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
                     )
                 }
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_pin),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                )
             }
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_pin),
+                contentDescription = null,
+                tint = Color.Unspecified,
+            )
         }
         VerticalSpacer(20.dp)
         ReportInputComponent(

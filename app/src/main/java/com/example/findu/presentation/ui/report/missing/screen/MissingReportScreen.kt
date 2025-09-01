@@ -1,14 +1,25 @@
 package com.example.findu.presentation.ui.report.missing.screen
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
+import com.example.findu.domain.model.breed.Breed
+import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.domain.model.report.FurColorType
+import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.report.component.ReportDateComponent
@@ -16,11 +27,14 @@ import com.example.findu.presentation.ui.report.component.ReportDescriptionCompo
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
 import com.example.findu.presentation.ui.report.component.ReportImageComponent
 import com.example.findu.presentation.ui.report.component.ReportInputComponent
+import com.example.findu.presentation.ui.report.component.ReportLocationComponent
 import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
 import com.example.findu.presentation.ui.report.missing.component.ReportGenderComponent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
 import com.example.findu.ui.theme.FindUTheme
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.compose.rememberCameraPositionState
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -29,7 +43,26 @@ fun MissingReportScreen(
     uiState: MissingReportUiState,
     onEvent: (MissingReportUiEvent) -> Unit,
 ) {
-    Column {
+    val cameraPositionState = rememberCameraPositionState {
+        uiState.currentLatLng?.let {
+            position = CameraPosition(it, 15.0)
+        }
+    }
+    val buttonEnabled by remember {
+        derivedStateOf {
+            uiState.speciesType != null &&
+                    uiState.breed != null &&
+                    uiState.age.text.isNotEmpty() &&
+                    uiState.selectedFurColors.isNotEmpty() &&
+                    uiState.missingDate.isNotEmpty() &&
+                    uiState.address.isNotEmpty() &&
+                    uiState.imageUriList.isNotEmpty()
+        }
+    }
+
+    Column(
+        modifier = Modifier.padding(bottom = 30.dp),
+    ) {
         FindUTopAppBar(
             modifier = Modifier,
             title = R.string.report_missing,
@@ -91,16 +124,44 @@ fun MissingReportScreen(
                 }
             )
             VerticalSpacer(30.dp)
+            ReportLocationComponent(
+                address = uiState.address,
+                cameraPositionState = cameraPositionState,
+                nearPlace = uiState.nearPlace,
+                onAddressClick = { onEvent(MissingReportUiEvent.OnAddressSearchClick) },
+                dismissKeyboard = { onEvent(MissingReportUiEvent.OnDismissKeyboard) }
+            )
+            VerticalSpacer(30.dp)
+            FindUButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                textRes = R.string.my_done,
+                onClick = { onEvent(MissingReportUiEvent.OnReportFinishButtonClick) },
+                enabled = buttonEnabled
+            )
         }
     }
 }
 
-@Preview(showBackground = true, heightDp = 1600)
+@Preview(showBackground = true, heightDp = 1400)
 @Composable
 private fun MissingReportScreenPreview() {
     FindUTheme {
         MissingReportScreen(
-            uiState = MissingReportUiState(),
+            uiState = MissingReportUiState(
+                speciesType = SpeciesType.DOG,
+                breed = Breed.DogBreed(
+                    breedId = 1,
+                    breedName = "말티즈",
+                    species = SpeciesType.DOG
+                ),
+                age = TextFieldState("3"),
+                missingDate = "2023년 10월 10일 (화)",
+                selectedFurColors = listOf(FurColorType.OTHER),
+                address = "서울시 강남구 역삼동",
+                imageUriList = listOf(Uri.EMPTY)
+            ),
             onEvent = {}
         )
     }
