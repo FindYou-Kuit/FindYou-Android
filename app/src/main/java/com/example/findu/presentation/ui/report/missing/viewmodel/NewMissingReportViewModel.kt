@@ -27,7 +27,7 @@ data class MissingReportUiState(
     val age: TextFieldState = TextFieldState(),
     val gender: Gender = Gender.MALE,
     val rfidNumber: TextFieldState = TextFieldState(),
-    val furColorType: List<FurColorType> = emptyList(),
+    val selectedFurColors: List<FurColorType> = emptyList(),
     val missingDate: LocalDateTime = LocalDateTime.now(),
     val description: String = "",
     val address: String = "",
@@ -45,7 +45,7 @@ sealed class MissingReportUiEvent {
     data class OnBreedInputFieldClick(val input: String) : MissingReportUiEvent()
     data class OnBreedClick(val breed: Breed) : MissingReportUiEvent()
     data object OnInfoFinishButtonClick : MissingReportUiEvent()
-    data class OnGenderClick(val gender: Gender) : MissingReportUiEvent()
+    data class OnGenderSelected(val gender: Gender) : MissingReportUiEvent()
     data class OnFurColorSelected(
         val furColorType: FurColorType,
         val flag: Boolean,
@@ -87,7 +87,7 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             is MissingReportUiEvent.OnBreedInputFieldClick -> {}
             is MissingReportUiEvent.OnDateSelected -> {}
             is MissingReportUiEvent.OnFurColorSelected -> {}
-            is MissingReportUiEvent.OnGenderClick -> {}
+            is MissingReportUiEvent.OnGenderSelected -> {}
             MissingReportUiEvent.OnInfoFinishButtonClick -> {}
             is MissingReportUiEvent.OnMapPinMoved -> {}
             MissingReportUiEvent.OnNavigateHomeClick -> {}

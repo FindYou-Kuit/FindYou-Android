@@ -35,8 +35,8 @@ fun MissingAnimalInfoComponent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
             .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+            .background(color = FindUTheme.colors.white, shape = RoundedCornerShape(20.dp))
             .padding(vertical = 20.dp)
             .padding(start = 30.dp, end = 27.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)

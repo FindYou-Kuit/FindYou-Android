@@ -75,26 +75,26 @@ fun ReportImageComponent(
                 if (page == 0) {
                     DefaultPageContent(
                         modifier = Modifier
-                            .size(itemSize)
+                            .shadow(
+                                elevation = 0.5.dp,
+                                shape = RoundedCornerShape(20.dp)
+                            )
                             .background(
                                 color = FindUTheme.colors.gray3,
                                 shape = RoundedCornerShape(20.dp)
                             )
-                            .shadow(
-                                elevation = 4.dp,
-                                shape = RoundedCornerShape(20.dp)
-                            ),
+                            .size(itemSize),
                         onClick = onOpenDialogClick
                     )
                 } else {
                     ImagePageContent(
                         modifier = Modifier
-                            .size(itemSize)
-                            .clip(RoundedCornerShape(20.dp))
                             .shadow(
-                                elevation = 4.dp,
+                                elevation = 0.5.dp,
                                 shape = RoundedCornerShape(20.dp)
-                            ),
+                            )
+                            .size(itemSize)
+                            .clip(RoundedCornerShape(20.dp)),
                         imageUri = imgUriList[page - 1]
                     )
                 }

@@ -175,7 +175,10 @@
     <string name="report_breed_title">어떤 품종인가요?</string>
     <string name="report_breed_input_hint">품종을 선택해주세요.</string>
     <string name="report_gender_title">성별을 선택해주세요</string>
-    <string name="report_color_title">반려동물의 털색을 표시해 주세요!</string>
+    <string name="report_rfid_title">RFID 번호를 입력해주세요.</string>
+    <string name="report_rfid_placeholder">아이의 RFID 를 알고 계시다면 입력해주세요.</string>
+    <string name="report_color_title">아이의 털색을 선택해 주세요.</string>
+    <string name="report_color_title_additional">(여러 개 선택 가능)</string>
     <string name="report_feature_title">특징을 체크해주세요!</string>
     <string name="report_location">주소를 입력해주세요</string>
     <string name="report_image_count">%d</string>
