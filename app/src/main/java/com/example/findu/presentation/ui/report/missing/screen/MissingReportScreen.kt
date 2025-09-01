@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
+import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
 import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
 import com.example.findu.presentation.ui.report.component.ReportImageComponent
@@ -20,6 +20,8 @@ import com.example.findu.presentation.ui.report.missing.component.ReportGenderCo
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
 import com.example.findu.ui.theme.FindUTheme
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun MissingReportScreen(
@@ -69,6 +71,16 @@ fun MissingReportScreen(
                     onEvent(MissingReportUiEvent.OnFurColorSelected(color, isSelected))
                 }
             )
+            VerticalSpacer(30.dp)
+            ReportDateComponent(
+                selectedDate = uiState.missingDate,
+                titleRes = R.string.report_missing_date_title,
+                nowDate = uiState.nowDate.format(
+                    DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E)", Locale.KOREAN)
+                ),
+                onClick = { onEvent(MissingReportUiEvent.OnMissingDateClicked) }
+            )
+            VerticalSpacer(30.dp)
         }
     }
 }

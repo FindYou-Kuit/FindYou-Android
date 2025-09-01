@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 data class MissingReportUiState(
@@ -28,13 +30,14 @@ data class MissingReportUiState(
     val gender: Gender = Gender.MALE,
     val rfidNumber: TextFieldState = TextFieldState(),
     val selectedFurColors: List<FurColorType> = emptyList(),
-    val missingDate: LocalDateTime = LocalDateTime.now(),
+    val nowDate: LocalDateTime = LocalDateTime.now(),
+    val missingDate: String = "",
+    val isDateBottomSheetShown: Boolean = false,
     val description: String = "",
     val address: String = "",
     val currentLatLng: LatLng? = null,
     val nearPlace: String = "",
 )
-
 sealed class MissingReportUiEvent {
     data object OnBackPressed : MissingReportUiEvent()
     data object OnAddImageClick : MissingReportUiEvent()
@@ -51,6 +54,7 @@ sealed class MissingReportUiEvent {
         val flag: Boolean,
     ) : MissingReportUiEvent()
 
+    data object OnMissingDateClicked : MissingReportUiEvent()
     data class OnDateSelected(val dateTime: LocalDateTime) : MissingReportUiEvent()
     data object OnAddressSearchClick : MissingReportUiEvent()
     data class OnAddressUpdated(val address: String) : MissingReportUiEvent()
@@ -85,6 +89,7 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             is MissingReportUiEvent.OnAddressUpdated -> {}
             is MissingReportUiEvent.OnBreedClick -> {}
             is MissingReportUiEvent.OnBreedInputFieldClick -> {}
+            MissingReportUiEvent.OnMissingDateClicked -> {}
             is MissingReportUiEvent.OnDateSelected -> {}
             is MissingReportUiEvent.OnFurColorSelected -> {}
             is MissingReportUiEvent.OnGenderSelected -> {}

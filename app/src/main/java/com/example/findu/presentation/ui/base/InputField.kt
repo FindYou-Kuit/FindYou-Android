@@ -14,14 +14,13 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun RectangleInputField(
+fun RoundedInputField(
     modifier: Modifier = Modifier,
     state: TextFieldState,
     @StringRes placeHolderRes: Int,

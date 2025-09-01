@@ -179,7 +179,13 @@
     <string name="report_rfid_placeholder">아이의 RFID 를 알고 계시다면 입력해주세요.</string>
     <string name="report_color_title">아이의 털색을 선택해 주세요.</string>
     <string name="report_color_title_additional">(여러 개 선택 가능)</string>
+    <string name="report_witness_date_title">목격 날짜를 확인해주세요.</string>
+    <string name="report_missing_date_title">실종 날짜를 확인해주세요.</string>
+    <string name="report_date_placeholder">날짜를 선택해주세요.</string>
     <string name="report_feature_title">특징을 체크해주세요!</string>
+    <string name="report_description_title">추가 설명 작성하기</string>
+    <string name="report_description_title_additional">(옵션)</string>
+    <string name="report_description_placeholder">특이사항이 있다면 작성해주세요.</string>
     <string name="report_location">주소를 입력해주세요</string>
     <string name="report_image_count">%d</string>
     <string name="report_cannot_distinction">품종을 인식하지 못했습니다.</string>
@@ -209,7 +215,7 @@
     <string name="report_location_title">위치가 맞는지 확인해주세요!</string>
     <string name="report_confirm">확인</string>
     <string name="report_witness_date">발견 날짜</string>
-    <string name="report_missing_date_title">실종 날짜</string>
+    <!--<string name="report_missing_date_title">실종 날짜</string>-->
     <string name="report_write_additional_description">추가 설명 작성하기</string>
 
     <!-- home-->

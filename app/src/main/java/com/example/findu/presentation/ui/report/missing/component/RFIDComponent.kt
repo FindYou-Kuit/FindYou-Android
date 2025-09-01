@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
-import com.example.findu.presentation.ui.base.RectangleInputField
+import com.example.findu.presentation.ui.base.RoundedInputField
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
@@ -33,7 +33,7 @@ fun RFIDComponent(
             text = stringResource(R.string.report_rfid_title),
             style = FindUTheme.typography.body1SemiBold16,
         )
-        RectangleInputField(
+        RoundedInputField(
             modifier = modifier,
             state = rfidState,
             placeHolderRes = R.string.report_rfid_placeholder,
