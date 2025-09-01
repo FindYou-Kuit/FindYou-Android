@@ -23,6 +23,12 @@ import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
 import com.google.android.material.chip.Chip
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.MapView
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,13 +45,23 @@ class SearchDisappearDetailFragment : Fragment() {
     private val args: SearchDisappearDetailFragmentArgs by navArgs()
     private var isBookmarked = false
 
+    private lateinit var mapView: MapView
+    private var naverMap: NaverMap? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentSearchDetailDisappearBinding.inflate(layoutInflater)
+
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.getMapAsync { nMap ->
+            naverMap = nMap
+            setupMap()
+        }
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,11 +76,35 @@ class SearchDisappearDetailFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
-
-        initDummyImages()
 //        observeViewModel()
 //        fetchDetailData()
         initListener()
+    }
+
+    private fun setupMap() {
+        val address = binding.tvValueLostLocation.text.toString()
+        if (address.isNotEmpty()) {
+            try {
+                val geocoder = android.location.Geocoder(requireContext())
+                val results = geocoder.getFromLocationName(address, 1)
+                if (!results.isNullOrEmpty()) {
+                    val location = LatLng(results[0].latitude, results[0].longitude)
+                    val cameraUpdate = CameraUpdate.scrollTo(location)
+                    naverMap?.moveCamera(cameraUpdate)
+
+                    val marker = Marker().apply {
+                        position = location
+                        map = naverMap
+                        icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
+                        height = 23
+                    }
+                    marker.position = location
+                    marker.map = naverMap
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "주소 찾을 수 업음.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initDummyImages() {
@@ -154,6 +194,8 @@ class SearchDisappearDetailFragment : Fragment() {
 
 
     private fun initListener() = with(binding) {
+        initDummyImages()
+
         ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -167,6 +209,7 @@ class SearchDisappearDetailFragment : Fragment() {
             val address = binding.tvValueLostLocation.text.toString()
             openNaverMap(address)
         }
+
 
     }
 

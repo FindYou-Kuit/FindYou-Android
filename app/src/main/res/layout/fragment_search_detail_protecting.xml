@@ -279,11 +279,20 @@
                     android:layout_height="160dp"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="20dp"
-                    android:background="@color/red1"
+                    android:background="@drawable/bg_search_map_round"
+                    android:clipToOutline="true"
                     app:circularflow_defaultRadius="20dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_shelter_location" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_shelter_location">
 
+                    <com.naver.maps.map.MapView
+                        android:id="@+id/mapView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_search_detail_location_info"
                     android:layout_width="match_parent"
