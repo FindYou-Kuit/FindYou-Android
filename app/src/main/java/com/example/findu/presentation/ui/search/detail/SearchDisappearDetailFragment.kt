@@ -37,6 +37,7 @@ class SearchDisappearDetailFragment : Fragment() {
     private var name: String? = null
 
     private val args: SearchDisappearDetailFragmentArgs by navArgs()
+    private var isBookmarked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -117,7 +118,7 @@ class SearchDisappearDetailFragment : Fragment() {
 
 //            initViewPager(data.imageUrls)
             initTagView(data)
-            initBookmarkUI(data)
+//            initBookmarkUI(data)
 //            initMapButtons(data)
         }
     }
@@ -156,14 +157,14 @@ class SearchDisappearDetailFragment : Fragment() {
         binding.ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+        initBookmarkUI()
     }
 
-    private fun initBookmarkUI(data: DetailReportData) {
-        updateBookmarkUI(data.interest)
+    private fun initBookmarkUI() {
         binding.ivSearchDetailBookmark.setOnClickListener {
-            data.interest = !data.interest
+            isBookmarked = !isBookmarked
             viewModel.setInterestReportAnimal(cardId)
-            updateBookmarkUI(data.interest)
+            updateBookmarkUI(isBookmarked)
         }
     }
 
@@ -216,7 +217,7 @@ class SearchDisappearDetailFragment : Fragment() {
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
             if (bookmark) R.drawable.ic_search_fill_bookmark
-            else R.drawable.ic_search_blank_bookmark
+            else R.drawable.ic_search_detail_bookmark
         )
     }
 

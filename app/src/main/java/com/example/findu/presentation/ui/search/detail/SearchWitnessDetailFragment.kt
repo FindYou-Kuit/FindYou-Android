@@ -9,20 +9,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailWitnessBinding
 import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
-import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,6 +33,7 @@ class SearchWitnessDetailFragment : Fragment() {
     private var name: String? = null
 
     private val args :SearchWitnessDetailFragmentArgs by navArgs()
+    private var isBookmarked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -115,7 +113,7 @@ class SearchWitnessDetailFragment : Fragment() {
 
 //            initViewPager(data.imageUrls)
             initTagView(data)
-            initBookmarkUI(data)
+//            initBookmarkUI(data)
 //            initMapButtons(data)
         }
     }
@@ -152,14 +150,14 @@ class SearchWitnessDetailFragment : Fragment() {
         binding.ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+        initBookmarkUI()
     }
 
-    private fun initBookmarkUI(data: DetailReportData) {
-        updateBookmarkUI(data.interest)
+    private fun initBookmarkUI() {
         binding.ivSearchDetailBookmark.setOnClickListener {
-            data.interest = !data.interest
+            isBookmarked = !isBookmarked
             viewModel.setInterestReportAnimal(cardId)
-            updateBookmarkUI(data.interest)
+            updateBookmarkUI(isBookmarked)
         }
     }
 
@@ -211,7 +209,7 @@ class SearchWitnessDetailFragment : Fragment() {
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
             if (bookmark) R.drawable.ic_search_fill_bookmark
-            else R.drawable.ic_search_blank_bookmark
+            else R.drawable.ic_search_detail_bookmark
         )
     }
 

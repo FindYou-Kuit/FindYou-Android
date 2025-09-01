@@ -34,6 +34,8 @@ class SearchProtectingDetailFragment : Fragment() {
 
     private val args: SearchProtectingDetailFragmentArgs by navArgs()
 
+    private var isBookmarked = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +59,7 @@ class SearchProtectingDetailFragment : Fragment() {
         }
         observeViewModel()
         fetchDetailData()
-
+        initBookmarkUI()
 //        setContentVisibility()
         initBackButton()
 
@@ -109,7 +111,7 @@ class SearchProtectingDetailFragment : Fragment() {
             tvValueJurisdiction.text = data.authority
 
             initTagView(data)
-            initBookmarkUI(data)
+//            initBookmarkUI(data)
 //            initCallButtons(data)
 //            initMapButtons(data)
         }
@@ -151,12 +153,11 @@ class SearchProtectingDetailFragment : Fragment() {
 //        }
 //    }
 
-    private fun initBookmarkUI(data: DetailProtectData) {
-        updateBookmarkUI(data.interest)
+    private fun initBookmarkUI() {
         binding.ivSearchDetailBookmark.setOnClickListener {
-            data.interest = !data.interest
+            isBookmarked = !isBookmarked
             viewModel.setInterestProtectingAnimal(cardId)
-            updateBookmarkUI(data.interest)
+            updateBookmarkUI(isBookmarked)
         }
     }
 
@@ -209,36 +210,8 @@ class SearchProtectingDetailFragment : Fragment() {
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
             if (bookmark) R.drawable.ic_search_fill_bookmark
-            else R.drawable.ic_search_blank_bookmark
+            else R.drawable.ic_search_detail_bookmark
         )
     }
 
-//    private fun setContentVisibility() {
-//        binding.clSearchShowMore.setOnClickListener {
-//            binding.clSearchContentDetail.visibility = View.VISIBLE
-//            binding.clSearchShowMore.visibility = View.INVISIBLE
-//        }
-//
-//        binding.clSearchDetailSpecialNoteBtn.setOnClickListener {
-//            isDetailVisible = !isDetailVisible
-//            binding.clSearchDetailSpecialNoteDescription.visibility = if (isDetailVisible) {
-//                View.VISIBLE
-//            } else {
-//                View.GONE
-//            }
-//
-//            binding.tvSearchDetailSpecialNote.text = if (isDetailVisible) {
-//                "접기"
-//            } else {
-//                "보기"
-//            }
-//
-//            binding.ivSearchDetailSpecialNoteIcon.rotation = if (isDetailVisible) {
-//                180f
-//            } else {
-//                0f
-//            }
-//        }
-//
-//    }
 }
