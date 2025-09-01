@@ -12,9 +12,10 @@ import com.example.findu.R
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.report.component.ReportDateComponent
+import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
-import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
 import com.example.findu.presentation.ui.report.component.ReportImageComponent
+import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
 import com.example.findu.presentation.ui.report.missing.component.RFIDComponent
 import com.example.findu.presentation.ui.report.missing.component.ReportGenderComponent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
@@ -81,6 +82,12 @@ fun MissingReportScreen(
                 onClick = { onEvent(MissingReportUiEvent.OnMissingDateClicked) }
             )
             VerticalSpacer(30.dp)
+            ReportDescriptionComponent(
+                descriptionState = uiState.description,
+                onKeyboardAction = KeyboardActionHandler {
+                    onEvent(MissingReportUiEvent.OnDismissKeyboard)
+                }
+            )
         }
     }
 }

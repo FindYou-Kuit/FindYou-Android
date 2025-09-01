@@ -17,8 +17,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import javax.inject.Inject
 
 data class MissingReportUiState(
@@ -33,11 +31,12 @@ data class MissingReportUiState(
     val nowDate: LocalDateTime = LocalDateTime.now(),
     val missingDate: String = "",
     val isDateBottomSheetShown: Boolean = false,
-    val description: String = "",
+    val description: TextFieldState = TextFieldState(),
     val address: String = "",
     val currentLatLng: LatLng? = null,
     val nearPlace: String = "",
 )
+
 sealed class MissingReportUiEvent {
     data object OnBackPressed : MissingReportUiEvent()
     data object OnAddImageClick : MissingReportUiEvent()

@@ -39,7 +39,6 @@ fun RoundedInputField(
         interactionSource = interactionSource,
         lineLimits = if (singleLine) TextFieldLineLimits.SingleLine else TextFieldLineLimits.MultiLine(),
         decorator = { innerTextField ->
-
             Box(
                 modifier = modifier
                     .fillMaxWidth()
