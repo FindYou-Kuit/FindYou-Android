@@ -4,9 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginRequestDto(
-    @SerialName("kakaoId")
-    val kakaoId: Long,
+data class GuestLoginRequestDto(
     @SerialName("deviceId")
     val deviceId: String,
 )

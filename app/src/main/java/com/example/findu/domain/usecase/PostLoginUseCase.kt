@@ -1,19 +1,16 @@
 package com.example.findu.domain.usecase
 
+import com.example.findu.domain.model.LoginData
+import com.example.findu.domain.model.LoginInfo
 import com.example.findu.domain.repository.AuthRepository
 import com.example.findu.domain.repository.TokenRepository
 
 class PostLoginUseCase(
     private val authRepository: AuthRepository,
-    private val tokenRepository: TokenRepository
 ) {
     suspend fun postLogin(
-        email: String,
-        password: String
-    ): Result<Unit> = authRepository.postLogin(
-        email = email,
-        password = password
-    ).mapCatching { accessToken ->
-        tokenRepository.setAccessToken(accessToken)
-    }
+        loginInfo:LoginInfo
+    ): Result<LoginData> = authRepository.postLogin(
+        loginInfo = loginInfo
+    )
 }
