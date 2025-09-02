@@ -1,0 +1,11 @@
+package com.example.findu.presentation.ui.report.witness.navigation
+
+import kotlinx.serialization.Serializable
+
+sealed interface WitnessReportRoute {
+    @Serializable
+    data object WitnessReport : WitnessReportRoute
+
+    @Serializable
+    data object AnimalInfo : WitnessReportRoute
+}

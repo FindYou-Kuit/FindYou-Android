@@ -17,7 +17,6 @@
     <string name="login_without_signup_toast_message">가입없이 찾아유 실행</string>
 
 
-
     <!--signup-->
     <string name="signup_email_title">이메일</string>
     <string name="signup_email_hint">example1234@gmail.com</string>
