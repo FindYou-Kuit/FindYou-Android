@@ -21,6 +21,7 @@ import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
+import com.example.findu.presentation.ui.common.AppSettingDialog
 import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
@@ -70,6 +71,13 @@ fun WitnessReportScreen(
             onDismissRequest = { onEvent(WitnessReportUiEvent.OnDismissDialog) },
             onCameraClick = { onEvent(WitnessReportUiEvent.OnOpenCameraClick) },
             onGalleryClick = { onEvent(WitnessReportUiEvent.OnOpenGalleryClick) }
+        )
+    }
+
+    if(uiState.isAppSettingDialogShown) {
+        AppSettingDialog(
+            onDismissRequest = { onEvent(WitnessReportUiEvent.OnDismissDialog) },
+            openAppSettings = { onEvent(WitnessReportUiEvent.OnAppSettingClick) }
         )
     }
 }

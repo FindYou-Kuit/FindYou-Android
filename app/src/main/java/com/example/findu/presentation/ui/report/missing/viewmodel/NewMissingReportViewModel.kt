@@ -21,6 +21,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 data class MissingReportUiState(
+    val isFirstPermissionRequest: Boolean = false,
     val imageUriList: List<Uri> = emptyList(),
     val speciesType: SpeciesType? = null,
     val breedSearchText: TextFieldState = TextFieldState(),
@@ -38,6 +39,7 @@ data class MissingReportUiState(
     val nearPlace: TextFieldState = TextFieldState(),
     val isImageDialogShown: Boolean = false,
     val isSuccessDialogShown: Boolean = false,
+    val isAppSettingDialogShown: Boolean = false,
 )
 
 sealed class MissingReportUiEvent {
@@ -46,6 +48,7 @@ sealed class MissingReportUiEvent {
     data object OnOpenCameraClick : MissingReportUiEvent()
     data object OnOpenGalleryClick : MissingReportUiEvent()
     data object OnSelectAnimalInfoClick : MissingReportUiEvent()
+    data class OnImageSelected(val uri: Uri) : MissingReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : MissingReportUiEvent()
     data class OnBreedInputFieldClick(val input: String) : MissingReportUiEvent()
     data class OnBreedClick(val breed: Breed) : MissingReportUiEvent()
@@ -66,6 +69,7 @@ sealed class MissingReportUiEvent {
     data object OnNavigateReportHistoryClick : MissingReportUiEvent()
     data object OnNavigateHomeClick : MissingReportUiEvent()
     data object OnDismissKeyboard : MissingReportUiEvent()
+    data object OnAppSettingClick : MissingReportUiEvent()
 }
 
 sealed class MissingReportUiEffect {
@@ -73,6 +77,9 @@ sealed class MissingReportUiEffect {
     data object NavigateToAddressSearch : MissingReportUiEffect()
     data class ShowToast(val message: String) : MissingReportUiEffect()
     data object DismissKeyboard : MissingReportUiEffect()
+    data object OpenCamera : MissingReportUiEffect()
+    data object OpenGallery : MissingReportUiEffect()
+    data object OpenAppSettings : MissingReportUiEffect()
 }
 
 @HiltViewModel
@@ -101,18 +108,46 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             MissingReportUiEvent.OnDismissDialog -> setDialogInVisible()
             MissingReportUiEvent.OnNavigateHomeClick -> {}
             MissingReportUiEvent.OnNavigateReportHistoryClick -> {}
-            MissingReportUiEvent.OnOpenCameraClick -> {}
-            MissingReportUiEvent.OnOpenGalleryClick -> {}
+            MissingReportUiEvent.OnOpenCameraClick -> openCamera()
+            MissingReportUiEvent.OnOpenGalleryClick -> openGallery()
             MissingReportUiEvent.OnReportFinishButtonClick -> {}
             MissingReportUiEvent.OnSelectAnimalInfoClick -> {}
             is MissingReportUiEvent.OnSpeciesClick -> {}
+            is MissingReportUiEvent.OnImageSelected -> addImageToList(event.uri)
             MissingReportUiEvent.OnDismissKeyboard -> {
                 viewModelScope.launch {
                     _uiEffect.send(MissingReportUiEffect.DismissKeyboard)
                 }
             }
+
+            MissingReportUiEvent.OnAppSettingClick -> openAppSettings()
         }
     }
+
+    private fun openAppSettings() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.OpenAppSettings)
+        }
+    }
+
+    private fun openGallery() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.OpenGallery)
+        }
+    }
+
+    fun openCamera() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.OpenCamera)
+        }
+    }
+
+    fun setAppSettingDialogVisible() {
+        _uiState.update {
+            it.copy(isAppSettingDialogShown = true)
+        }
+    }
+
 
     private fun setImageDialogVisible() {
         _uiState.update {
@@ -125,6 +160,15 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             it.copy(
                 isImageDialogShown = false,
                 isSuccessDialogShown = false
+            )
+        }
+    }
+
+    private fun addImageToList(uri: Uri) {
+        _uiState.update { it ->
+            it.copy(
+                imageUriList = listOf(uri) + it.imageUriList,
+                isImageDialogShown = false
             )
         }
     }

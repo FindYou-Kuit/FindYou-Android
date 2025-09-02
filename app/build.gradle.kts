@@ -137,4 +137,7 @@ dependencies {
 
     // View Pager
     implementation(libs.bundles.pager)
+    
+    // Accompanist
+    implementation(libs.accompanist.permissions)
 }

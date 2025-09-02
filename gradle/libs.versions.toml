@@ -1,4 +1,5 @@
 [versions]
+accompanistPermissions = "0.37.3"
 agp = "8.7.3"
 coilCompose = "2.5.0"
 composeBom = "2024.04.01"
@@ -34,6 +35,7 @@ kakao = "2.20.3"
 
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

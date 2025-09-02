@@ -22,6 +22,7 @@ import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
+import com.example.findu.presentation.ui.common.AppSettingDialog
 import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
@@ -74,6 +75,12 @@ fun MissingReportScreen(
             onDismissRequest = { onEvent(MissingReportUiEvent.OnDismissDialog) },
             onCameraClick = { onEvent(MissingReportUiEvent.OnOpenCameraClick) },
             onGalleryClick = { onEvent(MissingReportUiEvent.OnOpenGalleryClick) }
+        )
+    }
+    if(uiState.isAppSettingDialogShown) {
+        AppSettingDialog(
+            onDismissRequest = { onEvent(MissingReportUiEvent.OnDismissDialog) },
+            openAppSettings = { onEvent(MissingReportUiEvent.OnAppSettingClick) }
         )
     }
 }

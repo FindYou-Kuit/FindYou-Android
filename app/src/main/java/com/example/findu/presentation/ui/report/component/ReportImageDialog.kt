@@ -38,6 +38,10 @@ fun ReportImageDialog(
     ) {
         Column(
             modifier = modifier
+                .background(
+                    color = FindUTheme.colors.gray1,
+                    shape = RoundedCornerShape(15.dp),
+                )
                 .padding(horizontal = 20.dp)
                 .padding(top = 40.dp, bottom = 20.dp)
         ) {
@@ -71,6 +75,7 @@ fun ReportImageDialog(
             ) {
                 Column(
                     modifier = Modifier
+                        .weight(1f)
                         .background(
                             color = FindUTheme.colors.mainColor2,
                             shape = RoundedCornerShape(8.dp),
@@ -88,7 +93,6 @@ fun ReportImageDialog(
                         contentDescription = null,
                         modifier = Modifier.size(42.dp, 30.dp)
                     )
-                    VerticalSpacer(18.dp)
                     Text(
                         text = stringResource(R.string.report_dialog_capture),
                         style = FindUTheme.typography.body2SemiBold14.copy(
@@ -98,6 +102,7 @@ fun ReportImageDialog(
                 }
                 Column(
                     modifier = Modifier
+                        .weight(1f)
                         .background(
                             color = FindUTheme.colors.mainColor2,
                             shape = RoundedCornerShape(8.dp),
@@ -115,7 +120,6 @@ fun ReportImageDialog(
                         contentDescription = null,
                         modifier = Modifier.size(42.dp, 30.dp)
                     )
-                    VerticalSpacer(18.dp)
                     Text(
                         text = stringResource(R.string.report_dialog_upload),
                         style = FindUTheme.typography.body2SemiBold14.copy(

@@ -7,10 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
-import com.example.findu.domain.model.report.Gender
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +20,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 data class WitnessReportUiState(
+    val isFirstPermissionRequest: Boolean = false,
     val imageUriList: List<Uri> = emptyList(),
     val speciesType: SpeciesType? = null,
     val breedSearchText: TextFieldState = TextFieldState(),
@@ -36,6 +35,7 @@ data class WitnessReportUiState(
     val nearPlace: TextFieldState = TextFieldState(),
     val isImageDialogShown: Boolean = false,
     val isSuccessDialogShown: Boolean = false,
+    val isAppSettingDialogShown: Boolean = false,
 )
 
 sealed class WitnessReportUiEvent {
@@ -43,6 +43,7 @@ sealed class WitnessReportUiEvent {
     data object OnAddImageClick : WitnessReportUiEvent()
     data object OnOpenCameraClick : WitnessReportUiEvent()
     data object OnOpenGalleryClick : WitnessReportUiEvent()
+    data class OnImageSelected(val uri: Uri) : WitnessReportUiEvent()
     data object OnSelectAnimalInfoClick : WitnessReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : WitnessReportUiEvent()
     data class OnBreedInputFieldClick(val input: String) : WitnessReportUiEvent()
@@ -63,6 +64,7 @@ sealed class WitnessReportUiEvent {
     data object OnNavigateReportHistoryClick : WitnessReportUiEvent()
     data object OnNavigateHomeClick : WitnessReportUiEvent()
     data object OnDismissKeyboard : WitnessReportUiEvent()
+    data object OnAppSettingClick : WitnessReportUiEvent()
 }
 
 sealed class WitnessReportUiEffect {
@@ -70,6 +72,9 @@ sealed class WitnessReportUiEffect {
     data object NavigateToAddressSearch : WitnessReportUiEffect()
     data class ShowToast(val message: String) : WitnessReportUiEffect()
     data object DismissKeyboard : WitnessReportUiEffect()
+    data object OpenCamera : WitnessReportUiEffect()
+    data object OpenGallery : WitnessReportUiEffect()
+    data object OpenAppSettings : WitnessReportUiEffect()
 }
 
 @HiltViewModel
@@ -97,16 +102,43 @@ class NewWitnessReportViewModel @Inject constructor() : ViewModel() {
             WitnessReportUiEvent.OnNavigateHomeClick -> {}
             WitnessReportUiEvent.OnDismissDialog -> setDialogInVisible()
             WitnessReportUiEvent.OnNavigateReportHistoryClick -> {}
-            WitnessReportUiEvent.OnOpenCameraClick -> {}
-            WitnessReportUiEvent.OnOpenGalleryClick -> {}
+            WitnessReportUiEvent.OnOpenCameraClick -> openCamera()
+            WitnessReportUiEvent.OnOpenGalleryClick -> openGallery()
             WitnessReportUiEvent.OnReportFinishButtonClick -> {}
             WitnessReportUiEvent.OnSelectAnimalInfoClick -> {}
             is WitnessReportUiEvent.OnSpeciesClick -> {}
+            is WitnessReportUiEvent.OnImageSelected -> addImageToList(event.uri)
             WitnessReportUiEvent.OnDismissKeyboard -> {
                 viewModelScope.launch {
                     _uiEffect.send(WitnessReportUiEffect.DismissKeyboard)
                 }
             }
+
+            WitnessReportUiEvent.OnAppSettingClick -> openAppSettings()
+        }
+    }
+
+    private fun openAppSettings() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.OpenAppSettings)
+        }
+    }
+
+    private fun openGallery() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.OpenGallery)
+        }
+    }
+
+    fun openCamera() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.OpenCamera)
+        }
+    }
+
+    fun setAppSettingDialogVisible() {
+        _uiState.update {
+            it.copy(isAppSettingDialogShown = true)
         }
     }
 
@@ -121,6 +153,15 @@ class NewWitnessReportViewModel @Inject constructor() : ViewModel() {
             it.copy(
                 isImageDialogShown = false,
                 isSuccessDialogShown = false
+            )
+        }
+    }
+
+    private fun addImageToList(uri: Uri) {
+        _uiState.update { it ->
+            it.copy(
+                imageUriList = listOf(uri) + it.imageUriList,
+                isImageDialogShown = false
             )
         }
     }
