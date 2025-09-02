@@ -1,7 +1,8 @@
 package com.example.findu.presentation.ui.my
 
-import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,14 +20,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.findu.BuildConfig
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
 import com.example.findu.presentation.ui.login.LoginActivity
 import com.example.findu.presentation.ui.my.dialog.MyLogoutDialog
+import com.example.findu.presentation.ui.my.dialog.MyNicknameDialog
+import com.example.findu.presentation.ui.my.dialog.MyProfileImageDialog
 import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
-import com.example.findu.presentation.util.PermissionUtils.hasCameraPermission
-import com.example.findu.presentation.util.PermissionUtils.hasLocationPermission
-import com.example.findu.presentation.util.PermissionUtils.requestLocationPermission
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -34,25 +37,27 @@ class MyFragment : Fragment() {
     private val binding get() = _binding!!
     private val myViewModel by viewModels<MyViewModel>()
 
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    private var myProfileImageDialog: MyProfileImageDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    Toast.makeText(requireContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    findNavController().popBackStack()
-                }
+        pickMedia = registerForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri: Uri? ->
+            if (uri != null) {
+                myProfileImageDialog?.setGalleryImage(uri)
+            } else {
+                Toast.makeText(requireContext(), "이미지가 선택되지 않았어요.", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMyBinding.inflate(inflater, container, false)
 
@@ -63,18 +68,32 @@ class MyFragment : Fragment() {
     }
 
     private fun initListener() {
-
         with(binding) {
             llMyNickname.setOnClickListener {
-                llMyNickname.visibility = View.INVISIBLE
-                llMyEditNickname.visibility = View.VISIBLE
+                MyNicknameDialog(
+                    context = requireContext(),
+                    onNicknameChange = { newNickname ->
+                        myViewModel.updateNickName(newNickname)
+                    }
+                ).show()
             }
 
-            btnMyDoneEdit.setOnClickListener {
-                llMyNickname.visibility = View.VISIBLE
-                llMyEditNickname.visibility = View.INVISIBLE
-
-                myViewModel.updateNickName(etMyNickname.text.toString())
+            clMyProflieImage.setOnClickListener {
+                myProfileImageDialog = MyProfileImageDialog(
+                    context = requireContext(),
+                    onDrawableSelected = { resId ->
+                        myViewModel.updateProfileImage(resId)
+                    },
+                    onGallerySelected = { uri ->
+                        myViewModel.updateProfileImageFromGallery(uri)
+                    },
+                    launchGallery = {
+                        pickMedia.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }
+                )
+                myProfileImageDialog?.show()
             }
 
             etMyNickname.addTextChangedListener { text ->
@@ -93,35 +112,40 @@ class MyFragment : Fragment() {
                 findNavController().navigate(R.id.action_fragment_my_to_fragment_my_keep_animals)
             }
 
-            clMyCameraPermission.setOnClickListener {
-                if (hasCameraPermission(requireContext())) {
-                    Toast.makeText(requireContext(), "카메라 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-                }
+            clMyInquire.setOnClickListener {
+                findNavController().navigate(R.id.action_fragment_my_to_fragment_inquire)
             }
 
-            clMyLocationPermission.setOnClickListener {
-                if (hasLocationPermission(requireContext())) {
-                    Toast.makeText(requireContext(), "위치 권한이 이미 허용되었습니다.", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    requestLocationPermission(requireActivity())
-                }
-            }
-
-            clMyLogout.setOnClickListener {
+            val logoutClickListener = View.OnClickListener {
                 MyLogoutDialog(
                     context = requireContext(),
                     onLogoutClick = {
                         with(requireActivity()) {
-                            startActivity(
-                                Intent(requireContext(), LoginActivity::class.java)
-                            )
+                            startActivity(Intent(requireContext(), LoginActivity::class.java))
                             finish()
                         }
-                    }).show()
+                    }
+                ).show()
+            }
+
+            clMyLogout.setOnClickListener(logoutClickListener)
+            tvMyVersionInfo.setOnClickListener(logoutClickListener)
+            chipMyVersion.setOnClickListener(logoutClickListener)
+
+            clMyGotoUpdate.setOnClickListener {
+                val pkg = requireContext().packageName
+                try {
+                    startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$pkg"))
+                    )
+                } catch (e: ActivityNotFoundException) {
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=$pkg")
+                        )
+                    )
+                }
             }
 
             clMyWithdrawal.setOnClickListener {
@@ -137,7 +161,23 @@ class MyFragment : Fragment() {
                         }
                     }).show()
             }
+
+            clMyAlarmSetting.setOnClickListener {
+                myViewModel.toggleAlarmSetting()
+            }
+
+            setupVersion()
         }
+    }
+
+    private fun setupVersion() = with(binding) {
+        val currentVersion = BuildConfig.VERSION_NAME
+        val latest = "1.0"
+        tvMyVersionInfo.text = "버전 정보 $currentVersion"
+
+        val isLatest = currentVersion.replace(".", "").toInt() >= latest.replace(".", "").toInt()
+        clMyVersionChip.isVisible = isLatest
+        clMyGotoUpdate.isVisible = !isLatest
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -169,6 +209,27 @@ class MyFragment : Fragment() {
                         message?.let {
                             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                         }
+                    }
+                }
+                launch {
+                    myViewModel.selectedImageResId.collect { resId ->
+                        resId?.let {
+                            binding.ivMyIllust.setImageResource(it)
+                        }
+                    }
+                }
+                launch {
+                    myViewModel.selectedProfileImageUri.collect { uri ->
+                        uri?.let {
+                            binding.ivMyIllust.setImageURI(it)
+                        }
+                    }
+                }
+                launch {
+                    myViewModel.alarmEnabled.collect { enabled ->
+                        binding.ivMyAlarmIcon.setImageResource(
+                            if (enabled) R.drawable.img_my_alarm_on else R.drawable.img_my_alarm_off
+                        )
                     }
                 }
             }

@@ -104,6 +104,9 @@
         android:label="My"
         tools:layout="@layout/fragment_my">
         <action
+                android:id="@+id/action_fragment_my_to_fragment_inquire"
+                app:destination="@id/fragment_my_inquire" />
+        <action
             android:id="@+id/action_fragment_my_to_fragment_my_report_history"
             app:destination="@id/fragment_my_report_history" />
         <action
@@ -239,6 +242,12 @@
             android:defaultValue=""
             app:argType="string" />
     </fragment>
+
+    <fragment
+            android:id="@+id/fragment_my_inquire"
+            android:name="com.example.findu.presentation.ui.my.MyInquireFragment"
+            android:label="문의하기"
+            tools:layout="@layout/fragment_my_inquire" />
 
     <fragment
         android:id="@+id/fragment_search_detail_protecting"

@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.my
 
-import android.util.Log
+import android.net.Uri
+import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
@@ -19,6 +20,7 @@ import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.model.MyViewedAnimalsRv
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,7 +37,7 @@ class MyViewModel @Inject constructor(
     private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
     private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
     private val deleteInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
-    private val deleteReportUseCase: DeleteReportUseCase
+    private val deleteReportUseCase: DeleteReportUseCase,
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -55,6 +57,15 @@ class MyViewModel @Inject constructor(
 
     private val _nickNameState = MutableStateFlow<String?>(null)
     val nickNameState = _nickNameState.asStateFlow()
+
+    private val _selectedImageResId = MutableStateFlow<Int?>(null)
+    val selectedImageResId = _selectedImageResId.asStateFlow()
+
+    private val _selectedProfileImageUri = MutableStateFlow<Uri?>(null)
+    val selectedProfileImageUri: StateFlow<Uri?> = _selectedProfileImageUri
+
+    private val _alarmEnabled = MutableStateFlow(false)
+    val alarmEnabled : StateFlow<Boolean> = _alarmEnabled
 
     fun fetchInterestAnimals() {
         viewModelScope.launch {
@@ -116,6 +127,19 @@ class MyViewModel @Inject constructor(
         }
     }
 
+    fun updateProfileImage(resId: Int) {
+        _selectedImageResId.value = resId
+    }
+
+
+    fun updateProfileImageFromGallery(uri: Uri) {
+        _selectedProfileImageUri.value = uri
+    }
+
+    fun toggleAlarmSetting(){
+        _alarmEnabled.value = !_alarmEnabled.value
+    }
+
     fun updateNickName(newNickName: String) {
         _nickNameState.value = newNickName
 
@@ -128,6 +152,7 @@ class MyViewModel @Inject constructor(
             )
         }
     }
+
 
     fun fetchNickName() {
         viewModelScope.launch {
@@ -145,7 +170,7 @@ class MyViewModel @Inject constructor(
     fun setInterest(
         id: Long,
         isInterest: Boolean,
-        tag: String
+        tag: String,
     ) {
         when (tag) {
             "보호중" -> postProtectInterest(id, isInterest)
