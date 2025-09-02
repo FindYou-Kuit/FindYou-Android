@@ -2,7 +2,9 @@ package com.example.findu.presentation.ui.report.missing
 
 import android.Manifest
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -150,7 +152,7 @@ class NewMissingReportFragment : Fragment() {
                             }
 
                             MissingReportUiEffect.OpenAppSettings -> {
-                                // TODO: 앱 설정으로 이동
+                                openAppSettings()
                             }
                         }
                     }
@@ -191,5 +193,17 @@ class NewMissingReportFragment : Fragment() {
         findNavController().navigate(
             NewMissingReportFragmentDirections.actionFragmentNewMissingReportToFragmentReportCamera()
         )
+    }
+
+    private fun openAppSettings() {
+        try {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", requireContext().packageName, null)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "설정을 열 수 없습니다", Toast.LENGTH_SHORT).show()
+        }
     }
 }
