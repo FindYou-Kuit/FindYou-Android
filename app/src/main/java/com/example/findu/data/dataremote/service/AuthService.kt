@@ -1,6 +1,7 @@
 package com.example.findu.data.dataremote.service
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
+import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.request.CheckNicknameRequestDto
 import com.example.findu.data.dataremote.model.request.GuestLoginRequestDto
 import com.example.findu.data.dataremote.model.request.LoginRequestDto
@@ -24,12 +25,12 @@ interface AuthService {
     @POST("/$API/$VERSION/$AUTH/login/kakao")
     suspend fun postLogin(
         @Body loginRequestDto: LoginRequestDto
-    ): BaseResponse<LoginResponseDto>
+    ): NullableBaseResponse<LoginResponseDto>
 
     @POST("/$API/$VERSION/$AUTH/login/guest")
     suspend fun postGuestLogin(
         @Body guestLoginRequestDto: GuestLoginRequestDto
-    ): BaseResponse<GuestLoginResponseDto>
+    ): NullableBaseResponse<GuestLoginResponseDto>
 
     @POST("/$API/$VERSION/users/check/duplicate-nickname")
     suspend fun postCheckNickname(
@@ -44,5 +45,5 @@ interface AuthService {
         @Part("nickname") nickname: RequestBody,
         @Part("kakaoId") kakaoId: RequestBody,
         @Part("deviceId") deviceId: RequestBody
-    ): BaseResponse<UserInfoDto>
+    ): NullableBaseResponse<UserInfoDto>
 }

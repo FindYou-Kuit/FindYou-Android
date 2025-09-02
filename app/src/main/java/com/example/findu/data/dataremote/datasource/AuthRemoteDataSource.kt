@@ -1,6 +1,7 @@
 package com.example.findu.data.dataremote.datasource
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
+import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.request.GuestLoginRequestDto
 import com.example.findu.data.dataremote.model.request.LoginRequestDto
 import com.example.findu.data.dataremote.model.response.CheckNicknameResponseDto
@@ -13,11 +14,11 @@ import java.io.File
 interface AuthRemoteDataSource {
     suspend fun postLogin(
         loginRequestDto: LoginRequestDto
-    ): BaseResponse<LoginResponseDto>
+    ): NullableBaseResponse<LoginResponseDto>
 
     suspend fun postGuestLogin(
         guestLoginRequestDto: GuestLoginRequestDto
-    ): BaseResponse<GuestLoginResponseDto>
+    ): NullableBaseResponse<GuestLoginResponseDto>
 
     suspend fun postCheckNickname(
         nickname: String
@@ -29,5 +30,5 @@ interface AuthRemoteDataSource {
         nickname: String,
         kakaoId: Long,
         deviceId: String
-    ): BaseResponse<UserInfoDto>
+    ): NullableBaseResponse<UserInfoDto>
 }

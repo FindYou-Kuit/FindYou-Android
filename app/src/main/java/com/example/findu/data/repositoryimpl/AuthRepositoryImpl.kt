@@ -17,17 +17,20 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     override suspend fun postLogin(loginInfo: LoginInfo): Result<LoginData> =
         runCatching {
-            authRemoteDataSource.postLogin(loginRequestDto = loginInfo.toRequestDto()).handleBaseResponse().getOrThrow().toDomain()
+            authRemoteDataSource.postLogin(loginRequestDto = loginInfo.toRequestDto()).handleBaseResponse().getOrThrow()
+                ?.toDomain() ?: error("Login data is null")
         }
 
-    override suspend fun postGuestLogin(deviceId:String): Result<GuestLoginData> =
+    override suspend fun postGuestLogin(deviceId: String): Result<GuestLoginData> =
         runCatching {
-            authRemoteDataSource.postGuestLogin(guestLoginRequestDto = deviceId.toRequestDto()).handleBaseResponse().getOrThrow().toDomain()
+            authRemoteDataSource.postGuestLogin(guestLoginRequestDto = deviceId.toRequestDto()).handleBaseResponse()
+                .getOrThrow()
+                ?.toDomain() ?: error("Login data is null")
         }
 
     override suspend fun postCheckNickname(nickname: String): Result<Boolean> =
         runCatching {
-            authRemoteDataSource.postCheckNickname(nickname=nickname).handleBaseResponse().getOrThrow().isDuplicate
+            authRemoteDataSource.postCheckNickname(nickname = nickname).handleBaseResponse().getOrThrow().isDuplicate
         }
 
     override suspend fun postSignup(
@@ -43,6 +46,6 @@ class AuthRepositoryImpl @Inject constructor(
             nickname = nickname,
             kakaoId = kakaoId,
             deviceId = deviceId
-        ).handleBaseResponse().getOrThrow().toDomain()
+        ).handleBaseResponse().getOrThrow()?.toDomain() ?: error("Signup data is null")
     }
 }

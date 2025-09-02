@@ -2,6 +2,7 @@ package com.example.findu.data.dataremote.datasourceimpl
 
 import com.example.findu.data.dataremote.datasource.AuthRemoteDataSource
 import com.example.findu.data.dataremote.model.base.BaseResponse
+import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.request.CheckNicknameRequestDto
 import com.example.findu.data.dataremote.model.request.GuestLoginRequestDto
 import com.example.findu.data.dataremote.model.request.LoginRequestDto
@@ -20,10 +21,10 @@ import javax.inject.Inject
 class AuthRemoteDataSourceImpl @Inject constructor(
     private val authService: AuthService
 ) : AuthRemoteDataSource {
-    override suspend fun postLogin(loginRequestDto: LoginRequestDto): BaseResponse<LoginResponseDto> =
+    override suspend fun postLogin(loginRequestDto: LoginRequestDto): NullableBaseResponse<LoginResponseDto> =
         authService.postLogin(loginRequestDto=loginRequestDto)
 
-    override suspend fun postGuestLogin(guestLoginRequestDto: GuestLoginRequestDto): BaseResponse<GuestLoginResponseDto> =
+    override suspend fun postGuestLogin(guestLoginRequestDto: GuestLoginRequestDto): NullableBaseResponse<GuestLoginResponseDto> =
         authService.postGuestLogin(guestLoginRequestDto=guestLoginRequestDto)
 
     override suspend fun postCheckNickname(nickname: String): BaseResponse<CheckNicknameResponseDto> =
@@ -35,7 +36,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         nickname: String,
         kakaoId: Long,
         deviceId: String
-    ): BaseResponse<UserInfoDto> = authService.postSignup(
+    ): NullableBaseResponse<UserInfoDto> = authService.postSignup(
         profileImage = profileImageFile?.let {
             MultipartBody.Part.createFormData(
                 "profileImage",
