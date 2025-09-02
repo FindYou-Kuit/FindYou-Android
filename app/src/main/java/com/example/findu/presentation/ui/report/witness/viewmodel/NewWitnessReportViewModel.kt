@@ -10,11 +10,13 @@ import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -32,6 +34,8 @@ data class WitnessReportUiState(
     val address: String = "",
     val currentLatLng: LatLng? = null,
     val nearPlace: TextFieldState = TextFieldState(),
+    val isImageDialogShown: Boolean = false,
+    val isSuccessDialogShown: Boolean = false,
 )
 
 sealed class WitnessReportUiEvent {
@@ -54,6 +58,7 @@ sealed class WitnessReportUiEvent {
     data object OnAddressSearchClick : WitnessReportUiEvent()
     data class OnAddressUpdated(val address: String) : WitnessReportUiEvent()
     data class OnMapPinMoved(val latLng: LatLng) : WitnessReportUiEvent()
+    data object OnDismissDialog : WitnessReportUiEvent()
     data object OnReportFinishButtonClick : WitnessReportUiEvent()
     data object OnNavigateReportHistoryClick : WitnessReportUiEvent()
     data object OnNavigateHomeClick : WitnessReportUiEvent()
@@ -79,7 +84,7 @@ class NewWitnessReportViewModel @Inject constructor() : ViewModel() {
     fun handleEvent(event: WitnessReportUiEvent) {
         when (event) {
             WitnessReportUiEvent.OnBackPressed -> {}
-            WitnessReportUiEvent.OnAddImageClick -> {}
+            WitnessReportUiEvent.OnAddImageClick -> setImageDialogVisible()
             WitnessReportUiEvent.OnAddressSearchClick -> {}
             is WitnessReportUiEvent.OnAddressUpdated -> {}
             is WitnessReportUiEvent.OnBreedClick -> {}
@@ -90,6 +95,7 @@ class NewWitnessReportViewModel @Inject constructor() : ViewModel() {
             WitnessReportUiEvent.OnInfoFinishButtonClick -> {}
             is WitnessReportUiEvent.OnMapPinMoved -> {}
             WitnessReportUiEvent.OnNavigateHomeClick -> {}
+            WitnessReportUiEvent.OnDismissDialog -> setDialogInVisible()
             WitnessReportUiEvent.OnNavigateReportHistoryClick -> {}
             WitnessReportUiEvent.OnOpenCameraClick -> {}
             WitnessReportUiEvent.OnOpenGalleryClick -> {}
@@ -101,6 +107,21 @@ class NewWitnessReportViewModel @Inject constructor() : ViewModel() {
                     _uiEffect.send(WitnessReportUiEffect.DismissKeyboard)
                 }
             }
+        }
+    }
+
+    private fun setImageDialogVisible() {
+        _uiState.update {
+            it.copy(isImageDialogShown = true)
+        }
+    }
+
+    private fun setDialogInVisible() {
+        _uiState.update {
+            it.copy(
+                isImageDialogShown = false,
+                isSuccessDialogShown = false
+            )
         }
     }
 }

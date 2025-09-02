@@ -26,6 +26,7 @@ import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
 import com.example.findu.presentation.ui.report.component.ReportImageComponent
+import com.example.findu.presentation.ui.report.component.ReportImageDialog
 import com.example.findu.presentation.ui.report.component.ReportInputComponent
 import com.example.findu.presentation.ui.report.component.ReportLocationComponent
 import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
@@ -34,6 +35,7 @@ import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportU
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
 import com.example.findu.ui.theme.FindUTheme
 import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.rememberCameraPositionState
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -60,6 +62,29 @@ fun MissingReportScreen(
         }
     }
 
+    MissingReportScreen(
+        uiState = uiState,
+        onEvent = onEvent,
+        cameraPositionState = cameraPositionState,
+        buttonEnabled = buttonEnabled
+    )
+
+    if (uiState.isImageDialogShown) {
+        ReportImageDialog(
+            onDismissRequest = { onEvent(MissingReportUiEvent.OnDismissDialog) },
+            onCameraClick = { onEvent(MissingReportUiEvent.OnOpenCameraClick) },
+            onGalleryClick = { onEvent(MissingReportUiEvent.OnOpenGalleryClick) }
+        )
+    }
+}
+
+@Composable
+private fun MissingReportScreen(
+    uiState: MissingReportUiState,
+    onEvent: (MissingReportUiEvent) -> Unit,
+    cameraPositionState: CameraPositionState,
+    buttonEnabled: Boolean,
+) {
     Column(
         modifier = Modifier.padding(bottom = 30.dp),
     ) {

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.KeyboardActionHandler
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -26,12 +25,14 @@ import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
 import com.example.findu.presentation.ui.report.component.ReportImageComponent
+import com.example.findu.presentation.ui.report.component.ReportImageDialog
 import com.example.findu.presentation.ui.report.component.ReportLocationComponent
 import com.example.findu.presentation.ui.report.witness.component.WitnessAnimalInfoComponent
 import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiEvent
 import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiState
 import com.example.findu.ui.theme.FindUTheme
 import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.rememberCameraPositionState
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -57,6 +58,29 @@ fun WitnessReportScreen(
         }
     }
 
+    WitnessReportScreen(
+        uiState = uiState,
+        onEvent = onEvent,
+        cameraPositionState = cameraPositionState,
+        buttonEnabled = buttonEnabled
+    )
+
+    if (uiState.isImageDialogShown) {
+        ReportImageDialog(
+            onDismissRequest = { onEvent(WitnessReportUiEvent.OnDismissDialog) },
+            onCameraClick = { onEvent(WitnessReportUiEvent.OnOpenCameraClick) },
+            onGalleryClick = { onEvent(WitnessReportUiEvent.OnOpenGalleryClick) }
+        )
+    }
+}
+
+@Composable
+private fun WitnessReportScreen(
+    uiState: WitnessReportUiState,
+    onEvent: (WitnessReportUiEvent) -> Unit,
+    cameraPositionState: CameraPositionState,
+    buttonEnabled: Boolean,
+) {
     Column(
         modifier = Modifier.padding(bottom = 30.dp),
     ) {

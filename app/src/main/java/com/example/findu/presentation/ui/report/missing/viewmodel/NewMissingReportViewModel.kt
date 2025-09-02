@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -35,6 +36,8 @@ data class MissingReportUiState(
     val address: String = "",
     val currentLatLng: LatLng? = null,
     val nearPlace: TextFieldState = TextFieldState(),
+    val isImageDialogShown: Boolean = false,
+    val isSuccessDialogShown: Boolean = false,
 )
 
 sealed class MissingReportUiEvent {
@@ -58,6 +61,7 @@ sealed class MissingReportUiEvent {
     data object OnAddressSearchClick : MissingReportUiEvent()
     data class OnAddressUpdated(val address: String) : MissingReportUiEvent()
     data class OnMapPinMoved(val latLng: LatLng) : MissingReportUiEvent()
+    data object OnDismissDialog : MissingReportUiEvent()
     data object OnReportFinishButtonClick : MissingReportUiEvent()
     data object OnNavigateReportHistoryClick : MissingReportUiEvent()
     data object OnNavigateHomeClick : MissingReportUiEvent()
@@ -83,7 +87,7 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
     fun handleEvent(event: MissingReportUiEvent) {
         when (event) {
             MissingReportUiEvent.OnBackPressed -> {}
-            MissingReportUiEvent.OnAddImageClick -> {}
+            MissingReportUiEvent.OnAddImageClick -> setImageDialogVisible()
             MissingReportUiEvent.OnAddressSearchClick -> {}
             is MissingReportUiEvent.OnAddressUpdated -> {}
             is MissingReportUiEvent.OnBreedClick -> {}
@@ -94,6 +98,7 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             is MissingReportUiEvent.OnGenderSelected -> {}
             MissingReportUiEvent.OnInfoFinishButtonClick -> {}
             is MissingReportUiEvent.OnMapPinMoved -> {}
+            MissingReportUiEvent.OnDismissDialog -> setDialogInVisible()
             MissingReportUiEvent.OnNavigateHomeClick -> {}
             MissingReportUiEvent.OnNavigateReportHistoryClick -> {}
             MissingReportUiEvent.OnOpenCameraClick -> {}
@@ -106,6 +111,21 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
                     _uiEffect.send(MissingReportUiEffect.DismissKeyboard)
                 }
             }
+        }
+    }
+
+    private fun setImageDialogVisible() {
+        _uiState.update {
+            it.copy(isImageDialogShown = true)
+        }
+    }
+
+    private fun setDialogInVisible() {
+        _uiState.update {
+            it.copy(
+                isImageDialogShown = false,
+                isSuccessDialogShown = false
+            )
         }
     }
 }
