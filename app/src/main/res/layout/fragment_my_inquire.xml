@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_my_inquire"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_my_inquire_title"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_my_inquire_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="문의하기"
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_inquire_category_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="20dp"
+        android:text="카테고리"
+        android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_my_inquire_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="중복 선택 가능"
+        android:textAppearance="@style/TextAppearance.FindU.caption_12"
+        android:textColor="@color/gray4"
+        app:layout_constraintBottom_toBottomOf="@id/tv_inquire_category_label"
+        app:layout_constraintStart_toEndOf="@id/tv_inquire_category_label"
+        app:layout_constraintTop_toTopOf="@id/tv_inquire_category_label" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cg_inquire_filter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:chipSpacingHorizontal="5dp"
+        app:chipSpacingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_inquire_category_label"
+        app:selectionRequired="false"
+        app:singleSelection="false">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_bug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_my_inquire_chip"
+            android:checkable="true"
+            android:clickable="true"
+            android:text="오류/버그 신고"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+            android:textColor="@color/chip_inquire_color"
+            app:chipBackgroundColor="@color/white" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_my_inquire_chip"
+            android:checkable="true"
+            android:clickable="true"
+            android:text="개선 및 피드백"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+            android:textColor="@color/chip_inquire_color"
+            app:chipBackgroundColor="@color/white" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_etc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_my_inquire_chip"
+            android:checkable="true"
+            android:clickable="true"
+            android:text="기타 문의"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+            android:textColor="@color/chip_inquire_color"
+            app:chipBackgroundColor="@color/white" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <TextView
+        android:id="@+id/tv_inquire_title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="20dp"
+        android:text="문의 제목"
+        android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cg_inquire_filter" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfi_inquire_title"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="10dp"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_inquire_title_label">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tf_inquire_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="제목을 입력해주세요."
+            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+            android:textColorHint="@color/gray3" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_inquire_content_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="30dp"
+        android:text="문의 내용"
+        android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tfi_inquire_title" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfi_inquire_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_inquire_content_label">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tf_inquire_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:hint="내용을 입력해주세요."
+            android:inputType="textMultiLine"
+            android:maxLines="17"
+            android:minLines="5"
+            android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
+            android:textColorHint="@color/gray3" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_inquire_set_initial"
+        android:layout_width="103dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/bg_btn_gray_30"
+        android:backgroundTint="@null"
+        android:text="초기화"
+        android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+        android:textColor="@color/gray4"
+        app:backgroundTint="@color/gray2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_inquire_check"
+        android:layout_width="212dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/bg_btn_main_30"
+        android:text="확인"
+        android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+        app:backgroundTint="@color/main_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
