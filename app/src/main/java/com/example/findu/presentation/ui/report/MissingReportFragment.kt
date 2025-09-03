@@ -178,6 +178,9 @@ class MissingReportFragment : Fragment() {
                             MissingReportUiEffect.OpenAppSettings -> {
                                 openAppSettings()
                             }
+                            MissingReportUiEffect.ClearFocus -> {
+                                focusManager.clearFocus()
+                            }
                         }
                     }
                 }

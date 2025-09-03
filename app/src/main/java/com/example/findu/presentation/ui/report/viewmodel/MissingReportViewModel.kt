@@ -17,7 +17,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 
 data class MissingReportUiState(
@@ -26,11 +29,13 @@ data class MissingReportUiState(
     val speciesType: SpeciesType? = null,
     val breedSearchText: TextFieldState = TextFieldState(),
     val breed: Breed? = null,
+    val breedList: List<Breed> = emptyList(),
     val age: TextFieldState = TextFieldState(),
     val gender: Gender = Gender.MALE,
     val rfidNumber: TextFieldState = TextFieldState(),
     val selectedFurColors: List<FurColorType> = emptyList(),
-    val nowDate: LocalDateTime = LocalDateTime.now(),
+    val nowDate: LocalDateTime = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault()),
     val missingDate: String = "",
     val isDateBottomSheetShown: Boolean = false,
     val description: TextFieldState = TextFieldState(),
@@ -67,6 +72,7 @@ sealed class MissingReportUiEvent {
     data object OnReportFinishButtonClick : MissingReportUiEvent()
     data object OnDismissKeyboard : MissingReportUiEvent()
     data object OnAppSettingClick : MissingReportUiEvent()
+    data object ClearFocus : MissingReportUiEvent()
 }
 
 sealed class MissingReportUiEffect {
@@ -76,6 +82,7 @@ sealed class MissingReportUiEffect {
     data class ShowToast(val message: String) : MissingReportUiEffect()
     data object ShowFinishDialog : MissingReportUiEffect()
     data object DismissKeyboard : MissingReportUiEffect()
+    data object ClearFocus : MissingReportUiEffect()
     data object OpenCamera : MissingReportUiEffect()
     data object OpenGallery : MissingReportUiEffect()
     data object OpenAppSettings : MissingReportUiEffect()
@@ -90,33 +97,133 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
     private val _uiEffect = Channel<MissingReportUiEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
+    init {
+        fetchBreedList()
+    }
+
+    private fun fetchBreedList() {
+        // TODO: 실제 API 연동 필요
+        _uiState.update {
+            it.copy(
+                breedList = listOf(
+                    Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
+                    Breed.DogBreed(2, "German Shepherd", SpeciesType.DOG),
+                    Breed.DogBreed(3, "Golden Retriever", SpeciesType.DOG),
+                    Breed.DogBreed(4, "Bulldog", SpeciesType.DOG),
+                    Breed.DogBreed(5, "Beagle", SpeciesType.DOG),
+                    Breed.DogBreed(6, "Poodle", SpeciesType.DOG),
+                )
+            )
+        }
+    }
+
     fun handleEvent(event: MissingReportUiEvent) {
         when (event) {
             MissingReportUiEvent.OnBackPressed -> navigateUp()
             MissingReportUiEvent.OnAddImageClick -> setImageDialogVisible()
-            MissingReportUiEvent.OnAddressSearchClick -> {}
-            is MissingReportUiEvent.OnAddressUpdated -> {}
-            is MissingReportUiEvent.OnBreedClick -> {}
-            MissingReportUiEvent.OnMissingDateClicked -> {}
-            is MissingReportUiEvent.OnDateSelected -> {}
-            is MissingReportUiEvent.OnFurColorSelected -> {}
-            is MissingReportUiEvent.OnGenderSelected -> {}
+            MissingReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
+            is MissingReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
+            is MissingReportUiEvent.OnBreedClick -> updateBreed(event.breed)
+            MissingReportUiEvent.OnMissingDateClicked -> setDateBottomSheetVisible(true)
+            is MissingReportUiEvent.OnDateSelected -> updateDate(event.dateTime)
+            is MissingReportUiEvent.OnFurColorSelected ->
+                updateFurColor(event.furColorType, event.flag)
+
+            is MissingReportUiEvent.OnGenderSelected -> updateGender(event.gender)
             MissingReportUiEvent.OnInfoFinishButtonClick -> navigateUp()
-            is MissingReportUiEvent.OnMapPinMoved -> {}
+            is MissingReportUiEvent.OnMapPinMoved -> updateAddress(event.latLng)
             MissingReportUiEvent.OnDismissDialog -> setDialogInVisible()
             MissingReportUiEvent.OnOpenCameraClick -> openCamera()
             MissingReportUiEvent.OnOpenGalleryClick -> openGallery()
             MissingReportUiEvent.OnReportFinishButtonClick -> showFinishDialog()
-            MissingReportUiEvent.OnSelectAnimalInfoClick -> {}
-            is MissingReportUiEvent.OnSpeciesClick -> {}
+            MissingReportUiEvent.OnSelectAnimalInfoClick -> navigateToAnimalInfo()
+            is MissingReportUiEvent.OnSpeciesClick -> updateSpecies(event.speciesType)
             is MissingReportUiEvent.OnImageSelected -> addImageToList(event.uri)
-            MissingReportUiEvent.OnDismissKeyboard -> {
-                viewModelScope.launch {
-                    _uiEffect.send(MissingReportUiEffect.DismissKeyboard)
-                }
-            }
-
+            MissingReportUiEvent.OnDismissKeyboard -> dismissKeyboard()
             MissingReportUiEvent.OnAppSettingClick -> openAppSettings()
+            MissingReportUiEvent.ClearFocus -> clearViewFocus()
+        }
+    }
+
+    private fun clearViewFocus() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.ClearFocus)
+        }
+    }
+
+    private fun updateGender(gender: Gender) {
+        _uiState.update { it.copy(gender = gender) }
+    }
+
+    private fun dismissKeyboard() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.DismissKeyboard)
+        }
+    }
+
+    private fun updateAddress(latLng: LatLng) {
+        // TODO: 주소 변환 api 연동
+        _uiState.update {
+            it.copy(
+                currentLatLng = latLng,
+                address = "위도: ${latLng.latitude}, 경도: ${latLng.longitude}"
+            )
+        }
+    }
+
+    private fun updateFurColor(
+        furColorType: FurColorType,
+        flag: Boolean,
+    ) {
+        _uiState.update {
+            val newList = if (flag) {
+                it.selectedFurColors + furColorType
+            } else {
+                it.selectedFurColors - furColorType
+            }
+            it.copy(selectedFurColors = newList)
+        }
+    }
+
+    private fun updateSpecies(speciesType: SpeciesType) {
+        _uiState.update { it.copy(speciesType = speciesType) }
+    }
+
+    private fun navigateToAnimalInfo() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.NavigateToAnimalInfo)
+        }
+    }
+
+    private fun updateDate(dateTime: LocalDateTime) {
+        _uiState.update {
+            it.copy(
+                missingDate = "${dateTime.year}년 ${dateTime.monthNumber}월 ${dateTime.dayOfMonth}일",
+            )
+        }
+        setDateBottomSheetVisible(false)
+    }
+
+    private fun setDateBottomSheetVisible(flag: Boolean) {
+        _uiState.update { it.copy(isDateBottomSheetShown = flag) }
+    }
+
+    private fun updateBreed(breed: Breed) {
+        _uiState.update {
+            it.copy(
+                breed = breed,
+                breedSearchText = TextFieldState(breed.name)
+            )
+        }
+    }
+
+    private fun updateAddress(address: String) {
+        _uiState.update { it.copy(address = address) }
+    }
+
+    private fun navigateToAddressSearch() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.NavigateToAddressSearch)
         }
     }
 

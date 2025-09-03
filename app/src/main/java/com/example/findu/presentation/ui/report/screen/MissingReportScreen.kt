@@ -6,12 +6,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +29,7 @@ import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.common.AppSettingDialog
+import com.example.findu.presentation.ui.report.component.ReportDateBottomSheet
 import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
@@ -34,13 +41,17 @@ import com.example.findu.presentation.ui.report.component.missing.MissingAnimalI
 import com.example.findu.presentation.ui.report.component.missing.ReportGenderComponent
 import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiState
+import com.example.findu.presentation.util.extension.toKoreanDateString
 import com.example.findu.ui.theme.FindUTheme
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
+import kotlinx.datetime.format
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MissingReportScreen(
     uiState: MissingReportUiState,
@@ -51,7 +62,15 @@ fun MissingReportScreen(
             position = CameraPosition(it, 15.0)
         }
     }
-    val buttonEnabled by remember {
+    val buttonEnabled by remember(
+        uiState.speciesType,
+        uiState.breed,
+        uiState.age,
+        uiState.selectedFurColors,
+        uiState.missingDate,
+        uiState.address,
+        uiState.imageUriList
+    ) {
         derivedStateOf {
             uiState.speciesType != null &&
                     uiState.breed != null &&
@@ -63,9 +82,19 @@ fun MissingReportScreen(
         }
     }
 
+    val sheetState = rememberModalBottomSheetState(
+        skipHalfExpanded = true,
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+    val scope = rememberCoroutineScope()
+
     MissingReportScreen(
         uiState = uiState,
         onEvent = onEvent,
+        onDateClick = {
+            onEvent(MissingReportUiEvent.OnDismissKeyboard)
+            scope.launch { sheetState.show() }
+        },
         cameraPositionState = cameraPositionState,
         buttonEnabled = buttonEnabled
     )
@@ -77,23 +106,39 @@ fun MissingReportScreen(
             onGalleryClick = { onEvent(MissingReportUiEvent.OnOpenGalleryClick) }
         )
     }
-    if(uiState.isAppSettingDialogShown) {
+    if (uiState.isAppSettingDialogShown) {
         AppSettingDialog(
             onDismissRequest = { onEvent(MissingReportUiEvent.OnDismissDialog) },
             openAppSettings = { onEvent(MissingReportUiEvent.OnAppSettingClick) }
         )
     }
+
+
+    ReportDateBottomSheet(
+        nowDate = uiState.nowDate,
+        sheetState = sheetState,
+        onDateSelected = {
+            onEvent(MissingReportUiEvent.OnDateSelected(it))
+            scope.launch { sheetState.hide() }
+        },
+        hideSheet = {
+            scope.launch { sheetState.hide() }
+        },
+    )
 }
 
 @Composable
 private fun MissingReportScreen(
     uiState: MissingReportUiState,
     onEvent: (MissingReportUiEvent) -> Unit,
+    onDateClick: () -> Unit = {},
     cameraPositionState: CameraPositionState,
     buttonEnabled: Boolean,
 ) {
     Column(
-        modifier = Modifier.padding(bottom = 30.dp),
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 30.dp),
     ) {
         FindUTopAppBar(
             modifier = Modifier,
@@ -143,10 +188,8 @@ private fun MissingReportScreen(
             ReportDateComponent(
                 selectedDate = uiState.missingDate,
                 titleRes = R.string.report_missing_date_title,
-                nowDate = uiState.nowDate.format(
-                    DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E)", Locale.KOREAN)
-                ),
-                onClick = { onEvent(MissingReportUiEvent.OnMissingDateClicked) }
+                nowDate = uiState.nowDate.toKoreanDateString(),
+                onClick = onDateClick
             )
             VerticalSpacer(30.dp)
             ReportDescriptionComponent(

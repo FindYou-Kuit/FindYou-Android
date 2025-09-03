@@ -88,24 +88,26 @@ fun ReportSpeciesComponent(
                     shape = RoundedCornerShape(30.dp)
                 )
         ) {
-            Box(
-                modifier = Modifier.matchParentSize()
-            ) {
+            selectedSpecies?.let {
                 Box(
-                    modifier = modifier
-                        .offset { IntOffset(animatedX, 0) }
-                        .fillMaxHeight()
-                        .size(selectedBoxWidthDp, 44.dp)
-                        .clip(RoundedCornerShape(30.dp))
-                        .background(
-                            color = FindUTheme.colors.white,
-                        )
-                        .border(
-                            width = 1.dp,
-                            color = FindUTheme.colors.mainColor,
-                            shape = RoundedCornerShape(30.dp)
-                        )
-                )
+                    modifier = Modifier.matchParentSize()
+                ) {
+                    Box(
+                        modifier = modifier
+                            .offset { IntOffset(animatedX, 0) }
+                            .fillMaxHeight()
+                            .size(selectedBoxWidthDp, 44.dp)
+                            .clip(RoundedCornerShape(30.dp))
+                            .background(
+                                color = FindUTheme.colors.white,
+                            )
+                            .border(
+                                width = 2.dp,
+                                color = FindUTheme.colors.mainColor,
+                                shape = RoundedCornerShape(30.dp)
+                            )
+                    )
+                }
             }
             Row(
                 modifier = modifier

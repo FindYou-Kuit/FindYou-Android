@@ -52,6 +52,9 @@
     <string name="Maltese">말티즈</string>
     <string name="dummy_location_address">서울특별시 광진구 화양동 000–0</string>
     <string name="asterisk">*</string>
+    <string name="year">년</string>
+    <string name="month">월</string>
+    <string name="day">일</string>
 
     <!-- bottom navigation-->
     <string name="bottom_nav_home">홈</string>

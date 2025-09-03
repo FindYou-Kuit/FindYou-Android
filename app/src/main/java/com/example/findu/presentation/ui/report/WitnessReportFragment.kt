@@ -175,6 +175,10 @@ class WitnessReportFragment : Fragment() {
                                 openAppSettings()
                             }
 
+                            WitnessReportUiEffect.ClearFocus -> {
+                                focusManager.clearFocus()
+                            }
+
                         }
                     }
                 }

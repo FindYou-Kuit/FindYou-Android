@@ -1,12 +1,15 @@
 package com.example.findu.presentation.ui.report.screen
 
+import android.R.attr.bottom
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -48,7 +51,14 @@ fun WitnessReportScreen(
             position = CameraPosition(it, 15.0)
         }
     }
-    val buttonEnabled by remember {
+    val buttonEnabled by remember(
+        uiState.speciesType,
+        uiState.breed,
+        uiState.selectedFurColors,
+        uiState.witnessDate,
+        uiState.address,
+        uiState.imageUriList
+    ) {
         derivedStateOf {
             uiState.speciesType != null &&
                     uiState.breed != null &&
@@ -74,7 +84,7 @@ fun WitnessReportScreen(
         )
     }
 
-    if(uiState.isAppSettingDialogShown) {
+    if (uiState.isAppSettingDialogShown) {
         AppSettingDialog(
             onDismissRequest = { onEvent(WitnessReportUiEvent.OnDismissDialog) },
             openAppSettings = { onEvent(WitnessReportUiEvent.OnAppSettingClick) }
@@ -90,7 +100,9 @@ private fun WitnessReportScreen(
     buttonEnabled: Boolean,
 ) {
     Column(
-        modifier = Modifier.padding(bottom = 30.dp),
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 30.dp),
     ) {
         FindUTopAppBar(
             modifier = Modifier,

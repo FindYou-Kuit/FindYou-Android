@@ -25,6 +25,7 @@ data class WitnessReportUiState(
     val speciesType: SpeciesType? = null,
     val breedSearchText: TextFieldState = TextFieldState(),
     val breed: Breed? = null,
+    val breedList: List<Breed> = emptyList(),
     val selectedFurColors: List<FurColorType> = emptyList(),
     val nowDate: LocalDateTime = LocalDateTime.now(),
     val witnessDate: String = "",
@@ -46,7 +47,6 @@ sealed class WitnessReportUiEvent {
     data class OnImageSelected(val uri: Uri) : WitnessReportUiEvent()
     data object OnSelectAnimalInfoClick : WitnessReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : WitnessReportUiEvent()
-    data class OnBreedInputFieldClick(val input: String) : WitnessReportUiEvent()
     data class OnBreedClick(val breed: Breed) : WitnessReportUiEvent()
     data object OnInfoFinishButtonClick : WitnessReportUiEvent()
     data class OnFurColorSelected(
@@ -63,6 +63,7 @@ sealed class WitnessReportUiEvent {
     data object OnReportFinishButtonClick : WitnessReportUiEvent()
     data object OnDismissKeyboard : WitnessReportUiEvent()
     data object OnAppSettingClick : WitnessReportUiEvent()
+    data object ClearFocus : WitnessReportUiEvent()
 }
 
 sealed class WitnessReportUiEffect {
@@ -75,6 +76,7 @@ sealed class WitnessReportUiEffect {
     data object OpenCamera : WitnessReportUiEffect()
     data object OpenGallery : WitnessReportUiEffect()
     data object OpenAppSettings : WitnessReportUiEffect()
+    data object ClearFocus : WitnessReportUiEffect()
 }
 
 @HiltViewModel
@@ -88,31 +90,106 @@ class WitnessReportViewModel @Inject constructor() : ViewModel() {
 
     fun handleEvent(event: WitnessReportUiEvent) {
         when (event) {
-            WitnessReportUiEvent.OnBackPressed -> {}
+            WitnessReportUiEvent.OnBackPressed -> navigateUp()
             WitnessReportUiEvent.OnAddImageClick -> setImageDialogVisible()
-            WitnessReportUiEvent.OnAddressSearchClick -> {}
-            is WitnessReportUiEvent.OnAddressUpdated -> {}
-            is WitnessReportUiEvent.OnBreedClick -> {}
-            is WitnessReportUiEvent.OnBreedInputFieldClick -> {}
-            WitnessReportUiEvent.OnWitnessDateClicked -> {}
-            is WitnessReportUiEvent.OnDateSelected -> {}
-            is WitnessReportUiEvent.OnFurColorSelected -> {}
+            WitnessReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
+            is WitnessReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
+            is WitnessReportUiEvent.OnBreedClick -> updateBreed(event.breed)
+            WitnessReportUiEvent.OnWitnessDateClicked -> setDateBottomSheetVisible(true)
+            is WitnessReportUiEvent.OnDateSelected -> updateDate(event.dateTime)
+            is WitnessReportUiEvent.OnFurColorSelected ->
+                updateFurColor(event.furColorType, event.flag)
+
             WitnessReportUiEvent.OnInfoFinishButtonClick -> navigateUp()
-            is WitnessReportUiEvent.OnMapPinMoved -> {}
+            is WitnessReportUiEvent.OnMapPinMoved -> updateAddress(event.latLng)
             WitnessReportUiEvent.OnDismissDialog -> setDialogInVisible()
             WitnessReportUiEvent.OnOpenCameraClick -> openCamera()
             WitnessReportUiEvent.OnOpenGalleryClick -> openGallery()
             WitnessReportUiEvent.OnReportFinishButtonClick -> showFinishDialog()
-            WitnessReportUiEvent.OnSelectAnimalInfoClick -> {}
-            is WitnessReportUiEvent.OnSpeciesClick -> {}
+            WitnessReportUiEvent.OnSelectAnimalInfoClick -> navigateToAnimalInfo()
+            is WitnessReportUiEvent.OnSpeciesClick -> updateSpecies(event.speciesType)
             is WitnessReportUiEvent.OnImageSelected -> addImageToList(event.uri)
-            WitnessReportUiEvent.OnDismissKeyboard -> {
-                viewModelScope.launch {
-                    _uiEffect.send(WitnessReportUiEffect.DismissKeyboard)
-                }
-            }
-
+            WitnessReportUiEvent.OnDismissKeyboard -> dismissKeyboard()
             WitnessReportUiEvent.OnAppSettingClick -> openAppSettings()
+            WitnessReportUiEvent.ClearFocus -> clearFocus()
+        }
+    }
+
+    private fun clearFocus() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.ClearFocus)
+        }
+    }
+
+    private fun dismissKeyboard() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.DismissKeyboard)
+        }
+    }
+
+    private fun updateAddress(latLng: LatLng) {
+        // TODO: 주소 변환 api 연동
+        _uiState.update {
+            it.copy(
+                currentLatLng = latLng,
+                address = "위도: ${latLng.latitude}, 경도: ${latLng.longitude}"
+            )
+        }
+    }
+
+    private fun updateFurColor(
+        furColorType: FurColorType,
+        flag: Boolean,
+    ) {
+        _uiState.update {
+            val newList = if (flag) {
+                it.selectedFurColors + furColorType
+            } else {
+                it.selectedFurColors - furColorType
+            }
+            it.copy(selectedFurColors = newList)
+        }
+    }
+
+    private fun updateSpecies(speciesType: SpeciesType) {
+        _uiState.update { it.copy(speciesType = speciesType) }
+    }
+
+    private fun navigateToAnimalInfo() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.NavigateToAnimalInfo)
+        }
+    }
+
+    private fun updateDate(dateTime: LocalDateTime) {
+        _uiState.update {
+            it.copy(
+                witnessDate = "${dateTime.year}년 ${dateTime.monthValue}월 ${dateTime.dayOfMonth}일",
+            )
+        }
+        setDateBottomSheetVisible(false)
+    }
+
+    private fun setDateBottomSheetVisible(flag: Boolean) {
+        _uiState.update { it.copy(isDateBottomSheetShown = flag) }
+    }
+
+    private fun updateBreed(breed: Breed) {
+        _uiState.update {
+            it.copy(
+                breed = breed,
+                breedSearchText = TextFieldState(breed.name)
+            )
+        }
+    }
+
+    private fun updateAddress(address: String) {
+        _uiState.update { it.copy(address = address) }
+    }
+
+    private fun navigateToAddressSearch() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.NavigateToAddressSearch)
         }
     }
 

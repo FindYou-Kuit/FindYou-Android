@@ -110,20 +110,20 @@ fun ReportLocationComponent(
                     isLogoClickEnabled = false,
                 )
             ) {
-                MarkerComposable(
-                    keys = arrayOf(cameraPositionState.position),
-                    state = remember {
-                        MarkerState(
-                            position = cameraPositionState.position.target
-                        )
-                    }
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_pin),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                    )
-                }
+//                MarkerComposable(
+//                    keys = arrayOf(cameraPositionState.position),
+//                    state = remember {
+//                        MarkerState(
+//                            position = cameraPositionState.position.target
+//                        )
+//                    }
+//                ) {
+//                    Icon(
+//                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_pin),
+//                        contentDescription = null,
+//                        tint = Color.Unspecified,
+//                    )
+//                }
             }
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_pin),
