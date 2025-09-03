@@ -33,10 +33,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentNewWitnessReportBinding
 import com.example.findu.presentation.type.PermissionType
+import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_RESULT_KEY
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_URI
+import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationActivity
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog.Companion.POST_TAG
+import com.example.findu.presentation.ui.report.missing.NewMissingReportFragmentDirections
+import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEffect
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.witness.navigation.WitnessReportNavHost
 import com.example.findu.presentation.ui.report.witness.navigation.WitnessReportRoute
@@ -115,6 +119,17 @@ class NewWitnessReportFragment : Fragment() {
                         lifecycle = lifecycleOwner.lifecycle
                     ).collect { sideEffect ->
                         when (sideEffect) {
+                            WitnessReportUiEffect.NavigateToUp -> {
+                                val hasBackStack = navController.previousBackStackEntry != null
+                                if (hasBackStack) {
+                                    // 정보 입력 뒤로가기
+                                    navController.popBackStack()
+                                } else {
+                                    // 신고화면에서 뒤로가기
+                                    findNavController().popBackStack()
+                                }
+                            }
+
                             WitnessReportUiEffect.NavigateToAddressSearch -> navigateToAddressSearch()
                             WitnessReportUiEffect.NavigateToAnimalInfo -> {
                                 navController.navigate(WitnessReportRoute.AnimalInfo)
@@ -123,6 +138,15 @@ class NewWitnessReportFragment : Fragment() {
                             is WitnessReportUiEffect.ShowToast -> {
                                 Toast.makeText(
                                     requireContext(), sideEffect.message, Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            WitnessReportUiEffect.ShowFinishDialog -> {
+                                ReportFinishDialog(
+                                    requireContext(),
+                                    ReportType.MISSING,
+                                    onGoHistoryClick = ::navigateToReportHistory,
+                                    onGoHomeClick = ::navigateToHome
                                 ).show()
                             }
 
@@ -151,6 +175,7 @@ class NewWitnessReportFragment : Fragment() {
                             WitnessReportUiEffect.OpenAppSettings -> {
                                 openAppSettings()
                             }
+
                         }
                     }
                 }
@@ -189,6 +214,18 @@ class NewWitnessReportFragment : Fragment() {
     private fun navigateToCamera() {
         findNavController().navigate(
             NewWitnessReportFragmentDirections.actionFragmentNewWitnessReportToFragmentReportCamera()
+        )
+    }
+
+    private fun navigateToReportHistory() {
+        findNavController().navigate(
+            NewWitnessReportFragmentDirections.actionFragmentNewWitnessReportToFragmentMyReportHistory()
+        )
+    }
+
+    private fun navigateToHome() {
+        findNavController().navigate(
+            NewWitnessReportFragmentDirections.actionFragmentNewWitnessReportToFragmentHome()
         )
     }
 

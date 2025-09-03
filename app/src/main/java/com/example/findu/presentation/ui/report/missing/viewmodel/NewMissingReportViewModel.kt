@@ -67,8 +67,6 @@ sealed class MissingReportUiEvent {
     data class OnMapPinMoved(val latLng: LatLng) : MissingReportUiEvent()
     data object OnDismissDialog : MissingReportUiEvent()
     data object OnReportFinishButtonClick : MissingReportUiEvent()
-    data object OnNavigateReportHistoryClick : MissingReportUiEvent()
-    data object OnNavigateHomeClick : MissingReportUiEvent()
     data object OnDismissKeyboard : MissingReportUiEvent()
     data object OnAppSettingClick : MissingReportUiEvent()
 }
@@ -78,6 +76,7 @@ sealed class MissingReportUiEffect {
     data object NavigateToAnimalInfo : MissingReportUiEffect()
     data object NavigateToAddressSearch : MissingReportUiEffect()
     data class ShowToast(val message: String) : MissingReportUiEffect()
+    data object ShowFinishDialog : MissingReportUiEffect()
     data object DismissKeyboard : MissingReportUiEffect()
     data object OpenCamera : MissingReportUiEffect()
     data object OpenGallery : MissingReportUiEffect()
@@ -104,14 +103,12 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             is MissingReportUiEvent.OnDateSelected -> {}
             is MissingReportUiEvent.OnFurColorSelected -> {}
             is MissingReportUiEvent.OnGenderSelected -> {}
-            MissingReportUiEvent.OnInfoFinishButtonClick -> {}
+            MissingReportUiEvent.OnInfoFinishButtonClick -> navigateUp()
             is MissingReportUiEvent.OnMapPinMoved -> {}
             MissingReportUiEvent.OnDismissDialog -> setDialogInVisible()
-            MissingReportUiEvent.OnNavigateHomeClick -> {}
-            MissingReportUiEvent.OnNavigateReportHistoryClick -> {}
             MissingReportUiEvent.OnOpenCameraClick -> openCamera()
             MissingReportUiEvent.OnOpenGalleryClick -> openGallery()
-            MissingReportUiEvent.OnReportFinishButtonClick -> {}
+            MissingReportUiEvent.OnReportFinishButtonClick -> showFinishDialog()
             MissingReportUiEvent.OnSelectAnimalInfoClick -> {}
             is MissingReportUiEvent.OnSpeciesClick -> {}
             is MissingReportUiEvent.OnImageSelected -> addImageToList(event.uri)
@@ -122,6 +119,12 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             }
 
             MissingReportUiEvent.OnAppSettingClick -> openAppSettings()
+        }
+    }
+
+    private fun showFinishDialog() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.ShowFinishDialog)
         }
     }
 

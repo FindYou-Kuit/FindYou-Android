@@ -34,8 +34,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentNewMissingReportBinding
 import com.example.findu.presentation.type.PermissionType
+import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_RESULT_KEY
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_URI
+import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationActivity
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog.Companion.POST_TAG
 import com.example.findu.presentation.ui.report.missing.navigation.MissingReportNavHost
@@ -140,6 +142,15 @@ class NewMissingReportFragment : Fragment() {
                                 ).show()
                             }
 
+                            MissingReportUiEffect.ShowFinishDialog -> {
+                                ReportFinishDialog(
+                                    requireContext(),
+                                    ReportType.MISSING,
+                                    onGoHistoryClick = ::navigateToReportHistory,
+                                    onGoHomeClick = ::navigateToHome
+                                ).show()
+                            }
+
                             MissingReportUiEffect.DismissKeyboard -> {
                                 keyboardController?.hide()
                                 focusManager.clearFocus()
@@ -203,6 +214,18 @@ class NewMissingReportFragment : Fragment() {
     private fun navigateToCamera() {
         findNavController().navigate(
             NewMissingReportFragmentDirections.actionFragmentNewMissingReportToFragmentReportCamera()
+        )
+    }
+
+    private fun navigateToReportHistory() {
+        findNavController().navigate(
+            NewMissingReportFragmentDirections.actionFragmentNewMissingReportToFragmentMyReportHistory()
+        )
+    }
+
+    private fun navigateToHome() {
+        findNavController().navigate(
+            NewMissingReportFragmentDirections.actionFragmentNewMissingReportToFragmentHome()
         )
     }
 

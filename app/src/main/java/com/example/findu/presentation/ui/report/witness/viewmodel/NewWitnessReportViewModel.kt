@@ -4,9 +4,11 @@ import android.net.Uri
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.ui.NavigationUI.navigateUp
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
+import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEffect
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -61,16 +63,16 @@ sealed class WitnessReportUiEvent {
     data class OnMapPinMoved(val latLng: LatLng) : WitnessReportUiEvent()
     data object OnDismissDialog : WitnessReportUiEvent()
     data object OnReportFinishButtonClick : WitnessReportUiEvent()
-    data object OnNavigateReportHistoryClick : WitnessReportUiEvent()
-    data object OnNavigateHomeClick : WitnessReportUiEvent()
     data object OnDismissKeyboard : WitnessReportUiEvent()
     data object OnAppSettingClick : WitnessReportUiEvent()
 }
 
 sealed class WitnessReportUiEffect {
+    data object NavigateToUp : WitnessReportUiEffect()
     data object NavigateToAnimalInfo : WitnessReportUiEffect()
     data object NavigateToAddressSearch : WitnessReportUiEffect()
     data class ShowToast(val message: String) : WitnessReportUiEffect()
+    data object ShowFinishDialog : WitnessReportUiEffect()
     data object DismissKeyboard : WitnessReportUiEffect()
     data object OpenCamera : WitnessReportUiEffect()
     data object OpenGallery : WitnessReportUiEffect()
@@ -97,14 +99,12 @@ class NewWitnessReportViewModel @Inject constructor() : ViewModel() {
             WitnessReportUiEvent.OnWitnessDateClicked -> {}
             is WitnessReportUiEvent.OnDateSelected -> {}
             is WitnessReportUiEvent.OnFurColorSelected -> {}
-            WitnessReportUiEvent.OnInfoFinishButtonClick -> {}
+            WitnessReportUiEvent.OnInfoFinishButtonClick -> navigateUp()
             is WitnessReportUiEvent.OnMapPinMoved -> {}
-            WitnessReportUiEvent.OnNavigateHomeClick -> {}
             WitnessReportUiEvent.OnDismissDialog -> setDialogInVisible()
-            WitnessReportUiEvent.OnNavigateReportHistoryClick -> {}
             WitnessReportUiEvent.OnOpenCameraClick -> openCamera()
             WitnessReportUiEvent.OnOpenGalleryClick -> openGallery()
-            WitnessReportUiEvent.OnReportFinishButtonClick -> {}
+            WitnessReportUiEvent.OnReportFinishButtonClick -> showFinishDialog()
             WitnessReportUiEvent.OnSelectAnimalInfoClick -> {}
             is WitnessReportUiEvent.OnSpeciesClick -> {}
             is WitnessReportUiEvent.OnImageSelected -> addImageToList(event.uri)
@@ -115,6 +115,18 @@ class NewWitnessReportViewModel @Inject constructor() : ViewModel() {
             }
 
             WitnessReportUiEvent.OnAppSettingClick -> openAppSettings()
+        }
+    }
+
+    private fun showFinishDialog() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.ShowFinishDialog)
+        }
+    }
+
+    private fun navigateUp() {
+        viewModelScope.launch {
+            _uiEffect.send(WitnessReportUiEffect.NavigateToUp)
         }
     }
 
