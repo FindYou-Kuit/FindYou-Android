@@ -43,6 +43,7 @@ import com.example.findu.presentation.ui.common.WheelPicker
 import com.example.findu.presentation.util.extension.isOdd
 import com.example.findu.ui.theme.FindUTheme
 import kotlinx.datetime.LocalDateTime
+import java.time.YearMonth
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -57,31 +58,16 @@ fun ReportDateBottomSheet(
     var selectedMonth by remember { mutableIntStateOf(nowDate.monthNumber) }
     var selectedDay by remember { mutableIntStateOf(nowDate.dayOfMonth) }
 
-    val yearList by remember { mutableStateOf(listOf("2025")) }
-    val monthList by remember { mutableStateOf((1..selectedMonth).map { it.toString() }) }
-    var dayList by remember { mutableStateOf((1..selectedDay).map { it.toString() }) }
-    LaunchedEffect(monthList, selectedMonth) {
-        dayList = when {
-            selectedMonth == nowDate.monthNumber -> {
-                (1..nowDate.dayOfMonth).map { it.toString() }
-            }
-
-            selectedMonth.isOdd() -> {
-                (1..31).map { it.toString() }
-            }
-
-            selectedMonth == 2 -> {
-                if (selectedYear % 4 == 0 && (selectedYear % 100 != 0 || selectedYear % 400 == 0)) {
-                    (1..29).map { it.toString() }
-                } else {
-                    (1..28).map { it.toString() }
-                }
-            }
-
-            else -> {
-                (1..30).map { it.toString() }
-            }
+    val yearList by remember { mutableStateOf((2020..2030).map { it.toString() }) }
+    val monthList by remember { mutableStateOf((1..12).map { it.toString() }) }
+    var dayList by remember { mutableStateOf((1..YearMonth.of(selectedYear, selectedMonth).lengthOfMonth()).map { it.toString() }) }
+    LaunchedEffect(selectedYear, selectedMonth, nowDate) {
+        val maxDays = if (selectedYear == nowDate.year && selectedMonth == nowDate.monthNumber) {
+            nowDate.dayOfMonth
+        } else {
+            YearMonth.of(selectedYear, selectedMonth).lengthOfMonth()
         }
+        dayList = (1..maxDays).map { it.toString() }
     }
 
     ModalBottomSheetLayout(
