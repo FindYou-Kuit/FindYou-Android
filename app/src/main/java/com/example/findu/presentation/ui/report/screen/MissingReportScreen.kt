@@ -49,9 +49,6 @@ import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
-import kotlinx.datetime.format
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

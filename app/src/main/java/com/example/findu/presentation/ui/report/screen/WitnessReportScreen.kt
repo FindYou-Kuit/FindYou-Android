@@ -38,7 +38,6 @@ import com.example.findu.presentation.ui.report.component.ReportImageComponent
 import com.example.findu.presentation.ui.report.component.ReportImageDialog
 import com.example.findu.presentation.ui.report.component.ReportLocationComponent
 import com.example.findu.presentation.ui.report.component.witness.WitnessAnimalInfoComponent
-import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiEvent
 import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiState
 import com.example.findu.presentation.util.extension.toKoreanDateString
@@ -47,9 +46,6 @@ import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
-import kotlinx.datetime.format
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

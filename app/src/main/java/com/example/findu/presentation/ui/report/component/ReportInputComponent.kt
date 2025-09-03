@@ -41,7 +41,7 @@ fun ReportInputComponent(
                 text = stringResource(titleRes),
                 style = FindUTheme.typography.body1SemiBold16,
             )
-            if(isEssential) {
+            if (isEssential) {
                 Text(
                     text = stringResource(R.string.asterisk),
                     style = FindUTheme.typography.body2SemiBold14.copy(color = FindUTheme.colors.red1)

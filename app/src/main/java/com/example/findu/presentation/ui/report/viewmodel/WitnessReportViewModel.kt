@@ -247,7 +247,7 @@ class WitnessReportViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun openCamera() {
+    private fun openCamera() {
         viewModelScope.launch {
             _uiEffect.send(WitnessReportUiEffect.OpenCamera)
         }
