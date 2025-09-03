@@ -22,7 +22,6 @@ import com.example.findu.ui.theme.FindUTheme
 
 @Composable
 fun MissingReportAnimalInfoScreen(
-    popBackStack: () -> Unit,
     uiState: MissingReportUiState,
     onEvent: (MissingReportUiEvent) -> Unit,
 ) {
