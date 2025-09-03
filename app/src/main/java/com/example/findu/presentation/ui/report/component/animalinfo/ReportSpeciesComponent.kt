@@ -43,9 +43,10 @@ fun ReportSpeciesComponent(
 ) {
     val density = LocalDensity.current
     var widthPx by remember { mutableIntStateOf(0) }
+    val segmentCount = SpeciesType.entries.size
     val (selectedBoxWidthDp, selectedBoxWidthPx) = remember(widthPx) {
         with(density) {
-            Pair((widthPx / 3).toDp(), (widthPx / 3))
+            Pair((widthPx / segmentCount).toDp(), (widthPx / segmentCount))
         }
     }
     val targetX = remember(selectedBoxWidthPx, selectedSpecies) {

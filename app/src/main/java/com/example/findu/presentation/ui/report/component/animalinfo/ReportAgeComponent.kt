@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.report.component.animalinfo
 
+import android.R.attr.text
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -36,11 +37,12 @@ import com.example.findu.R
 import com.example.findu.presentation.ui.base.HorizontalSpacer
 import com.example.findu.presentation.util.extension.isNotDigit
 import com.example.findu.ui.theme.FindUTheme
+import com.kakao.sdk.friend.m.s
 
 @Composable
 fun ReportAgeComponent(
     modifier: Modifier = Modifier,
-    age: TextFieldState = TextFieldState(),
+    age: TextFieldState,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState().value
@@ -80,9 +82,10 @@ fun ReportAgeComponent(
                         keyboardType = KeyboardType.Number
                     ),
                     inputTransformation = {
-                        if (asCharSequence().length > 2
-                            || asCharSequence().lastOrNull()?.isNotDigit() == true
-                        ) revertAllChanges()
+                        val sequence = asCharSequence()
+                        if (sequence.length > 2 || sequence.any { it.isNotDigit() }) {
+                            revertAllChanges()
+                        }
                     },
                 )
                 Divider(
@@ -109,6 +112,9 @@ fun ReportAgeComponent(
 @Composable
 private fun ReportAgeComponentPreview() {
     FindUTheme {
-        ReportAgeComponent()
+        ReportAgeComponent(
+            modifier = Modifier.padding(20.dp),
+            age = TextFieldState(""),
+        )
     }
 }

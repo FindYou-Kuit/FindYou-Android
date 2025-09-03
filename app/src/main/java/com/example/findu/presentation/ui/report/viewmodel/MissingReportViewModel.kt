@@ -186,7 +186,13 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateSpecies(speciesType: SpeciesType) {
-        _uiState.update { it.copy(speciesType = speciesType) }
+        _uiState.update {
+            it.copy(
+                speciesType = speciesType,
+                breed = null,
+                breedSearchText = TextFieldState(""),
+            )
+        }
     }
 
     private fun navigateToAnimalInfo() {
@@ -251,7 +257,7 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun openCamera() {
+    private fun openCamera() {
         viewModelScope.launch {
             _uiEffect.send(MissingReportUiEffect.OpenCamera)
         }
@@ -274,7 +280,8 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
         _uiState.update {
             it.copy(
                 isImageDialogShown = false,
-                isSuccessDialogShown = false
+                isSuccessDialogShown = false,
+                isAppSettingDialogShown = false
             )
         }
     }

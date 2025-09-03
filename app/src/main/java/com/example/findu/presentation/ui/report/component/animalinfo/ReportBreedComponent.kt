@@ -108,9 +108,8 @@ fun ReportBreedComponent(
                             color = FindUTheme.colors.gray4,
                             modifier = Modifier.align(Alignment.CenterStart)
                         )
-                    } else {
-                        innerTextField()
                     }
+                    innerTextField()
                     Icon(
                         imageVector = if (isFocused) Icons.Default.KeyboardArrowUp
                         else Icons.Default.KeyboardArrowDown,
