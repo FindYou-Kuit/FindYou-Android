@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.findu.presentation.ui.report.missing.screen.MissingReportAnimalInfoScreen
 import com.example.findu.presentation.ui.report.missing.screen.MissingReportScreen
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
@@ -34,7 +35,10 @@ fun MissingReportNavHost(
                 slideOutHorizontally(targetOffsetX = { -it })
             }
         ) {
-            // 동물 정보 입력 스크린
+            MissingReportAnimalInfoScreen(
+                uiState = uiState,
+                onEvent = onEvent,
+            )
         }
     }
 }

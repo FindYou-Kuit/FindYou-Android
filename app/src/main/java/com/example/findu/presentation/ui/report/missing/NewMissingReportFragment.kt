@@ -118,6 +118,17 @@ class NewMissingReportFragment : Fragment() {
                         lifecycle = lifecycleOwner.lifecycle
                     ).collect { sideEffect ->
                         when (sideEffect) {
+                            MissingReportUiEffect.NavigateToUp -> {
+                                val hasBackStack = navController.previousBackStackEntry != null
+                                if (hasBackStack) {
+                                    // 정보 입력 뒤로가기
+                                    navController.popBackStack()
+                                } else {
+                                    // 신고화면에서 뒤로가기
+                                    findNavController().popBackStack()
+                                }
+                            }
+
                             MissingReportUiEffect.NavigateToAddressSearch -> navigateToAddressSearch()
                             MissingReportUiEffect.NavigateToAnimalInfo -> {
                                 navController.navigate(MissingReportRoute.AnimalInfo)

@@ -4,12 +4,14 @@ import android.net.Uri
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.ui.NavigationUI.navigateUp
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,7 +52,6 @@ sealed class MissingReportUiEvent {
     data object OnSelectAnimalInfoClick : MissingReportUiEvent()
     data class OnImageSelected(val uri: Uri) : MissingReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : MissingReportUiEvent()
-    data class OnBreedInputFieldClick(val input: String) : MissingReportUiEvent()
     data class OnBreedClick(val breed: Breed) : MissingReportUiEvent()
     data object OnInfoFinishButtonClick : MissingReportUiEvent()
     data class OnGenderSelected(val gender: Gender) : MissingReportUiEvent()
@@ -73,6 +74,7 @@ sealed class MissingReportUiEvent {
 }
 
 sealed class MissingReportUiEffect {
+    data object NavigateToUp : MissingReportUiEffect()
     data object NavigateToAnimalInfo : MissingReportUiEffect()
     data object NavigateToAddressSearch : MissingReportUiEffect()
     data class ShowToast(val message: String) : MissingReportUiEffect()
@@ -93,12 +95,11 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
 
     fun handleEvent(event: MissingReportUiEvent) {
         when (event) {
-            MissingReportUiEvent.OnBackPressed -> {}
+            MissingReportUiEvent.OnBackPressed -> navigateUp()
             MissingReportUiEvent.OnAddImageClick -> setImageDialogVisible()
             MissingReportUiEvent.OnAddressSearchClick -> {}
             is MissingReportUiEvent.OnAddressUpdated -> {}
             is MissingReportUiEvent.OnBreedClick -> {}
-            is MissingReportUiEvent.OnBreedInputFieldClick -> {}
             MissingReportUiEvent.OnMissingDateClicked -> {}
             is MissingReportUiEvent.OnDateSelected -> {}
             is MissingReportUiEvent.OnFurColorSelected -> {}
@@ -121,6 +122,12 @@ class NewMissingReportViewModel @Inject constructor() : ViewModel() {
             }
 
             MissingReportUiEvent.OnAppSettingClick -> openAppSettings()
+        }
+    }
+
+    private fun navigateUp() {
+        viewModelScope.launch {
+            _uiEffect.send(MissingReportUiEffect.NavigateToUp)
         }
     }
 
