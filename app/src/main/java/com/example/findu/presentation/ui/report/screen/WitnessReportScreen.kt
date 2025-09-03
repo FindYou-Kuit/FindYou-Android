@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.missing.screen
+package com.example.findu.presentation.ui.report.screen
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.KeyboardActionHandler
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -28,12 +27,10 @@ import com.example.findu.presentation.ui.report.component.ReportDescriptionCompo
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
 import com.example.findu.presentation.ui.report.component.ReportImageComponent
 import com.example.findu.presentation.ui.report.component.ReportImageDialog
-import com.example.findu.presentation.ui.report.component.ReportInputComponent
 import com.example.findu.presentation.ui.report.component.ReportLocationComponent
-import com.example.findu.presentation.ui.report.missing.component.MissingAnimalInfoComponent
-import com.example.findu.presentation.ui.report.missing.component.ReportGenderComponent
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
+import com.example.findu.presentation.ui.report.component.witness.WitnessAnimalInfoComponent
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiEvent
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiState
 import com.example.findu.ui.theme.FindUTheme
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
@@ -42,9 +39,9 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun MissingReportScreen(
-    uiState: MissingReportUiState,
-    onEvent: (MissingReportUiEvent) -> Unit,
+fun WitnessReportScreen(
+    uiState: WitnessReportUiState,
+    onEvent: (WitnessReportUiEvent) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
         uiState.currentLatLng?.let {
@@ -55,15 +52,14 @@ fun MissingReportScreen(
         derivedStateOf {
             uiState.speciesType != null &&
                     uiState.breed != null &&
-                    uiState.age.text.isNotEmpty() &&
                     uiState.selectedFurColors.isNotEmpty() &&
-                    uiState.missingDate.isNotEmpty() &&
+                    uiState.witnessDate.isNotEmpty() &&
                     uiState.address.isNotEmpty() &&
                     uiState.imageUriList.isNotEmpty()
         }
     }
 
-    MissingReportScreen(
+    WitnessReportScreen(
         uiState = uiState,
         onEvent = onEvent,
         cameraPositionState = cameraPositionState,
@@ -72,23 +68,24 @@ fun MissingReportScreen(
 
     if (uiState.isImageDialogShown) {
         ReportImageDialog(
-            onDismissRequest = { onEvent(MissingReportUiEvent.OnDismissDialog) },
-            onCameraClick = { onEvent(MissingReportUiEvent.OnOpenCameraClick) },
-            onGalleryClick = { onEvent(MissingReportUiEvent.OnOpenGalleryClick) }
+            onDismissRequest = { onEvent(WitnessReportUiEvent.OnDismissDialog) },
+            onCameraClick = { onEvent(WitnessReportUiEvent.OnOpenCameraClick) },
+            onGalleryClick = { onEvent(WitnessReportUiEvent.OnOpenGalleryClick) }
         )
     }
+
     if(uiState.isAppSettingDialogShown) {
         AppSettingDialog(
-            onDismissRequest = { onEvent(MissingReportUiEvent.OnDismissDialog) },
-            openAppSettings = { onEvent(MissingReportUiEvent.OnAppSettingClick) }
+            onDismissRequest = { onEvent(WitnessReportUiEvent.OnDismissDialog) },
+            openAppSettings = { onEvent(WitnessReportUiEvent.OnAppSettingClick) }
         )
     }
 }
 
 @Composable
-private fun MissingReportScreen(
-    uiState: MissingReportUiState,
-    onEvent: (MissingReportUiEvent) -> Unit,
+private fun WitnessReportScreen(
+    uiState: WitnessReportUiState,
+    onEvent: (WitnessReportUiEvent) -> Unit,
     cameraPositionState: CameraPositionState,
     buttonEnabled: Boolean,
 ) {
@@ -97,13 +94,13 @@ private fun MissingReportScreen(
     ) {
         FindUTopAppBar(
             modifier = Modifier,
-            title = R.string.report_missing,
+            title = R.string.report_witness,
             navigationIconRes = R.drawable.ic_arrow_left,
-            onNavigationIconClick = { onEvent(MissingReportUiEvent.OnBackPressed) }
+            onNavigationIconClick = { onEvent(WitnessReportUiEvent.OnBackPressed) }
         )
         ReportImageComponent(
             imgUriList = uiState.imageUriList,
-            onOpenDialogClick = { onEvent(MissingReportUiEvent.OnAddImageClick) }
+            onOpenDialogClick = { onEvent(WitnessReportUiEvent.OnAddImageClick) }
         )
 
         Column(
@@ -112,47 +109,32 @@ private fun MissingReportScreen(
                 .padding(horizontal = 20.dp),
         ) {
             VerticalSpacer(30.dp)
-            MissingAnimalInfoComponent(
+            WitnessAnimalInfoComponent(
                 speciesType = uiState.speciesType,
                 breed = uiState.breed?.name,
-                age = uiState.age.text.toString().toIntOrNull(),
-                onSelectAnimalInfoClick = { onEvent(MissingReportUiEvent.OnSelectAnimalInfoClick) }
-            )
-            VerticalSpacer(30.dp)
-            ReportGenderComponent(
-                selectedGender = uiState.gender,
-                onGenderSelected = { onEvent(MissingReportUiEvent.OnGenderSelected(it)) }
-            )
-            VerticalSpacer(30.dp)
-            ReportInputComponent(
-                titleRes = R.string.report_rfid_title,
-                placeHolderRes = R.string.report_rfid_placeholder,
-                state = uiState.rfidNumber,
-                onKeyboardAction = KeyboardActionHandler {
-                    onEvent(MissingReportUiEvent.OnDismissKeyboard)
-                }
+                onSelectAnimalInfoClick = { onEvent(WitnessReportUiEvent.OnSelectAnimalInfoClick) }
             )
             VerticalSpacer(30.dp)
             ReportFurColorComponent(
                 selectedFurColors = uiState.selectedFurColors,
                 onColorSelected = { color, isSelected ->
-                    onEvent(MissingReportUiEvent.OnFurColorSelected(color, isSelected))
+                    onEvent(WitnessReportUiEvent.OnFurColorSelected(color, isSelected))
                 }
             )
             VerticalSpacer(30.dp)
             ReportDateComponent(
-                selectedDate = uiState.missingDate,
-                titleRes = R.string.report_missing_date_title,
+                selectedDate = uiState.witnessDate,
+                titleRes = R.string.report_witness_date_title,
                 nowDate = uiState.nowDate.format(
                     DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E)", Locale.KOREAN)
                 ),
-                onClick = { onEvent(MissingReportUiEvent.OnMissingDateClicked) }
+                onClick = { onEvent(WitnessReportUiEvent.OnWitnessDateClicked) }
             )
             VerticalSpacer(30.dp)
             ReportDescriptionComponent(
                 descriptionState = uiState.description,
                 onKeyboardAction = KeyboardActionHandler {
-                    onEvent(MissingReportUiEvent.OnDismissKeyboard)
+                    onEvent(WitnessReportUiEvent.OnDismissKeyboard)
                 }
             )
             VerticalSpacer(30.dp)
@@ -160,8 +142,8 @@ private fun MissingReportScreen(
                 address = uiState.address,
                 cameraPositionState = cameraPositionState,
                 nearPlace = uiState.nearPlace,
-                onAddressClick = { onEvent(MissingReportUiEvent.OnAddressSearchClick) },
-                dismissKeyboard = { onEvent(MissingReportUiEvent.OnDismissKeyboard) }
+                onAddressClick = { onEvent(WitnessReportUiEvent.OnAddressSearchClick) },
+                dismissKeyboard = { onEvent(WitnessReportUiEvent.OnDismissKeyboard) }
             )
             VerticalSpacer(30.dp)
             FindUButton(
@@ -169,7 +151,7 @@ private fun MissingReportScreen(
                     .fillMaxWidth()
                     .height(50.dp),
                 textRes = R.string.my_done,
-                onClick = { onEvent(MissingReportUiEvent.OnReportFinishButtonClick) },
+                onClick = { onEvent(WitnessReportUiEvent.OnReportFinishButtonClick) },
                 enabled = buttonEnabled
             )
         }
@@ -178,18 +160,17 @@ private fun MissingReportScreen(
 
 @Preview(showBackground = true, heightDp = 1400)
 @Composable
-private fun MissingReportScreenPreview() {
+private fun WitnessReportScreenPreview() {
     FindUTheme {
-        MissingReportScreen(
-            uiState = MissingReportUiState(
+        WitnessReportScreen(
+            uiState = WitnessReportUiState(
                 speciesType = SpeciesType.DOG,
                 breed = Breed.DogBreed(
                     breedId = 1,
                     breedName = "말티즈",
                     species = SpeciesType.DOG
                 ),
-                age = TextFieldState("3"),
-                missingDate = "2023년 10월 10일 (화)",
+                witnessDate = "2023년 10월 10일 (화)",
                 selectedFurColors = listOf(FurColorType.OTHER),
                 address = "서울시 강남구 역삼동",
                 imageUriList = listOf(Uri.EMPTY)

@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.missing.component
+package com.example.findu.presentation.ui.report.component.missing
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement

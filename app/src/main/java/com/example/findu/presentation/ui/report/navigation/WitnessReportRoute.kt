@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.witness.navigation
+package com.example.findu.presentation.ui.report.navigation
 
 import kotlinx.serialization.Serializable
 

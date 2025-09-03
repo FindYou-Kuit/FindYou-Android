@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.witness
+package com.example.findu.presentation.ui.report
 
 import android.Manifest
 import android.content.Intent
@@ -35,17 +35,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentWitnessReportBinding
 import com.example.findu.presentation.type.PermissionType
 import com.example.findu.presentation.type.report.ReportType
-import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_RESULT_KEY
-import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_URI
+import com.example.findu.presentation.ui.report.constants.ReportConstants
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationActivity
-import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog.Companion.POST_TAG
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
-import com.example.findu.presentation.ui.report.witness.navigation.WitnessReportNavHost
-import com.example.findu.presentation.ui.report.witness.navigation.WitnessReportRoute
-import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportViewModel
-import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiEffect
-import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiEvent
+import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog
+import com.example.findu.presentation.ui.report.navigation.WitnessReportNavHost
+import com.example.findu.presentation.ui.report.navigation.WitnessReportRoute
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiEffect
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiEvent
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -191,8 +189,8 @@ class WitnessReportFragment : Fragment() {
     }
 
     private fun getCapturedUri() {
-        setFragmentResultListener(IMAGE_URI) { _, result ->
-            val imageUri = result.getString(IMAGE_RESULT_KEY)
+        setFragmentResultListener(ReportConstants.IMAGE_URI) { _, result ->
+            val imageUri = result.getString(ReportConstants.IMAGE_RESULT_KEY)
             imageUri?.let {
                 viewModel.handleEvent(WitnessReportUiEvent.OnImageSelected(it.toUri()))
             }
@@ -204,7 +202,7 @@ class WitnessReportFragment : Fragment() {
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                    val data = result.data?.getStringExtra(POST_TAG)
+                    val data = result.data?.getStringExtra(ReportLocationDialog.Companion.POST_TAG)
                     viewModel.handleEvent(WitnessReportUiEvent.OnAddressUpdated(data ?: "주소 찾기 실패"))
                 }
             }

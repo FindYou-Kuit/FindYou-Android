@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.witness.viewmodel
+package com.example.findu.presentation.ui.report.viewmodel
 
 import android.net.Uri
 import androidx.compose.foundation.text.input.TextFieldState

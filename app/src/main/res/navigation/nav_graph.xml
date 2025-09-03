@@ -210,7 +210,7 @@
 
     <fragment
         android:id="@+id/fragment_missing_report"
-        android:name="com.example.findu.presentation.ui.report.missing.MissingReportFragment"
+        android:name="com.example.findu.presentation.ui.report.MissingReportFragment"
         android:label="Missing Report"
         tools:layout="@layout/fragment_missing_report">
         <action
@@ -227,7 +227,7 @@
 
     <fragment
         android:id="@+id/fragment_witness_report"
-        android:name="com.example.findu.presentation.ui.report.witness.WitnessReportFragment"
+        android:name="com.example.findu.presentation.ui.report.WitnessReportFragment"
         android:label="Witness Report"
         tools:layout="@layout/fragment_witness_report">
         <action

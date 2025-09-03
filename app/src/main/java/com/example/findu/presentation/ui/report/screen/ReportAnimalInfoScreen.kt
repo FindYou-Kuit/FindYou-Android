@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.missing.screen
+package com.example.findu.presentation.ui.report.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,10 +23,10 @@ import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.report.component.animalinfo.ReportAgeComponent
 import com.example.findu.presentation.ui.report.component.animalinfo.ReportBreedComponent
 import com.example.findu.presentation.ui.report.component.animalinfo.ReportSpeciesComponent
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
-import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiEvent
-import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiState
+import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiEvent
+import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiState
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiEvent
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiState
 import com.example.findu.ui.theme.FindUTheme
 
 

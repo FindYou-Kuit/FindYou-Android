@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.missing.navigation
+package com.example.findu.presentation.ui.report.navigation
 
 import kotlinx.serialization.Serializable
 

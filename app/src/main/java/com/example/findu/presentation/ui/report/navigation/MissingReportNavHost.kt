@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.missing.navigation
+package com.example.findu.presentation.ui.report.navigation
 
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.findu.presentation.ui.report.missing.screen.MissingReportAnimalInfoScreen
-import com.example.findu.presentation.ui.report.missing.screen.MissingReportScreen
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
+import com.example.findu.presentation.ui.report.screen.MissingReportAnimalInfoScreen
+import com.example.findu.presentation.ui.report.screen.MissingReportScreen
+import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiEvent
+import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiState
 
 @Composable
 fun MissingReportNavHost(

@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.witness.navigation
+package com.example.findu.presentation.ui.report.navigation
 
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.findu.presentation.ui.report.missing.screen.WitnessReportAnimalInfoScreen
-import com.example.findu.presentation.ui.report.witness.screen.WitnessReportScreen
-import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiEvent
-import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiState
+import com.example.findu.presentation.ui.report.screen.WitnessReportAnimalInfoScreen
+import com.example.findu.presentation.ui.report.screen.WitnessReportScreen
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiEvent
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiState
 
 @Composable
 fun WitnessReportNavHost(

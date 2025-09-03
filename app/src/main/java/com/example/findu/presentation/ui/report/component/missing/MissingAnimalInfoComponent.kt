@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.witness.component
+package com.example.findu.presentation.ui.report.component.missing
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -25,10 +25,11 @@ import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun WitnessAnimalInfoComponent(
+fun MissingAnimalInfoComponent(
     modifier: Modifier = Modifier,
     speciesType: SpeciesType?,
     breed: String?,
+    age: Int?,
     onSelectAnimalInfoClick: () -> Unit,
 ) {
     Column(
@@ -100,6 +101,25 @@ fun WitnessAnimalInfoComponent(
                 }
             }
         )
+        AnimalInfoContent(
+            title = R.string.report_age,
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.report_age_placeholder),
+                    style = FindUTheme.typography.body1SemiBold16,
+                    color = FindUTheme.colors.gray6,
+                )
+            },
+            content = age?.let {
+                {
+                    Text(
+                        text = stringResource(R.string.report_age_unit, it),
+                        style = FindUTheme.typography.body1SemiBold16,
+                        color = FindUTheme.colors.gray6,
+                    )
+                }
+            }
+        )
     }
 }
 
@@ -132,11 +152,12 @@ fun AnimalInfoContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun WitnessAnimalInfoComponentPreview() {
+private fun MissingAnimalInfoComponentPreview() {
     FindUTheme {
-        WitnessAnimalInfoComponent(
+        MissingAnimalInfoComponent(
             speciesType = SpeciesType.CAT,
             breed = "코리안숏헤어",
+            age = 3,
             onSelectAnimalInfoClick = {}
         )
     }
@@ -144,11 +165,12 @@ private fun WitnessAnimalInfoComponentPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun WitnessAnimalInfoComponentNullPreview() {
+private fun MissingAnimalInfoComponentNullPreview() {
     FindUTheme {
-        WitnessAnimalInfoComponent(
+        MissingAnimalInfoComponent(
             speciesType = null,
             breed = null,
+            age = null,
             onSelectAnimalInfoClick = {}
         )
     }

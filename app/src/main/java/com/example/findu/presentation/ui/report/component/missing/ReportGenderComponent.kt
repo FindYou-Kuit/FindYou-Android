@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.missing.component
+package com.example.findu.presentation.ui.report.component.missing
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateIntAsState
