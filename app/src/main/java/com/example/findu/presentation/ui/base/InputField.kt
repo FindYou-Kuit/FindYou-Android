@@ -56,9 +56,8 @@ fun RoundedInputField(
                         style = FindUTheme.typography.tag1SemiBold12,
                         color = FindUTheme.colors.gray4,
                     )
-                } else {
-                    innerTextField()
                 }
+                innerTextField()
             }
         },
     )

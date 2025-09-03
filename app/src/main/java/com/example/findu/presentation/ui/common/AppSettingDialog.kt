@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,13 +42,12 @@ fun AppSettingDialog(
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             Text(
-                "접근 권한이 없어 해당 기능을 사용할 수 없습니다.",
+                text = stringResource(R.string.permission_dialog_title),
                 style = FindUTheme.typography.head3SemiBold18.copy(),
                 textAlign = TextAlign.Center,
             )
             Text(
-                "권한을 허용하시려면 설정을 눌러주세요.\n" +
-                        "필요 권한 : 카메라",
+                text = stringResource(R.string.permission_dialog_body),
                 style = FindUTheme.typography.body1Regular16.copy(),
                 textAlign = TextAlign.Center,
             )

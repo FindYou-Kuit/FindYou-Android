@@ -151,6 +151,8 @@
     <string name="report_dialog_set_location">현 위치로 설정하기</string>
     <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000–0ddd 광진구 건국대학교 000–00 202호</string>
     <string name="report_dialog_find_location">지도에서 위치 찾기</string>
+    <string name="permission_dialog_title">접근 권한이 없어 해당 기능을 사용할 수 없습니다.</string>
+    <string name="permission_dialog_body">권한을 허용하시려면 설정을 눌러주세요.\n필요 권한 : 카메라</string>
 
     <!--  report  -->
     <string name="report_witness">목격신고</string>

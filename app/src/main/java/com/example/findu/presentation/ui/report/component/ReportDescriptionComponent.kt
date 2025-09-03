@@ -52,7 +52,7 @@ fun ReportDescriptionComponent(
             modifier = modifier.heightIn(min = 98.dp),
             state = descriptionState,
             placeHolderRes = R.string.report_description_placeholder,
-            singleLine = true,
+            singleLine = false,
             interactionSource = interactionSource,
             onKeyboardAction = onKeyboardAction,
         )

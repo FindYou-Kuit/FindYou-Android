@@ -46,7 +46,8 @@ fun WheelPicker(
     onSelected: (index: Int) -> Unit,
 ) {
     val textStyle: TextStyle = FindUTheme.typography.head2SemiBold20
-    val state = rememberLazyListState(initialFirstVisibleItemIndex = startIndex)
+    val clampStartIndex = startIndex.coerceIn(0, items.lastIndex.coerceAtLeast(0))
+    val state = rememberLazyListState(initialFirstVisibleItemIndex = clampStartIndex)
     val fling = rememberSnapFlingBehavior(lazyListState = state)
     val density = LocalDensity.current
     val itemHeightPx = with(density) { itemHeight.toPx() }
