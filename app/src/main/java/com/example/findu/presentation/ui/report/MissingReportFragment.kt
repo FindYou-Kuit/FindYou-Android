@@ -57,6 +57,17 @@ class MissingReportFragment : Fragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                val data = result.data?.getStringExtra(ReportLocationDialog.Companion.POST_TAG)
+                viewModel.handleEvent(MissingReportUiEvent.OnAddressUpdated(data ?: "주소 찾기 실패"))
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -205,13 +216,6 @@ class MissingReportFragment : Fragment() {
     }
 
     private fun navigateToAddressSearch() {
-        resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                    val data = result.data?.getStringExtra(ReportLocationDialog.Companion.POST_TAG)
-                    viewModel.handleEvent(MissingReportUiEvent.OnAddressUpdated(data ?: "주소 찾기 실패"))
-                }
-            }
         val intent = Intent(context, ReportLocationActivity::class.java)
         resultLauncher.launch(intent)
     }

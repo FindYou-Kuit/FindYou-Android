@@ -219,10 +219,13 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragment_missing_report_to_fragment_report_camera"
-            app:destination="@id/fragment_report_camera" />
+            app:destination="@id/fragment_report_camera"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragment_missing_report_to_fragment_my_report_history"
-            app:destination="@id/fragment_my_report_history" />
+            app:destination="@id/fragment_my_report_history"
+            app:popUpToInclusive="true" />
+
     </fragment>
 
     <fragment
@@ -236,10 +239,13 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragment_witness_report_to_fragment_report_camera"
-            app:destination="@id/fragment_report_camera" />
+            app:destination="@id/fragment_report_camera"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragment_witness_report_to_fragment_my_report_history"
-            app:destination="@id/fragment_my_report_history" />
+            app:destination="@id/fragment_my_report_history"
+            app:popUpToInclusive="true" />
+
     </fragment>
 
 </navigation>
