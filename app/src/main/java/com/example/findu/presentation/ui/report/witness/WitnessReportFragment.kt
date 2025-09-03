@@ -1,4 +1,4 @@
-package com.example.findu.presentation.ui.report.missing
+package com.example.findu.presentation.ui.report.witness
 
 import android.Manifest
 import android.content.Intent
@@ -32,7 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
-import com.example.findu.databinding.FragmentNewMissingReportBinding
+import com.example.findu.databinding.FragmentWitnessReportBinding
 import com.example.findu.presentation.type.PermissionType
 import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_RESULT_KEY
@@ -40,30 +40,28 @@ import com.example.findu.presentation.ui.report.constants.ReportConstants.IMAGE_
 import com.example.findu.presentation.ui.report.dialog.ReportFinishDialog
 import com.example.findu.presentation.ui.report.dialog.ReportLocationActivity
 import com.example.findu.presentation.ui.report.dialog.ReportLocationDialog.Companion.POST_TAG
-import com.example.findu.presentation.ui.report.missing.navigation.MissingReportNavHost
-import com.example.findu.presentation.ui.report.missing.navigation.MissingReportRoute
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEffect
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
-import com.example.findu.presentation.ui.report.missing.viewmodel.NewMissingReportViewModel
+import com.example.findu.presentation.ui.report.witness.navigation.WitnessReportNavHost
+import com.example.findu.presentation.ui.report.witness.navigation.WitnessReportRoute
+import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportViewModel
+import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiEffect
+import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 
-class NewMissingReportFragment : Fragment() {
-
-    private var _binding: FragmentNewMissingReportBinding? = null
+class WitnessReportFragment : Fragment() {
+    private var _binding: FragmentWitnessReportBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModels<NewMissingReportViewModel>()
+    private val viewModel by viewModels<WitnessReportViewModel>()
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        _binding = FragmentNewMissingReportBinding.inflate(inflater, container, false)
+        _binding = FragmentWitnessReportBinding.inflate(inflater, container, false)
 
         getCapturedUri()
 
@@ -73,7 +71,7 @@ class NewMissingReportFragment : Fragment() {
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.missingReportComposeView.apply {
+        binding.witnessReportComposeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -86,7 +84,7 @@ class NewMissingReportFragment : Fragment() {
                 val pickMedia =
                     rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                         if (uri != null) {
-                            viewModel.handleEvent(MissingReportUiEvent.OnImageSelected(uri))
+                            viewModel.handleEvent(WitnessReportUiEvent.OnImageSelected(uri))
                         } else {
                             Log.d("NewMissingReportFragment", "No media selected")
                         }
@@ -120,7 +118,7 @@ class NewMissingReportFragment : Fragment() {
                         lifecycle = lifecycleOwner.lifecycle
                     ).collect { sideEffect ->
                         when (sideEffect) {
-                            MissingReportUiEffect.NavigateToUp -> {
+                            WitnessReportUiEffect.NavigateToUp -> {
                                 val hasBackStack = navController.previousBackStackEntry != null
                                 if (hasBackStack) {
                                     // 정보 입력 뒤로가기
@@ -131,18 +129,18 @@ class NewMissingReportFragment : Fragment() {
                                 }
                             }
 
-                            MissingReportUiEffect.NavigateToAddressSearch -> navigateToAddressSearch()
-                            MissingReportUiEffect.NavigateToAnimalInfo -> {
-                                navController.navigate(MissingReportRoute.AnimalInfo)
+                            WitnessReportUiEffect.NavigateToAddressSearch -> navigateToAddressSearch()
+                            WitnessReportUiEffect.NavigateToAnimalInfo -> {
+                                navController.navigate(WitnessReportRoute.AnimalInfo)
                             }
 
-                            is MissingReportUiEffect.ShowToast -> {
+                            is WitnessReportUiEffect.ShowToast -> {
                                 Toast.makeText(
                                     requireContext(), sideEffect.message, Toast.LENGTH_SHORT
                                 ).show()
                             }
 
-                            MissingReportUiEffect.ShowFinishDialog -> {
+                            WitnessReportUiEffect.ShowFinishDialog -> {
                                 ReportFinishDialog(
                                     requireContext(),
                                     ReportType.MISSING,
@@ -151,12 +149,12 @@ class NewMissingReportFragment : Fragment() {
                                 ).show()
                             }
 
-                            MissingReportUiEffect.DismissKeyboard -> {
+                            WitnessReportUiEffect.DismissKeyboard -> {
                                 keyboardController?.hide()
                                 focusManager.clearFocus()
                             }
 
-                            MissingReportUiEffect.OpenCamera -> {
+                            WitnessReportUiEffect.OpenCamera -> {
                                 when (permissionType) {
                                     PermissionType.NOT_DETERMINED -> {
                                         cameraPermissionState.launchPermissionRequest()
@@ -169,18 +167,19 @@ class NewMissingReportFragment : Fragment() {
                                 }
                             }
 
-                            MissingReportUiEffect.OpenGallery -> {
+                            WitnessReportUiEffect.OpenGallery -> {
                                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                             }
 
-                            MissingReportUiEffect.OpenAppSettings -> {
+                            WitnessReportUiEffect.OpenAppSettings -> {
                                 openAppSettings()
                             }
+
                         }
                     }
                 }
 
-                MissingReportNavHost(
+                WitnessReportNavHost(
                     navController = navController,
                     onEvent = { event -> viewModel.handleEvent(event) },
                     uiState = uiState,
@@ -193,18 +192,18 @@ class NewMissingReportFragment : Fragment() {
         setFragmentResultListener(IMAGE_URI) { _, result ->
             val imageUri = result.getString(IMAGE_RESULT_KEY)
             imageUri?.let {
-                viewModel.handleEvent(MissingReportUiEvent.OnImageSelected(it.toUri()))
+                viewModel.handleEvent(WitnessReportUiEvent.OnImageSelected(it.toUri()))
             }
-            Log.d("NewWitnessReportFragment", "getCapturedUri: $imageUri")
         }
     }
+
 
     private fun navigateToAddressSearch() {
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == AppCompatActivity.RESULT_OK) {
                     val data = result.data?.getStringExtra(POST_TAG)
-                    viewModel.handleEvent(MissingReportUiEvent.OnAddressUpdated(data ?: "주소 찾기 실패"))
+                    viewModel.handleEvent(WitnessReportUiEvent.OnAddressUpdated(data ?: "주소 찾기 실패"))
                 }
             }
         val intent = Intent(context, ReportLocationActivity::class.java)
@@ -213,19 +212,19 @@ class NewMissingReportFragment : Fragment() {
 
     private fun navigateToCamera() {
         findNavController().navigate(
-            NewMissingReportFragmentDirections.actionFragmentNewMissingReportToFragmentReportCamera()
+            WitnessReportFragmentDirections.actionFragmentWitnessReportToFragmentReportCamera()
         )
     }
 
     private fun navigateToReportHistory() {
         findNavController().navigate(
-            NewMissingReportFragmentDirections.actionFragmentNewMissingReportToFragmentMyReportHistory()
+            WitnessReportFragmentDirections.actionFragmentWitnessReportToFragmentMyReportHistory()
         )
     }
 
     private fun navigateToHome() {
         findNavController().navigate(
-            NewMissingReportFragmentDirections.actionFragmentNewMissingReportToFragmentHome()
+            WitnessReportFragmentDirections.actionFragmentWitnessReportToFragmentHome()
         )
     }
 

@@ -4,14 +4,12 @@ import android.net.Uri
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.ui.NavigationUI.navigateUp
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -84,7 +82,7 @@ sealed class MissingReportUiEffect {
 }
 
 @HiltViewModel
-class NewMissingReportViewModel @Inject constructor() : ViewModel() {
+class MissingReportViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(MissingReportUiState())
     val uiState: StateFlow<MissingReportUiState>
         get() = _uiState.asStateFlow()

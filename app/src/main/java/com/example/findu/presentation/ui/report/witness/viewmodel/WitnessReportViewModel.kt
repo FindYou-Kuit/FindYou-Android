@@ -4,11 +4,9 @@ import android.net.Uri
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.ui.NavigationUI.navigateUp
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
-import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEffect
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -80,7 +78,7 @@ sealed class WitnessReportUiEffect {
 }
 
 @HiltViewModel
-class NewWitnessReportViewModel @Inject constructor() : ViewModel() {
+class WitnessReportViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(WitnessReportUiState())
     val uiState: StateFlow<WitnessReportUiState>
         get() = _uiState.asStateFlow()
