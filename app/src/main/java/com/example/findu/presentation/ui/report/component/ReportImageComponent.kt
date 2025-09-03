@@ -85,7 +85,6 @@ fun ReportImageComponent(
             pageSpacing = 20.dp,
             contentPadding = PaddingValues(horizontal = paddingDp)
         ) { page ->
-            Log.d("ReportImageComponent", "Rendering page $page")
             val isCurrentPage = page == pagerState.currentPage
             val itemSize by animateDpAsState(
                 targetValue = if (isCurrentPage) 160.dp else 120.dp,
@@ -103,7 +102,7 @@ fun ReportImageComponent(
                     DefaultPageContent(
                         modifier = Modifier
                             .shadow(
-                                elevation = 0.5.dp,
+                                elevation = 2.dp,
                                 shape = RoundedCornerShape(20.dp)
                             )
                             .background(
@@ -118,13 +117,13 @@ fun ReportImageComponent(
                     ImagePageContent(
                         modifier = Modifier
                             .shadow(
-                                elevation = 0.5.dp,
+                                elevation = 2.dp,
                                 shape = RoundedCornerShape(20.dp)
                             )
                             .size(itemSize)
                             .clip(RoundedCornerShape(20.dp))
                             .align(Alignment.Center),
-                        imageUri = imgUriList[page - 1]
+                        imageUri = imgUriList[page]
                     )
                 }
             }

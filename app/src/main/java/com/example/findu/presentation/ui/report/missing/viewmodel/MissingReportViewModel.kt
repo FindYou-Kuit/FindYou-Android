@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 data class MissingReportUiState(
-    val isFirstPermissionRequest: Boolean = false,
+    val isFirstPermissionRequest: Boolean = true,
     val imageUriList: List<Uri> = emptyList(),
     val speciesType: SpeciesType? = null,
     val breedSearchText: TextFieldState = TextFieldState(),

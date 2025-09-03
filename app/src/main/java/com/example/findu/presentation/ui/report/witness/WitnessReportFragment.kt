@@ -89,7 +89,7 @@ class WitnessReportFragment : Fragment() {
                             Log.d("NewMissingReportFragment", "No media selected")
                         }
                     }
-                var permissionType by remember(cameraPermissionState.status) {
+                var permissionType by remember {
                     mutableStateOf(
                         when {
                             uiState.isFirstPermissionRequest -> PermissionType.NOT_DETERMINED
@@ -99,17 +99,19 @@ class WitnessReportFragment : Fragment() {
                         }
                     )
                 }
+                var openCamera by remember { mutableStateOf(false) }
+
                 // 권한이 승인되면 바로 카메라 이동
                 LaunchedEffect(
                     cameraPermissionState.status,
                     permissionType
                 ) {
-                    if (
-                        permissionType == PermissionType.NOT_DETERMINED || permissionType == PermissionType.SHOULD_SHOW_RATIONALE
-                        && cameraPermissionState.status.isGranted
-                    ) {
+                    if (cameraPermissionState.status.isGranted) {
                         permissionType = PermissionType.GRANTED
-                        viewModel.openCamera()
+                        if (openCamera) {
+                            viewModel.openCamera()
+                            openCamera = false
+                        }
                     }
                 }
 
