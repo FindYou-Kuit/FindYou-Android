@@ -1,16 +1,23 @@
 package com.example.findu.presentation.ui.report.missing.screen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.report.component.animalinfo.ReportAgeComponent
@@ -18,46 +25,111 @@ import com.example.findu.presentation.ui.report.component.animalinfo.ReportBreed
 import com.example.findu.presentation.ui.report.component.animalinfo.ReportSpeciesComponent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.missing.viewmodel.MissingReportUiState
+import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiEvent
+import com.example.findu.presentation.ui.report.witness.viewmodel.WitnessReportUiState
 import com.example.findu.ui.theme.FindUTheme
+
+
+@Composable
+fun WitnessReportAnimalInfoScreen(
+    uiState: WitnessReportUiState,
+    onEvent: (WitnessReportUiEvent) -> Unit,
+) {
+    val buttonEnabled by remember {
+        derivedStateOf {
+            uiState.speciesType != null &&
+                    uiState.breed != null
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Column {
+            FindUTopAppBar(
+                title = R.string.report_animal_info_title,
+                navigationIconRes = R.drawable.ic_arrow_left,
+                onNavigationIconClick = { onEvent(WitnessReportUiEvent.OnBackPressed) },
+            )
+            ReportAnimalInfoScreen(
+                speciesType = uiState.speciesType,
+                breed = uiState.breed,
+                onSpeciesClick = { onEvent(WitnessReportUiEvent.OnSpeciesClick(it)) },
+                onBreedClick = { onEvent(WitnessReportUiEvent.OnBreedClick(it)) },
+            )
+        }
+
+        FindUButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 30.dp)
+                .height(50.dp)
+                .padding(horizontal = 20.dp),
+            textRes = R.string.report_confirm,
+            onClick = { onEvent(WitnessReportUiEvent.OnInfoFinishButtonClick) },
+            enabled = buttonEnabled
+        )
+    }
+}
 
 @Composable
 fun MissingReportAnimalInfoScreen(
     uiState: MissingReportUiState,
     onEvent: (MissingReportUiEvent) -> Unit,
 ) {
+    val buttonEnabled by remember {
+        derivedStateOf {
+            uiState.speciesType != null &&
+                    uiState.breed != null &&
+                    uiState.age.text.isNotEmpty()
+        }
+    }
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        FindUTopAppBar(
-            title = R.string.report_animal_info_title,
-            navigationIconRes = R.drawable.ic_arrow_left,
-            onNavigationIconClick = { onEvent(MissingReportUiEvent.OnBackPressed) },
-        )
-        MissingReportAnimalInfoScreen(
-            speciesType = uiState.speciesType,
-            breed = uiState.breed,
-            age = uiState.age,
-            onSpeciesClick = { onEvent(MissingReportUiEvent.OnSpeciesClick(it)) },
-            onBreedClick = { onEvent(MissingReportUiEvent.OnBreedClick(it)) },
+        Column {
+            FindUTopAppBar(
+                title = R.string.report_animal_info_title,
+                navigationIconRes = R.drawable.ic_arrow_left,
+                onNavigationIconClick = { onEvent(MissingReportUiEvent.OnBackPressed) },
+            )
+            ReportAnimalInfoScreen(
+                speciesType = uiState.speciesType,
+                breed = uiState.breed,
+                age = uiState.age,
+                onSpeciesClick = { onEvent(MissingReportUiEvent.OnSpeciesClick(it)) },
+                onBreedClick = { onEvent(MissingReportUiEvent.OnBreedClick(it)) },
+            )
+        }
+        FindUButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 30.dp)
+                .height(50.dp)
+                .padding(horizontal = 20.dp),
+            textRes = R.string.report_confirm,
+            onClick = { onEvent(MissingReportUiEvent.OnInfoFinishButtonClick) },
+            enabled = buttonEnabled
         )
     }
 }
 
 @Composable
-private fun MissingReportAnimalInfoScreen(
+private fun ReportAnimalInfoScreen(
     speciesType: SpeciesType? = null,
     breed: Breed? = null,
-    age: TextFieldState,
+    age: TextFieldState? = null,
     onSpeciesClick: (SpeciesType) -> Unit = {},
     onBreedClick: (Breed) -> Unit = {},
     clearFocus: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .padding(top = 20.dp)
             .padding(horizontal = 20.dp),
     ) {
@@ -73,22 +145,35 @@ private fun MissingReportAnimalInfoScreen(
             onBreedClick = onBreedClick,
         )
         VerticalSpacer(40.dp)
-        ReportAgeComponent(age = age)
+        age?.let { ReportAgeComponent(age = it) }
     }
 }
 
 
 @Preview(showBackground = true)
 @Composable
-private fun ReportAnimalInfoScreenPreview() {
+private fun MissingReportAnimalInfoScreenPreview() {
     FindUTheme {
         MissingReportAnimalInfoScreen(
-            clearFocus = {},
-            speciesType = SpeciesType.ETC,
-            breed = Breed.DogBreed(1, "Labrador", SpeciesType.DOG),
-            age = TextFieldState("3"),
-            onSpeciesClick = { },
-            onBreedClick = { },
+            uiState = MissingReportUiState(
+                speciesType = SpeciesType.DOG,
+                breed = Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
+                age = TextFieldState("3"),
+            ),
+            onEvent = {}
+        )
+    }
+}
+@Preview(showBackground = true)
+@Composable
+private fun WitnessReportAnimalInfoScreenPreview() {
+    FindUTheme {
+        WitnessReportAnimalInfoScreen(
+            uiState = WitnessReportUiState(
+                speciesType = SpeciesType.DOG,
+                breed = Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
+            ),
+            onEvent = {}
         )
     }
 }

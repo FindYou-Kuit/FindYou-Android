@@ -62,43 +62,40 @@ fun ReportAgeComponent(
             )
         }
         Row {
-            BasicTextField(
-                state = age,
-                textStyle = FindUTheme.typography.body2SemiBold14.copy(
-                    color =
-                        if (isFocused) FindUTheme.colors.mainColor
-                        else FindUTheme.colors.gray6
-                ),
-                interactionSource = interactionSource,
-                lineLimits = TextFieldLineLimits.SingleLine,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-                inputTransformation = {
-                    if (asCharSequence().length > 2
-                        || asCharSequence().last().isNotDigit()
-                    ) revertAllChanges()
-                },
-                decorator = { innerTextField ->
-                    Column(
-                        modifier = Modifier.width(30.dp),
-                        verticalArrangement = Arrangement.spacedBy(2.dp),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        innerTextField()
-                        Divider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(
-                                    width = 1.dp,
-                                    color =
-                                        if (isFocused) FindUTheme.colors.mainColor
-                                        else FindUTheme.colors.gray6,
-                                )
+            Column(
+                modifier = Modifier.width(30.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                BasicTextField(
+                    state = age,
+                    textStyle = FindUTheme.typography.body2SemiBold14.copy(
+                        color =
+                            if (isFocused) FindUTheme.colors.mainColor
+                            else FindUTheme.colors.gray6
+                    ),
+                    interactionSource = interactionSource,
+                    lineLimits = TextFieldLineLimits.SingleLine,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    inputTransformation = {
+                        if (asCharSequence().length > 2
+                            || asCharSequence().lastOrNull()?.isNotDigit() == true
+                        ) revertAllChanges()
+                    },
+                )
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color =
+                                if (isFocused) FindUTheme.colors.mainColor
+                                else FindUTheme.colors.gray6,
                         )
-                    }
-                }
-            )
+                )
+            }
             HorizontalSpacer(7.dp)
             Text(
                 text = stringResource(R.string.report_age_postfix),
