@@ -48,7 +48,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MissingReportFragment : Fragment() {
 
     private var _binding: FragmentMissingReportBinding? = null
@@ -121,7 +123,7 @@ class MissingReportFragment : Fragment() {
                     if (cameraPermissionState.status.isGranted) {
                         permissionType = PermissionType.GRANTED
                         if (openCamera) {
-                            viewModel.openCamera()
+                            navigateToCamera()
                             openCamera = false
                         }
                     }
@@ -248,5 +250,10 @@ class MissingReportFragment : Fragment() {
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "설정을 열 수 없습니다", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

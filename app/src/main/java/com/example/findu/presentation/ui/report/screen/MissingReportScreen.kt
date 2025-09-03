@@ -15,6 +15,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -59,6 +60,11 @@ fun MissingReportScreen(
     val cameraPositionState = rememberCameraPositionState {
         uiState.currentLatLng?.let {
             position = CameraPosition(it, 15.0)
+        }
+    }
+    LaunchedEffect(uiState.currentLatLng) {
+        uiState.currentLatLng?.let {
+            cameraPositionState.position = CameraPosition(it, 15.0)
         }
     }
     val buttonEnabled by remember(

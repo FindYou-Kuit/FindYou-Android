@@ -48,7 +48,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WitnessReportFragment : Fragment() {
     private var _binding: FragmentWitnessReportBinding? = null
     private val binding get() = _binding!!
@@ -118,7 +120,7 @@ class WitnessReportFragment : Fragment() {
                     if (cameraPermissionState.status.isGranted) {
                         permissionType = PermissionType.GRANTED
                         if (openCamera) {
-                            viewModel.openCamera()
+                            navigateToCamera()
                             openCamera = false
                         }
                     }
@@ -154,7 +156,7 @@ class WitnessReportFragment : Fragment() {
                             WitnessReportUiEffect.ShowFinishDialog -> {
                                 ReportFinishDialog(
                                     requireContext(),
-                                    ReportType.MISSING,
+                                    ReportType.WITNESS,
                                     onGoHistoryClick = ::navigateToReportHistory,
                                     onGoHomeClick = ::navigateToHome
                                 ).show()
@@ -247,5 +249,10 @@ class WitnessReportFragment : Fragment() {
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "설정을 열 수 없습니다", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

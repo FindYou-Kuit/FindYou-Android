@@ -14,6 +14,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -58,13 +59,19 @@ fun WitnessReportScreen(
             position = CameraPosition(it, 15.0)
         }
     }
+    LaunchedEffect(uiState.currentLatLng) {
+        uiState.currentLatLng?.let {
+            cameraPositionState.position = CameraPosition(it, 15.0)
+        }
+    }
     val buttonEnabled by remember(
         uiState.speciesType,
         uiState.breed,
         uiState.selectedFurColors,
         uiState.witnessDate,
         uiState.address,
-        uiState.imageUriList
+        uiState.imageUriList,
+        uiState.nearPlace
     ) {
         derivedStateOf {
             uiState.speciesType != null &&
@@ -72,7 +79,8 @@ fun WitnessReportScreen(
                     uiState.selectedFurColors.isNotEmpty() &&
                     uiState.witnessDate.isNotEmpty() &&
                     uiState.address.isNotEmpty() &&
-                    uiState.imageUriList.isNotEmpty()
+                    uiState.imageUriList.isNotEmpty() &&
+                    uiState.nearPlace.text.isNotEmpty()
         }
     }
 
