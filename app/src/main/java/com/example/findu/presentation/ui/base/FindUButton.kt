@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.findu.ui.theme.FindUTheme
@@ -22,10 +23,6 @@ fun FindUButton(
 ) {
     Box(
         modifier = modifier
-            .clickable(
-                enabled = enabled,
-                onClick = onClick
-            )
             .background(
                 color = if (enabled) {
                     FindUTheme.colors.mainColor
@@ -33,6 +30,13 @@ fun FindUButton(
                     FindUTheme.colors.gray1
                 },
                 shape = RoundedCornerShape(30.dp)
+            )
+            .clip(
+                shape = RoundedCornerShape(30.dp)
+            )
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
             ),
         contentAlignment = Alignment.Center
     ) {

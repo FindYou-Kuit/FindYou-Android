@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -56,32 +57,31 @@ fun ReportDateBottomSheet(
     var selectedMonth by remember { mutableIntStateOf(nowDate.monthNumber) }
     var selectedDay by remember { mutableIntStateOf(nowDate.dayOfMonth) }
 
-    val startMonthIndex by remember { mutableIntStateOf(nowDate.monthNumber - 1) }
-    val startDayIndex by remember { mutableIntStateOf(nowDate.dayOfMonth - 1) }
-
     val yearList by remember { mutableStateOf(listOf("2025")) }
-    val monthList by remember { mutableStateOf((1..12).map { it.toString() }) }
-    val dayList by
-    remember(selectedMonth) {
-        when {
+    val monthList by remember { mutableStateOf((1..selectedMonth).map { it.toString() }) }
+    var dayList by remember { mutableStateOf((1..selectedDay).map { it.toString() }) }
+    LaunchedEffect(monthList, selectedMonth) {
+        dayList = when {
+            selectedMonth == nowDate.monthNumber -> {
+                (1..nowDate.dayOfMonth).map { it.toString() }
+            }
+
             selectedMonth.isOdd() -> {
-                mutableStateOf((1..31).map { it.toString() })
+                (1..31).map { it.toString() }
             }
 
             selectedMonth == 2 -> {
                 if (selectedYear % 4 == 0 && (selectedYear % 100 != 0 || selectedYear % 400 == 0)) {
-                    mutableStateOf((1..29).map { it.toString() })
+                    (1..29).map { it.toString() }
                 } else {
-                    mutableStateOf((1..28).map { it.toString() })
+                    (1..28).map { it.toString() }
                 }
             }
 
             else -> {
-                mutableStateOf((1..30).map { it.toString() })
+                (1..30).map { it.toString() }
             }
         }
-
-        mutableStateOf((1..31).map { it.toString() })
     }
 
     ModalBottomSheetLayout(
@@ -99,12 +99,12 @@ fun ReportDateBottomSheet(
                 ReportDateBottomSheetContent(
                     modifier = modifier,
                     hideSheet = hideSheet,
-                    startMonthIndex = startMonthIndex,
-                    startDayIndex = startDayIndex,
+                    startMonthIndex = selectedMonth,
+                    startDayIndex = selectedDay,
                     onYearSelected = { selectedYear = it },
                     onMonthSelected = {
                         selectedMonth = it
-                        if (selectedDay > dayList.size) {
+                        if (selectedDay > dayList.size && dayList.isNotEmpty()) {
                             selectedDay = dayList.size
                         }
                     },
@@ -208,32 +208,32 @@ fun ReportDateBottomSheetContent(
                         shape = RoundedCornerShape(8.dp),
                     ),
             )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 50.dp)
-        ) {
-            WheelPicker(
-                modifier = Modifier.weight(1f),
-                items = yearList,
-                startIndex = 0,
-                onSelected = { onYearSelected(yearList[it].toInt()) }
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 50.dp)
+            ) {
+                WheelPicker(
+                    modifier = Modifier.weight(1f),
+                    items = yearList,
+                    startIndex = 0,
+                    onSelected = { if (yearList.isNotEmpty()) onYearSelected(yearList[it].toInt()) }
+                )
 
-            WheelPicker(
-                modifier = Modifier.weight(1f),
-                items = monthList,
-                startIndex = startMonthIndex,
-                onSelected = { onMonthSelected(monthList[it].toInt()) }
-            )
+                WheelPicker(
+                    modifier = Modifier.weight(1f),
+                    items = monthList,
+                    startIndex = if (monthList.isNotEmpty()) startMonthIndex - 1 else 0,
+                    onSelected = { if (monthList.isNotEmpty()) onMonthSelected(monthList[it].toInt()) }
+                )
 
-            WheelPicker(
-                modifier = Modifier.weight(1f),
-                items = dayList,
-                startIndex = startDayIndex,
-                onSelected = { onDaySelected(dayList[it].toInt()) }
-            )
-        }
+                WheelPicker(
+                    modifier = Modifier.weight(1f),
+                    items = dayList,
+                    startIndex = if (dayList.isNotEmpty()) startDayIndex - 1 else 0,
+                    onSelected = { if (dayList.isNotEmpty()) onDaySelected(dayList[it].toInt()) }
+                )
+            }
         }
         FindUButton(
             modifier = Modifier

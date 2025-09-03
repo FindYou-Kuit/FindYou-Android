@@ -82,7 +82,7 @@ fun ReportLocationComponent(
                 tint = FindUTheme.colors.mainColor,
             )
             Text(
-                text = address,
+                text = address.ifEmpty { stringResource(R.string.report_location) },
                 style = FindUTheme.typography.body2SemiBold14,
                 color = FindUTheme.colors.gray4,
                 textDecoration = TextDecoration.Underline,

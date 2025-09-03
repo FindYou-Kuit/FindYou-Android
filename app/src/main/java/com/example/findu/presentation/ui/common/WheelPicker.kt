@@ -53,11 +53,14 @@ fun WheelPicker(
     val halfPadItems = (visibleCount - 1) / 2
 
     // 현재 "가운데"에 가장 가까운 인덱스 계산
-    val currentIndex by remember {
+    val currentIndex by remember(
+        state,
+        items
+    ) {
         derivedStateOf {
             val offsetItems = state.firstVisibleItemScrollOffset / itemHeightPx
             val raw = state.firstVisibleItemIndex + offsetItems
-            raw.roundToInt().coerceIn(0, items.lastIndex)
+            raw.roundToInt().coerceIn(0, items.lastIndex.coerceAtLeast(0))
         }
     }
 

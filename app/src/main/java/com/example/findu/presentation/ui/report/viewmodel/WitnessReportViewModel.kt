@@ -16,7 +16,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 
 data class WitnessReportUiState(
@@ -27,7 +30,8 @@ data class WitnessReportUiState(
     val breed: Breed? = null,
     val breedList: List<Breed> = emptyList(),
     val selectedFurColors: List<FurColorType> = emptyList(),
-    val nowDate: LocalDateTime = LocalDateTime.now(),
+    val nowDate: LocalDateTime = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault()),
     val witnessDate: String = "",
     val isDateBottomSheetShown: Boolean = false,
     val description: TextFieldState = TextFieldState(),
@@ -45,6 +49,7 @@ sealed class WitnessReportUiEvent {
     data object OnOpenCameraClick : WitnessReportUiEvent()
     data object OnOpenGalleryClick : WitnessReportUiEvent()
     data class OnImageSelected(val uri: Uri) : WitnessReportUiEvent()
+    data class OnAIDistinctionClick(val uri: Uri) : WitnessReportUiEvent()
     data object OnSelectAnimalInfoClick : WitnessReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : WitnessReportUiEvent()
     data class OnBreedClick(val breed: Breed) : WitnessReportUiEvent()
@@ -88,10 +93,31 @@ class WitnessReportViewModel @Inject constructor() : ViewModel() {
     private val _uiEffect = Channel<WitnessReportUiEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
+    init {
+        fetchBreedList()
+    }
+
+    private fun fetchBreedList() {
+        // TODO: 실제 API 연동 필요
+        _uiState.update {
+            it.copy(
+                breedList = listOf(
+                    Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
+                    Breed.DogBreed(2, "German Shepherd", SpeciesType.DOG),
+                    Breed.DogBreed(3, "Golden Retriever", SpeciesType.DOG),
+                    Breed.DogBreed(4, "Bulldog", SpeciesType.DOG),
+                    Breed.DogBreed(5, "Beagle", SpeciesType.DOG),
+                    Breed.DogBreed(6, "Poodle", SpeciesType.DOG),
+                )
+            )
+        }
+    }
+
     fun handleEvent(event: WitnessReportUiEvent) {
         when (event) {
             WitnessReportUiEvent.OnBackPressed -> navigateUp()
             WitnessReportUiEvent.OnAddImageClick -> setImageDialogVisible()
+            is WitnessReportUiEvent.OnAIDistinctionClick -> distinguishWithAI(event.uri)
             WitnessReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
             is WitnessReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
             is WitnessReportUiEvent.OnBreedClick -> updateBreed(event.breed)
@@ -113,6 +139,10 @@ class WitnessReportViewModel @Inject constructor() : ViewModel() {
             WitnessReportUiEvent.OnAppSettingClick -> openAppSettings()
             WitnessReportUiEvent.ClearFocus -> clearFocus()
         }
+    }
+
+    private fun distinguishWithAI(uri: Uri) {
+        // TODO : AI api 연동
     }
 
     private fun clearFocus() {
@@ -164,7 +194,7 @@ class WitnessReportViewModel @Inject constructor() : ViewModel() {
     private fun updateDate(dateTime: LocalDateTime) {
         _uiState.update {
             it.copy(
-                witnessDate = "${dateTime.year}년 ${dateTime.monthValue}월 ${dateTime.dayOfMonth}일",
+                witnessDate = "${dateTime.year}년 ${dateTime.monthNumber}월 ${dateTime.dayOfMonth}일",
             )
         }
         setDateBottomSheetVisible(false)

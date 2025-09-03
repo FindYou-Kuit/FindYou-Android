@@ -1,7 +1,7 @@
 package com.example.findu.presentation.ui.report.screen
 
-import android.R.attr.bottom
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,10 +25,12 @@ import com.example.findu.R
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
+import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.common.AppSettingDialog
+import com.example.findu.presentation.ui.report.component.ReportDateBottomSheet
 import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
 import com.example.findu.presentation.ui.report.component.ReportFurColorComponent
@@ -32,15 +38,20 @@ import com.example.findu.presentation.ui.report.component.ReportImageComponent
 import com.example.findu.presentation.ui.report.component.ReportImageDialog
 import com.example.findu.presentation.ui.report.component.ReportLocationComponent
 import com.example.findu.presentation.ui.report.component.witness.WitnessAnimalInfoComponent
+import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiEvent
 import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiState
+import com.example.findu.presentation.util.extension.toKoreanDateString
 import com.example.findu.ui.theme.FindUTheme
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
+import kotlinx.datetime.format
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WitnessReportScreen(
     uiState: WitnessReportUiState,
@@ -69,9 +80,27 @@ fun WitnessReportScreen(
         }
     }
 
+    val sheetState = rememberModalBottomSheetState(
+        skipHalfExpanded = true,
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+    val scope = rememberCoroutineScope()
+
+    BackHandler {
+        if (sheetState.isVisible) {
+            scope.launch { sheetState.hide() }
+        } else {
+            onEvent(WitnessReportUiEvent.OnBackPressed)
+        }
+    }
+
     WitnessReportScreen(
         uiState = uiState,
         onEvent = onEvent,
+        onDateClick = {
+            onEvent(WitnessReportUiEvent.OnDismissKeyboard)
+            scope.launch { sheetState.show() }
+        },
         cameraPositionState = cameraPositionState,
         buttonEnabled = buttonEnabled
     )
@@ -90,12 +119,25 @@ fun WitnessReportScreen(
             openAppSettings = { onEvent(WitnessReportUiEvent.OnAppSettingClick) }
         )
     }
+
+    ReportDateBottomSheet(
+        nowDate = uiState.nowDate,
+        sheetState = sheetState,
+        onDateSelected = {
+            onEvent(WitnessReportUiEvent.OnDateSelected(it))
+            scope.launch { sheetState.hide() }
+        },
+        hideSheet = {
+            scope.launch { sheetState.hide() }
+        },
+    )
 }
 
 @Composable
 private fun WitnessReportScreen(
     uiState: WitnessReportUiState,
     onEvent: (WitnessReportUiEvent) -> Unit,
+    onDateClick: () -> Unit,
     cameraPositionState: CameraPositionState,
     buttonEnabled: Boolean,
 ) {
@@ -111,8 +153,10 @@ private fun WitnessReportScreen(
             onNavigationIconClick = { onEvent(WitnessReportUiEvent.OnBackPressed) }
         )
         ReportImageComponent(
+            reportType = ReportType.WITNESS,
             imgUriList = uiState.imageUriList,
-            onOpenDialogClick = { onEvent(WitnessReportUiEvent.OnAddImageClick) }
+            onOpenDialogClick = { onEvent(WitnessReportUiEvent.OnAddImageClick) },
+            onDistinctionClick = { onEvent(WitnessReportUiEvent.OnAIDistinctionClick(it)) }
         )
 
         Column(
@@ -137,10 +181,8 @@ private fun WitnessReportScreen(
             ReportDateComponent(
                 selectedDate = uiState.witnessDate,
                 titleRes = R.string.report_witness_date_title,
-                nowDate = uiState.nowDate.format(
-                    DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E)", Locale.KOREAN)
-                ),
-                onClick = { onEvent(WitnessReportUiEvent.OnWitnessDateClicked) }
+                nowDate = uiState.nowDate.toKoreanDateString(),
+                onClick = onDateClick
             )
             VerticalSpacer(30.dp)
             ReportDescriptionComponent(

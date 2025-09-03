@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.report.screen
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import com.example.findu.R
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
+import com.example.findu.presentation.type.report.ReportType
 import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
@@ -88,6 +90,14 @@ fun MissingReportScreen(
     )
     val scope = rememberCoroutineScope()
 
+    BackHandler {
+        if (sheetState.isVisible) {
+            scope.launch { sheetState.hide() }
+        } else {
+            onEvent(MissingReportUiEvent.OnBackPressed)
+        }
+    }
+
     MissingReportScreen(
         uiState = uiState,
         onEvent = onEvent,
@@ -147,6 +157,7 @@ private fun MissingReportScreen(
             onNavigationIconClick = { onEvent(MissingReportUiEvent.OnBackPressed) }
         )
         ReportImageComponent(
+            reportType = ReportType.MISSING,
             imgUriList = uiState.imageUriList,
             onOpenDialogClick = { onEvent(MissingReportUiEvent.OnAddImageClick) }
         )

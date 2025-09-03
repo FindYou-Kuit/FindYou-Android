@@ -113,7 +113,7 @@ class WitnessReportFragment : Fragment() {
                 // 권한이 승인되면 바로 카메라 이동
                 LaunchedEffect(
                     cameraPermissionState.status,
-                    permissionType
+                    openCamera,
                 ) {
                     if (cameraPermissionState.status.isGranted) {
                         permissionType = PermissionType.GRANTED
@@ -166,6 +166,7 @@ class WitnessReportFragment : Fragment() {
                             }
 
                             WitnessReportUiEffect.OpenCamera -> {
+                                openCamera = true
                                 when (permissionType) {
                                     PermissionType.NOT_DETERMINED -> {
                                         cameraPermissionState.launchPermissionRequest()
