@@ -216,14 +216,15 @@
         <action
             android:id="@+id/action_fragment_missing_report_to_fragment_home"
             app:destination="@id/fragment_home"
+            app:popUpTo="@id/fragment_home"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragment_missing_report_to_fragment_report_camera"
-            app:destination="@id/fragment_report_camera"
-            app:popUpToInclusive="true" />
+            app:destination="@id/fragment_report_camera" />
         <action
             android:id="@+id/action_fragment_missing_report_to_fragment_my_report_history"
             app:destination="@id/fragment_my_report_history"
+            app:popUpTo="@id/fragment_missing_report"
             app:popUpToInclusive="true" />
 
     </fragment>
@@ -236,14 +237,15 @@
         <action
             android:id="@+id/action_fragment_witness_report_to_fragment_home"
             app:destination="@id/fragment_home"
+            app:popUpTo="@id/fragment_home"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragment_witness_report_to_fragment_report_camera"
-            app:destination="@id/fragment_report_camera"
-            app:popUpToInclusive="true" />
+            app:destination="@id/fragment_report_camera" />
         <action
             android:id="@+id/action_fragment_witness_report_to_fragment_my_report_history"
             app:destination="@id/fragment_my_report_history"
+            app:popUpTo="@id/fragment_witness_report"
             app:popUpToInclusive="true" />
 
     </fragment>
