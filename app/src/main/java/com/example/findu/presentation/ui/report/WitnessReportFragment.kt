@@ -117,12 +117,14 @@ class WitnessReportFragment : Fragment() {
                     cameraPermissionState.status,
                     openCamera,
                 ) {
-                    if (cameraPermissionState.status.isGranted) {
-                        permissionType = PermissionType.GRANTED
-                        if (openCamera) {
-                            navigateToCamera()
-                            openCamera = false
-                        }
+                    permissionType = when {
+                        cameraPermissionState.status.isGranted -> PermissionType.GRANTED
+                        cameraPermissionState.status.shouldShowRationale -> PermissionType.SHOULD_SHOW_RATIONALE
+                        else -> PermissionType.DENIED
+                    }
+                    if (openCamera && permissionType == PermissionType.GRANTED) {
+                        navigateToCamera()
+                        openCamera = false
                     }
                 }
 
@@ -175,7 +177,7 @@ class WitnessReportFragment : Fragment() {
                                     }
 
                                     PermissionType.DENIED -> viewModel.setAppSettingDialogVisible()
-                                    PermissionType.GRANTED -> navigateToCamera()
+                                    PermissionType.GRANTED -> {  /* Launched Effect 에서 수행 */}
                                     PermissionType.SHOULD_SHOW_RATIONALE -> cameraPermissionState.launchPermissionRequest()
 
                                 }

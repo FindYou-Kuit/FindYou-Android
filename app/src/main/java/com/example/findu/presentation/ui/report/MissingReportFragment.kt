@@ -23,6 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -30,6 +32,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentMissingReportBinding
@@ -61,13 +64,14 @@ class MissingReportFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                val data = result.data?.getStringExtra(ReportLocationDialog.Companion.POST_TAG)
-                viewModel.handleEvent(MissingReportUiEvent.OnAddressUpdated(data ?: "주소 찾기 실패"))
+
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                    val data = result.data?.getStringExtra(ReportLocationDialog.Companion.POST_TAG)
+                    viewModel.handleEvent(MissingReportUiEvent.OnAddressUpdated(data ?: "주소 찾기 실패"))
+                }
             }
-        }
     }
 
     override fun onCreateView(
@@ -120,12 +124,14 @@ class MissingReportFragment : Fragment() {
                     cameraPermissionState.status,
                     openCamera,
                 ) {
-                    if (cameraPermissionState.status.isGranted) {
-                        permissionType = PermissionType.GRANTED
-                        if (openCamera) {
-                            navigateToCamera()
-                            openCamera = false
-                        }
+                    permissionType = when {
+                        cameraPermissionState.status.isGranted -> PermissionType.GRANTED
+                        cameraPermissionState.status.shouldShowRationale -> PermissionType.SHOULD_SHOW_RATIONALE
+                        else -> PermissionType.DENIED
+                    }
+                    if (openCamera && permissionType == PermissionType.GRANTED) {
+                        navigateToCamera()
+                        openCamera = false
                     }
                 }
 
@@ -178,7 +184,7 @@ class MissingReportFragment : Fragment() {
                                     }
 
                                     PermissionType.DENIED -> viewModel.setAppSettingDialogVisible()
-                                    PermissionType.GRANTED -> navigateToCamera()
+                                    PermissionType.GRANTED -> {  /* Launched Effect 에서 수행 */}
                                     PermissionType.SHOULD_SHOW_RATIONALE -> cameraPermissionState.launchPermissionRequest()
 
                                 }
@@ -191,6 +197,7 @@ class MissingReportFragment : Fragment() {
                             MissingReportUiEffect.OpenAppSettings -> {
                                 openAppSettings()
                             }
+
                             MissingReportUiEffect.ClearFocus -> {
                                 focusManager.clearFocus()
                             }
