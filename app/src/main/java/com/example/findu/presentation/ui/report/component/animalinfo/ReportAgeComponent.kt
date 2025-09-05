@@ -49,7 +49,8 @@ fun ReportAgeComponent(
             )
             Text(
                 text = stringResource(R.string.asterisk),
-                style = FindUTheme.typography.body2SemiBold14.copy(color = FindUTheme.colors.red1)
+                style = FindUTheme.typography.body2SemiBold14,
+                color = FindUTheme.colors.red1
             )
         }
         Row {
@@ -91,7 +92,8 @@ fun ReportAgeComponent(
             HorizontalSpacer(7.dp)
             Text(
                 text = stringResource(R.string.report_age_postfix),
-                style = FindUTheme.typography.body2SemiBold14.copy(color = FindUTheme.colors.gray6)
+                style = FindUTheme.typography.body2SemiBold14,
+                color = FindUTheme.colors.gray6,
             )
         }
     }

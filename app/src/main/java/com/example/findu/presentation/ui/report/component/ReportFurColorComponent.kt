@@ -52,15 +52,18 @@ fun ReportFurColorComponent(
         ) {
             Text(
                 text = stringResource(R.string.report_color_title),
-                style = FindUTheme.typography.body1SemiBold16.copy(color = FindUTheme.colors.gray6)
+                style = FindUTheme.typography.body1SemiBold16,
+                color = FindUTheme.colors.gray6,
             )
             Text(
                 text = stringResource(R.string.asterisk),
-                style = FindUTheme.typography.body2SemiBold14.copy(color = FindUTheme.colors.red1)
+                style = FindUTheme.typography.body2SemiBold14,
+                color = FindUTheme.colors.red1
             )
             Text(
                 text = stringResource(R.string.report_color_title_additional),
-                style = FindUTheme.typography.captionRegular12.copy(color = FindUTheme.colors.gray4)
+                style = FindUTheme.typography.captionRegular12,
+                color = FindUTheme.colors.gray4,
             )
         }
         FlowRow(
@@ -158,10 +161,11 @@ private fun FurColorChip(
         Text(
             text = furColorType.color,
             style = if (isSelected) {
-                FindUTheme.typography.body2SemiBold14.copy(color = FindUTheme.colors.gray6)
+                FindUTheme.typography.body2SemiBold14
             } else {
-                FindUTheme.typography.body2Regular14.copy(color = FindUTheme.colors.gray6)
-            }
+                FindUTheme.typography.body2Regular14
+            },
+            color = FindUTheme.colors.gray6
         )
     }
 }

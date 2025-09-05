@@ -161,19 +161,22 @@ fun ReportDateBottomSheetContent(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.year),
-                    style = FindUTheme.typography.body1SemiBold16.copy(color = FindUTheme.colors.gray5),
+                    style = FindUTheme.typography.body1SemiBold16,
+                    color = FindUTheme.colors.gray5,
                 )
                 Text(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.month),
-                    style = FindUTheme.typography.body1SemiBold16.copy(color = FindUTheme.colors.gray5),
+                    style = FindUTheme.typography.body1SemiBold16,
+                    color = FindUTheme.colors.gray5,
                 )
                 Text(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.day),
-                    style = FindUTheme.typography.body1SemiBold16.copy(color = FindUTheme.colors.gray5),
+                    style = FindUTheme.typography.body1SemiBold16,
+                    color = FindUTheme.colors.gray5,
                 )
             }
         }
