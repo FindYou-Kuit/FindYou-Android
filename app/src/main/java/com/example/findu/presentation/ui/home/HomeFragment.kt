@@ -17,9 +17,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentHomeBinding
-import com.example.findu.domain.model.HomeReportData
-import com.example.findu.domain.model.ReportDataType
-import com.example.findu.domain.model.ReportItem
 import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.home.composeview.HomeScreen
@@ -105,7 +102,6 @@ class HomeFragment : Fragment() {
                             alarmButtonClicked = {
                                 homeViewModel.handleEvent(HomeUiEvent.OnAlarmButtonClick)
                             },
-                            homeReportData =  uiState.homeReportData,
                             indicatorClicked = { reportDurationType ->
                                 homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
                             },

@@ -7,4 +7,7 @@ object ApiConstraints {
 
     // Auth
     const val AUTH = "auth"
+
+    // Home
+    const val HOME = "home"
 }

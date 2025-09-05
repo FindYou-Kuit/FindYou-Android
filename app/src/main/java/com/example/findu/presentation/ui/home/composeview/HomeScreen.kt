@@ -27,11 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
-import com.example.findu.domain.model.HomeReportData
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
-import com.example.findu.domain.model.ReportDataType
-import com.example.findu.domain.model.ReportItem
 import com.example.findu.presentation.type.HomeBannerType
 import com.example.findu.presentation.type.HomeReportDurationType
 import com.example.findu.presentation.ui.home.component.HomeBannerPager
@@ -53,16 +50,15 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
-    uiState: HomeUiState = HomeUiState(),
     reportButtonClicked: () -> Unit,
     alarmButtonClicked: () -> Unit,
-    homeReportData: HomeReportData,
     navigateToProtectDetail: (ProtectAnimal) -> Unit,
     navigateToReportDetail: (ReportAnimal) -> Unit,
     indicatorClicked: (HomeReportDurationType) -> Unit,
     navigationToSearch: () -> Unit,
     userNickname: String,
     modifier: Modifier = Modifier,
+    uiState: HomeUiState = HomeUiState(),
     innerPaddingValues: PaddingValues = PaddingValues(0.dp)
 ) {
     val bannerList = HomeBannerType.entries
@@ -106,12 +102,14 @@ fun HomeScreen(
                     .background(color = FindUTheme.colors.gray2)
             ) {
                 item {
-                    HomeReportCard(
-                        modifier = Modifier.padding(15.dp),
-                        homeReportData = homeReportData,
-                        indicatorClicked = indicatorClicked,
-                        homeReportDuration = uiState.reportDataDuration
-                    )
+                    uiState.homeData?.let {
+                        HomeReportCard(
+                            modifier = Modifier.padding(15.dp),
+                            homeStatistics = it.statistics,
+                            indicatorClicked = indicatorClicked,
+                            homeReportDuration = uiState.reportDataDuration
+                        )
+                    }
                 }
                 item {
                     Column(
@@ -200,19 +198,11 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     var selected by remember { mutableStateOf(HomeReportDurationType.WEEK) }
-    val homeReportData = HomeReportData(
-        reports = listOf(
-            ReportItem(ReportDataType.RESCUE, 1833),
-            ReportItem(ReportDataType.PROTECTION, 1744),
-            ReportItem(ReportDataType.ADOPTION, 1),
-            ReportItem(ReportDataType.REPORT, 6)
-        )
-    )
+
     FindUTheme {
         HomeScreen(
             reportButtonClicked = {},
             alarmButtonClicked = {},
-            homeReportData = homeReportData,
             indicatorClicked = { clickedLabel -> selected = clickedLabel },
             navigationToSearch = {},
             userNickname = "신민석",
