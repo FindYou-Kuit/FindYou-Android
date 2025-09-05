@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -18,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.findu.R
-import com.example.findu.presentation.ui.base.FindUButton
+import com.example.findu.presentation.ui.base.RectangleFindUButton
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
@@ -51,19 +50,13 @@ fun AppSettingDialog(
                 style = FindUTheme.typography.body1Regular16.copy(),
                 textAlign = TextAlign.Center,
             )
-            FindUButton(
+            RectangleFindUButton(
                 textRes = R.string.my_set_camera_permission,
                 onClick = {
                     openAppSettings()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp)
-                    .background(
-                        color = FindUTheme.colors.mainColor,
-                        shape = RoundedCornerShape(8.dp),
-                    )
-                    .clip(RoundedCornerShape(8.dp))
                     .align(Alignment.CenterHorizontally)
             )
         }

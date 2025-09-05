@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +17,9 @@ import com.example.findu.ui.theme.FindUTheme
 
 @Composable
 fun FindUButton(
-    modifier: Modifier = Modifier,
     @StringRes textRes: Int,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     Box(
@@ -34,6 +35,40 @@ fun FindUButton(
             .clip(
                 shape = RoundedCornerShape(30.dp)
             )
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(id = textRes),
+            style = FindUTheme.typography.head3SemiBold18.copy(
+                color = if (enabled) {
+                    FindUTheme.colors.white
+                } else {
+                    FindUTheme.colors.gray4
+                }
+            )
+        )
+    }
+}
+
+@Composable
+fun RectangleFindUButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    @StringRes textRes: Int,
+    enabled: Boolean = true,
+) {
+    Box(
+        modifier = modifier
+            .background(
+                color = FindUTheme.colors.mainColor,
+                shape = RoundedCornerShape(8.dp),
+            )
+            .padding(vertical = 15.dp)
+            .clip(RoundedCornerShape(8.dp))
             .clickable(
                 enabled = enabled,
                 onClick = onClick
