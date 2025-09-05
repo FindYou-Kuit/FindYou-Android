@@ -34,7 +34,7 @@ fun FindUTopAppBar(
     ) {
         navigationIconRes?.let {
             IconButton(
-                onClick = { onNavigationIconClick() },
+                onClick = onNavigationIconClick,
                 modifier = Modifier.align(Alignment.CenterStart)
             ) {
                 BaseVectorIcon(
