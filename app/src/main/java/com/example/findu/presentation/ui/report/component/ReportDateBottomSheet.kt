@@ -2,7 +2,6 @@ package com.example.findu.presentation.ui.report.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
@@ -40,7 +38,6 @@ import com.example.findu.R
 import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.common.WheelPicker
-import com.example.findu.presentation.util.extension.isOdd
 import com.example.findu.ui.theme.FindUTheme
 import kotlinx.datetime.LocalDateTime
 import java.time.YearMonth
@@ -71,6 +68,7 @@ fun ReportDateBottomSheet(
     }
 
     ModalBottomSheetLayout(
+        modifier = modifier,
         sheetState = sheetState,
         sheetShape = RoundedCornerShape(
             topStart = 20.dp,
@@ -83,7 +81,6 @@ fun ReportDateBottomSheet(
                     .padding(vertical = 22.dp)
             ) {
                 ReportDateBottomSheetContent(
-                    modifier = modifier,
                     hideSheet = hideSheet,
                     startMonthIndex = selectedMonth,
                     startDayIndex = selectedDay,
