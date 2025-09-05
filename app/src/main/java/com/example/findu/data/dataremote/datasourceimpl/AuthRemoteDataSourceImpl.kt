@@ -11,10 +11,8 @@ import com.example.findu.data.dataremote.model.response.auth.GuestLoginResponseD
 import com.example.findu.data.dataremote.model.response.auth.LoginResponseDto
 import com.example.findu.data.dataremote.model.response.auth.UserInfoDto
 import com.example.findu.data.dataremote.service.AuthService
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import com.example.findu.data.mapper.torequest.toImageMultipart
+import com.example.findu.data.mapper.torequest.toPlainTextRequestBody
 import java.io.File
 import javax.inject.Inject
 
@@ -37,16 +35,10 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         kakaoId: Long,
         deviceId: String
     ): NullableBaseResponse<UserInfoDto> = authService.postSignup(
-        profileImage = profileImageFile?.let {
-            MultipartBody.Part.createFormData(
-                "profileImage",
-                it.name,
-                it.asRequestBody("image/*".toMediaTypeOrNull())
-            )
-        },
-        defaultImageName = defaultImageName?.toRequestBody("text/plain".toMediaTypeOrNull()),
-        nickname = nickname.toRequestBody("text/plain".toMediaTypeOrNull()),
-        kakaoId = kakaoId.toString().toRequestBody("text/plain".toMediaTypeOrNull()),
-        deviceId = deviceId.toRequestBody("text/plain".toMediaTypeOrNull())
+        profileImage = profileImageFile?.toImageMultipart("profileImage"),
+        defaultImageName = defaultImageName?.toPlainTextRequestBody(),
+        nickname = nickname.toPlainTextRequestBody(),
+        kakaoId = kakaoId.toString().toPlainTextRequestBody(),
+        deviceId = deviceId.toPlainTextRequestBody()
     )
 }
