@@ -1,12 +1,8 @@
 package com.example.findu.domain.model
 
-data class CheckEmailData(
-    val isDuplicateEmail: Boolean
-)
-
 data class LoginInfo(
     val kakaoId: Long,
-    val deviceId:String
+    val deviceId: String
 )
 
 data class LoginData(

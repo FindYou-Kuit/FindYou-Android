@@ -36,7 +36,6 @@ class LoginActivity : ComponentActivity() {
         setContent {
             val callback: (OAuthToken?, Throwable?) -> Unit = { oAuthToken, _ ->
                 if (oAuthToken != null) {
-                    Log.d(TAG, "oAuth_AccessToken: ${oAuthToken.accessToken}")
 
                     UserApiClient.instance.me { user, error ->
                         if (error != null) {

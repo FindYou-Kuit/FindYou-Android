@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.main
 
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -8,13 +9,25 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.findu.R
 import com.example.findu.databinding.ActivityMainBinding
+import com.example.findu.domain.usecase.SetDeviceIdUseCase
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var setDeviceIdUseCase: SetDeviceIdUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val deviceId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+            ?: "unknown_device_id"
+
+        setDeviceIdUseCase(deviceId=deviceId)
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

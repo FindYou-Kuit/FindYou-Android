@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.presentation.type.DefaultProfileType
+import com.example.findu.presentation.type.NicknameValidType
 import com.example.findu.presentation.ui.base.BaseVectorIcon
 import com.example.findu.presentation.ui.onboarding.component.OnboardingButton
 import com.example.findu.presentation.ui.onboarding.component.OnboardingNickname
@@ -37,6 +41,13 @@ fun OnboardingScreen(
 
     val focusManager = LocalFocusManager.current
 
+    val isNextButtonEnabled by remember(uiState.pageState, uiState.nickNameValidState) {
+        derivedStateOf {
+            uiState.pageState == 1 ||
+                    (uiState.pageState == 2 && uiState.nickNameValidState == NicknameValidType.VALID)
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -58,7 +69,7 @@ fun OnboardingScreen(
                 defaultProfileType = uiState.defaultProfileType,
                 defaultProfileClicked = defaultProfileClicked,
                 cameraIconClicked = cameraIconClicked,
-                profileImgUrl = uiState.profileImageUrl,
+                profileImgUri = uiState.profileImageUri,
                 clearProfileImage = clearProfileImage
             )
 
@@ -78,7 +89,7 @@ fun OnboardingScreen(
         }
         Spacer(modifier = Modifier.weight(1f))
         OnboardingButton(
-            enabled = uiState.isNextButtonEnabled,
+            enabled = isNextButtonEnabled,
             onClick = nextButtonClicked
         )
         Spacer(modifier = Modifier.height(30.dp))

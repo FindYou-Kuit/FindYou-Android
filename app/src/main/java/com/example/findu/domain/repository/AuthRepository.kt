@@ -1,9 +1,10 @@
 package com.example.findu.domain.repository
 
-import com.example.findu.domain.model.CheckEmailData
 import com.example.findu.domain.model.GuestLoginData
 import com.example.findu.domain.model.LoginData
 import com.example.findu.domain.model.LoginInfo
+import com.example.findu.domain.model.UserInfo
+import java.io.File
 
 interface AuthRepository {
     suspend fun postLogin(
@@ -14,13 +15,15 @@ interface AuthRepository {
         deviceId: String
     ): Result<GuestLoginData>
 
-    suspend fun postCheckEmail(
-        email: String
-    ): Result<CheckEmailData>
+    suspend fun postCheckNickname(
+        nickname: String
+    ): Result<Boolean>
 
     suspend fun postSignup(
-        email: String,
-        password: String,
-        nickname: String
-    ): Result<String>
+        profileImageFile: File?,
+        defaultImageName: String?,
+        nickname: String,
+        kakaoId: Long,
+        deviceId: String
+    ): Result<UserInfo>
 }

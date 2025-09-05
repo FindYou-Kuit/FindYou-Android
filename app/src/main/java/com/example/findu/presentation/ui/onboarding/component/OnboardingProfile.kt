@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.onboarding.component
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,11 +29,11 @@ import com.example.findu.ui.theme.FindUTheme
 @Composable
 fun OnboardingProfile(
     cameraIconClicked: () -> Unit,
-    profileImgUrl: String,
+    profileImgUri: Uri?,
     clearProfileImage: () -> Unit,
     defaultProfileClicked: (defaultProfileType: DefaultProfileType) -> Unit,
     modifier: Modifier = Modifier,
-    defaultProfileType: DefaultProfileType = DefaultProfileType.NONE
+    defaultProfileType: DefaultProfileType = DefaultProfileType.DEFAULT
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         BaseVectorIcon(vectorResource = R.drawable.ic_onboarding_page_first)
@@ -56,7 +57,7 @@ fun OnboardingProfile(
         )
         Spacer(modifier = Modifier.height(35.dp))
         OnboardingProfileBox(
-            profileImgUrl = profileImgUrl,
+            profileImgUri = profileImgUri,
             defaultProfileType = defaultProfileType,
             cameraClicked = cameraIconClicked,
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -75,7 +76,7 @@ fun OnboardingProfile(
                     .size(68.dp)
                     .noRippleClickable {
                         clearProfileImage()
-                        defaultProfileClicked(DefaultProfileType.NONE)
+                        defaultProfileClicked(DefaultProfileType.DEFAULT)
                     }
             )
             Image(
@@ -85,7 +86,7 @@ fun OnboardingProfile(
                     .size(68.dp)
                     .noRippleClickable {
                         clearProfileImage()
-                        defaultProfileClicked(DefaultProfileType.DOG)
+                        defaultProfileClicked(DefaultProfileType.PUPPY)
                     }
             )
             Image(
@@ -120,7 +121,7 @@ private fun OnboardingProfilePreview() {
     OnboardingProfile(
         defaultProfileClicked = {},
         cameraIconClicked = {},
-        profileImgUrl = "",
+        profileImgUri = null,
         clearProfileImage = {},
     )
 }
