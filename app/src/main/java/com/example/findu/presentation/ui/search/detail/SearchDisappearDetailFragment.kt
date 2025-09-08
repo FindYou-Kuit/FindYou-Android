@@ -156,22 +156,9 @@ class SearchDisappearDetailFragment : Fragment() {
             tvValueReporterName.text = data.userName
             tvValuePhoneNumber.text = data.userPhone
 
-//            initViewPager(data.imageUrls)
             initTagView(data)
-//            initBookmarkUI(data)
-//            initMapButtons(data)
         }
     }
-
-
-//    private fun initMapButtons(data: DetailReportData) {
-//        binding.btnViewLocation.setOnClickListener {
-//            openNaverMap(data.eventLocation)
-//        }
-//        binding.btnShowFoundPlace.setOnClickListener {
-//            openNaverMap(data.eventLocation)
-//        }
-//    }
 
     private fun initViewPager(imageList: List<Int>) {
         val adapter = SearchDetailVPAdapter(imageList)
@@ -273,5 +260,37 @@ class SearchDisappearDetailFragment : Fragment() {
             else R.drawable.ic_search_detail_blank_bookmark
         )
     }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onPause() {
+        binding.mapView.onPause()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        binding.mapView.onStop()
+        super.onStop()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onDestroyView() {
+        binding.mapView.onDestroy()
+        super.onDestroyView()
+    }
+
 
 }

@@ -32,7 +32,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailProtectingBinding
-    private var isDetailVisible = false
     private val viewModel by viewModels<DetailSearchViewModel>()
     private var cardId: Long = -1
     private var tag: String? = null
@@ -74,7 +73,6 @@ class SearchProtectingDetailFragment : Fragment() {
         observeViewModel()
         fetchDetailData()
         initBookmarkUI()
-//        setContentVisibility()
         initListener()
 
     }
@@ -151,13 +149,10 @@ class SearchProtectingDetailFragment : Fragment() {
             tvValueJurisdiction.text = data.authority
 
             initTagView(data)
-//            initBookmarkUI(data)
-//            initCallButtons(data)
-//            initMapButtons(data)
+
         }
 
     }
-
 
     private fun initListener() = with(binding) {
         ivSearchDetailBack.setOnClickListener {
@@ -185,15 +180,6 @@ class SearchProtectingDetailFragment : Fragment() {
             startActivity(intent)
         }
     }
-
-//    private fun initMapButtons(data: DetailProtectData) {
-//        binding.btnViewLocation.setOnClickListener {
-//            openNaverMap(data.careAddr)
-//        }
-//        binding.btnShowFoundPlace.setOnClickListener {
-//            openNaverMap(data.foundLocation)
-//        }
-//    }
 
     private fun initBookmarkUI() {
         binding.ivSearchDetailBookmark.setOnClickListener {
@@ -254,6 +240,37 @@ class SearchProtectingDetailFragment : Fragment() {
             if (bookmark) R.drawable.ic_search_fill_bookmark
             else R.drawable.ic_search_detail_blank_bookmark
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onPause() {
+        binding.mapView.onPause()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        binding.mapView.onStop()
+        super.onStop()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onDestroyView() {
+        binding.mapView.onDestroy()
+        super.onDestroyView()
     }
 
 }

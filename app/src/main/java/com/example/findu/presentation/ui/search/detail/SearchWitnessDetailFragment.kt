@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +40,6 @@ class SearchWitnessDetailFragment : Fragment() {
     private val args :SearchWitnessDetailFragmentArgs by navArgs()
     private var isBookmarked = false
 
-    private lateinit var mapView: MapView
     private var naverMap: NaverMap? = null
 
     override fun onCreateView(
@@ -150,11 +148,7 @@ class SearchWitnessDetailFragment : Fragment() {
             tvValueReporterName.text = data.userName
             tvWitnessDate.text = data.eventDate
 
-
-//            initViewPager(data.imageUrls)
             initTagView(data)
-//            initBookmarkUI(data)
-//            initMapButtons(data)
         }
     }
 
@@ -176,15 +170,6 @@ class SearchWitnessDetailFragment : Fragment() {
         }
 
     }
-
-//    private fun initMapButtons(data: DetailReportData) {
-//        binding.btnViewLocation.setOnClickListener {
-//            openNaverMap(data.eventLocation)
-//        }
-//        binding.btnShowFoundPlace.setOnClickListener {
-//            openNaverMap(data.eventLocation)
-//        }
-//    }
 
     private fun initListener() = with(binding) {
         ivSearchDetailBack.setOnClickListener {
@@ -260,6 +245,37 @@ class SearchWitnessDetailFragment : Fragment() {
             if (bookmark) R.drawable.ic_search_fill_bookmark
             else R.drawable.ic_search_detail_blank_bookmark
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onPause() {
+        binding.mapView.onPause()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        binding.mapView.onStop()
+        super.onStop()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onDestroyView() {
+        binding.mapView.onDestroy()
+        super.onDestroyView()
     }
 
 }
