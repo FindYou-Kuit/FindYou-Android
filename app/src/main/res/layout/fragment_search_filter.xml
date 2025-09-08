@@ -28,7 +28,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="조회 필터"
+            android:text="@string/search_filter_main"
             android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="6dp"
-                    android:text="~"
+                    android:text="@string/search_filter_tilde"
                     android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                     android:textColor="@color/gray6"
                     app:layout_constraintBottom_toBottomOf="@id/cl_search_filter_date_start"
@@ -296,14 +296,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="/"
+                        android:text="@string/search_filter_divider"
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
                         android:textColor="@color/gray4" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10"
+                        android:text="@string/search_filter_max_count"
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
                         android:textColor="@color/gray4" />
 
@@ -465,7 +465,7 @@
             android:background="@drawable/bg_search_filter_initial"
             android:elevation="0dp"
             android:stateListAnimator="@null"
-            android:text="초기화"
+            android:text="@string/search_filter_initial"
             android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
             android:textColor="@color/gray4"
             android:translationZ="0dp"

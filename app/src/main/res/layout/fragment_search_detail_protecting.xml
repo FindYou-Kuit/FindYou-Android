@@ -63,7 +63,6 @@
                 android:id="@+id/cl_search_detail_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="4dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_search_detail_img">
 
@@ -228,7 +227,7 @@
                         android:id="@+id/tv_special_note"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="특이사항"
+                        android:text="@string/search_detail_label_note"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
                         android:textColor="@color/gray6" />
 
@@ -239,7 +238,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_search_detail_special_note"
                         android:padding="12dp"
-                        android:text="수로에 빠져서 119구조. 몸이 엉망이라 목욕 후, 수로에서 나오려고 힘을 많이 썼는지 누워있음."
+                        android:text="@string/search_detail_label_note_value"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
                         android:textColor="@color/gray5" />
                 </LinearLayout>
@@ -306,7 +305,7 @@
                         android:id="@+id/tv_value_shelter_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="임성중학교"
+                        android:text="@string/search_detail_location_around_value"
                         android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                         android:textColor="@color/main_color"
                         app:layout_constraintStart_toStartOf="parent"
@@ -316,7 +315,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="에서 보호 중이에요."
+                        android:text="@string/search_detail_protect_ment"
                         android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                         app:layout_constraintBottom_toBottomOf="@id/tv_value_shelter_name"
                         app:layout_constraintStart_toEndOf="@id/tv_value_shelter_name"
@@ -327,7 +326,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상"
+                        android:text="@string/search_detail_protect_location_value"
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
                         android:textColor="@color/gray5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -354,7 +353,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="복사"
+                            android:text="@string/search_detail_copy"
                             android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
                             android:textColor="#00D1CA"
                             app:layout_constraintBottom_toBottomOf="@id/iv_search_copy"
@@ -388,7 +387,7 @@
                     android:id="@+id/tv_detail_particulars"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="세부 사항"
+                    android:text="@string/search_detail_detailed"
                     android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -576,7 +575,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="전화 걸기"
+                            android:text="@string/search_detail_call_phone"
                             android:textAppearance="@style/TextAppearance.FindU.Body1_R_16"
                             android:textColor="@color/gray5" />
                     </LinearLayout>
@@ -605,7 +604,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="지도 보기"
+                            android:text="@string/search_detail_show_map"
                             android:textAppearance="@style/TextAppearance.FindU.Body1_R_16"
                             android:textColor="@color/gray5" />
                     </LinearLayout>

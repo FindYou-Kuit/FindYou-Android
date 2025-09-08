@@ -65,7 +65,6 @@
                 android:id="@+id/cl_search_detail_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="4dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/vp_search_detail_img">
 
@@ -167,7 +166,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="실종날짜"
+                            android:text="@string/search_detail_lost_date"
                             android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                             android:textColor="@color/gray5" />
 
@@ -190,7 +189,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="RFID"
+                            android:text="@string/search_detail_rfid"
                             android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                             android:textColor="@color/gray5" />
 
@@ -198,7 +197,7 @@
                             android:id="@+id/tv_value_rfid"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="410097800408315"
+                            android:text="@string/search_detail_rfid_value"
                             android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                             android:textColor="@color/gray6" />
                     </LinearLayout>
@@ -207,7 +206,7 @@
                         android:id="@+id/tv_label_note"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="특이사항"
+                        android:text="@string/search_detail_label_note"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
                         android:textColor="@color/gray6" />
 
@@ -218,7 +217,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_search_detail_special_note"
                         android:padding="12dp"
-                        android:text="수로에 빠져서 119구조. 몸이 엉망이라 목욕 후, 수로에서 나오려고 힘을 많이 썼는지 누워있음."
+                        android:text="@string/search_detail_label_note_value"
                         android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
                         android:textColor="@color/gray5" />
                 </LinearLayout>
@@ -247,7 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
-                    android:text="실종위치"
+                    android:text="@string/search_detail_lost_location"
                     android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -287,7 +286,7 @@
                         android:id="@+id/tv_value_lost_location_around"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="임성중학교"
+                        android:text="@string/search_detail_location_around_value"
                         android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                         android:textColor="@color/main_color"
                         app:layout_constraintStart_toStartOf="parent"
@@ -297,7 +296,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="주변에서 실종됐어요."
+                        android:text="@string/search_detail_location_around"
                         android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                         app:layout_constraintBottom_toBottomOf="@id/tv_value_lost_location_around"
                         app:layout_constraintStart_toEndOf="@id/tv_value_lost_location_around"
@@ -308,7 +307,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상"
+                        android:text="@string/search_detail_lost_location_value"
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
                         android:textColor="@color/gray5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -335,7 +334,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="복사"
+                            android:text="@string/search_detail_copy"
                             android:textAppearance="@style/TextAppearance.FindU.Body2_R_14"
                             android:textColor="#00D1CA"
                             app:layout_constraintBottom_toBottomOf="@id/iv_search_copy"
@@ -369,7 +368,7 @@
                     android:id="@+id/tv_detail_info_reporter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="신고자 정보"
+                    android:text="@string/search_detail_reporter_info"
                     android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -392,7 +391,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="이름"
+                            android:text="@string/search_detail_reporter_name"
                             android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                             android:textColor="@color/gray5" />
 
@@ -400,7 +399,7 @@
                             android:id="@+id/tv_value_reporter_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="김소희"
+                            android:text="@string/search_detail_reporter_name_value"
                             android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                             android:textColor="@color/gray6" />
                     </LinearLayout>
@@ -415,7 +414,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="전화번호"
+                            android:text="@string/search_detail_reporter_phone"
                             android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
                             android:textColor="@color/gray5" />
 
@@ -423,7 +422,7 @@
                             android:id="@+id/tv_value_phone_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="000-****-0000"
+                            android:text="@string/search_detail_reporter_phone_value"
                             android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
                             android:textColor="@color/gray6" />
                     </LinearLayout>
@@ -466,7 +465,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="메시지 보내기"
+                            android:text="@string/search_detail_send_message"
                             android:textAppearance="@style/TextAppearance.FindU.Body1_R_16"
                             android:textColor="@color/gray5" />
                     </LinearLayout>
@@ -495,7 +494,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="지도 보기"
+                            android:text="@string/search_detail_show_map"
                             android:textAppearance="@style/TextAppearance.FindU.Body1_R_16"
                             android:textColor="@color/gray5" />
                     </LinearLayout>

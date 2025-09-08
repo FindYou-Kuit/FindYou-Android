@@ -429,6 +429,35 @@
     <string name="search_protect_detail">보호중</string>
     <string name="search_detail_shelter_location">보호소 위치</string>
     <string name="search_address_not_found">주소를 찾을 수 없음.</string>
+    <string name="search_detail_lost_date">실종날짜</string>
+    <string name="search_detail_rfid">RFID</string>
+    <string name="search_detail_rfid_value">410097800408315</string>
+    <string name="search_detail_label_note">특이사항</string>
+    <string name="search_detail_label_note_value">수로에 빠져서 119구조. 몸이 엉망이라 목욕 후, 수로에서 나오려고 힘을 많이 썼는지 누워있음.</string>
+    <string name="search_detail_lost_location">실종위치</string>
+    <string name="search_detail_location_around_value">임성중학교</string>
+    <string name="search_detail_location_around">주변에서 실종됐어요.</string>
+    <string name="search_detail_lost_location_value">충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상</string>
+    <string name="search_detail_copy">복사</string>
+    <string name="search_detail_name">name</string>
+    <string name="search_detail_reporter_name_value">김소희</string>
+    <string name="search_detail_reporter_phone">전화번호</string>
+    <string name="search_detail_reporter_phone_value">000-****-0000</string>
+    <string name="search_detail_send_message">메시지 보내기</string>
+    <string name="search_detail_show_map">지도 보기</string>
+    <string name="search_detail_protect_ment">에서 보호 중이에요.</string>
+    <string name="search_detail_protect_location_value">충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상</string>
+    <string name="search_detail_detailed">세부 사항</string>
+    <string name="search_detail_call_phone">전화 걸기</string>
+    <string name="search_detail_witness_location">목격 장소</string>
+    <string name="search_detail_witness_location_value">충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상</string>
+    <string name="search_detail_witness_date">목격 날짜</string>
+    <string name="search_detail_reporter_name">이름</string>
+    <string name="search_filter_main">조회 필터</string>
+    <string name="search_filter_tilde">~</string>
+    <string name="search_filter_divider">/</string>
+    <string name="search_filter_max_count">10</string>
+    <string name="search_filter_initial">초기화</string>
 
 
 </resources>
