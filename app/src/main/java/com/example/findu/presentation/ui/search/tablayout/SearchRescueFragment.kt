@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.search.tablayout
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
+import com.example.findu.presentation.ui.search.model.DummyProvider
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
@@ -55,65 +57,11 @@ class SearchRescueFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("VisibleForTests")
     private fun initDummyItems() {
-        items.addAll(
-            arrayListOf(
-                SearchAnimal(
-                    cardId = 1,
-                    thumbnailImageUrl = "https://picsum.photos/200/300",
-                    title = "말티즈",
-                    tag = SearchStatus.PROTECTING,
-                    date = "2024-11-23",
-                    location = "성신구 내동 628-1",
-                    interest = true
-                ),
-                SearchAnimal(
-                    cardId = 2,
-                    thumbnailImageUrl = "https://picsum.photos/200/301",
-                    title = "믹스견",
-                    tag = SearchStatus.WITNESS,
-                    date = "2024-11-24",
-                    location = "성신구 내동 628-1",
-                    interest = false
-                ),
-                SearchAnimal(
-                    cardId = 3,
-                    thumbnailImageUrl = "https://picsum.photos/200/302",
-                    title = "웰시코기",
-                    tag = SearchStatus.MISSING,
-                    date = "2024-11-25",
-                    location = "성신구 내동 628-1",
-                    interest = false
-                ),
-                SearchAnimal(
-                    cardId = 4,
-                    thumbnailImageUrl = "https://picsum.photos/200/300",
-                    title = "말티즈",
-                    tag = SearchStatus.PROTECTING,
-                    date = "2024-11-23",
-                    location = "성신구 내동 628-1",
-                    interest = true
-                ),
-                SearchAnimal(
-                    cardId = 5,
-                    thumbnailImageUrl = "https://picsum.photos/200/301",
-                    title = "믹스견",
-                    tag = SearchStatus.WITNESS,
-                    date = "2024-11-24",
-                    location = "성신구 내동 628-1",
-                    interest = false
-                ),
-                SearchAnimal(
-                    cardId = 6,
-                    thumbnailImageUrl = "https://picsum.photos/200/302",
-                    title = "웰시코기",
-                    tag = SearchStatus.MISSING,
-                    date = "2024-11-25",
-                    location = "성신구 내동 628-1",
-                    interest = false
-                )
-            )
-        )
+        items.addAll(DummyProvider.getDummyAnimals())
+        items.addAll(DummyProvider.getDummyAnimals())
+        items.addAll(DummyProvider.getDummyAnimals())
     }
 
     private fun setupRV(searchDataList: List<SearchAnimal>) {
