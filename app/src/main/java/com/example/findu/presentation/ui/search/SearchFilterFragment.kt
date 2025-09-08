@@ -362,6 +362,8 @@ class SearchFilterFragment : Fragment() {
         container.visibility = if (open) View.VISIBLE else View.GONE
         triggerView.setBackgroundResource(if (open) R.drawable.bg_search_radius_8_up else R.drawable.bg_search_radius_8)
         rotateArrow(arrow, open)
+
+        setBreedDropdown(false)
     }
 
     private fun updateSelectedLocation() = with(binding) {

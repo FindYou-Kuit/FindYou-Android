@@ -64,18 +64,20 @@ class SearchFilterDateDialog(
             }
             datePicker.minDate = cal.timeInMillis
         }
+        val maxLocal: LocalDate? = if (type == Type.DATE_START && !model.endDate.isNullOrBlank()) {
+            runCatching { LocalDate.parse(model.endDate, fmt) }.getOrNull()
+        } else null
 
-        clampBounds(minLocal, today)
-        applyMasks(minLocal)
-
+        val maxBound = if (maxLocal != null && maxLocal.isBefore(today)) maxLocal else today
+        clampBounds(minLocal, maxBound)
+        applyMasks(minLocal, maxLocal)
         datePicker.init(
             datePicker.year,
             datePicker.month,
             datePicker.dayOfMonth
         ) { _, _, _, _ ->
-            applyMasks(minLocal)
+            applyMasks(minLocal, maxLocal)
         }
-
 
         btnSearchFilterDateConfirm.setOnClickListener {
             val pickedDate = LocalDate.of(
@@ -97,10 +99,10 @@ class SearchFilterDateDialog(
         }
     }
 
-    private fun clampBounds(minLocal: LocalDate?, today: LocalDate) = with(binding) {
+    private fun clampBounds(minLocal: LocalDate?, maxBound: LocalDate) = with(binding) {
         val cur = LocalDate.of(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth)
         val clamped = when {
-            cur.isAfter(today) -> today
+            cur.isAfter(maxBound) -> maxBound
             minLocal != null && cur.isBefore(minLocal) -> minLocal
             else -> cur
         }
@@ -109,18 +111,19 @@ class SearchFilterDateDialog(
         }
     }
 
-    private fun applyMasks(minLocal: LocalDate?) = with(binding) {
+    private fun applyMasks(minLocal: LocalDate?, maxLocal: LocalDate?) = with(binding) {
         val current = LocalDate.of(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth)
         val today = LocalDate.now()
 
         val atToday = current.isEqual(today)
         val atStart = minLocal?.let { current.isEqual(it) } == true && type == Type.DATE_END
 
-        flTopMask.isVisible = atStart
-        flBottomMask.isVisible = atToday
+        val atEnd = maxLocal?.let { current.isEqual(it) } == true && type == Type.DATE_START
 
-        if (!atStart) flTopMask.visibility = View.GONE
-        if (!atToday) flBottomMask.visibility = View.GONE
+        flTopMask.isVisible = atStart
+
+        flBottomMask.isVisible = atToday || atEnd
+
 
     }
 

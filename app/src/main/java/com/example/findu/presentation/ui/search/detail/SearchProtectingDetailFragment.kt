@@ -26,8 +26,10 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SearchProtectingDetailFragment : Fragment() {
@@ -52,7 +54,6 @@ class SearchProtectingDetailFragment : Fragment() {
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync { nMap ->
             naverMap = nMap
-            setupMap()
         }
         return binding.root
     }
@@ -79,29 +80,37 @@ class SearchProtectingDetailFragment : Fragment() {
 
     private fun setupMap() {
         val address = binding.tvValueProtectLocation.text.toString()
-        if (address.isNotEmpty()) {
-            try {
+        if (address.isBlank()) return
+        lifecycleScope.launch(Dispatchers.IO) {
+            runCatching {
                 val geocoder = android.location.Geocoder(requireContext())
-                val results = geocoder.getFromLocationName(address, 1)
+                geocoder.getFromLocationName(address, 1)
+            }.onSuccess { results ->
                 if (!results.isNullOrEmpty()) {
                     val location = LatLng(results[0].latitude, results[0].longitude)
-                    val cameraUpdate = CameraUpdate.scrollTo(location)
-                    naverMap?.moveCamera(cameraUpdate)
-
-                    val marker = Marker().apply {
-                        position = location
-                        map = naverMap
-                        icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
-                        height = 23
+                    withContext(Dispatchers.Main) {
+                        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
+                        Marker().apply {
+                            position = location
+                            map = naverMap
+                            icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
+                            height = 23
+                        }
                     }
-                    marker.position = location
-                    marker.map = naverMap
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
+                    }
                 }
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "주소 찾을 수 업음.", Toast.LENGTH_SHORT).show()
+            }.onFailure { e ->
+                Log.w("SearchDisappearDetail", "Geocoding failed", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+
 
     private fun fetchDetailData() {
         when (tag) {
@@ -149,6 +158,7 @@ class SearchProtectingDetailFragment : Fragment() {
             tvValueJurisdiction.text = data.authority
 
             initTagView(data)
+            setupMap()
 
         }
 

@@ -22,7 +22,7 @@ object DummySearchRvData {
     )
 
     private fun protecting(id: Long, name: String, addr: String) = SearchRv(
-        image = null.toString(),
+        image ="",
         name = name,
         date = today(),
         address = addr,
@@ -32,7 +32,7 @@ object DummySearchRvData {
     )
 
     private fun witness(id: Long, name: String, addr: String) = SearchRv(
-        image = null.toString(),
+        image ="",
         name = name,
         date = today(),
         address = addr,
@@ -42,7 +42,7 @@ object DummySearchRvData {
     )
 
     private fun missing(id: Long, name: String, addr: String) = SearchRv(
-        image = null.toString(),
+        image ="",
         name = name,
         date = today(),
         address = addr,

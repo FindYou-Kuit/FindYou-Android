@@ -428,6 +428,7 @@
     <string name="onboarding_invalid_text_box">다음과 같은 경우에 불가능해요.\n 1. 중복된 닉네임인 경우\n 2. 띄어쓰기만 있는 닉네임인 경우\n 3. 특수문자(!@#$,.^)가 포함되어 있는 경우</string>
     <string name="search_protect_detail">보호중</string>
     <string name="search_detail_shelter_location">보호소 위치</string>
+    <string name="search_address_not_found">주소를 찾을 수 없음.</string>
 
 
 </resources>
