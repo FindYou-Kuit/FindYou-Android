@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
+import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -131,7 +132,7 @@ class WitnessReportViewModel @Inject constructor() : ViewModel() {
             WitnessReportUiEvent.OnDismissDialog -> setDialogInVisible()
             WitnessReportUiEvent.OnOpenCameraClick -> openCamera()
             WitnessReportUiEvent.OnOpenGalleryClick -> openGallery()
-            WitnessReportUiEvent.OnReportFinishButtonClick -> showFinishDialog()
+            WitnessReportUiEvent.OnReportFinishButtonClick -> postMissingReport()
             WitnessReportUiEvent.OnSelectAnimalInfoClick -> navigateToAnimalInfo()
             is WitnessReportUiEvent.OnSpeciesClick -> updateSpecies(event.speciesType)
             is WitnessReportUiEvent.OnImageSelected -> addImageToList(event.uri)
@@ -139,6 +140,12 @@ class WitnessReportViewModel @Inject constructor() : ViewModel() {
             WitnessReportUiEvent.OnAppSettingClick -> openAppSettings()
             WitnessReportUiEvent.ClearFocus -> clearFocus()
         }
+    }
+
+    private fun postMissingReport() {
+        // TODO : 신고 등록 API 구현
+        val normalizedAddress = _uiState.value.address.toNormalizeAddress()
+        showFinishDialog()
     }
 
     private fun distinguishWithAI(uri: Uri) {

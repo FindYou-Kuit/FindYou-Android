@@ -8,6 +8,7 @@ import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
+import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -135,7 +136,7 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
             MissingReportUiEvent.OnDismissDialog -> setDialogInVisible()
             MissingReportUiEvent.OnOpenCameraClick -> openCamera()
             MissingReportUiEvent.OnOpenGalleryClick -> openGallery()
-            MissingReportUiEvent.OnReportFinishButtonClick -> showFinishDialog()
+            MissingReportUiEvent.OnReportFinishButtonClick -> postMissingReport()
             MissingReportUiEvent.OnSelectAnimalInfoClick -> navigateToAnimalInfo()
             is MissingReportUiEvent.OnSpeciesClick -> updateSpecies(event.speciesType)
             is MissingReportUiEvent.OnImageSelected -> addImageToList(event.uri)
@@ -143,6 +144,12 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
             MissingReportUiEvent.OnAppSettingClick -> openAppSettings()
             MissingReportUiEvent.ClearFocus -> clearViewFocus()
         }
+    }
+
+    private fun postMissingReport() {
+        // TODO : 신고 등록 API 구현
+        val normalizedAddress = _uiState.value.address.toNormalizeAddress()
+        showFinishDialog()
     }
 
     private fun clearViewFocus() {
