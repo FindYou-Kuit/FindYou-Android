@@ -4,48 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_search_all"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.ui.search.tablayout.SearchAllFragment">
-
-    <ImageView
-        android:id="@+id/iv_search_banner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/img_search_banner_adopt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/ib_search_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@null"
-        android:src="@drawable/img_search_filters"
-        app:layout_constraintStart_toStartOf="@id/iv_search_banner"
-        app:layout_constraintTop_toBottomOf="@id/iv_search_banner" />
-
-    <ImageButton
-        android:id="@+id/ib_search_horizontal_sort"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="15dp"
-        android:background="@null"
-        android:src="@drawable/ic_search_horizontal_sort"
-        app:layout_constraintEnd_toEndOf="@id/iv_search_banner"
-        app:layout_constraintTop_toBottomOf="@id/iv_search_banner" />
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search_horizontal_content"
+        android:id="@+id/rv_search_all"
         android:layout_width="320dp"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ib_search_filter"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/search_horizontal_content_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

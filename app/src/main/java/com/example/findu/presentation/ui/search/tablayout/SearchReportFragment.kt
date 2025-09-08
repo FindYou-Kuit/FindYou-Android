@@ -20,7 +20,7 @@ import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
+import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
@@ -32,7 +32,7 @@ class SearchReportFragment : Fragment() {
     private var _binding: FragmentSearchReportBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var rvAdapter: SearchContentRVAdapter
+    private lateinit var listAdapter: SearchListAdapter
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
@@ -52,8 +52,7 @@ class SearchReportFragment : Fragment() {
 //        viewModel.getSearchReportData()
         initDummyItems()
         setupRV(items)
-        initFilterButton()
-        initToggleButton()
+
         return binding.root
     }
 
@@ -139,8 +138,8 @@ class SearchReportFragment : Fragment() {
             isNewList = true
             lastReportId = Long.MAX_VALUE
 
-            rvAdapter.submitList(emptyList())
-            binding.rvSearchHorizontalContent.scrollToPosition(0)
+            listAdapter.submitList(emptyList())
+            binding.rvSearchReport.scrollToPosition(0)
 
             viewModel.getSearchReportData()
         }
@@ -160,12 +159,12 @@ class SearchReportFragment : Fragment() {
         }
 
         if (isNewList) {
-            rvAdapter.submitList(searchList)
+            listAdapter.submitContent(searchList)
             isNewList = false
-            binding.rvSearchHorizontalContent.scrollToPosition(0)
-            binding.rvSearchHorizontalContent.smoothScrollToPosition(0)
+            binding.rvSearchReport.scrollToPosition(0)
+            binding.rvSearchReport.smoothScrollToPosition(0)
         } else {
-            rvAdapter.addData(searchList)
+            listAdapter.addContent(searchList)
         }
     }
 
@@ -199,85 +198,69 @@ class SearchReportFragment : Fragment() {
     }
 
 
-    private fun initFilterButton() {
-        binding.ibSearchFilter.setOnClickListener {
-            findNavController().navigate(R.id.action_fragment_search_to_fragment_search_filter)
-        }
+    private fun navigateToFilter() {
+        findNavController().navigate(R.id.action_fragment_search_to_fragment_search_filter)
     }
 
+
     private fun initRVAdapter() {
-        rvAdapter = SearchContentRVAdapter(
-            onItemClick = { item ->
-                navigateToDetail(item.cardId, item.tag.text, item.name)
-            },
-            onBookmarkClick = { cardId, isBookmark, tag ->
-                viewModel.setInterest(cardId, isBookmark, tag)
-            }
-        ).apply { submitList(emptyList()) }
-        binding.rvSearchHorizontalContent.adapter = rvAdapter
-        binding.rvSearchHorizontalContent.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        listAdapter = SearchListAdapter(
+            onFilterClick = { navigateToFilter() },
+            onToggleClick = { toggleLayoutMode() },
+            onItemClick = { item -> navigateToDetail(item.cardId, item.tag.text, item.name) },
+            onBookmarkClick = { cardId, isBookmark, tag -> viewModel.setInterest(cardId, isBookmark, tag) }
+        )
 
-        binding.rvSearchHorizontalContent.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
+        binding.rvSearchReport.apply {
+            adapter = listAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(true)
+            itemAnimator = null
+        }
 
+        binding.rvSearchReport.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
-                val rvPosition = when (recyclerView.layoutManager) {
-                    is LinearLayoutManager -> {
-                        (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    }
-
-                    else -> {
-                        (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
-                    }
+                val lastPos = when (val manager = recyclerView.layoutManager) {
+                    is LinearLayoutManager -> manager.findLastVisibleItemPosition()
+                    else -> return
                 }
-
-                val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
-
-                // 페이징 처리
-                if (rvPosition == totalCount) {
-                    viewModel.getSearchReportData(
-                        lastReportId
-                    )
+                val total = (recyclerView.adapter?.itemCount ?: 1) - 1
+                //페이징 처리
+                if (lastPos == total) {
+                    viewModel.getSearchReportData(lastReportId)
                 }
             }
         })
-    }
-
-
-    private fun initToggleButton() {
-        binding.ibSearchHorizontalSort.setOnClickListener {
-            toggleLayoutMode()
-        }
     }
 
     private fun toggleLayoutMode() {
         isGridMode = !isGridMode
 
         if (isGridMode) {
-            while (binding.rvSearchHorizontalContent.itemDecorationCount > 0) {
-                binding.rvSearchHorizontalContent.removeItemDecorationAt(0)
+            while (binding.rvSearchReport.itemDecorationCount > 0) {
+                binding.rvSearchReport.removeItemDecorationAt(0)
+            }
+            binding.rvSearchReport.addItemDecoration(SearchSpacingItemDecoration(10))
+
+            val grid = GridLayoutManager(requireContext(), 2)
+
+            grid.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int = if (position == 0) 2 else 1
             }
 
-            binding.rvSearchHorizontalContent.addItemDecoration(SearchSpacingItemDecoration(10))
-            binding.rvSearchHorizontalContent.layoutManager = GridLayoutManager(requireContext(), 2)
-            rvAdapter.setGridMode(true)
-            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_grid_sort)
-
+            binding.rvSearchReport.layoutManager = grid
+            listAdapter.setGridMode(true)
         } else {
-            binding.rvSearchHorizontalContent.layoutManager =
+            binding.rvSearchReport.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            rvAdapter.setGridMode(false)
-            binding.ibSearchHorizontalSort.setImageResource(R.drawable.ic_search_horizontal_sort)
-
+            listAdapter.setGridMode(false)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.rvSearchHorizontalContent.adapter = null
+        binding.rvSearchReport.adapter = null
         _binding = null
     }
 

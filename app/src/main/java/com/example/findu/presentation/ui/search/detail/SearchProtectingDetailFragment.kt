@@ -252,7 +252,7 @@ class SearchProtectingDetailFragment : Fragment() {
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
             if (bookmark) R.drawable.ic_search_fill_bookmark
-            else R.drawable.ic_search_detail_bookmark
+            else R.drawable.ic_search_detail_blank_bookmark
         )
     }
 
