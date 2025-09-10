@@ -1,31 +1,49 @@
 package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.dataremote.datasource.InterestRemoteDataSource
+import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.util.handleBaseResponse
+import com.example.findu.domain.model.my.MyInterestData
 import com.example.findu.domain.repository.InterestRepository
 import javax.inject.Inject
 
 class InterestRepositoryImpl @Inject constructor(
     private val interestRemoteDataSource: InterestRemoteDataSource
 ) : InterestRepository {
-    override suspend fun getInterestProtectingAnimals(id: Long): Result<Unit> =
+    override suspend fun getInterestAnimals(lastId: Long): Result<MyInterestData> =
         runCatching {
-            interestRemoteDataSource.getInterestProtectingAnimals(id).handleBaseResponse()
+            val dto: MyInterestResponseDto =
+                interestRemoteDataSource
+                    .getInterestAnimals(lastId)
+                    .handleBaseResponse()
+                    .getOrThrow()
+                    ?: error("Empty response body")
+
+
+            MyInterestData(
+                interestAnimals = dto.interestAnimals.map {
+                    MyInterestData.InterestAnimal(
+                        reportId = it.reportId,
+                        thumbnailImageUrl = it.thumbnailImageUrl,
+                        title = it.title,
+                        tag = it.tag,
+                        date = it.date,
+                        address = it.address
+                    )
+                },
+                isLast = dto.isLast,
+                lastId = dto.lastId
+            )
         }
 
-    override suspend fun getInterestReportAnimals(id: Long): Result<Unit> =
+    override suspend fun registerInterestAnimal(reportId: Long): Result<Unit> =
         runCatching {
-            interestRemoteDataSource.getInterestReportAnimals(id).handleBaseResponse()
+            interestRemoteDataSource.registerInterestAnimal(reportId).handleBaseResponse()
         }
 
-    override suspend fun deleteInterestProtectingAnimals(reportId: Long): Result<Unit> =
+    override suspend fun deleteInterestAnimal(reportId: Long): Result<Unit> =
         runCatching {
-            interestRemoteDataSource.deleteInterestProtectingAnimals(reportId).handleBaseResponse()
-        }
-
-    override suspend fun deleteInterestReportAnimals(reportId: Long): Result<Unit> =
-        runCatching {
-            interestRemoteDataSource.deleteInterestReportAnimals(reportId).handleBaseResponse()
+            interestRemoteDataSource.deleteInterestAnimal(reportId).handleBaseResponse()
         }
 
 }

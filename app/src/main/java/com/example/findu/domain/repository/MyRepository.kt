@@ -6,8 +6,7 @@ import com.example.findu.domain.model.my.MyViewedAnimalData
 
 interface MyRepository {
     suspend fun getMyInterest(
-        lastReportId: Long,
-        lastProtectId: Long,
+        lastId : Long
     ): Result<MyInterestData>
 
     suspend fun getMyReportHistory(

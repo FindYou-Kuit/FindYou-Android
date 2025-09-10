@@ -4,13 +4,8 @@ import com.example.findu.domain.repository.MyRepository
 import javax.inject.Inject
 
 class GetInterestUseCase @Inject constructor(
-    private val myRepository: MyRepository
+    private val myRepository: MyRepository,
 ) {
-    suspend operator fun invoke(
-        lastReportId: Long,
-        lastProtectId: Long,
-    ) = myRepository.getMyInterest(
-        lastReportId = lastReportId,
-        lastProtectId = lastProtectId
-    )
+    suspend operator fun invoke(lastId: Long) =
+        myRepository.getMyInterest(lastId)
 }
