@@ -9,13 +9,13 @@ import com.example.findu.presentation.model.MyViewedAnimalsRv
 
 fun MyInterestData.InterestAnimal.toRvModel(): MyInterestRv {
     return MyInterestRv(
-        animalId = this.animalId,
+        reportId = this.reportId,
         thumbnailImageUrl = this.thumbnailImageUrl,
         title = this.title,
         tag = this.tag,
         date = this.date,
-        location = this.location,
-        interest = this.interest
+        address = this.address,
+        interest = true
     )
 }
 

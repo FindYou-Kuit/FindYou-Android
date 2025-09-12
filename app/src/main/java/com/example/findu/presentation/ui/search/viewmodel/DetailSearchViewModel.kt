@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
-import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailSearchViewModel @Inject constructor(
     private val getDetailSearchUseCase: GetDetailSearchUseCase,
-    private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
-    private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase
+    private val postInterestAnimalUseCase: PostInterestAnimalUseCase,
+    private val deleteInterestAnimalUseCase: DeleteInterestAnimalUseCase
 ) : ViewModel() {
 
     private val _detailSearchData = MutableStateFlow<DetailProtectData?>(null)
@@ -41,14 +41,14 @@ class DetailSearchViewModel @Inject constructor(
     fun setInterestProtectingAnimal(id: Long) {
         viewModelScope.launch {
             if (_detailSearchData.value?.interest == true) {
-                postInterestProtectingAnimalUseCase(id).fold(
+                postInterestAnimalUseCase(id).fold(
                     onSuccess = { },
                     onFailure = { error ->
                         _errorMessage.value = error.message ?: "신고 동물 관심 등록 중 오류가 발생했습니다."
                     }
                 )
             } else {
-                deleteInterestProtectingAnimalUseCase(id).fold(
+                deleteInterestAnimalUseCase(id).fold(
                     onSuccess = { },
                     onFailure = { error ->
                         _errorMessage.value = error.message ?: "신고 동물 관심 해제 중 오류가 발생했습니다."

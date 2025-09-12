@@ -2,7 +2,7 @@ package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
 import com.example.findu.data.dataremote.util.handleBaseResponse
-import com.example.findu.data.mapper.todomain.my.toDomain
+import com.example.findu.data.mapper.toDomain.my.toDomain
 import com.example.findu.domain.model.my.MyInterestData
 import com.example.findu.domain.model.my.MyReportHistoryData
 import com.example.findu.domain.model.my.MyViewedAnimalData
@@ -13,13 +13,11 @@ class MyRepositoryImpl @Inject constructor(
     private val myRemoteDataSource: MyRemoteDataSource
 ) : MyRepository {
     override suspend fun getMyInterest(
-        lastReportId: Long,
-        lastProtectId: Long,
+        lastId: Long,
     ): Result<MyInterestData> =
         runCatching {
             myRemoteDataSource.getInterestAnimals(
-                lastReportId = lastReportId,
-                lastProtectId = lastProtectId
+                lastId = lastId,
             ).handleBaseResponse().getOrThrow().toDomain()
         }
 

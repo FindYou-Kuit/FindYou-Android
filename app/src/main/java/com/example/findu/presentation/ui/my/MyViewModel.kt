@@ -4,9 +4,8 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetNickNameUseCase
@@ -33,10 +32,8 @@ class MyViewModel @Inject constructor(
     private val deleteUserUseCase: DeleteUserUseCase,
     private val patchNickNameUseCase: PatchNickNameUseCase,
     private val getNickNameUseCase: GetNickNameUseCase,
-    private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
-    private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
-    private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
-    private val deleteInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
+    private val postInterestAnimalUseCase: PostInterestAnimalUseCase,
+    private val deleteInterestAnimalUseCase: DeleteInterestAnimalUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
 ) : ViewModel() {
 
@@ -65,13 +62,12 @@ class MyViewModel @Inject constructor(
     val selectedProfileImageUri: StateFlow<Uri?> = _selectedProfileImageUri
 
     private val _alarmEnabled = MutableStateFlow(false)
-    val alarmEnabled : StateFlow<Boolean> = _alarmEnabled
+    val alarmEnabled: StateFlow<Boolean> = _alarmEnabled
 
     fun fetchInterestAnimals() {
         viewModelScope.launch {
             getInterestUseCase(
-                lastReportId = Long.MAX_VALUE,
-                lastProtectId = Long.MAX_VALUE
+                lastId = Long.MAX_VALUE,
             ).fold(
                 onSuccess = { data ->
                     _interestAnimals.value = data.interestAnimals.map { it.toRvModel() }
@@ -136,7 +132,7 @@ class MyViewModel @Inject constructor(
         _selectedProfileImageUri.value = uri
     }
 
-    fun toggleAlarmSetting(){
+    fun toggleAlarmSetting() {
         _alarmEnabled.value = !_alarmEnabled.value
     }
 
@@ -167,53 +163,17 @@ class MyViewModel @Inject constructor(
         }
     }
 
-    fun setInterest(
-        id: Long,
-        isInterest: Boolean,
-        tag: String,
-    ) {
-        when (tag) {
-            "보호중" -> postProtectInterest(id, isInterest)
-            "목격신고" -> postReportInterest(id, isInterest)
-            "실종신고" -> postReportInterest(id, isInterest)
-            else -> {
-                _errorMessage.value = "잘못된 태그 값입니다."
-            }
-        }
-
-    }
-
-    private fun postProtectInterest(id: Long, isInterest: Boolean) {
+    fun setInterest(id: Long, isInterest: Boolean) {
         viewModelScope.launch {
-            if (isInterest) {
-                postInterestProtectingAnimalUseCase(id).fold(
+            val result = if (isInterest) {
+                postInterestAnimalUseCase(id).fold(
                     onSuccess = {},
                     onFailure = {
                         _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
                     }
                 )
             } else {
-                deleteInterestProtectingAnimalUseCase(id).fold(
-                    onSuccess = {},
-                    onFailure = {
-                        _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."
-                    }
-                )
-            }
-        }
-    }
-
-    private fun postReportInterest(id: Long, isInterest: Boolean) {
-        viewModelScope.launch {
-            if (isInterest) {
-                postInterestReportAnimalUseCase(id).fold(
-                    onSuccess = {},
-                    onFailure = {
-                        _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
-                    }
-                )
-            } else {
-                deleteInterestReportAnimalUseCase(id).fold(
+                deleteInterestAnimalUseCase(id).fold(
                     onSuccess = {},
                     onFailure = {
                         _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."

@@ -32,7 +32,7 @@ class MyInterestRvAdapter(
             with(binding) {
                 tvMyHistoryTitle.text = item.title
                 tvMyHistoryDate.text = item.date
-                tvMyHistoryLocation.text = item.location
+                tvMyHistoryLocation.text = item.address
 
                 chipMyHistoryAnimalState.text = item.tag
                 val stateType = AnimalStateType.entries.first { it.state == item.tag }
@@ -58,7 +58,7 @@ class MyInterestRvAdapter(
             with(binding) {
                 flMyHistoryKeep.setOnClickListener {
                     item.interest = !item.interest
-                    onKeepClick(item.animalId, item.interest, item.tag)
+                    onKeepClick(item.reportId, item.interest, item.tag)
                     if (item.interest) {
                         binding.ivMyHistoryKeep.visibility = View.VISIBLE
                         binding.ivMyHistoryNonKeep.visibility = View.GONE
@@ -67,7 +67,7 @@ class MyInterestRvAdapter(
                         binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
                     }
                 }
-                clMyHistoryContainer.setOnClickListener { onItemClick(item.animalId, item.tag, item.title) }
+                clMyHistoryContainer.setOnClickListener { onItemClick(item.reportId, item.tag, item.title) }
             }
         }
     }

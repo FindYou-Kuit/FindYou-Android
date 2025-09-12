@@ -13,10 +13,9 @@ import retrofit2.http.PATCH
 import retrofit2.http.Query
 
 interface MyService {
-    @GET("/api/v1/users/interest-animals")
+    @GET("/api/v2/users/me/interest-animals")
     suspend fun getInterestAnimals(
-        @Query("lastInterestReportId") lastReportId: Long,
-        @Query("lastInterestProtectId") lastProtectId: Long,
+        @Query("lastId") lastId: Long
     ): BaseResponse<MyInterestResponseDto>
 
     @GET("/api/v1/users/reports")

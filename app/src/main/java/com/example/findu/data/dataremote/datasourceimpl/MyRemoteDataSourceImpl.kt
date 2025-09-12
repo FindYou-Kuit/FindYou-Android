@@ -14,10 +14,9 @@ class MyRemoteDataSourceImpl @Inject constructor(
     private val myService: MyService
 ) : MyRemoteDataSource {
     override suspend fun getInterestAnimals(
-        lastReportId: Long,
-        lastProtectId: Long
+        lastId: Long
     ): BaseResponse<MyInterestResponseDto> =
-        myService.getInterestAnimals(lastReportId, lastProtectId)
+        myService.getInterestAnimals(lastId)
 
     override suspend fun getReportHistory(lastReportId: Long): BaseResponse<MyReportHistoryResponseDto> =
         myService.getReportHistory(lastReportId)

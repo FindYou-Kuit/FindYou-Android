@@ -9,8 +9,7 @@ import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsRespon
 
 interface MyRemoteDataSource {
     suspend fun getInterestAnimals(
-        lastReportId: Long,
-        lastProtectId: Long
+        lastId: Long,
     ): BaseResponse<MyInterestResponseDto>
 
     suspend fun getReportHistory(

@@ -1,4 +1,4 @@
-package com.example.findu.data.mapper.todomain.my
+package com.example.findu.data.mapper.toDomain.my
 
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
@@ -11,18 +11,16 @@ fun MyInterestResponseDto.toDomain(): MyInterestData {
     return MyInterestData(
         interestAnimals = interestAnimals.map {
             MyInterestData.InterestAnimal(
-                animalId = it.animalId,
+                reportId = it.reportId,
                 date = it.date,
-                interest = it.interest,
-                location = it.location,
+                address = it.address,
                 tag = it.tag,
                 thumbnailImageUrl = it.thumbnailImageUrl,
                 title = it.title
             )
         },
         isLast = isLast,
-        lastInterestProtectId = lastInterestProtectId,
-        lastInterestReportId = lastInterestReportId
+        lastId = lastId
     )
 }
 
