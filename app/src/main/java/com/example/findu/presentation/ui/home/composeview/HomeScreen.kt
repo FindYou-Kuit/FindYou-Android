@@ -35,6 +35,7 @@ import com.example.findu.presentation.ui.home.component.HomeBannerPager
 import com.example.findu.presentation.ui.home.component.HomeButtonList
 import com.example.findu.presentation.ui.home.component.HomeProtectAnimalList
 import com.example.findu.presentation.ui.home.component.HomeReportCard
+import com.example.findu.presentation.ui.home.component.HomeReportDialog
 import com.example.findu.presentation.ui.home.component.HomeReportedAnimalList
 import com.example.findu.presentation.ui.home.component.HomeScrollToTopButton
 import com.example.findu.presentation.ui.home.component.HomeTopBar
@@ -55,11 +56,16 @@ fun HomeScreen(
     navigateToProtectDetail: (ProtectAnimal) -> Unit,
     navigateToReportDetail: (ReportAnimal) -> Unit,
     indicatorClicked: (HomeReportDurationType) -> Unit,
-    navigationToSearch: () -> Unit,
+    navigationToProtectAnimal: () -> Unit,
+    navigationToReportAnimal: () -> Unit,
     userNickname: String,
+    onReportDialogDismiss: () -> Unit,
+    onLostReportClick: () -> Unit,
+    onFindReportClick: () -> Unit,
+    onPhoneClicked: () -> Unit,
     modifier: Modifier = Modifier,
     uiState: HomeUiState = HomeUiState(),
-    innerPaddingValues: PaddingValues = PaddingValues(0.dp)
+    innerPaddingValues: PaddingValues = PaddingValues(0.dp),
 ) {
     val bannerList = HomeBannerType.entries
     val pagerState = rememberPagerState()
@@ -154,7 +160,7 @@ fun HomeScreen(
                     )
                     HomeProtectAnimalList(
                         nickname = userNickname,
-                        navigationToSearch = navigationToSearch,
+                        navigationToSearch = navigationToProtectAnimal,
                         animalCards = uiState.homeData!!.protectAnimalCards,
                         navigateToProtectDetail = navigateToProtectDetail
                     )
@@ -168,7 +174,7 @@ fun HomeScreen(
                     )
                     HomeReportedAnimalList(
                         nickname = userNickname,
-                        navigationToSearch = navigationToSearch,
+                        navigationToSearch = navigationToReportAnimal,
                         animalCards = uiState.homeData!!.reportAnimalCards,
                         navigateToReportDetail = navigateToReportDetail
                     )
@@ -191,6 +197,20 @@ fun HomeScreen(
                     .padding(bottom = 60.dp, end = 20.dp)
             )
         }
+        if (uiState.isReportDialogVisible) {
+            HomeReportDialog(
+                onDismissRequest = onReportDialogDismiss,
+                onLostReportButtonClicked = {
+                    onLostReportClick()
+                    onReportDialogDismiss()
+                },
+                onFindReportButtonClicked = {
+                    onFindReportClick()
+                    onReportDialogDismiss()
+                },
+                onPhoneClicked = onPhoneClicked
+            )
+        }
     }
 }
 
@@ -204,10 +224,15 @@ private fun HomeScreenPreview() {
             reportButtonClicked = {},
             alarmButtonClicked = {},
             indicatorClicked = { clickedLabel -> selected = clickedLabel },
-            navigationToSearch = {},
             userNickname = "신민석",
             navigateToProtectDetail = {},
-            navigateToReportDetail = {}
+            navigateToReportDetail = {},
+            onReportDialogDismiss = {},
+            onLostReportClick = {},
+            onFindReportClick = {},
+            navigationToProtectAnimal = {},
+            navigationToReportAnimal = {},
+            onPhoneClicked = {}
         )
     }
 }

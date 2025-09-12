@@ -20,8 +20,6 @@ import com.example.findu.databinding.FragmentHomeBinding
 import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.home.composeview.HomeScreen
-import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
-import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
 import com.example.findu.presentation.ui.home.viewmodel.HomeUiEffect
 import com.example.findu.presentation.ui.home.viewmodel.HomeUiEvent
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
@@ -55,20 +53,13 @@ class HomeFragment : Fragment() {
                         .collect { sideEffect ->
                             when (sideEffect) {
                                 is HomeUiEffect.NavigateToProtectDetail -> {
-                                    navigateToProtectDetail(sideEffect.id, sideEffect.tag, sideEffect.name)
+                                    navigateToProtectDetail(id = sideEffect.animal.protectId.toString(), tag =  sideEffect.animal.tag, name =  sideEffect.animal.title)
                                 }
 
                                 is HomeUiEffect.NavigateToReportDetail -> {
-                                    navigateToReportDetail(sideEffect.id, sideEffect.tag, sideEffect.name)
+                                    navigateToReportDetail(id = sideEffect.animal.reportId.toString(), tag =  sideEffect.animal.tag, name =  sideEffect.animal.title)
                                 }
 
-                                is HomeUiEffect.ShowReportDialog -> {
-                                    showReportDialog()
-                                }
-
-                                is HomeUiEffect.ShowFindDialog -> {
-                                    showFindDialog()
-                                }
 
                                 is HomeUiEffect.OpenWebLink -> {
                                     openWebLink(sideEffect.url)
@@ -77,6 +68,11 @@ class HomeFragment : Fragment() {
                                 is HomeUiEffect.ShowToast -> {
                                     Toast.makeText(requireContext(), sideEffect.message, Toast.LENGTH_SHORT).show()
                                 }
+
+                                is HomeUiEffect.NavigateToProtectList -> TODO()
+                                is HomeUiEffect.NavigateToReportList -> TODO()
+
+                                is HomeUiEffect.Dial -> call120()
                             }
                         }
                 }
@@ -105,16 +101,27 @@ class HomeFragment : Fragment() {
                             indicatorClicked = { reportDurationType ->
                                 homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
                             },
-                            navigationToSearch = {
-                                homeViewModel.handleEvent(HomeUiEvent.OnFindDialogClick)
-                            },
                             userNickname = "사용자",
                             navigateToProtectDetail = { protectAnimal ->
-                                homeViewModel.handleEvent(HomeUiEvent.OnProtectAnimalClick(protectAnimal))
+                                homeViewModel.navigateToProtectDetail(protectAnimal)
                             },
                             navigateToReportDetail = { reportAnimal ->
-                                homeViewModel.handleEvent(HomeUiEvent.OnReportAnimalClick(reportAnimal))
+                                homeViewModel.navigateToReportDetail(reportAnimal)
                             },
+                            navigationToProtectAnimal = {
+                                homeViewModel.navigateToProtectList()
+                            },
+                            navigationToReportAnimal = {
+                                homeViewModel.navigateToReportList()
+                            },
+                            onReportDialogDismiss = {
+                                homeViewModel.handleEvent(HomeUiEvent.OnReportDialogDismiss)
+                            },
+                            onLostReportClick = {},
+                            onFindReportClick = {},
+                            onPhoneClicked={
+                                homeViewModel.dial()
+                            }
                         )
                     }
 
@@ -163,19 +170,14 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showReportDialog() {
-        val dialog = HomeReportDialog(requireContext(), findNavController())
-        dialog.show()
-    }
-
-    private fun showFindDialog() {
-        val dialog = HomeFindDialog(requireContext(), findNavController())
-        dialog.show()
-    }
-
     private fun openWebLink(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         requireActivity().startActivity(intent)
+    }
+
+    private fun call120() {
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:120"))
+        startActivity(intent)
     }
 
     override fun onDestroyView() {
