@@ -53,7 +53,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
-    uiState: HomeUiState = HomeUiState(),
     reportButtonClicked: () -> Unit,
     alarmButtonClicked: () -> Unit,
     homeReportData: HomeReportData,
@@ -63,6 +62,7 @@ fun HomeScreen(
     navigationToSearch: () -> Unit,
     userNickname: String,
     modifier: Modifier = Modifier,
+    uiState: HomeUiState = HomeUiState(),
     innerPaddingValues: PaddingValues = PaddingValues(0.dp)
 ) {
     val bannerList = HomeBannerType.entries
