@@ -19,12 +19,12 @@ interface ReportService {
         @Part files: List<MultipartBody.Part>
     ): BaseResponse<List<String>>
 
-    @POST("/api/v1/reports/new-missing-reports")
+    @POST("/api/v2/reports/new-missing-reports")
     suspend fun postMissingReport(
         @Body request: MissingReportRequestDto
     ): NullableBaseResponse<Unit>
 
-    @POST("/api/v1/reports/new-witness-reports")
+    @POST("/api/v2/reports/new-witness-reports")
     suspend fun postWitnessReport(
         @Body request: WitnessReportRequestDto
     ): NullableBaseResponse<Unit>

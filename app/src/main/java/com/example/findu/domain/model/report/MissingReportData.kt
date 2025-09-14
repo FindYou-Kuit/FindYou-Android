@@ -1,14 +1,15 @@
 package com.example.findu.domain.model.report
 
-import kotlinx.datetime.Instant
-
 data class MissingReportData(
     val imageUrls: List<String>,
-    val breedId: Int,
-    val sex: SexType,
-    val furColors: List<FurColorType>,
+    val species: String,
+    val breed: String,
+    val age: String,
+    val sex: String,
+    val rfid: String,
+    val furColor: String,
+    val missingDate: String,
+    val significant: String,
     val location: String,
-    val featureIds: List<Int>,
-    val description: String,
-    val missingDate: Instant
+    val landmark: String
 )
