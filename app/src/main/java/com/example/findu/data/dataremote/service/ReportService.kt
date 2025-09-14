@@ -14,7 +14,7 @@ import retrofit2.http.Path
 
 interface ReportService {
     @Multipart
-    @POST("/api/v1/reports/images")
+    @POST("/api/v2/reports/images")
     suspend fun uploadImages(
         @Part files: List<MultipartBody.Part>
     ): BaseResponse<List<String>>
