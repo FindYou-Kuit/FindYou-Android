@@ -7,57 +7,38 @@ import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.BreedValidationData
 import com.example.findu.domain.model.breed.SpeciesType
 
-fun List<BreedResponseDto>.toDomain(): BreedData {
-    val dogBreedList = mutableListOf<Breed.DogBreed>()
-    val catBreedList = mutableListOf<Breed.CatBreed>()
-    val etcBreedList = mutableListOf<Breed.EtcBreed>()
-
-    forEach { breedResponseDto ->
-        when (breedResponseDto.toDomainSpecies()) {
-            SpeciesType.DOG -> {
-                dogBreedList.add(
-                    Breed.DogBreed(
-                        breedId = breedResponseDto.breedId,
-                        breedName = breedResponseDto.breedName,
-                        species = SpeciesType.CAT,
-                    )
-                )
-            }
-
-            SpeciesType.CAT -> {
-                catBreedList.add(
-                    Breed.CatBreed(
-                        breedId = breedResponseDto.breedId,
-                        breedName = breedResponseDto.breedName,
-                        species = SpeciesType.CAT,
-                    )
-                )
-            }
-
-            SpeciesType.ETC -> {
-                etcBreedList.add(
-                    Breed.EtcBreed(
-                        breedId = breedResponseDto.breedId,
-                        breedName = breedResponseDto.breedName,
-                        species = SpeciesType.CAT,
-                    )
-                )
-            }
-        }
+fun BreedResponseDto.toDomain(): BreedData {
+    val dogBreedList = dogBreedList.mapIndexed { index, breedName ->
+        Breed.DogBreed(
+            breedId = index + 1, // 임시 ID 생성 (1부터 시작)
+            breedName = breedName,
+            species = SpeciesType.DOG
+        )
     }
+
+    val catBreedList = catBreedList.mapIndexed { index, breedName ->
+        Breed.CatBreed(
+            breedId = dogBreedList.size + index + 1, // DOG ID 다음부터 시작
+            breedName = breedName,
+            species = SpeciesType.CAT
+        )
+    }
+
+    val etcBreedList = etcBreedList.mapIndexed { index, breedName ->
+        Breed.EtcBreed(
+            breedId = dogBreedList.size + catBreedList.size + index + 1, // CAT ID 다음부터 시작
+            breedName = breedName,
+            species = SpeciesType.ETC
+        )
+    }
+
     return BreedData(
-        dogBreedList = dogBreedList.toList(),
-        catBreedList = catBreedList.toList(),
-        etcBreedList = etcBreedList.toList()
+        dogBreedList = dogBreedList,
+        catBreedList = catBreedList,
+        etcBreedList = etcBreedList
     )
 }
 
-private fun BreedResponseDto.toDomainSpecies() =
-    when (species) {
-        "개" -> SpeciesType.DOG
-        "고양이" -> SpeciesType.CAT
-        else -> SpeciesType.ETC
-    }
 
 fun BreedValidationResponseDto.toDomain() =
     BreedValidationData(

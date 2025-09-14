@@ -11,8 +11,8 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface BreedService {
-    @GET("/api/v1/breeds")
-    suspend fun getBreeds(): BaseResponse<List<BreedResponseDto>>
+    @GET("/api/v2/breeds")
+    suspend fun getBreeds(): BaseResponse<BreedResponseDto>
 
     @GET("/api/v1/breeds/validation")
     suspend fun getBreedValidation(

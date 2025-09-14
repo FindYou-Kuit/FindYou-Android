@@ -12,7 +12,7 @@ import javax.inject.Inject
 class BreedRemoteDataSourceImpl @Inject constructor(
     private val service: BreedService
 ) : BreedRemoteDataSource {
-    override suspend fun getBreed(): BaseResponse<List<BreedResponseDto>> =
+    override suspend fun getBreed(): BaseResponse<BreedResponseDto> =
         service.getBreeds()
 
     override suspend fun getBreedValidation(breedName: String): BaseResponse<BreedValidationResponseDto> =
