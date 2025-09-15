@@ -4,8 +4,10 @@ import com.example.findu.data.dataremote.model.request.MissingReportRequestDto
 import com.example.findu.data.dataremote.model.request.WitnessReportRequestDto
 import com.example.findu.domain.model.report.MissingReportData
 import com.example.findu.domain.model.report.WitnessReportData
-import java.text.SimpleDateFormat
-import java.util.Locale
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 fun MissingReportData.toRequestDto() =
     MissingReportRequestDto(
@@ -16,9 +18,9 @@ fun MissingReportData.toRequestDto() =
         sex = sex.value,
         rfid = "", // 기본값
         furColor = furColors.joinToString("&") { it.color },
-        missingDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
-            java.util.Date(missingDate.toEpochMilliseconds())
-        ),
+        missingDate = Instant.fromEpochMilliseconds(missingDate.toEpochMilliseconds())
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .date.toString(),
         significant = description,
         location = location,
         landmark = "" // 기본값
@@ -33,7 +35,7 @@ fun WitnessReportData.toRequestDto() =
         location = location,
         landmark = "", // 기본값
         significant = description,
-        foundDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
-            java.util.Date(foundDate.toEpochMilliseconds())
-        )
+        foundDate = Instant.fromEpochMilliseconds(foundDate.toEpochMilliseconds())
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .date.toString()
     )
