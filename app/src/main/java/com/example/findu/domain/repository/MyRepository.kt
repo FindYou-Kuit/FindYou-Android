@@ -1,6 +1,8 @@
 package com.example.findu.domain.repository
 
+import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.domain.model.my.MyInterestData
+import com.example.findu.domain.model.my.MyProfileData
 import com.example.findu.domain.model.my.MyReportHistoryData
 import com.example.findu.domain.model.my.MyViewedAnimalData
 
@@ -22,5 +24,6 @@ interface MyRepository {
 
     suspend fun patchNickname(newNickname: String): Result<Unit>
 
-    suspend fun getNickname(): Result<String>
+    suspend fun getNickname(): Result<MyProfileData>
+
 }

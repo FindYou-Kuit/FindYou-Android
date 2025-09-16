@@ -1,9 +1,11 @@
 package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
+import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.toDomain.my.toDomain
 import com.example.findu.domain.model.my.MyInterestData
+import com.example.findu.domain.model.my.MyProfileData
 import com.example.findu.domain.model.my.MyReportHistoryData
 import com.example.findu.domain.model.my.MyViewedAnimalData
 import com.example.findu.domain.repository.MyRepository
@@ -48,8 +50,16 @@ class MyRepositoryImpl @Inject constructor(
             myRemoteDataSource.patchNickname(newNickname).handleBaseResponse().getOrThrow()
         }
 
-    override suspend fun getNickname(): Result<String> =
+    override suspend fun getNickname(): Result<MyProfileData> =
         runCatching {
-            myRemoteDataSource.getNickname().handleBaseResponse().getOrThrow().nickname
+            myRemoteDataSource.getNickname()
+                .handleBaseResponse()
+                .getOrThrow()
+                .let { dto ->
+                    MyProfileData(
+                        nickname = dto.nickname,
+                        profileImage = dto.profileImage
+                    )
+                }
         }
 }

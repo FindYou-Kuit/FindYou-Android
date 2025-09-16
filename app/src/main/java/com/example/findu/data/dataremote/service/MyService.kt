@@ -37,6 +37,6 @@ interface MyService {
         @Body newNickname: String
     ): NullableBaseResponse<Unit>
 
-    @GET("/api/v1/users/nickname")
+    @GET("/api/v2/users/me")
     suspend fun getNickname(): BaseResponse<MyNickNameResponseDto>
 }

@@ -20,6 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.findu.BuildConfig
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
@@ -62,7 +63,7 @@ class MyFragment : Fragment() {
         _binding = FragmentMyBinding.inflate(inflater, container, false)
 
         initListener()
-        myViewModel.fetchNickName()
+        myViewModel.fetchMyProfile()
 
         return binding.root
     }
@@ -190,6 +191,7 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         observeViewModel()
     }
 
@@ -197,13 +199,18 @@ class MyFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    myViewModel.nickNameState.collect { nickName ->
-                        nickName?.let {
-                            binding.tvMyNickname.text = nickName
-                            binding.etMyNickname.setText(nickName)
+                    myViewModel.myProfile.collect { profile ->
+                        profile?.let {
+                            binding.tvMyNickname.text = it.nickname
+                            binding.etMyNickname.setText(it.nickname)
+
+                            Glide.with(this@MyFragment)
+                                .load(it.profileImage)
+                                .into(binding.ivMyIllust)
                         }
                     }
                 }
+
                 launch {
                     myViewModel.deleteUserMessage.collect { message ->
                         message?.let {

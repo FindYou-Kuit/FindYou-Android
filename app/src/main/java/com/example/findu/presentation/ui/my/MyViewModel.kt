@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.domain.model.my.MyProfileData
 import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
@@ -54,6 +55,10 @@ class MyViewModel @Inject constructor(
 
     private val _nickNameState = MutableStateFlow<String?>(null)
     val nickNameState = _nickNameState.asStateFlow()
+
+    private val _myProfile = MutableStateFlow<MyProfileData?>(null)
+    val myProfile = _myProfile.asStateFlow()
+
 
     private val _selectedImageResId = MutableStateFlow<Int?>(null)
     val selectedImageResId = _selectedImageResId.asStateFlow()
@@ -150,14 +155,14 @@ class MyViewModel @Inject constructor(
     }
 
 
-    fun fetchNickName() {
+    fun fetchMyProfile() {
         viewModelScope.launch {
             getNickNameUseCase().fold(
-                onSuccess = {
-                    _nickNameState.value = it
+                onSuccess = { data ->
+                    _myProfile.value = data
                 },
                 onFailure = {
-                    _errorMessage.value = it.message ?: "닉네임을 불러오는 중 오류가 발생했습니다."
+                    _errorMessage.value = it.message ?: "프로필 정보를 불러오는 중 오류가 발생했습니다."
                 }
             )
         }
