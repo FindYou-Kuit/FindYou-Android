@@ -12,10 +12,6 @@ enum class HomeButtonType(
         imageRes = R.drawable.img_home_protect_center,
         nameRes = R.string.home_button_protect_center
     ),
-    HOSPITAL(
-        imageRes = R.drawable.img_home_hospital,
-        nameRes = R.string.home_button_hospital
-    ),
     PROTECT_PART(
         imageRes = R.drawable.img_home_protect_part,
         nameRes = R.string.home_button_protect_part
