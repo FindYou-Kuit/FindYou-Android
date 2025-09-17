@@ -18,7 +18,7 @@ class TokenLocalDataSourceImpl @Inject constructor(
         set(value) = sharedPreferences.edit { putString(REFRESH_TOKEN, value) }
 
     override fun clearToken() {
-        sharedPreferences.edit().clear().apply()
+        sharedPreferences.edit { clear() }
     }
 
     companion object {

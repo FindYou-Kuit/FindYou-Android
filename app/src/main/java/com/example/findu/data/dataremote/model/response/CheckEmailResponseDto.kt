@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CheckEmailResponseDto(
-    @SerialName("isDuplicateEmail")
-    val isDuplicateEmail: Boolean
+data class CheckNicknameResponseDto(
+    @SerialName("isDuplicate")
+    val isDuplicate: Boolean
 )

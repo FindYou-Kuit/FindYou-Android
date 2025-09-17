@@ -3,14 +3,18 @@ package com.example.findu.domain.usecase
 import com.example.findu.domain.model.LoginData
 import com.example.findu.domain.model.LoginInfo
 import com.example.findu.domain.repository.AuthRepository
-import com.example.findu.domain.repository.TokenRepository
+import com.example.findu.domain.repository.DeviceRepository
 
 class PostLoginUseCase(
     private val authRepository: AuthRepository,
+    private val deviceRepository: DeviceRepository
 ) {
     suspend fun postLogin(
-        loginInfo:LoginInfo
+        kakaoId:Long
     ): Result<LoginData> = authRepository.postLogin(
-        loginInfo = loginInfo
+        loginInfo = LoginInfo(
+            kakaoId = kakaoId,
+            deviceId = deviceRepository.getDeviceId()
+        )
     )
 }
