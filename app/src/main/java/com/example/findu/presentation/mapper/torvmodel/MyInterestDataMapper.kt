@@ -31,9 +31,10 @@ fun MyReportHistoryData.Report.toRvModel(): MyReportHistoryRv {
     )
 }
 
-fun MyViewedAnimalData.ViewedAnimal.toRvModel(): MyViewedAnimalsRv {
+
+fun MyViewedAnimalData.Card.toRvModel(): MyViewedAnimalsRv {
     return MyViewedAnimalsRv(
-        cardId = this.cardId,
+        reportId = this.reportId,
         thumbnailImageUrl = this.thumbnailImageUrl,
         title = this.title,
         tag = this.tag,
@@ -41,4 +42,5 @@ fun MyViewedAnimalData.ViewedAnimal.toRvModel(): MyViewedAnimalsRv {
         location = this.location,
         interest = this.interest
     )
+
 }

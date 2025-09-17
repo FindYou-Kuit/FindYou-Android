@@ -45,12 +45,9 @@ fun MyReportHistoryResponseDto.toDomain(): MyReportHistoryData {
 
 fun MyViewedAnimalsResponseDto.toDomain(): MyViewedAnimalData {
     return MyViewedAnimalData(
-        isLast = isLast,
-        lastViewedProtectId = lastViewedProtectId,
-        lastViewedReportId = lastViewedReportId,
-        viewedAnimals = viewedAnimals.map {
-            MyViewedAnimalData.ViewedAnimal(
-                cardId = it.cardId,
+        cards = cards.map {
+            MyViewedAnimalData.Card(
+                reportId = it.reportId,
                 date = it.date,
                 interest = it.interest,
                 location = it.location,
@@ -58,6 +55,8 @@ fun MyViewedAnimalsResponseDto.toDomain(): MyViewedAnimalData {
                 thumbnailImageUrl = it.thumbnailImageUrl,
                 title = it.title
             )
-        }
+        },
+        isLast = isLast,
+        lastId = lastId,
     )
 }

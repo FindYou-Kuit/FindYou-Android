@@ -58,7 +58,7 @@ class MyViewedAnimalsRvAdapter(
             with(binding) {
                 flMyHistoryKeep.setOnClickListener {
                     item.interest = !item.interest
-                    onKeepClick(item.cardId, item.interest, item.tag)
+                    onKeepClick(item.reportId, item.interest, item.tag)
                     if (item.interest) {
                         binding.ivMyHistoryKeep.visibility = View.VISIBLE
                         binding.ivMyHistoryNonKeep.visibility = View.GONE
@@ -69,7 +69,7 @@ class MyViewedAnimalsRvAdapter(
                 }
                 clMyHistoryContainer.setOnClickListener {
                     onItemClick(
-                        item.cardId,
+                        item.reportId,
                         item.tag,
                         item.title
                     )

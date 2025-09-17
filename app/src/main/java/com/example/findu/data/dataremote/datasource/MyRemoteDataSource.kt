@@ -17,8 +17,7 @@ interface MyRemoteDataSource {
     ): BaseResponse<MyReportHistoryResponseDto>
 
     suspend fun getViewedAnimals(
-        lastReportId: Long,
-        lastProtectId: Long
+        lastId: Long,
     ): BaseResponse<MyViewedAnimalsResponseDto>
 
     suspend fun deleteUser(): NullableBaseResponse<Unit>

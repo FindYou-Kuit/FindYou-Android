@@ -102,11 +102,10 @@ class MyViewModel @Inject constructor(
     fun fetchViewedAnimals() {
         viewModelScope.launch {
             getViewedAnimalUseCase(
-                lastReportId = Long.MAX_VALUE,
-                lastProtectId = Long.MAX_VALUE
+                lastId = Long.MAX_VALUE,
             ).fold(
                 onSuccess = { data ->
-                    _viewedAnimals.value = data.viewedAnimals.map { it.toRvModel() }
+                    _viewedAnimals.value = data.cards.map { it.toRvModel() }
                 },
                 onFailure = {
                     _errorMessage.value = it.message ?: "데이터를 불러오는 중 오류가 발생했습니다."

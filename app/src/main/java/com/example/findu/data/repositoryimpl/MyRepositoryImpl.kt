@@ -30,13 +30,11 @@ class MyRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getMyViewedAnimals(
-        lastReportId: Long,
-        lastProtectId: Long
+        lastId: Long,
     ): Result<MyViewedAnimalData> =
         runCatching {
             myRemoteDataSource.getViewedAnimals(
-                lastReportId = lastReportId,
-                lastProtectId = lastProtectId
+                lastId = lastId,
             ).handleBaseResponse().getOrThrow().toDomain()
         }
 

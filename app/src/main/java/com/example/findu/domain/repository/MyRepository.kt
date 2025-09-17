@@ -16,8 +16,7 @@ interface MyRepository {
     ): Result<MyReportHistoryData>
 
     suspend fun getMyViewedAnimals(
-        lastReportId: Long,
-        lastProtectId: Long
+        lastId: Long,
     ): Result<MyViewedAnimalData>
 
     suspend fun deleteUser(): Result<Unit>

@@ -11,10 +11,10 @@ import com.example.findu.data.dataremote.service.MyService
 import javax.inject.Inject
 
 class MyRemoteDataSourceImpl @Inject constructor(
-    private val myService: MyService
+    private val myService: MyService,
 ) : MyRemoteDataSource {
     override suspend fun getInterestAnimals(
-        lastId: Long
+        lastId: Long,
     ): BaseResponse<MyInterestResponseDto> =
         myService.getInterestAnimals(lastId)
 
@@ -22,10 +22,9 @@ class MyRemoteDataSourceImpl @Inject constructor(
         myService.getReportHistory(lastId)
 
     override suspend fun getViewedAnimals(
-        lastReportId: Long,
-        lastProtectId: Long
+        lastId: Long,
     ): BaseResponse<MyViewedAnimalsResponseDto> =
-        myService.getViewedAnimals(lastReportId, lastProtectId)
+        myService.getViewedAnimals(lastId)
 
     override suspend fun deleteUser(): NullableBaseResponse<Unit> =
         myService.deleteUser()
