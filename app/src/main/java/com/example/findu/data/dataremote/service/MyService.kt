@@ -28,7 +28,7 @@ interface MyService {
         @Query("lastId") lastId: Long,
     ): BaseResponse<MyViewedAnimalsResponseDto>
 
-    @DELETE("/api/v1/users")
+    @DELETE("/api/v2/users/me")
     suspend fun deleteUser(): NullableBaseResponse<Unit>
 
     @PATCH("/api/v2/users/me/nickname")
