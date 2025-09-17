@@ -134,9 +134,9 @@ fun HomeScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 33.dp),
-                            navigateToProtectCenter = {},
-                            navigateToProtectPart = {},
-                            navigateToVolunteer = {}
+                            navigateToProtectCenter = navigateToProtectCenter,
+                            navigateToProtectPart = navigateToProtectPart,
+                            navigateToVolunteer = navigateToVolunteer
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         Text(

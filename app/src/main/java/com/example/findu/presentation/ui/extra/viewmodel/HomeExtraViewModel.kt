@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 data class HomeExtraUiState(
     val loadState: LoadState = LoadState.Idle,
-    val data:List<VolunteerWork> = listOf(
+    val data: List<VolunteerWork> = listOf(
         VolunteerWork(
             institution = "양평군유기동물보호센터",
             recruitmentPeriod = "2025.04.21 ~ 2025.05.20",
@@ -53,15 +53,13 @@ class HomeExtraViewModel @Inject constructor(
 
     val uiState = _uiState
         .onStart {
+            _uiState.value = HomeExtraUiState(loadState = LoadState.Success)
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = HomeExtraUiState()
         )
-
-
-
 
 
 }

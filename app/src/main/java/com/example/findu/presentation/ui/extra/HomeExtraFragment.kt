@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -15,15 +14,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentHomeExtraBinding
-import com.example.findu.presentation.type.AnimalStateType
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.extra.view.ExtraHomeVolunteerScreen
 import com.example.findu.presentation.ui.extra.viewmodel.HomeExtraViewModel
-import com.example.findu.presentation.ui.home.composeview.HomeScreen
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
-import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
-import com.example.findu.presentation.ui.home.viewmodel.HomeUiEffect
-import com.example.findu.presentation.ui.home.viewmodel.HomeUiEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -82,13 +76,7 @@ class HomeExtraFragment : Fragment() {
         }
     }
 
-    
-    
 
-    private fun showReportDialog() {
-        val dialog = HomeReportDialog(requireContext(), findNavController())
-        dialog.show()
-    }
 
     private fun showFindDialog() {
         val dialog = HomeFindDialog(requireContext(), findNavController())
