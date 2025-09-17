@@ -31,7 +31,7 @@ interface MyService {
     @DELETE("/api/v1/users")
     suspend fun deleteUser(): NullableBaseResponse<Unit>
 
-    @PATCH("/api/v1/users/nickname")
+    @PATCH("/api/v2/users/me/nickname")
     suspend fun patchNickname(
         @Body newNickname: String
     ): NullableBaseResponse<Unit>
