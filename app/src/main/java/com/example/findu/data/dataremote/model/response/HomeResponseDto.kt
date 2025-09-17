@@ -5,20 +5,40 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HomeResponseDto(
-    @SerialName("yesterdayRescuedAnimalCount")
-    val yesterdayRescuedAnimalCount: Int,
-    @SerialName("yesterdayReportedAnimalCount")
-    val yesterdayReportedAnimalCount: Int,
-    @SerialName("protectAnimalCards")
-    val protectAnimalCards: List<ProtectAnimalCard>,
-    @SerialName("reportAnimalCards")
-    val reportAnimalCards: List<ReportAnimalCard>
+    @SerialName("statistics")
+    val statistics: Statistics,
+    @SerialName("protectingAnimals")
+    val protectingAnimals: List<ProtectingAnimal>,
+    @SerialName("witnessedOrMissingAnimals")
+    val witnessedOrMissingAnimals: List<WitnessedOrMissingAnimal>
 )
 
 @Serializable
-data class ProtectAnimalCard(
-    @SerialName("protectId")
-    val protectId: Int,
+data class Statistics(
+    @SerialName("recent7days")
+    val recent7days: PeriodStatistics,
+    @SerialName("recent3months")
+    val recent3months: PeriodStatistics,
+    @SerialName("recent1Year")
+    val recent1Year: PeriodStatistics
+)
+
+@Serializable
+data class PeriodStatistics(
+    @SerialName("rescuedAnimalCount")
+    val rescuedAnimalCount: Int,
+    @SerialName("protectingAnimalCount")
+    val protectingAnimalCount: Int,
+    @SerialName("adoptedAnimalCount")
+    val adoptedAnimalCount: Int,
+    @SerialName("lostAnimalCount")
+    val lostAnimalCount: Int
+)
+
+@Serializable
+data class ProtectingAnimal(
+    @SerialName("reportId")
+    val reportId: Int,
     @SerialName("thumbnailImageUrl")
     val thumbnailImageUrl: String,
     @SerialName("title")
@@ -32,7 +52,7 @@ data class ProtectAnimalCard(
 )
 
 @Serializable
-data class ReportAnimalCard(
+data class WitnessedOrMissingAnimal(
     @SerialName("reportId")
     val reportId: Int,
     @SerialName("thumbnailImageUrl")
@@ -41,8 +61,8 @@ data class ReportAnimalCard(
     val title: String,
     @SerialName("tag")
     val tag: String,
-    @SerialName("registerDate")
-    val registerDate: String,
-    @SerialName("happenLocation")
-    val happenLocation: String
+    @SerialName("happenDate")
+    val happenDate: String,
+    @SerialName("careAddress")
+    val careAddress: String
 )

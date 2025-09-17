@@ -4,8 +4,36 @@ data class HomeData(
     val todayRescuedAnimalCount: Int,
     val todayReportAnimalCount: Int,
     val protectAnimalCards: List<ProtectAnimal>,
-    val reportAnimalCards: List<ReportAnimal>
+    val reportAnimalCards: List<ReportAnimal>,
+    val statistics: HomeStatistics
 )
+
+data class HomeStatistics(
+    val recent7days: PeriodStatistics,
+    val recent3months: PeriodStatistics,
+    val recent1Year: PeriodStatistics
+)
+
+data class PeriodStatistics(
+    val rescuedAnimalCount: Int,
+    val protectingAnimalCount: Int,
+    val adoptedAnimalCount: Int,
+    val reportedAnimalCount: Int
+) {
+    fun getAllStatistics(): List<Pair<String, Int>> = listOf(
+        StatisticsType.RESCUED.label to rescuedAnimalCount,
+        StatisticsType.PROTECTING.label to protectingAnimalCount,
+        StatisticsType.ADOPTED.label to adoptedAnimalCount,
+        StatisticsType.REPORTED.label to reportedAnimalCount
+    )
+}
+
+enum class StatisticsType(val label: String) {
+    RESCUED("구조"),
+    PROTECTING("보호중"),
+    ADOPTED("입양"),
+    REPORTED("신고")
+}
 
 data class ProtectAnimal(
     val protectId: Int,
@@ -24,19 +52,3 @@ data class ReportAnimal(
     val registerDate: String,
     val happenLocation: String
 )
-
-data class ReportItem(
-    val type: ReportDataType,
-    val count: Int
-)
-
-data class HomeReportData(
-    val reports: List<ReportItem>
-)
-
-enum class ReportDataType(val label: String) {
-    RESCUE("구조"),
-    PROTECTION("보호중"),
-    ADOPTION("입양"),
-    REPORT("신고")
-}
