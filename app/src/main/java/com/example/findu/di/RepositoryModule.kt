@@ -3,6 +3,7 @@ package com.example.findu.di
 import com.example.findu.data.repositoryimpl.AuthRepositoryImpl
 import com.example.findu.data.repositoryimpl.DetailSearchRepositoryImpl
 import com.example.findu.data.repositoryimpl.BreedRepositoryImpl
+import com.example.findu.data.repositoryimpl.DeviceRepositoryImpl
 import com.example.findu.data.repositoryimpl.DummyRepositoryImpl
 import com.example.findu.data.repositoryimpl.HomeRepositoryImpl
 import com.example.findu.data.repositoryimpl.InterestRepositoryImpl
@@ -13,6 +14,7 @@ import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.data.repositoryimpl.ReportRepositoryImpl
 import com.example.findu.data.repositoryimpl.TokenRepositoryImpl
 import com.example.findu.domain.repository.AuthRepository
+import com.example.findu.domain.repository.DeviceRepository
 import com.example.findu.domain.repository.DummyRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.repository.HomeRepository
@@ -68,4 +70,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindTokenRepository(tokenRepositoryImpl: TokenRepositoryImpl): TokenRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindDeviceRepository(deviceRepositoryImpl: DeviceRepositoryImpl): DeviceRepository
 }
