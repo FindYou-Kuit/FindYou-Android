@@ -23,9 +23,9 @@ class MyRepositoryImpl @Inject constructor(
             ).handleBaseResponse().getOrThrow().toDomain()
         }
 
-    override suspend fun getMyReportHistory(lastReportId: Long): Result<MyReportHistoryData> =
+    override suspend fun getMyReportHistory(lastId: Long): Result<MyReportHistoryData> =
         runCatching {
-            myRemoteDataSource.getReportHistory(lastReportId = lastReportId)
+            myRemoteDataSource.getReportHistory(lastId = lastId)
                 .handleBaseResponse().getOrThrow().toDomain()
         }
 

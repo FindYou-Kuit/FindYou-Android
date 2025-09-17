@@ -2,7 +2,7 @@ package com.example.findu.domain.model.my
 
 data class MyReportHistoryData(
     val isLast: Boolean,
-    val lastReportId: Long,
+    val lastId: Long,
     val reports: List<Report>
 ) {
     data class Report(
@@ -11,7 +11,8 @@ data class MyReportHistoryData(
         val reportId: Long,
         val tag: String,
         val thumbnailImageUrl: String,
-        val title: String
+        val title: String,
+        val interest : Boolean,
     )
 }
 

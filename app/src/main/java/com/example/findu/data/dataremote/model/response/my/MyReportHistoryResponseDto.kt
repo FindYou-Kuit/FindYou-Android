@@ -9,23 +9,30 @@ data class MyReportHistoryResponseDto(
     @SerialName("isLast")
     val isLast: Boolean,
     @SerialName("lastReportId")
-    val lastReportId: Long,
+    val lastId: Long,
     @SerialName("reports")
     val reports: List<Report>
 ) {
     @Serializable
     data class Report(
+        @SerialName("reportId")
+        val reportId: Long,
+        @SerialName("thumbnailImageUrl")
+        val thumbnailImageUrl: String,
+        @SerialName("title")
+        val title: String,
+        @SerialName("tag")
+        val tag: String,
         @SerialName("date")
         val date: String,
         @SerialName("location")
         val location: String,
-        @SerialName("reportId")
-        val reportId: Long,
-        @SerialName("tag")
-        val tag: String,
-        @SerialName("thumbnailImageUrl")
-        val thumbnailImageUrl: String,
-        @SerialName("title")
-        val title: String
+        @SerialName("interest")
+        val interest : Boolean,
+
+
+
+
+
     )
 }

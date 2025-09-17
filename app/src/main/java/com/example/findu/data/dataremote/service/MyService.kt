@@ -18,9 +18,9 @@ interface MyService {
         @Query("lastId") lastId: Long
     ): BaseResponse<MyInterestResponseDto>
 
-    @GET("/api/v1/users/reports")
+    @GET("/api/v2/users/me/reports")
     suspend fun getReportHistory(
-        @Query("lastReportId") lastReportId: Long,
+        @Query("lastId") lastId: Long,
     ): BaseResponse<MyReportHistoryResponseDto>
 
     @GET("/api/v1/users/viewed-animals")

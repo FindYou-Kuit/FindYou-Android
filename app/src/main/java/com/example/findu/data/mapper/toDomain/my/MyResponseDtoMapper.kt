@@ -27,8 +27,6 @@ fun MyInterestResponseDto.toDomain(): MyInterestData {
 
 fun MyReportHistoryResponseDto.toDomain(): MyReportHistoryData {
     return MyReportHistoryData(
-        isLast = isLast,
-        lastReportId = lastReportId,
         reports = reports.map {
             MyReportHistoryData.Report(
                 date = it.date,
@@ -36,9 +34,12 @@ fun MyReportHistoryResponseDto.toDomain(): MyReportHistoryData {
                 reportId = it.reportId,
                 tag = it.tag,
                 thumbnailImageUrl = it.thumbnailImageUrl,
-                title = it.title
+                title = it.title,
+                interest = it.interest
             )
-        }
+        },
+        isLast = isLast,
+        lastId = lastId,
     )
 }
 

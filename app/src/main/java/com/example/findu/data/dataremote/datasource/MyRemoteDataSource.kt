@@ -13,7 +13,7 @@ interface MyRemoteDataSource {
     ): BaseResponse<MyInterestResponseDto>
 
     suspend fun getReportHistory(
-        lastReportId: Long
+        lastId: Long
     ): BaseResponse<MyReportHistoryResponseDto>
 
     suspend fun getViewedAnimals(

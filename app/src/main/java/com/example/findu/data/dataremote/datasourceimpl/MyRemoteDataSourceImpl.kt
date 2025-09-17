@@ -18,8 +18,8 @@ class MyRemoteDataSourceImpl @Inject constructor(
     ): BaseResponse<MyInterestResponseDto> =
         myService.getInterestAnimals(lastId)
 
-    override suspend fun getReportHistory(lastReportId: Long): BaseResponse<MyReportHistoryResponseDto> =
-        myService.getReportHistory(lastReportId)
+    override suspend fun getReportHistory(lastId: Long): BaseResponse<MyReportHistoryResponseDto> =
+        myService.getReportHistory(lastId)
 
     override suspend fun getViewedAnimals(
         lastReportId: Long,

@@ -87,7 +87,7 @@ class MyViewModel @Inject constructor(
     fun fetchReportHistory() {
         viewModelScope.launch {
             getReportHistoryUseCase(
-                lastReportId = Long.MAX_VALUE,
+                lastId = Long.MAX_VALUE,
             ).fold(
                 onSuccess = { data ->
                     _reportHistory.value = data.reports.map { it.toRvModel() }

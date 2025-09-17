@@ -12,7 +12,7 @@ interface MyRepository {
     ): Result<MyInterestData>
 
     suspend fun getMyReportHistory(
-        lastReportId: Long
+        lastId: Long
     ): Result<MyReportHistoryData>
 
     suspend fun getMyViewedAnimals(
