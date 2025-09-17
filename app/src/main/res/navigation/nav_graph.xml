@@ -28,7 +28,16 @@
         <action
             android:id="@+id/action_fragment_home_to_fragment_search_detail_protecting"
             app:destination="@id/fragment_search_detail_protecting" />
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_home_extra"
+            app:destination="@id/fragment_home_extra" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fragment_home_extra"
+        android:name="com.example.findu.presentation.ui.extra.HomeExtraFragment"
+        android:label="Home Extra"
+        tools:layout="@layout/fragment_home_extra" />
 
     <fragment
         android:id="@+id/fragment_search"
