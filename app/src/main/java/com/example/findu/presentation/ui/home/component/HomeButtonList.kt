@@ -26,7 +26,6 @@ import com.example.findu.ui.theme.FindUTheme
 fun HomeButtonList(
     modifier: Modifier = Modifier,
     navigateToProtectCenter: () -> Unit = {},
-    navigateToHospital: () -> Unit = {},
     navigateToProtectPart: () -> Unit = {},
     navigateToVolunteer: () -> Unit = {},
 ) {
@@ -37,7 +36,6 @@ fun HomeButtonList(
         HomeButtonType.entries.forEach { homeButton ->
             val navigation = when (homeButton) {
                 HomeButtonType.PROTECT_CENTER -> navigateToProtectCenter
-                HomeButtonType.HOSPITAL -> navigateToHospital
                 HomeButtonType.PROTECT_PART -> navigateToProtectPart
                 HomeButtonType.VOLUNTEER -> navigateToVolunteer
             }

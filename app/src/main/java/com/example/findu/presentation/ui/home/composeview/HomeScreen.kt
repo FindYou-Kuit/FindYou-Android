@@ -60,6 +60,9 @@ fun HomeScreen(
     navigateToReportDetail: (ReportAnimal) -> Unit,
     indicatorClicked: (HomeReportDurationType) -> Unit,
     navigationToSearch: () -> Unit,
+    navigateToProtectCenter: () -> Unit,
+    navigateToProtectPart: () -> Unit,
+    navigateToVolunteer: () -> Unit,
     userNickname: String,
     modifier: Modifier = Modifier,
     uiState: HomeUiState = HomeUiState(),
@@ -128,7 +131,6 @@ fun HomeScreen(
                                 .fillMaxWidth()
                                 .padding(horizontal = 33.dp),
                             navigateToProtectCenter = {},
-                            navigateToHospital = {},
                             navigateToProtectPart = {},
                             navigateToVolunteer = {}
                         )
@@ -217,7 +219,10 @@ private fun HomeScreenPreview() {
             navigationToSearch = {},
             userNickname = "신민석",
             navigateToProtectDetail = {},
-            navigateToReportDetail = {}
+            navigateToReportDetail = {},
+            navigateToProtectCenter = {},
+            navigateToProtectPart = {},
+            navigateToVolunteer = {}
         )
     }
 }
