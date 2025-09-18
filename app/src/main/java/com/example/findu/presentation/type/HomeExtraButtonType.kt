@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.findu.R
 
-enum class HomeButtonType(
+enum class HomeExtraButtonType(
     @DrawableRes val imageRes: Int,
     @StringRes val nameRes: Int
 ) {

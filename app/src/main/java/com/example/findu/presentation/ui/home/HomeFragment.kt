@@ -18,6 +18,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentHomeBinding
 import com.example.findu.presentation.type.AnimalStateType
+import com.example.findu.presentation.type.HomeExtraButtonType
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.home.composeview.HomeScreen
 import com.example.findu.presentation.ui.home.viewmodel.HomeUiEffect
@@ -122,9 +123,8 @@ class HomeFragment : Fragment() {
                             onPhoneClicked={
                                 homeViewModel.dial()
                             },
-                            navigateToProtectCenter = { navigateToHomeExtra() },
-                            navigateToProtectPart = { navigateToHomeExtra() },
-                            navigateToVolunteer = { navigateToHomeExtra() },
+                            navigateToHomeExtra = { homeExtraButtonType->
+                                navigateToHomeExtra(homeExtraButtonType) },
                         )
                     }
 
@@ -183,9 +183,9 @@ class HomeFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun navigateToHomeExtra() {
+    private fun navigateToHomeExtra(homeExtraButtonType: HomeExtraButtonType) {
         findNavController().navigate(
-            HomeFragmentDirections.actionFragmentHomeToFragmentHomeExtra()
+            HomeFragmentDirections.actionFragmentHomeToFragmentHomeExtra(homeExtraButtonType)
         )
     }
 

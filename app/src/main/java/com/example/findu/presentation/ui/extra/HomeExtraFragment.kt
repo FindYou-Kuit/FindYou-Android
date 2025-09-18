@@ -13,6 +13,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.findu.databinding.FragmentHomeExtraBinding
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.extra.view.ExtraHomeVolunteerScreen
@@ -34,6 +35,7 @@ class HomeExtraFragment : Fragment() {
         _binding = FragmentHomeExtraBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

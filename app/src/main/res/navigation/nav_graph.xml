@@ -37,7 +37,12 @@
         android:id="@+id/fragment_home_extra"
         android:name="com.example.findu.presentation.ui.extra.HomeExtraFragment"
         android:label="Home Extra"
-        tools:layout="@layout/fragment_home_extra" />
+        tools:layout="@layout/fragment_home_extra">
+
+        <argument
+            android:name="homeExtraType"
+            app:argType="com.example.findu.presentation.ui.extra.HomeExtraType" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_search"

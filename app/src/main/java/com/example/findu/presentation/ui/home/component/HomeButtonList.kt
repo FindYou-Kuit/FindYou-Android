@@ -17,31 +17,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.findu.presentation.type.HomeButtonType
+import com.example.findu.presentation.type.HomeExtraButtonType
+import com.example.findu.presentation.type.HomeExtraType
 import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
 
 @Composable
-fun HomeButtonList(
+fun HomeExtraButtonList(
     modifier: Modifier = Modifier,
-    navigateToProtectCenter: () -> Unit = {},
-    navigateToProtectPart: () -> Unit = {},
-    navigateToVolunteer: () -> Unit = {},
+    navigateToHomeExtra: (HomeExtraButtonType) -> Unit = {},
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        HomeButtonType.entries.forEach { homeButton ->
-            val navigation = when (homeButton) {
-                HomeButtonType.PROTECT_CENTER -> navigateToProtectCenter
-                HomeButtonType.PROTECT_PART -> navigateToProtectPart
-                HomeButtonType.VOLUNTEER -> navigateToVolunteer
-            }
-
+        HomeExtraButtonType.entries.forEach { homeButton ->
             Column(
-                modifier = Modifier.noRippleClickable { navigation() },
+                modifier = Modifier.noRippleClickable { navigateToHomeExtra(homeButton) },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(painterResource(homeButton.imageRes), contentDescription = null, tint = Color.Unspecified)
@@ -56,6 +49,6 @@ fun HomeButtonList(
 
 @Preview
 @Composable
-private fun HomeButtonListPreview() {
-    HomeButtonList(modifier = Modifier.fillMaxWidth().padding(horizontal = 33.dp))
+private fun HomeExtraButtonListPreview() {
+    HomeExtraButtonList(modifier = Modifier.fillMaxWidth().padding(horizontal = 33.dp))
 }

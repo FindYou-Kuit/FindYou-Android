@@ -30,9 +30,10 @@ import com.example.findu.R
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.presentation.type.HomeBannerType
+import com.example.findu.presentation.type.HomeExtraButtonType
 import com.example.findu.presentation.type.HomeReportDurationType
 import com.example.findu.presentation.ui.home.component.HomeBannerPager
-import com.example.findu.presentation.ui.home.component.HomeButtonList
+import com.example.findu.presentation.ui.home.component.HomeExtraButtonList
 import com.example.findu.presentation.ui.home.component.HomeProtectAnimalList
 import com.example.findu.presentation.ui.home.component.HomeReportCard
 import com.example.findu.presentation.ui.home.component.HomeReportDialog
@@ -58,9 +59,7 @@ fun HomeScreen(
     indicatorClicked: (HomeReportDurationType) -> Unit,
     navigationToProtectAnimal: () -> Unit,
     navigationToReportAnimal: () -> Unit,
-    navigateToProtectCenter: () -> Unit,
-    navigateToProtectPart: () -> Unit,
-    navigateToVolunteer: () -> Unit,
+    navigateToHomeExtra: (HomeExtraButtonType) -> Unit,
     userNickname: String,
     onReportDialogDismiss: () -> Unit,
     onLostReportClick: () -> Unit,
@@ -130,13 +129,11 @@ fun HomeScreen(
                             )
                     ) {
                         Spacer(modifier = Modifier.height(20.dp))
-                        HomeButtonList(
+                        HomeExtraButtonList(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 33.dp),
-                            navigateToProtectCenter = navigateToProtectCenter,
-                            navigateToProtectPart = navigateToProtectPart,
-                            navigateToVolunteer = navigateToVolunteer
+                            navigateToHomeExtra = navigateToHomeExtra,
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         Text(
@@ -235,9 +232,7 @@ private fun HomeScreenPreview() {
             navigationToProtectAnimal = {},
             navigationToReportAnimal = {},
             onPhoneClicked = {},
-            navigateToProtectCenter = {},
-            navigateToProtectPart = {},
-            navigateToVolunteer = {}
+            navigateToHomeExtra = {},
         )
     }
 }
