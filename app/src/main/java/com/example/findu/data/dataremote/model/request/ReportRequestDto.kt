@@ -6,42 +6,46 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MissingReportRequestDto(
-    @SerialName("userId")
-    val userId: Int = 1,
-    @SerialName("imageUrls")
-    val imageUrls: List<String>,
+    @SerialName("imgUrls")
+    val imgUrls: List<String>,
+    @SerialName("species")
+    val species: String,
     @SerialName("breed")
-    val breed: Int,
+    val breed: String,
+    @SerialName("age")
+    val age: String,
     @SerialName("sex")
     val sex: String,
+    @SerialName("rfid")
+    val rfid: String,
     @SerialName("furColor")
-    val furColor: List<String>,
+    val furColor: String,
+    @SerialName("missingDate")
+    val missingDate: String,
+    @SerialName("significant")
+    val significant: String,
     @SerialName("location")
     val location: String,
-    @SerialName("features")
-    val features: List<Int>,
-    @SerialName("description")
-    val description: String,
-    @SerialName("missingDate")
-    val missingDate: Instant
+    @SerialName("landmark")
+    val landmark: String
 )
 
 @Serializable
 data class WitnessReportRequestDto(
-    @SerialName("userId")
-    val userId: Int = 1,
-    @SerialName("imageUrls")
-    val imageUrls: List<String>,
+    @SerialName("imgUrls")
+    val imgUrls: List<String>,
     @SerialName("breed")
-    val breed: Int,
+    val breed: String,
+    @SerialName("species")
+    val species: String,
     @SerialName("furColor")
-    val furColor: List<String>,
+    val furColor: String,
     @SerialName("location")
     val location: String,
-    @SerialName("features")
-    val features: List<Int>,
-    @SerialName("description")
-    val description: String,
+    @SerialName("landmark")
+    val landmark: String,
+    @SerialName("significant")
+    val significant: String,
     @SerialName("foundDate")
-    val foundDate: Instant
+    val foundDate: String
 )
