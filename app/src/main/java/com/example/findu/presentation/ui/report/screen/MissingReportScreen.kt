@@ -28,10 +28,12 @@ import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.presentation.type.report.ReportType
+import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.presentation.ui.common.AppSettingDialog
+import com.example.findu.presentation.ui.common.LoadingIndicatorDialog
 import com.example.findu.presentation.ui.report.component.ReportDateBottomSheet
 import com.example.findu.presentation.ui.report.component.ReportDateComponent
 import com.example.findu.presentation.ui.report.component.ReportDescriptionComponent
@@ -126,7 +128,6 @@ fun MissingReportScreen(
         )
     }
 
-
     ReportDateBottomSheet(
         nowDate = uiState.nowDate,
         sheetState = sheetState,
@@ -138,6 +139,10 @@ fun MissingReportScreen(
             scope.launch { sheetState.hide() }
         },
     )
+
+    if (uiState.loadState == LoadState.Loading) {
+        LoadingIndicatorDialog()
+    }
 }
 
 @Composable

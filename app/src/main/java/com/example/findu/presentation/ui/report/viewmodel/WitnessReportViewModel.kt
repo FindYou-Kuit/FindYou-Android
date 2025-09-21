@@ -14,6 +14,7 @@ import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
+import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
 import com.example.findu.presentation.util.extension.toDateString
 import com.example.findu.presentation.util.extension.toNormalizeAddress
@@ -34,6 +35,7 @@ import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 
 data class WitnessReportUiState(
+    val loadState: LoadState = LoadState.Idle,
     val isFirstPermissionRequest: Boolean = true,
     val imageUriList: List<Uri> = emptyList(),
     val speciesType: SpeciesType = SpeciesType.DOG,
@@ -116,10 +118,16 @@ class WitnessReportViewModel @Inject constructor(
     }
 
     private fun fetchBreedList() {
+        _uiState.update { it.copy(loadState = LoadState.Loading) }
         viewModelScope.launch {
             getBreedDataUseCase().fold(
                 onSuccess = { breedList ->
-                    _uiState.update { it.copy(breedList = breedList) }
+                    _uiState.update {
+                        it.copy(
+                            breedList = breedList,
+                            loadState = LoadState.Success,
+                        )
+                    }
                 },
                 onFailure = { error ->
                     _uiEffect.send(
@@ -127,6 +135,7 @@ class WitnessReportViewModel @Inject constructor(
                             message = error.message ?: "품종 데이터를 불러오지 못했습니다.",
                         )
                     )
+                    _uiState.update { it.copy(loadState = LoadState.Error) }
                 }
             )
         }
@@ -176,6 +185,7 @@ class WitnessReportViewModel @Inject constructor(
     }
 
     private fun postWitnessReport() {
+        _uiState.update { it.copy(loadState = LoadState.Loading) }
         viewModelScope.launch {
             val imageUrls = getImageUrls()
 
@@ -194,6 +204,7 @@ class WitnessReportViewModel @Inject constructor(
             ).fold(
                 onSuccess = {
                     showFinishDialog()
+                    _uiState.update { it.copy(loadState = LoadState.Success) }
                 },
                 onFailure = { error ->
                     _uiEffect.send(
@@ -201,6 +212,7 @@ class WitnessReportViewModel @Inject constructor(
                             message = error.message ?: "목격 신고 등록에 실패했습니다.",
                         )
                     )
+                    _uiState.update { it.copy(loadState = LoadState.Error) }
                     Log.d("http", "Error Message: : $error")
                 }
             )
