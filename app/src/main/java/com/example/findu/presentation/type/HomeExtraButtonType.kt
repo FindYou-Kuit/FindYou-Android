@@ -12,9 +12,9 @@ enum class HomeExtraButtonType(
         imageRes = R.drawable.img_home_protect_center,
         nameRes = R.string.home_button_protect_center
     ),
-    PROTECT_PART(
+    PROTECT_DEPARTMENT(
         imageRes = R.drawable.img_home_protect_part,
-        nameRes = R.string.home_button_protect_part
+        nameRes = R.string.home_button_PROTECT_DEPARTMENT
     ),
     VOLUNTEER(
         imageRes = R.drawable.img_home_volunteer,
