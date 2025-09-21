@@ -11,7 +11,9 @@ import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
+import com.example.findu.domain.model.report.MissingReportData
 import com.example.findu.domain.usecase.GetBreedDataUseCase
+import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
 import com.example.findu.presentation.util.extension.toNormalizeAddress
@@ -103,6 +105,7 @@ class MissingReportViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getBreedDataUseCase: GetBreedDataUseCase,
     private val uploadImagesUseCase: UploadImagesUseCase,
+    private val postMissingReportUseCase: PostMissingReportUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MissingReportUiState())
     val uiState: StateFlow<MissingReportUiState>
@@ -176,11 +179,37 @@ class MissingReportViewModel @Inject constructor(
     }
 
     private fun postMissingReport() {
-        // TODO : 신고 등록 API 구현
-        val normalizedAddress = _uiState.value.address.toNormalizeAddress()
-
         viewModelScope.launch {
             val imageUrls = getImageUrls()
+
+            val missingReportData = MissingReportData(
+                imageUrls = imageUrls,
+                species = _uiState.value.speciesType,
+                breed = _uiState.value.breed?.name.orEmpty(),
+                age = "${_uiState.value.age.text}살",
+                sex = _uiState.value.gender,
+                rfid = _uiState.value.rfidNumber.text.toString(),
+                furColors = _uiState.value.selectedFurColors,
+                missingDate = _uiState.value.missingDate,
+                location = _uiState.value.address.toNormalizeAddress(),
+                landmark = _uiState.value.nearPlace.text.toString(),
+                description = _uiState.value.description.text.toString(),
+            )
+            postMissingReportUseCase(
+                missingReportData = missingReportData
+            ).fold(
+                onSuccess = {
+                    showFinishDialog()
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "목격 신고 등록에 실패했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
+            )
         }
 
         showFinishDialog()

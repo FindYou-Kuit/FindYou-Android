@@ -109,7 +109,7 @@ fun ReportGenderComponent(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = gender.value,
+                            text = gender.displayName,
                             style = FindUTheme.typography.body1SemiBold16.copy(
                                 color = if (selectedGender == gender) FindUTheme.colors.mainColor else FindUTheme.colors.gray6
                             ),
