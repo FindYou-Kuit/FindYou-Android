@@ -1,13 +1,14 @@
 package com.example.findu.domain.model.report
 
-import kotlinx.datetime.Instant
+import com.example.findu.domain.model.breed.SpeciesType
 
 data class WitnessReportData(
     val imageUrls: List<String>,
-    val breedId: Int,
+    val species: SpeciesType,
+    val breed: String,
     val furColors: List<FurColorType>,
     val location: String,
-    val featureIds: List<Int>,
+    val landmark: String,
     val description: String,
-    val foundDate: Instant
+    val foundDate: String
 )

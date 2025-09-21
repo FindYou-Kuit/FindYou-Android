@@ -10,9 +10,12 @@ import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
+import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.usecase.GetBreedDataUseCase
+import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
+import com.example.findu.presentation.util.extension.toDateString
 import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -99,6 +102,7 @@ class WitnessReportViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getBreedDataUseCase: GetBreedDataUseCase,
     private val uploadImagesUseCase: UploadImagesUseCase,
+    private val postWitnessReportUseCase: PostWitnessReportUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WitnessReportUiState())
     val uiState: StateFlow<WitnessReportUiState>
@@ -172,14 +176,35 @@ class WitnessReportViewModel @Inject constructor(
     }
 
     private fun postWitnessReport() {
-        // TODO : 신고 등록 API 구현
-        val normalizedAddress = _uiState.value.address.toNormalizeAddress()
-
         viewModelScope.launch {
             val imageUrls = getImageUrls()
-        }
 
-        showFinishDialog()
+            val witnessReportData = WitnessReportData(
+                imageUrls = imageUrls,
+                species = _uiState.value.speciesType,
+                breed = _uiState.value.breed!!.name,
+                furColors = _uiState.value.selectedFurColors,
+                location = _uiState.value.address.toNormalizeAddress(),
+                description = _uiState.value.description.text.toString(),
+                foundDate = _uiState.value.witnessDate.toDateString(),
+                landmark = _uiState.value.nearPlace.text.toString(),
+            )
+            postWitnessReportUseCase(
+                witnessReportData = witnessReportData,
+            ).fold(
+                onSuccess = {
+                    showFinishDialog()
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        WitnessReportUiEffect.ShowToast(
+                            message = error.message ?: "목격 신고 등록에 실패했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
+            )
+        }
     }
 
     private suspend fun getImageUrls(): List<String> {

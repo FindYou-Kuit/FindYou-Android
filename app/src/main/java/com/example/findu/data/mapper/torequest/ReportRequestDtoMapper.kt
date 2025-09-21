@@ -5,7 +5,6 @@ import com.example.findu.data.dataremote.model.request.WitnessReportRequestDto
 import com.example.findu.domain.model.report.MissingReportData
 import com.example.findu.domain.model.report.WitnessReportData
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -29,11 +28,11 @@ fun MissingReportData.toRequestDto() =
 fun WitnessReportData.toRequestDto() =
     WitnessReportRequestDto(
         imgUrls = imageUrls,
-        breed = "품종 미상", // 기본값, 추후 ViewModel에서 제공 예정
-        species = "DOG", // 기본값, 추후 ViewModel에서 제공 예정
+        breed = breed,
+        species = species.displayName,
         furColor = furColors.joinToString("&") { it.color },
         location = location,
-        landmark = "", // 기본값
+        landmark = landmark,
         significant = description,
         foundDate = Instant.fromEpochMilliseconds(foundDate.toEpochMilliseconds())
             .toLocalDateTime(TimeZone.currentSystemDefault())

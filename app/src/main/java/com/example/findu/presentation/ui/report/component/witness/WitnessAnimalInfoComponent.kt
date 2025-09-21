@@ -57,7 +57,7 @@ fun WitnessAnimalInfoComponent(
                 content = speciesType?.let {
                     {
                         Text(
-                            text = it.species,
+                            text = it.displayName,
                             style = FindUTheme.typography.body1SemiBold16,
                             color = FindUTheme.colors.gray6,
                         )

@@ -74,8 +74,7 @@ fun WitnessReportScreen(
         uiState.nearPlace
     ) {
         derivedStateOf {
-            uiState.speciesType != null &&
-                    uiState.breed != null &&
+            uiState.breed != null &&
                     uiState.selectedFurColors.isNotEmpty() &&
                     uiState.witnessDate.isNotEmpty() &&
                     uiState.address.isNotEmpty() &&

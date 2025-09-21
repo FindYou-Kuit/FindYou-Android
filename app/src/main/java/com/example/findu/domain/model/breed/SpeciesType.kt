@@ -1,7 +1,7 @@
 package com.example.findu.domain.model.breed
 
 enum class SpeciesType(
-    val species: String
+    val displayName: String
 ) {
     // 강아지 , 고양이 , 기타
     DOG("강아지"),
