@@ -33,6 +33,7 @@ data class MissingReportUiState(
     val breedSearchText: TextFieldState = TextFieldState(),
     val breed: Breed? = null,
     val breedList: BreedData = BreedData(),
+    val showingBreedList: List<Breed> = emptyList(),
     val age: TextFieldState = TextFieldState(),
     val gender: Gender = Gender.MALE,
     val rfidNumber: TextFieldState = TextFieldState(),
@@ -58,6 +59,7 @@ sealed class MissingReportUiEvent {
     data object OnSelectAnimalInfoClick : MissingReportUiEvent()
     data class OnImageSelected(val uri: Uri) : MissingReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : MissingReportUiEvent()
+    data object OnSearchFieldChange : MissingReportUiEvent()
     data class OnBreedClick(val breed: Breed) : MissingReportUiEvent()
     data object OnInfoFinishButtonClick : MissingReportUiEvent()
     data class OnGenderSelected(val gender: Gender) : MissingReportUiEvent()
@@ -143,6 +145,7 @@ class MissingReportViewModel @Inject constructor(
             MissingReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
             is MissingReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
             is MissingReportUiEvent.OnBreedClick -> updateBreed(event.breed)
+            is MissingReportUiEvent.OnSearchFieldChange -> updateBreedResult()
             MissingReportUiEvent.OnMissingDateClicked -> setDateBottomSheetVisible(true)
             is MissingReportUiEvent.OnDateSelected -> updateDate(event.dateTime)
             is MissingReportUiEvent.OnFurColorSelected ->
@@ -161,6 +164,20 @@ class MissingReportViewModel @Inject constructor(
             MissingReportUiEvent.OnDismissKeyboard -> dismissKeyboard()
             MissingReportUiEvent.OnAppSettingClick -> openAppSettings()
             MissingReportUiEvent.ClearFocus -> clearViewFocus()
+        }
+    }
+
+    private fun updateBreedResult() {
+        val showingBreedList = when (_uiState.value.speciesType) {
+            SpeciesType.DOG -> _uiState.value.breedList.dogBreedList
+            SpeciesType.CAT -> _uiState.value.breedList.catBreedList
+            SpeciesType.ETC -> _uiState.value.breedList.etcBreedList
+        }.filter {
+            if (_uiState.value.breedSearchText.text.isBlank()) true
+            else it.name.contains(_uiState.value.breedSearchText.text, ignoreCase = true)
+        }
+        _uiState.update {
+            it.copy(showingBreedList = showingBreedList)
         }
     }
 

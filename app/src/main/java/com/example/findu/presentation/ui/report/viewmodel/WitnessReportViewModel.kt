@@ -32,6 +32,7 @@ data class WitnessReportUiState(
     val breedSearchText: TextFieldState = TextFieldState(),
     val breed: Breed? = null,
     val breedList: BreedData = BreedData(),
+    val showingBreedList: List<Breed> = emptyList(),
     val selectedFurColors: List<FurColorType> = emptyList(),
     val nowDate: LocalDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault()),
@@ -56,6 +57,7 @@ sealed class WitnessReportUiEvent {
     data object OnSelectAnimalInfoClick : WitnessReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : WitnessReportUiEvent()
     data class OnBreedClick(val breed: Breed) : WitnessReportUiEvent()
+    data object OnSearchFieldChange : WitnessReportUiEvent()
     data object OnInfoFinishButtonClick : WitnessReportUiEvent()
     data class OnFurColorSelected(
         val furColorType: FurColorType,
@@ -128,6 +130,7 @@ class WitnessReportViewModel @Inject constructor(
             WitnessReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
             is WitnessReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
             is WitnessReportUiEvent.OnBreedClick -> updateBreed(event.breed)
+            WitnessReportUiEvent.OnSearchFieldChange -> updateBreedResult()
             WitnessReportUiEvent.OnWitnessDateClicked -> setDateBottomSheetVisible(true)
             is WitnessReportUiEvent.OnDateSelected -> updateDate(event.dateTime)
             is WitnessReportUiEvent.OnFurColorSelected ->
@@ -145,6 +148,20 @@ class WitnessReportViewModel @Inject constructor(
             WitnessReportUiEvent.OnDismissKeyboard -> dismissKeyboard()
             WitnessReportUiEvent.OnAppSettingClick -> openAppSettings()
             WitnessReportUiEvent.ClearFocus -> clearFocus()
+        }
+    }
+
+    private fun updateBreedResult() {
+        val showingBreedList = when (_uiState.value.speciesType) {
+            SpeciesType.DOG -> _uiState.value.breedList.dogBreedList
+            SpeciesType.CAT -> _uiState.value.breedList.catBreedList
+            SpeciesType.ETC -> _uiState.value.breedList.etcBreedList
+        }.filter {
+            if (_uiState.value.breedSearchText.text.isBlank()) true
+            else it.name.contains(_uiState.value.breedSearchText.text, ignoreCase = true)
+        }
+        _uiState.update {
+            it.copy(showingBreedList = showingBreedList)
         }
     }
 

@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.report.component.animalinfo
 
-import android.R.attr.onClick
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -31,11 +30,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,24 +50,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.breed.Breed
-import com.example.findu.domain.model.breed.BreedData
-import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.ui.base.VerticalSpacer
 import com.example.findu.ui.theme.FindUTheme
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 
+@OptIn(FlowPreview::class)
 @Composable
 fun ReportBreedComponent(
     breedState: TextFieldState,
     modifier: Modifier = Modifier,
-    selectedSpeciesType: SpeciesType = SpeciesType.DOG,
     onDismissRequest: () -> Unit = {},
-    breedList: BreedData = BreedData(),
+    showingBreedList: List<Breed> = emptyList(),
+    onSearchFieldChange: () -> Unit = {},
     selectedBreed: Breed? = null,
     onBreedClick: (Breed) -> Unit = {},
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(breedState) {
+        snapshotFlow { breedState.text.toString() }
+            .distinctUntilChanged()
+            .debounce(300)
+            .collect { onSearchFieldChange() }
+    }
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -146,34 +156,27 @@ fun ReportBreedComponent(
         )
 
         BreedDropdown(
-            breedList = breedList,
+            showingBreedList = showingBreedList,
             selectedBreed = selectedBreed,
             showDropdown = isFocused,
             onDismissRequest = onDismissRequest,
             onBreedClick = onBreedClick,
-            selectedSpeciesType = selectedSpeciesType
         )
     }
 }
 
 @Composable
 fun BreedDropdown(
-    breedList: BreedData,
-    selectedSpeciesType: SpeciesType,
+    showingBreedList: List<Breed>,
     selectedBreed: Breed?,
     showDropdown: Boolean,
     onDismissRequest: () -> Unit = {},
     onBreedClick: (Breed) -> Unit,
 ) {
     var containerHeight by remember { mutableIntStateOf(0) }
-    val filteredBreedList = when (selectedSpeciesType) {
-        SpeciesType.DOG -> breedList.dogBreedList
-        SpeciesType.CAT -> breedList.catBreedList
-        SpeciesType.ETC -> breedList.etcBreedList
-    }
 
     AnimatedVisibility(
-        visible = showDropdown && filteredBreedList.isNotEmpty(),
+        visible = showDropdown && showingBreedList.isNotEmpty(),
         enter = expandVertically(),
         exit = shrinkVertically()
     ) {
@@ -196,7 +199,7 @@ fun BreedDropdown(
                 )
                 .heightIn(max = containerHeight.dp * 8),
         ) {
-            itemsIndexed(filteredBreedList) { index, breed ->
+            itemsIndexed(showingBreedList) { index, breed ->
                 if (index != 0) {
                     Divider(
                         modifier = Modifier
@@ -236,7 +239,7 @@ private fun ReportBreedComponentPreview() {
         ReportBreedComponent(
             modifier = Modifier.padding(20.dp),
             breedState = breedState,
-            breedList = BreedData(),
+            showingBreedList = emptyList(),
             selectedBreed = selectedBreed,
             onDismissRequest = { focusManager.clearFocus() },
             onBreedClick = {
