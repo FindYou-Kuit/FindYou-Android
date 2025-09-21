@@ -7,4 +7,13 @@ object ApiConstraints {
 
     // Auth
     const val AUTH = "auth"
+
+    // Report
+    const val REPORT = "reports"
+
+    // Breed
+    const val BREED = "breeds"
+
+    // Naver
+    const val REVERSE_GEOCODE = "map-reversegeocode/v2/gc"
 }
