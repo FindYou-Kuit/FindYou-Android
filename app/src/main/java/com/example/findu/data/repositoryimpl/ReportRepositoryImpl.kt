@@ -15,6 +15,7 @@ import com.example.findu.data.mapper.todomain.toDomain
 import com.example.findu.data.mapper.torequest.toRequestDto
 import com.example.findu.domain.model.report.AddressData
 import com.example.findu.domain.model.report.GptData
+import com.example.findu.domain.model.report.LatLngData
 import com.example.findu.domain.model.report.MissingReportData
 import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.repository.report.ReportRepository
@@ -66,6 +67,11 @@ class ReportRepositoryImpl @Inject constructor(
     override suspend fun getAddress(lat: Double, lng: Double): Result<AddressData> =
         runCatching {
             naverRemoteDataSource.getAddress("$lng,$lat").toDomain()
+        }
+
+    override suspend fun getLatLng(address: String): Result<LatLngData> =
+        runCatching {
+            naverRemoteDataSource.getLatLng(address).toDomain()
         }
 
     override suspend fun deleteReport(reportId: Long): Result<Unit> =

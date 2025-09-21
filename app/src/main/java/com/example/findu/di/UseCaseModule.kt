@@ -33,6 +33,7 @@ import com.example.findu.domain.usecase.my.PatchNickNameUseCase
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.usecase.report.DeleteReportUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
+import com.example.findu.domain.usecase.report.GetLatLngUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
@@ -111,6 +112,12 @@ object UseCaseModule {
     fun provideGetAddressUseCase(
         reportRepository: ReportRepository,
     ): GetAddressUseCase = GetAddressUseCase(reportRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetLatLngUseCase(
+        reportRepository: ReportRepository,
+    ): GetLatLngUseCase = GetLatLngUseCase(reportRepository)
 
     @Provides
     @Singleton

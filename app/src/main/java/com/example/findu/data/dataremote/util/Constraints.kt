@@ -16,4 +16,5 @@ object ApiConstraints {
 
     // Naver
     const val REVERSE_GEOCODE = "map-reversegeocode/v2/gc"
+    const val GEOCODE = "map-geocode/v2/geocode"
 }

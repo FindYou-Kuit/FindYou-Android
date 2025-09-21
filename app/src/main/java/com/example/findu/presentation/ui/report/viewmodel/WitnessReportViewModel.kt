@@ -15,6 +15,7 @@ import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.PostAiDetectionUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
+import com.example.findu.domain.usecase.report.GetLatLngUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.type.view.LoadState
@@ -113,6 +114,7 @@ class WitnessReportViewModel @Inject constructor(
     private val postWitnessReportUseCase: PostWitnessReportUseCase,
     private val postAiDetectionUseCase: PostAiDetectionUseCase,
     private val getAddressUseCase: GetAddressUseCase,
+    private val getLatLngUseCase: GetLatLngUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WitnessReportUiState())
     val uiState: StateFlow<WitnessReportUiState>
@@ -400,6 +402,23 @@ class WitnessReportViewModel @Inject constructor(
     }
 
     private fun updateAddress(address: String) {
+        viewModelScope.launch {
+            getLatLngUseCase(address).fold(
+                onSuccess = { latLngData ->
+                    _uiState.update {
+                        it.copy(currentLatLng = LatLng(latLngData.lat, latLngData.lng))
+                    }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        WitnessReportUiEffect.ShowToast(
+                            message = error.message ?: "좌표 정보를 불러오지 못했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
+            )
+        }
         _uiState.update { it.copy(address = address) }
     }
 

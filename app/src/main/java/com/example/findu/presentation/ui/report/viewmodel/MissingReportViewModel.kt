@@ -14,6 +14,7 @@ import com.example.findu.domain.model.report.Gender
 import com.example.findu.domain.model.report.MissingReportData
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
+import com.example.findu.domain.usecase.report.GetLatLngUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.type.view.LoadState
@@ -112,6 +113,7 @@ class MissingReportViewModel @Inject constructor(
     private val uploadImagesUseCase: UploadImagesUseCase,
     private val postMissingReportUseCase: PostMissingReportUseCase,
     private val getAddressUseCase: GetAddressUseCase,
+    private val getLatLngUseCase: GetLatLngUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MissingReportUiState())
     val uiState: StateFlow<MissingReportUiState>
@@ -342,6 +344,23 @@ class MissingReportViewModel @Inject constructor(
     }
 
     private fun updateAddress(address: String) {
+        viewModelScope.launch {
+            getLatLngUseCase(address).fold(
+                onSuccess = { latLngData ->
+                    _uiState.update {
+                        it.copy(currentLatLng = LatLng(latLngData.lat, latLngData.lng))
+                    }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "좌표 정보를 불러오지 못했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
+            )
+        }
         _uiState.update { it.copy(address = address) }
     }
 
