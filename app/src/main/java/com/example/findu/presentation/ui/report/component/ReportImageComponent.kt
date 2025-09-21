@@ -4,17 +4,24 @@ import android.net.Uri
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -43,7 +50,8 @@ fun ReportImageComponent(
     modifier: Modifier = Modifier,
     reportType: ReportType,
     imgUriList: List<Uri>,
-    onOpenDialogClick: (Int) -> Unit,
+    onOpenDialogClick: (Int) -> Unit = {},
+    onRemoveClick: (Uri) -> Unit = {},
     onDetectionClick: (Uri) -> Unit = {},
 ) {
     val density = LocalDensity.current
@@ -82,7 +90,8 @@ fun ReportImageComponent(
             pagerState = pagerState,
             imgUriList = imgUriList,
             contentPadding = PaddingValues(horizontal = paddingDp),
-            onOpenDialogClick = onOpenDialogClick
+            onOpenDialogClick = onOpenDialogClick,
+            onRemoveClick = onRemoveClick,
         )
         when (reportType) {
             ReportType.MISSING -> {
@@ -116,6 +125,7 @@ private fun ImagePagerContent(
     contentPadding: PaddingValues,
     imgUriList: List<Uri>,
     onOpenDialogClick: (Int) -> Unit,
+    onRemoveClick: (Uri) -> Unit = {},
 ) {
     HorizontalPager(
         state = pagerState,
@@ -129,7 +139,8 @@ private fun ImagePagerContent(
             page = page,
             pagerState = pagerState,
             imgUriList = imgUriList,
-            onOpenDialogClick = onOpenDialogClick
+            onOpenDialogClick = onOpenDialogClick,
+            onRemoveClick = onRemoveClick,
         )
     }
 }
@@ -139,6 +150,7 @@ private fun ImagePagerItem(
     page: Int,
     pagerState: PagerState,
     imgUriList: List<Uri>,
+    onRemoveClick: (Uri) -> Unit,
     onOpenDialogClick: (Int) -> Unit,
 ) {
     val isCurrentPage = page == pagerState.currentPage
@@ -165,7 +177,8 @@ private fun ImagePagerItem(
                         color = FindUTheme.colors.gray3,
                         shape = RoundedCornerShape(20.dp)
                     )
-                    .size(itemSize),
+                    .size(itemSize)
+                    .noRippleClickable { onOpenDialogClick(page) },
             )
         } else {
             ImagePageContent(
@@ -175,8 +188,10 @@ private fun ImagePagerItem(
                         shape = RoundedCornerShape(20.dp)
                     )
                     .size(itemSize)
-                    .clip(RoundedCornerShape(20.dp)),
-                imageUri = imgUriList[page]
+                    .clip(RoundedCornerShape(20.dp))
+                    .noRippleClickable { onOpenDialogClick(page + 1) },
+                imageUri = imgUriList[page],
+                onRemoveClick = onRemoveClick
             )
         }
     }
@@ -198,13 +213,41 @@ private fun DefaultPageContent(
 
 @Composable
 private fun ImagePageContent(
-    modifier: Modifier = Modifier,
     imageUri: Uri,
+    modifier: Modifier = Modifier,
+    onRemoveClick: (Uri) -> Unit = {},
 ) {
-    AsyncImage(
+    Box(
         modifier = modifier,
-        model = imageUri,
-        contentDescription = null,
-        contentScale = ContentScale.Crop
-    )
+    ) {
+        AsyncImage(
+            modifier = Modifier.matchParentSize(),
+            model = imageUri,
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+        IconButton(
+            modifier = Modifier
+                .padding(8.dp)
+                .clip(CircleShape)
+                .border(
+                    width = 1.dp,
+                    color = FindUTheme.colors.mainColor,
+                    shape = CircleShape
+                )
+                .background(
+                    shape = CircleShape,
+                    color = FindUTheme.colors.mainColor2
+                )
+                .size(24.dp)
+                .align(Alignment.TopEnd),
+            onClick = { onRemoveClick(imageUri) }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = null,
+                tint = FindUTheme.colors.mainColor,
+            )
+        }
+    }
 }

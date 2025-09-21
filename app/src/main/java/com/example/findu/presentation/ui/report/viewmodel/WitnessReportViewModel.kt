@@ -64,6 +64,7 @@ data class WitnessReportUiState(
 sealed class WitnessReportUiEvent {
     data object OnBackPressed : WitnessReportUiEvent()
     data class OnAddImageClick(val page: Int) : WitnessReportUiEvent()
+    data class OnRemoveImageClick(val uri: Uri) : WitnessReportUiEvent()
     data object OnOpenCameraClick : WitnessReportUiEvent()
     data object OnOpenGalleryClick : WitnessReportUiEvent()
     data class OnImageSelected(val uri: Uri) : WitnessReportUiEvent()
@@ -150,6 +151,7 @@ class WitnessReportViewModel @Inject constructor(
         when (event) {
             WitnessReportUiEvent.OnBackPressed -> navigateUp()
             is WitnessReportUiEvent.OnAddImageClick -> setImageDialogVisible(event.page)
+            is WitnessReportUiEvent.OnRemoveImageClick -> deleteImage(event.uri)
             is WitnessReportUiEvent.OnAIDetectionClick -> detectionWithAI(event.uri)
             WitnessReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
             is WitnessReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
@@ -309,12 +311,12 @@ class WitnessReportViewModel @Inject constructor(
             )
         }
 
-
     private fun clearFocus() {
         viewModelScope.launch {
             _uiEffect.send(WitnessReportUiEffect.ClearFocus)
         }
     }
+
 
     private fun dismissKeyboard() {
         viewModelScope.launch {
@@ -458,6 +460,15 @@ class WitnessReportViewModel @Inject constructor(
                 imageUriList = uriList,
                 isImageDialogShown = false,
                 addingPageIndex = 0,
+            )
+        }
+    }
+
+    private fun deleteImage(uri: Uri) {
+        _uiState.update {
+            val uriList = it.imageUriList.filterNot { imageUri -> imageUri == uri }
+            it.copy(
+                imageUriList = uriList,
             )
         }
     }

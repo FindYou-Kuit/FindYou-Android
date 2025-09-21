@@ -55,6 +55,7 @@ data class MissingReportUiState(
     val address: String = "",
     val currentLatLng: LatLng? = null,
     val nearPlace: TextFieldState = TextFieldState(),
+    val addingPageIndex: Int = 0,
     val isImageDialogShown: Boolean = false,
     val isSuccessDialogShown: Boolean = false,
     val isAppSettingDialogShown: Boolean = false,
@@ -62,7 +63,8 @@ data class MissingReportUiState(
 
 sealed class MissingReportUiEvent {
     data object OnBackPressed : MissingReportUiEvent()
-    data object OnAddImageClick : MissingReportUiEvent()
+    data class OnAddImageClick(val page: Int) : MissingReportUiEvent()
+    data class OnRemoveImageClick(val uri: Uri) : MissingReportUiEvent()
     data object OnOpenCameraClick : MissingReportUiEvent()
     data object OnOpenGalleryClick : MissingReportUiEvent()
     data object OnSelectAnimalInfoClick : MissingReportUiEvent()
@@ -147,7 +149,8 @@ class MissingReportViewModel @Inject constructor(
     fun handleEvent(event: MissingReportUiEvent) {
         when (event) {
             MissingReportUiEvent.OnBackPressed -> navigateUp()
-            MissingReportUiEvent.OnAddImageClick -> setImageDialogVisible()
+            is MissingReportUiEvent.OnAddImageClick -> setImageDialogVisible(event.page)
+            is MissingReportUiEvent.OnRemoveImageClick -> deleteImage(event.uri)
             MissingReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
             is MissingReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
             is MissingReportUiEvent.OnBreedClick -> updateBreed(event.breed)
@@ -372,9 +375,12 @@ class MissingReportViewModel @Inject constructor(
     }
 
 
-    private fun setImageDialogVisible() {
+    private fun setImageDialogVisible(page: Int) {
         _uiState.update {
-            it.copy(isImageDialogShown = true)
+            it.copy(
+                isImageDialogShown = true,
+                addingPageIndex = page,
+            )
         }
     }
 
@@ -389,10 +395,23 @@ class MissingReportViewModel @Inject constructor(
     }
 
     private fun addImageToList(uri: Uri) {
-        _uiState.update { it ->
+        _uiState.update {
+            val uriList = it.imageUriList.toMutableList().apply {
+                add(it.addingPageIndex, uri)
+            }
             it.copy(
-                imageUriList = listOf(uri) + it.imageUriList,
-                isImageDialogShown = false
+                imageUriList = uriList,
+                isImageDialogShown = false,
+                addingPageIndex = 0,
+            )
+        }
+    }
+
+    private fun deleteImage(uri: Uri) {
+        _uiState.update {
+            val uriList = it.imageUriList.filterNot { imageUri -> imageUri == uri }
+            it.copy(
+                imageUriList = uriList,
             )
         }
     }

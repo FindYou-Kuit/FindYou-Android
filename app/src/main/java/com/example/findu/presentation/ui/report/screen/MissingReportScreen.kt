@@ -167,7 +167,8 @@ private fun MissingReportScreen(
         ReportImageComponent(
             reportType = ReportType.MISSING,
             imgUriList = uiState.imageUriList,
-            onOpenDialogClick = { onEvent(MissingReportUiEvent.OnAddImageClick) }
+            onRemoveClick = { onEvent(MissingReportUiEvent.OnRemoveImageClick(it)) },
+            onOpenDialogClick = { onEvent(MissingReportUiEvent.OnAddImageClick(it)) }
         )
 
         Column(
