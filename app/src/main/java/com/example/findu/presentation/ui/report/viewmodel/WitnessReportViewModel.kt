@@ -465,11 +465,22 @@ class WitnessReportViewModel @Inject constructor(
     }
 
     private fun setImageDialogVisible(page: Int) {
-        _uiState.update {
-            it.copy(
-                isImageDialogShown = true,
-                addingPageIndex = page,
-            )
+        if (_uiState.value.imageUriList.size >= 5) {
+            viewModelScope.launch {
+                _uiEffect.send(
+                    WitnessReportUiEffect.ShowToast(
+                        message = "사진은 최대 5장까지 등록할 수 있습니다.",
+                    )
+                )
+            }
+            return
+        } else {
+            _uiState.update {
+                it.copy(
+                    isImageDialogShown = true,
+                    addingPageIndex = page,
+                )
+            }
         }
     }
 
