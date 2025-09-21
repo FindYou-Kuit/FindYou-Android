@@ -19,6 +19,7 @@ import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
+import com.example.findu.presentation.util.extension.toDateString
 import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -207,7 +208,7 @@ class MissingReportViewModel @Inject constructor(
                 sex = _uiState.value.gender,
                 rfid = _uiState.value.rfidNumber.text.toString(),
                 furColors = _uiState.value.selectedFurColors,
-                missingDate = _uiState.value.missingDate,
+                missingDate = _uiState.value.missingDate.toDateString(),
                 location = _uiState.value.address.toNormalizeAddress(),
                 landmark = _uiState.value.nearPlace.text.toString(),
                 description = _uiState.value.description.text.toString(),
@@ -230,8 +231,6 @@ class MissingReportViewModel @Inject constructor(
                 }
             )
         }
-
-        showFinishDialog()
     }
 
     private suspend fun getImageUrls(): List<String> {
@@ -408,11 +407,22 @@ class MissingReportViewModel @Inject constructor(
 
 
     private fun setImageDialogVisible(page: Int) {
-        _uiState.update {
-            it.copy(
-                isImageDialogShown = true,
-                addingPageIndex = page,
-            )
+        if (_uiState.value.imageUriList.size >= 5) {
+            viewModelScope.launch {
+                _uiEffect.send(
+                    MissingReportUiEffect.ShowToast(
+                        message = "사진은 최대 5장까지 등록할 수 있습니다.",
+                    )
+                )
+            }
+            return
+        } else {
+            _uiState.update {
+                it.copy(
+                    isImageDialogShown = true,
+                    addingPageIndex = page,
+                )
+            }
         }
     }
 
