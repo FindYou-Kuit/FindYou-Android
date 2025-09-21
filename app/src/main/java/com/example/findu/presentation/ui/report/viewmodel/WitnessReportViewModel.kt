@@ -1,6 +1,8 @@
 package com.example.findu.presentation.ui.report.viewmodel
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,9 +11,12 @@ import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.usecase.GetBreedDataUseCase
+import com.example.findu.domain.usecase.report.UploadImagesUseCase
+import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
 import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -91,7 +96,9 @@ sealed class WitnessReportUiEffect {
 
 @HiltViewModel
 class WitnessReportViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val getBreedDataUseCase: GetBreedDataUseCase,
+    private val uploadImagesUseCase: UploadImagesUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WitnessReportUiState())
     val uiState: StateFlow<WitnessReportUiState>
@@ -140,7 +147,7 @@ class WitnessReportViewModel @Inject constructor(
             WitnessReportUiEvent.OnDismissDialog -> setDialogInVisible()
             WitnessReportUiEvent.OnOpenCameraClick -> openCamera()
             WitnessReportUiEvent.OnOpenGalleryClick -> openGallery()
-            WitnessReportUiEvent.OnReportFinishButtonClick -> postMissingReport()
+            WitnessReportUiEvent.OnReportFinishButtonClick -> postWitnessReport()
             WitnessReportUiEvent.OnSelectAnimalInfoClick -> navigateToAnimalInfo()
             is WitnessReportUiEvent.OnSpeciesClick -> updateSpecies(event.speciesType)
             is WitnessReportUiEvent.OnImageSelected -> addImageToList(event.uri)
@@ -164,10 +171,35 @@ class WitnessReportViewModel @Inject constructor(
         }
     }
 
-    private fun postMissingReport() {
+    private fun postWitnessReport() {
         // TODO : 신고 등록 API 구현
         val normalizedAddress = _uiState.value.address.toNormalizeAddress()
+
+        viewModelScope.launch {
+            val imageUrls = getImageUrls()
+        }
+
         showFinishDialog()
+    }
+
+    private suspend fun getImageUrls(): List<String> {
+        val uriFiles = _uiState.value.imageUriList.toMultiPartBodys(context)
+        return uploadImagesUseCase(uriFiles).fold(
+            onSuccess = { imageUrls ->
+                imageUrls
+            },
+            onFailure = { error ->
+                viewModelScope.launch {
+                    _uiEffect.send(
+                        WitnessReportUiEffect.ShowToast(
+                            message = error.message ?: "이미지 업로드에 실패했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
+                emptyList()
+            }
+        )
     }
 
     private fun distinguishWithAI(uri: Uri) {

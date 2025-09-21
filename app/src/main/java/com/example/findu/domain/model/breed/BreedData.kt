@@ -6,25 +6,27 @@ data class BreedData(
     val etcBreedList: List<Breed.EtcBreed> = emptyList(),
 )
 
-sealed class Breed(val name: String) {
-
+sealed class Breed(
+    val name: String,
+    val id: Int = 0,
+) {
     data class DogBreed(
         val breedId: Int,
         val breedName: String,
         val species: SpeciesType,
-    ) : Breed(breedName)
+    ) : Breed(breedName, breedId)
 
     data class CatBreed(
         val breedId: Int,
         val breedName: String,
         val species: SpeciesType,
-    ) : Breed(breedName)
+    ) : Breed(breedName, breedId)
 
     data class EtcBreed(
         val breedId: Int,
         val breedName: String,
         val species: SpeciesType,
-    ) : Breed(breedName)
+    ) : Breed(breedName, breedId)
 }
 
 

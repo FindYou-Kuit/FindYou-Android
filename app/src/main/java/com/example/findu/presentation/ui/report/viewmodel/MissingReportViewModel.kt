@@ -1,6 +1,8 @@
 package com.example.findu.presentation.ui.report.viewmodel
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,9 +12,12 @@ import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
 import com.example.findu.domain.usecase.GetBreedDataUseCase
+import com.example.findu.domain.usecase.report.UploadImagesUseCase
+import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
 import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -95,7 +100,9 @@ sealed class MissingReportUiEffect {
 
 @HiltViewModel
 class MissingReportViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val getBreedDataUseCase: GetBreedDataUseCase,
+    private val uploadImagesUseCase: UploadImagesUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MissingReportUiState())
     val uiState: StateFlow<MissingReportUiState>
@@ -171,7 +178,32 @@ class MissingReportViewModel @Inject constructor(
     private fun postMissingReport() {
         // TODO : 신고 등록 API 구현
         val normalizedAddress = _uiState.value.address.toNormalizeAddress()
+
+        viewModelScope.launch {
+            val imageUrls = getImageUrls()
+        }
+
         showFinishDialog()
+    }
+
+    private suspend fun getImageUrls(): List<String> {
+        val uriFiles = _uiState.value.imageUriList.toMultiPartBodys(context)
+        return uploadImagesUseCase(uriFiles).fold(
+            onSuccess = { imageUrls ->
+                imageUrls
+            },
+            onFailure = { error ->
+                viewModelScope.launch {
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "이미지 업로드에 실패했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
+                emptyList()
+            }
+        )
     }
 
     private fun clearViewFocus() {
