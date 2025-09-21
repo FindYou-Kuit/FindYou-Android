@@ -41,7 +41,7 @@
 
         <argument
             android:name="homeExtraType"
-            app:argType="com.example.findu.presentation.ui.extra.HomeExtraType" />
+            app:argType="com.example.findu.presentation.type.HomeExtraButtonType"/>
     </fragment>
 
     <fragment
