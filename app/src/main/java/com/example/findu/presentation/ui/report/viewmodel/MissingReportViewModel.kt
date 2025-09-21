@@ -109,7 +109,6 @@ class MissingReportViewModel @Inject constructor(
     }
 
     private fun fetchBreedList() {
-        // TODO: 실제 API 연동 필요
         viewModelScope.launch {
             getBreedDataUseCase().fold(
                 onSuccess = { breedList ->
@@ -124,18 +123,6 @@ class MissingReportViewModel @Inject constructor(
                 }
             )
         }
-//        _uiState.update {
-//            it.copy(
-//                breedList = listOf(
-//                    Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
-//                    Breed.DogBreed(2, "German Shepherd", SpeciesType.DOG),
-//                    Breed.DogBreed(3, "Golden Retriever", SpeciesType.DOG),
-//                    Breed.DogBreed(4, "Bulldog", SpeciesType.DOG),
-//                    Breed.DogBreed(5, "Beagle", SpeciesType.DOG),
-//                    Breed.DogBreed(6, "Poodle", SpeciesType.DOG),
-//                )
-//            )
-//        }
     }
 
     fun handleEvent(event: MissingReportUiEvent) {

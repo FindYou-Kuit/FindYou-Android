@@ -105,7 +105,6 @@ class WitnessReportViewModel @Inject constructor(
     }
 
     private fun fetchBreedList() {
-        // TODO: 실제 API 연동 필요
         viewModelScope.launch {
             getBreedDataUseCase().fold(
                 onSuccess = { breedList ->
