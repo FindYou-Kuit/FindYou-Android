@@ -5,8 +5,10 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.Breed
+import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
+import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,10 +28,10 @@ import javax.inject.Inject
 data class WitnessReportUiState(
     val isFirstPermissionRequest: Boolean = true,
     val imageUriList: List<Uri> = emptyList(),
-    val speciesType: SpeciesType? = null,
+    val speciesType: SpeciesType = SpeciesType.DOG,
     val breedSearchText: TextFieldState = TextFieldState(),
     val breed: Breed? = null,
-    val breedList: List<Breed> = emptyList(),
+    val breedList: BreedData = BreedData(),
     val selectedFurColors: List<FurColorType> = emptyList(),
     val nowDate: LocalDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault()),
@@ -86,7 +88,9 @@ sealed class WitnessReportUiEffect {
 }
 
 @HiltViewModel
-class WitnessReportViewModel @Inject constructor() : ViewModel() {
+class WitnessReportViewModel @Inject constructor(
+    private val getBreedDataUseCase: GetBreedDataUseCase,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(WitnessReportUiState())
     val uiState: StateFlow<WitnessReportUiState>
         get() = _uiState.asStateFlow()
@@ -100,16 +104,18 @@ class WitnessReportViewModel @Inject constructor() : ViewModel() {
 
     private fun fetchBreedList() {
         // TODO: 실제 API 연동 필요
-        _uiState.update {
-            it.copy(
-                breedList = listOf(
-                    Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
-                    Breed.DogBreed(2, "German Shepherd", SpeciesType.DOG),
-                    Breed.DogBreed(3, "Golden Retriever", SpeciesType.DOG),
-                    Breed.DogBreed(4, "Bulldog", SpeciesType.DOG),
-                    Breed.DogBreed(5, "Beagle", SpeciesType.DOG),
-                    Breed.DogBreed(6, "Poodle", SpeciesType.DOG),
-                )
+        viewModelScope.launch {
+            getBreedDataUseCase().fold(
+                onSuccess = { breedList ->
+                    _uiState.update { it.copy(breedList = breedList) }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        WitnessReportUiEffect.ShowToast(
+                            message = error.message ?: "품종 데이터를 불러오지 못했습니다.",
+                        )
+                    )
+                }
             )
         }
     }

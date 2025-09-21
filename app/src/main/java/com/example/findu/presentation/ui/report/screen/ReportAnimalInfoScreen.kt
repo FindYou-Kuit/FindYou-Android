@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.breed.Breed
+import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.presentation.ui.base.FindUButton
 import com.example.findu.presentation.ui.base.FindUTopAppBar
@@ -88,14 +89,11 @@ fun MissingReportAnimalInfoScreen(
     onEvent: (MissingReportUiEvent) -> Unit,
 ) {
     val buttonEnabled by remember(
-        uiState.speciesType,
         uiState.breed,
         uiState.age,
     ) {
         derivedStateOf {
-            uiState.speciesType != null &&
-                    uiState.breed != null &&
-                    uiState.age.text.isNotEmpty()
+            uiState.breed != null && uiState.age.text.isNotEmpty()
         }
     }
 
@@ -137,10 +135,10 @@ fun MissingReportAnimalInfoScreen(
 
 @Composable
 private fun ReportAnimalInfoScreen(
-    speciesType: SpeciesType? = null,
+    speciesType: SpeciesType,
     breed: Breed? = null,
     breedState: TextFieldState,
-    breedList: List<Breed> = emptyList(),
+    breedList: BreedData,
     age: TextFieldState? = null,
     onSpeciesClick: (SpeciesType) -> Unit = {},
     onBreedClick: (Breed) -> Unit = {},
@@ -154,12 +152,16 @@ private fun ReportAnimalInfoScreen(
     ) {
         ReportSpeciesComponent(
             selectedSpecies = speciesType,
-            onSpeciesClick = onSpeciesClick,
+            onSpeciesClick = {
+                onSpeciesClick(it)
+                clearFocus()
+            },
         )
         VerticalSpacer(30.dp)
         ReportBreedComponent(
             breedState = breedState,
             breedList = breedList,
+            selectedSpeciesType = speciesType,
             onDismissRequest = clearFocus,
             selectedBreed = breed,
             onBreedClick = onBreedClick,

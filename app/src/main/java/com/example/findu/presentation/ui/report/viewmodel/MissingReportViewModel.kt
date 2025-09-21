@@ -5,9 +5,11 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.Breed
+import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
+import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,10 +29,10 @@ import javax.inject.Inject
 data class MissingReportUiState(
     val isFirstPermissionRequest: Boolean = true,
     val imageUriList: List<Uri> = emptyList(),
-    val speciesType: SpeciesType? = null,
+    val speciesType: SpeciesType = SpeciesType.DOG,
     val breedSearchText: TextFieldState = TextFieldState(),
     val breed: Breed? = null,
-    val breedList: List<Breed> = emptyList(),
+    val breedList: BreedData = BreedData(),
     val age: TextFieldState = TextFieldState(),
     val gender: Gender = Gender.MALE,
     val rfidNumber: TextFieldState = TextFieldState(),
@@ -90,7 +92,9 @@ sealed class MissingReportUiEffect {
 }
 
 @HiltViewModel
-class MissingReportViewModel @Inject constructor() : ViewModel() {
+class MissingReportViewModel @Inject constructor(
+    private val getBreedDataUseCase: GetBreedDataUseCase,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(MissingReportUiState())
     val uiState: StateFlow<MissingReportUiState>
         get() = _uiState.asStateFlow()
@@ -104,18 +108,32 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
 
     private fun fetchBreedList() {
         // TODO: 실제 API 연동 필요
-        _uiState.update {
-            it.copy(
-                breedList = listOf(
-                    Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
-                    Breed.DogBreed(2, "German Shepherd", SpeciesType.DOG),
-                    Breed.DogBreed(3, "Golden Retriever", SpeciesType.DOG),
-                    Breed.DogBreed(4, "Bulldog", SpeciesType.DOG),
-                    Breed.DogBreed(5, "Beagle", SpeciesType.DOG),
-                    Breed.DogBreed(6, "Poodle", SpeciesType.DOG),
-                )
+        viewModelScope.launch {
+            getBreedDataUseCase().fold(
+                onSuccess = { breedList ->
+                    _uiState.update { it.copy(breedList = breedList) }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "품종 데이터를 불러오지 못했습니다.",
+                        )
+                    )
+                }
             )
         }
+//        _uiState.update {
+//            it.copy(
+//                breedList = listOf(
+//                    Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
+//                    Breed.DogBreed(2, "German Shepherd", SpeciesType.DOG),
+//                    Breed.DogBreed(3, "Golden Retriever", SpeciesType.DOG),
+//                    Breed.DogBreed(4, "Bulldog", SpeciesType.DOG),
+//                    Breed.DogBreed(5, "Beagle", SpeciesType.DOG),
+//                    Breed.DogBreed(6, "Poodle", SpeciesType.DOG),
+//                )
+//            )
+//        }
     }
 
     fun handleEvent(event: MissingReportUiEvent) {
