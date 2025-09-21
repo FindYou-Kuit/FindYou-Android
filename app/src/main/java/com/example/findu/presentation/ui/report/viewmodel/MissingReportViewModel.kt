@@ -13,6 +13,7 @@ import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
 import com.example.findu.domain.model.report.MissingReportData
 import com.example.findu.domain.usecase.GetBreedDataUseCase
+import com.example.findu.domain.usecase.report.GetAddressUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.type.view.LoadState
@@ -83,7 +84,7 @@ sealed class MissingReportUiEvent {
     data class OnDateSelected(val dateTime: LocalDateTime) : MissingReportUiEvent()
     data object OnAddressSearchClick : MissingReportUiEvent()
     data class OnAddressUpdated(val address: String) : MissingReportUiEvent()
-    data class OnMapPinMoved(val latLng: LatLng) : MissingReportUiEvent()
+    data class OnCameraTargetMoved(val latLng: LatLng) : MissingReportUiEvent()
     data object OnDismissDialog : MissingReportUiEvent()
     data object OnReportFinishButtonClick : MissingReportUiEvent()
     data object OnDismissKeyboard : MissingReportUiEvent()
@@ -110,6 +111,7 @@ class MissingReportViewModel @Inject constructor(
     private val getBreedDataUseCase: GetBreedDataUseCase,
     private val uploadImagesUseCase: UploadImagesUseCase,
     private val postMissingReportUseCase: PostMissingReportUseCase,
+    private val getAddressUseCase: GetAddressUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MissingReportUiState())
     val uiState: StateFlow<MissingReportUiState>
@@ -162,7 +164,7 @@ class MissingReportViewModel @Inject constructor(
 
             is MissingReportUiEvent.OnGenderSelected -> updateGender(event.gender)
             MissingReportUiEvent.OnInfoFinishButtonClick -> navigateUp()
-            is MissingReportUiEvent.OnMapPinMoved -> updateAddress(event.latLng)
+            is MissingReportUiEvent.OnCameraTargetMoved -> updateAddress(event.latLng)
             MissingReportUiEvent.OnDismissDialog -> setDialogInVisible()
             MissingReportUiEvent.OnOpenCameraClick -> openCamera()
             MissingReportUiEvent.OnOpenGalleryClick -> openGallery()
@@ -267,11 +269,22 @@ class MissingReportViewModel @Inject constructor(
     }
 
     private fun updateAddress(latLng: LatLng) {
-        // TODO: 주소 변환 api 연동
-        _uiState.update {
-            it.copy(
-                currentLatLng = latLng,
-                address = "위도: ${latLng.latitude}, 경도: ${latLng.longitude}"
+        viewModelScope.launch {
+            getAddressUseCase(
+                lat = latLng.latitude,
+                lng = latLng.longitude
+            ).fold(
+                onSuccess = { addressData ->
+                    _uiState.update { it.copy(address = addressData.address) }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "주소 정보를 불러오지 못했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
             )
         }
     }

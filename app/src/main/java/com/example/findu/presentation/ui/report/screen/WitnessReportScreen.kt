@@ -19,6 +19,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,9 +49,14 @@ import com.example.findu.ui.theme.FindUTheme
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.rememberCameraPositionState
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.time.debounce
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, FlowPreview::class)
 @Composable
 fun WitnessReportScreen(
     uiState: WitnessReportUiState,
@@ -66,6 +72,23 @@ fun WitnessReportScreen(
             cameraPositionState.position = CameraPosition(it, 15.0)
         }
     }
+
+    LaunchedEffect(cameraPositionState) {
+        var lastEmitTime = 0L
+
+        snapshotFlow { cameraPositionState.isMoving }
+            .distinctUntilChanged()
+            .filter { !it }
+            .collect {
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastEmitTime >= 2000) {
+                    val latLng = cameraPositionState.position.target
+                    onEvent(WitnessReportUiEvent.OnCameraTargetMoved(latLng))
+                    lastEmitTime = currentTime
+                }
+            }
+    }
+
     val buttonEnabled by remember(
         uiState.speciesType,
         uiState.breed,

@@ -14,6 +14,7 @@ import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.PostAiDetectionUseCase
+import com.example.findu.domain.usecase.report.GetAddressUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.type.view.LoadState
@@ -83,7 +84,7 @@ sealed class WitnessReportUiEvent {
     data class OnDateSelected(val dateTime: LocalDateTime) : WitnessReportUiEvent()
     data object OnAddressSearchClick : WitnessReportUiEvent()
     data class OnAddressUpdated(val address: String) : WitnessReportUiEvent()
-    data class OnMapPinMoved(val latLng: LatLng) : WitnessReportUiEvent()
+    data class OnCameraTargetMoved(val latLng: LatLng) : WitnessReportUiEvent()
     data object OnDismissDialog : WitnessReportUiEvent()
     data object OnReportFinishButtonClick : WitnessReportUiEvent()
     data object OnDismissKeyboard : WitnessReportUiEvent()
@@ -111,6 +112,7 @@ class WitnessReportViewModel @Inject constructor(
     private val uploadImagesUseCase: UploadImagesUseCase,
     private val postWitnessReportUseCase: PostWitnessReportUseCase,
     private val postAiDetectionUseCase: PostAiDetectionUseCase,
+    private val getAddressUseCase: GetAddressUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WitnessReportUiState())
     val uiState: StateFlow<WitnessReportUiState>
@@ -163,7 +165,7 @@ class WitnessReportViewModel @Inject constructor(
                 updateFurColor(event.furColorType, event.flag)
 
             WitnessReportUiEvent.OnInfoFinishButtonClick -> navigateUp()
-            is WitnessReportUiEvent.OnMapPinMoved -> updateAddress(event.latLng)
+            is WitnessReportUiEvent.OnCameraTargetMoved -> updateAddress(event.latLng)
             WitnessReportUiEvent.OnDismissDialog -> setDialogInVisible()
             WitnessReportUiEvent.OnOpenCameraClick -> openCamera()
             WitnessReportUiEvent.OnOpenGalleryClick -> openGallery()
@@ -325,11 +327,22 @@ class WitnessReportViewModel @Inject constructor(
     }
 
     private fun updateAddress(latLng: LatLng) {
-        // TODO: 주소 변환 api 연동
-        _uiState.update {
-            it.copy(
-                currentLatLng = latLng,
-                address = "위도: ${latLng.latitude}, 경도: ${latLng.longitude}"
+        viewModelScope.launch {
+            getAddressUseCase(
+                lat = latLng.latitude,
+                lng = latLng.longitude
+            ).fold(
+                onSuccess = { addressData ->
+                    _uiState.update { it.copy(address = addressData.address) }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        WitnessReportUiEffect.ShowToast(
+                            message = error.message ?: "주소 정보를 불러오지 못했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
             )
         }
     }

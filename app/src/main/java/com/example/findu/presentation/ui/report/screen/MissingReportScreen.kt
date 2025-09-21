@@ -20,6 +20,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,14 +47,18 @@ import com.example.findu.presentation.ui.report.component.missing.MissingAnimalI
 import com.example.findu.presentation.ui.report.component.missing.ReportGenderComponent
 import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiEvent
 import com.example.findu.presentation.ui.report.viewmodel.MissingReportUiState
+import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiEvent
 import com.example.findu.presentation.util.extension.toKoreanDateString
 import com.example.findu.ui.theme.FindUTheme
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.rememberCameraPositionState
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, FlowPreview::class)
 @Composable
 fun MissingReportScreen(
     uiState: MissingReportUiState,
@@ -69,6 +74,23 @@ fun MissingReportScreen(
             cameraPositionState.position = CameraPosition(it, 15.0)
         }
     }
+
+    LaunchedEffect(cameraPositionState) {
+        var lastEmitTime = 0L
+
+        snapshotFlow { cameraPositionState.isMoving }
+            .distinctUntilChanged()
+            .filter { !it }
+            .collect {
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastEmitTime >= 2000) {
+                    val latLng = cameraPositionState.position.target
+                    onEvent(MissingReportUiEvent.OnCameraTargetMoved(latLng))
+                    lastEmitTime = currentTime
+                }
+            }
+    }
+
     val buttonEnabled by remember(
         uiState.speciesType,
         uiState.breed,
@@ -79,8 +101,7 @@ fun MissingReportScreen(
         uiState.imageUriList
     ) {
         derivedStateOf {
-            uiState.speciesType != null &&
-                    uiState.breed != null &&
+            uiState.breed != null &&
                     uiState.age.text.isNotEmpty() &&
                     uiState.selectedFurColors.isNotEmpty() &&
                     uiState.missingDate.isNotEmpty() &&
