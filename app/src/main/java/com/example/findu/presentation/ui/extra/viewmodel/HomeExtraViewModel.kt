@@ -19,7 +19,7 @@ import javax.inject.Inject
 data class HomeExtraUiState(
     val loadState: LoadState = LoadState.Idle,
     val homeExtraButtonType: HomeExtraButtonType? = null,
-    val data: List<Any> = listOf(
+    val data: List<VolunteerWork> = listOf(
         VolunteerWork(
             institution = "양평군유기동물보호센터",
             recruitmentPeriod = "2025.04.21 ~ 2025.05.20",
@@ -39,7 +39,7 @@ data class HomeExtraUiState(
 )
 
 sealed class HomeExtraUiEvent {
-    data class LoadData(val homeExtraButtonType: HomeExtraButtonType) : HomeExtraUiEvent()
+    data object LoadData : HomeExtraUiEvent()
     data class SetHomeExtraType(val homeExtraButtonType: HomeExtraButtonType) : HomeExtraUiEvent()
 }
 
@@ -65,7 +65,11 @@ class HomeExtraViewModel @Inject constructor(
 
     fun handleEvent(event: HomeExtraUiEvent) {
         when (event) {
-            is HomeExtraUiEvent.LoadData -> {}
+            is HomeExtraUiEvent.LoadData -> loadData()
+            is HomeExtraUiEvent.SetHomeExtraType -> {
+                _uiState.value = _uiState.value.copy(homeExtraButtonType = event.homeExtraButtonType)
+
+            }
         }
     }
 
@@ -73,20 +77,20 @@ class HomeExtraViewModel @Inject constructor(
             val type: HomeExtraButtonType? = savedStateHandle[HOME_EXTRA_TYPE]
             type?.let {
                 handleEvent(HomeExtraUiEvent.SetHomeExtraType(it))
-                handleEvent(HomeExtraUiEvent.LoadData(it))
             }
         }.stateIn(
             scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = HomeExtraUiState()
         )
 
 
-    private fun loadFor(type: HomeExtraButtonType) {
+    private fun loadData() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(loadState = LoadState.Loading)
-            val data: List<Any> = when (type) {
+            val data: List<VolunteerWork> = when (uiState.value.homeExtraButtonType) {
                 HomeExtraButtonType.PROTECT_CENTER -> emptyList()
-                HomeExtraButtonType.PROTECT_PART -> emptyList()
+                HomeExtraButtonType.PROTECT_DEPARTMENT -> emptyList()
                 HomeExtraButtonType.VOLUNTEER -> dummyVolunteer
+                null -> emptyList()
             }
             _uiState.value = _uiState.value.copy(
                 loadState = LoadState.Success, data = data

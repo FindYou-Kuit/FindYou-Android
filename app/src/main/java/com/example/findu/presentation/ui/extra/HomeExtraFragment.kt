@@ -13,10 +13,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.findu.databinding.FragmentHomeExtraBinding
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.extra.view.ExtraHomeVolunteerScreen
+import com.example.findu.presentation.ui.extra.viewmodel.HomeExtraUiEvent
 import com.example.findu.presentation.ui.extra.viewmodel.HomeExtraViewModel
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeExtraFragment : Fragment() {
     private var _binding: FragmentHomeExtraBinding? = null
     private val binding get() = _binding!!
-    private val homeViewModel by viewModels<HomeExtraViewModel>()
+    private val homeExtraViewModel by viewModels<HomeExtraViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,10 +43,10 @@ class HomeExtraFragment : Fragment() {
         binding.composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+                val uiState by homeExtraViewModel.uiState.collectAsStateWithLifecycle()
                 val lifecycleOwner = LocalLifecycleOwner.current
-                LaunchedEffect(homeViewModel.uiEffect, lifecycleOwner) {
-                    homeViewModel.uiEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                LaunchedEffect(homeExtraViewModel.uiEffect, lifecycleOwner) {
+                    homeExtraViewModel.uiEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
                         .collect { sideEffect ->
 //                            when (sideEffect) {
 //
@@ -54,13 +54,11 @@ class HomeExtraFragment : Fragment() {
                         }
                 }
 
+                LaunchedEffect(uiState.homeExtraButtonType){
+                    homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
+                }
 
-//                uiState.errorMessage?.let { message ->
-//                    LaunchedEffect(message) {
-//                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-//                        homeViewModel.handleEvent(HomeUiEvent.ClearError)
-//                    }
-//                }
+
 
 
                 when (uiState.loadState) {

@@ -24,7 +24,9 @@ import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
-fun ExtraVolunteerItem(modifier: Modifier = Modifier, volunteerWork: VolunteerWork) {
+fun ExtraVolunteerItem(
+    volunteerWork: VolunteerWork,
+    modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_VIEW, volunteerWork.webLink.toUri())
 

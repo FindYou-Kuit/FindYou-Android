@@ -12,15 +12,18 @@ import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.extra.component.ExtraVolunteerItem
 
 @Composable
-fun ExtraHomeVolunteerScreen(modifier: Modifier = Modifier,volunteerWorks: List<VolunteerWork>) {
+fun ExtraHomeVolunteerScreen(
+    volunteerWorks: List<VolunteerWork>,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier) {
         FindUTopAppBar(
             title = R.string.home_extra_volunteer,
             navigationIconRes = R.drawable.ic_arrow_left,
             onNavigationIconClick = {}
-            )
+        )
         LazyColumn {
-            items(volunteerWorks){
+            items(volunteerWorks) {
                 ExtraVolunteerItem(volunteerWork = it)
             }
         }
