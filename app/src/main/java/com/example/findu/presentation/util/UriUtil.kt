@@ -16,7 +16,7 @@ import java.io.InputStream
 object UriUtil {
     private const val BASE64_PREFIX = "data:image/jpeg;base64,"
 
-    fun Uri.uriToBase64(context: Context): String? {
+    fun Uri.uriToBase64(context: Context): String {
         return try {
             val contentResolver: ContentResolver = context.contentResolver
             val inputStream: InputStream? = contentResolver.openInputStream(this)
@@ -29,11 +29,11 @@ object UriUtil {
                 val byteArray: ByteArray = outputStream.toByteArray()
                 outputStream.close()
 
-                BASE64_PREFIX + Base64.encodeToString(byteArray, Base64.NO_WRAP)
-            }
+                Base64.encodeToString(byteArray, Base64.NO_WRAP)
+            } ?: ""
         } catch (e: Exception) {
             e.printStackTrace()
-            null
+            ""
         }
     }
 

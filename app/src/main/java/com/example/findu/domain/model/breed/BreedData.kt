@@ -11,19 +11,19 @@ sealed class Breed(
     val id: Int = 0,
 ) {
     data class DogBreed(
-        val breedId: Int,
+        val breedId: Int = 0,
         val breedName: String,
         val species: SpeciesType,
     ) : Breed(breedName, breedId)
 
     data class CatBreed(
-        val breedId: Int,
+        val breedId: Int = 0,
         val breedName: String,
         val species: SpeciesType,
     ) : Breed(breedName, breedId)
 
     data class EtcBreed(
-        val breedId: Int,
+        val breedId: Int = 0,
         val breedName: String,
         val species: SpeciesType,
     ) : Breed(breedName, breedId)

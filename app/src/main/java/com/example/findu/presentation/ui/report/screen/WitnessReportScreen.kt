@@ -164,8 +164,8 @@ private fun WitnessReportScreen(
         ReportImageComponent(
             reportType = ReportType.WITNESS,
             imgUriList = uiState.imageUriList,
-            onOpenDialogClick = { onEvent(WitnessReportUiEvent.OnAddImageClick) },
-            onDistinctionClick = { onEvent(WitnessReportUiEvent.OnAIDistinctionClick(it)) }
+            onOpenDialogClick = { onEvent(WitnessReportUiEvent.OnAddImageClick(it)) },
+            onDetectionClick = { onEvent(WitnessReportUiEvent.OnAIDetectionClick(it)) }
         )
 
         Column(

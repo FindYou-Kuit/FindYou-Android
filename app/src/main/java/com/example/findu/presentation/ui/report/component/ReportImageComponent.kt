@@ -43,8 +43,8 @@ fun ReportImageComponent(
     modifier: Modifier = Modifier,
     reportType: ReportType,
     imgUriList: List<Uri>,
-    onOpenDialogClick: () -> Unit,
-    onDistinctionClick: (Uri) -> Unit = {},
+    onOpenDialogClick: (Int) -> Unit,
+    onDetectionClick: (Uri) -> Unit = {},
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
@@ -98,7 +98,7 @@ fun ReportImageComponent(
                     textRes = R.string.report_ai_distinction,
                     onClick = {
                         if (pagerState.currentPage < imgUriList.size) {
-                            onDistinctionClick(imgUriList[pagerState.currentPage])
+                            onDetectionClick(imgUriList[pagerState.currentPage])
                         }
                     },
                     enabled = buttonEnabled
@@ -115,7 +115,7 @@ private fun ImagePagerContent(
     pagerState: PagerState,
     contentPadding: PaddingValues,
     imgUriList: List<Uri>,
-    onOpenDialogClick: () -> Unit,
+    onOpenDialogClick: (Int) -> Unit,
 ) {
     HorizontalPager(
         state = pagerState,
@@ -139,7 +139,7 @@ private fun ImagePagerItem(
     page: Int,
     pagerState: PagerState,
     imgUriList: List<Uri>,
-    onOpenDialogClick: () -> Unit,
+    onOpenDialogClick: (Int) -> Unit,
 ) {
     val isCurrentPage = page == pagerState.currentPage
     val itemSize by animateDpAsState(
@@ -150,7 +150,8 @@ private fun ImagePagerItem(
 
     Box(
         modifier = Modifier
-            .size(160.dp),
+            .size(160.dp)
+            .noRippleClickable { onOpenDialogClick(page) },
         contentAlignment = Alignment.Center
     ) {
         if (page == imgUriList.size) {
@@ -165,7 +166,6 @@ private fun ImagePagerItem(
                         shape = RoundedCornerShape(20.dp)
                     )
                     .size(itemSize),
-                onClick = onOpenDialogClick
             )
         } else {
             ImagePageContent(
@@ -185,10 +185,9 @@ private fun ImagePagerItem(
 @Composable
 private fun DefaultPageContent(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier.noRippleClickable { onClick() },
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         BaseVectorIcon(

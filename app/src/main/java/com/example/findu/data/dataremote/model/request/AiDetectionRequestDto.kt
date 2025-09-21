@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AiDetectionRequestDto(
-    @SerialName("imageUrl")
-    val imageUrl: String
+    @SerialName("base64Image")
+    val base64Image: String
 )

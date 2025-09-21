@@ -9,13 +9,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.Breed
 import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.domain.model.breed.SpeciesType.Companion.fromString
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.WitnessReportData
 import com.example.findu.domain.usecase.GetBreedDataUseCase
+import com.example.findu.domain.usecase.PostAiDetectionUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
+import com.example.findu.presentation.util.UriUtil.uriToBase64
 import com.example.findu.presentation.util.extension.toDateString
 import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
@@ -52,6 +55,7 @@ data class WitnessReportUiState(
     val address: String = "",
     val currentLatLng: LatLng? = null,
     val nearPlace: TextFieldState = TextFieldState(),
+    val addingPageIndex: Int = 0,
     val isImageDialogShown: Boolean = false,
     val isSuccessDialogShown: Boolean = false,
     val isAppSettingDialogShown: Boolean = false,
@@ -59,11 +63,11 @@ data class WitnessReportUiState(
 
 sealed class WitnessReportUiEvent {
     data object OnBackPressed : WitnessReportUiEvent()
-    data object OnAddImageClick : WitnessReportUiEvent()
+    data class OnAddImageClick(val page: Int) : WitnessReportUiEvent()
     data object OnOpenCameraClick : WitnessReportUiEvent()
     data object OnOpenGalleryClick : WitnessReportUiEvent()
     data class OnImageSelected(val uri: Uri) : WitnessReportUiEvent()
-    data class OnAIDistinctionClick(val uri: Uri) : WitnessReportUiEvent()
+    data class OnAIDetectionClick(val uri: Uri) : WitnessReportUiEvent()
     data object OnSelectAnimalInfoClick : WitnessReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : WitnessReportUiEvent()
     data class OnBreedClick(val breed: Breed) : WitnessReportUiEvent()
@@ -105,6 +109,7 @@ class WitnessReportViewModel @Inject constructor(
     private val getBreedDataUseCase: GetBreedDataUseCase,
     private val uploadImagesUseCase: UploadImagesUseCase,
     private val postWitnessReportUseCase: PostWitnessReportUseCase,
+    private val postAiDetectionUseCase: PostAiDetectionUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WitnessReportUiState())
     val uiState: StateFlow<WitnessReportUiState>
@@ -144,8 +149,8 @@ class WitnessReportViewModel @Inject constructor(
     fun handleEvent(event: WitnessReportUiEvent) {
         when (event) {
             WitnessReportUiEvent.OnBackPressed -> navigateUp()
-            WitnessReportUiEvent.OnAddImageClick -> setImageDialogVisible()
-            is WitnessReportUiEvent.OnAIDistinctionClick -> distinguishWithAI(event.uri)
+            is WitnessReportUiEvent.OnAddImageClick -> setImageDialogVisible(event.page)
+            is WitnessReportUiEvent.OnAIDetectionClick -> detectionWithAI(event.uri)
             WitnessReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
             is WitnessReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
             is WitnessReportUiEvent.OnBreedClick -> updateBreed(event.breed)
@@ -222,9 +227,7 @@ class WitnessReportViewModel @Inject constructor(
     private suspend fun getImageUrls(): List<String> {
         val uriFiles = _uiState.value.imageUriList.toMultiPartBodys(context)
         return uploadImagesUseCase(uriFiles).fold(
-            onSuccess = { imageUrls ->
-                imageUrls
-            },
+            onSuccess = { imageUrls -> imageUrls },
             onFailure = { error ->
                 viewModelScope.launch {
                     _uiEffect.send(
@@ -239,9 +242,73 @@ class WitnessReportViewModel @Inject constructor(
         )
     }
 
-    private fun distinguishWithAI(uri: Uri) {
-        // TODO : AI api 연동
+    private fun detectionWithAI(uri: Uri) {
+        _uiState.update { it.copy(loadState = LoadState.Loading) }
+        val base64Image = uri.uriToBase64(context)
+        viewModelScope.launch {
+            postAiDetectionUseCase(imageUrl = base64Image).fold(
+                onSuccess = { aiDetectionData ->
+                    val detectedSpecies = fromString(aiDetectionData.species)
+                    val detectedBreedName = getDetectedBreedName(
+                        detectedName = aiDetectionData.breed,
+                        speciesType = detectedSpecies,
+                    )
+                    val detectedFurColors =
+                        aiDetectionData.furColors.map { FurColorType.fromString(it) }
+
+                    _uiState.update {
+                        it.copy(
+                            breedSearchText = TextFieldState(detectedBreedName.name),
+                            speciesType = detectedSpecies,
+                            breed = detectedBreedName,
+                            selectedFurColors = detectedFurColors,
+                            loadState = LoadState.Success,
+                        )
+                    }
+
+                    _uiEffect.send(
+                        WitnessReportUiEffect.ShowToast(
+                            message = "AI 분석이 완료되었습니다!",
+                        )
+                    )
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        WitnessReportUiEffect.ShowToast(
+                            message = error.message ?: "AI 분석에 실패했습니다.",
+                        )
+                    )
+                    _uiState.update { it.copy(loadState = LoadState.Error) }
+                    Log.d("http", "Error Message: : $error")
+                }
+            )
+        }
     }
+
+    private fun getDetectedBreedName(detectedName: String, speciesType: SpeciesType): Breed =
+        when (speciesType) {
+            SpeciesType.DOG -> Breed.DogBreed(
+                breedName = _uiState.value.breedList.dogBreedList.find {
+                    it.name.contains(detectedName)
+                }?.breedName ?: AI_DETECT_FAIL_TEXT,
+                species = SpeciesType.DOG
+            )
+
+            SpeciesType.CAT -> Breed.CatBreed(
+                breedName = _uiState.value.breedList.catBreedList.find {
+                    it.name.contains(detectedName)
+                }?.breedName ?: AI_DETECT_FAIL_TEXT,
+                species = SpeciesType.CAT
+            )
+
+            SpeciesType.ETC -> Breed.EtcBreed(
+                breedName = _uiState.value.breedList.etcBreedList.find {
+                    it.name.contains(detectedName)
+                }?.breedName ?: AI_DETECT_FAIL_TEXT,
+                species = SpeciesType.ETC
+            )
+        }
+
 
     private fun clearFocus() {
         viewModelScope.launch {
@@ -363,9 +430,12 @@ class WitnessReportViewModel @Inject constructor(
         }
     }
 
-    private fun setImageDialogVisible() {
+    private fun setImageDialogVisible(page: Int) {
         _uiState.update {
-            it.copy(isImageDialogShown = true)
+            it.copy(
+                isImageDialogShown = true,
+                addingPageIndex = page,
+            )
         }
     }
 
@@ -380,11 +450,19 @@ class WitnessReportViewModel @Inject constructor(
     }
 
     private fun addImageToList(uri: Uri) {
-        _uiState.update { it ->
+        _uiState.update {
+            val uriList = it.imageUriList.toMutableList().apply {
+                add(it.addingPageIndex, uri)
+            }
             it.copy(
-                imageUriList = listOf(uri) + it.imageUriList,
-                isImageDialogShown = false
+                imageUriList = uriList,
+                isImageDialogShown = false,
+                addingPageIndex = 0,
             )
         }
+    }
+
+    private companion object {
+        const val AI_DETECT_FAIL_TEXT = "품종 인식에 실패했습니다."
     }
 }
