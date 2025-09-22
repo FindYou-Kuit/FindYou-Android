@@ -31,7 +31,7 @@ fun ExtraVolunteerItem(
     val intent = Intent(Intent.ACTION_VIEW, volunteerWork.webLink.toUri())
 
 
-    Column(modifier = modifier.padding(20.dp).noRippleClickable{
+    Column(modifier = modifier.padding(top=20.dp, start = 20.dp, end = 20.dp).noRippleClickable{
         context.startActivity(intent)
     }) {
         Row (verticalAlignment = Alignment.CenterVertically){
