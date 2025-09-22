@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,7 +51,7 @@ fun ExtraDepartmentItem(
                     clipboardManager.setText(AnnotatedString(department.district))
                 })
             Text(
-                text = "복사",
+                text = stringResource(R.string.home_extra_copy),
                 style = FindUTheme.typography.body2Regular14,
                 color = Color(0xFF00D1CA),
                 modifier = Modifier.noRippleClickable {

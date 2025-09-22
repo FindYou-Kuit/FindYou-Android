@@ -439,6 +439,7 @@
     <string name="home_extra_center">보호소 · 동물병원</string>
     <string name="home_extra_department">동물보호 부서</string>
     <string name="home_extra_volunteer">유기동물 봉사</string>
+    <string name="home_extra_copy">복사</string>
 
 
 </resources>
