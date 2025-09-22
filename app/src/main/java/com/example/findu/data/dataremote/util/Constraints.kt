@@ -10,4 +10,7 @@ object ApiConstraints {
 
     // Home
     const val HOME = "home"
+    // Home Extra
+    const val INFORMATION = "informations"
+
 }
