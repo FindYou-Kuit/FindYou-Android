@@ -9,48 +9,20 @@ import com.example.findu.domain.repository.SearchRepository
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
-    private val searchRemoteDataSource: SearchRemoteDataSource
+    private val searchRemoteDataSource: SearchRemoteDataSource,
 ) : SearchRepository {
-    override suspend fun getSearchAll(
+    override suspend fun getReports(
+        type: String,
         searchFilterData: SearchFilterData?,
-        lastProtectId: Long,
-        lastReportId: Long
+        lastId: Long,
     ): Result<List<SearchData>> =
         runCatching {
             listOf(
-                searchRemoteDataSource.getSearchAll(
+                searchRemoteDataSource.getReports(
+                    type = type,
                     searchFilterData = searchFilterData,
-                    lastProtectId = lastProtectId,
-                    lastReportId = lastReportId
+                    lastId = lastId
                 ).handleBaseResponse().getOrThrow().toDomain()
-            )
-        }
-
-    override suspend fun getSearchReport(
-        searchFilterData: SearchFilterData?,
-        lastReportId: Long
-    ): Result<List<SearchData>> =
-        runCatching {
-            listOf(
-                searchRemoteDataSource.getSearchReport(
-                    searchFilterData = searchFilterData,
-                    lastReportId = lastReportId
-                ).handleBaseResponse()
-                    .getOrThrow().toDomain()
-            )
-        }
-
-    override suspend fun getSearchProtect(
-        searchFilterData: SearchFilterData?,
-        lastProtectId: Long
-    ): Result<List<SearchData>> =
-        runCatching {
-            listOf(
-                searchRemoteDataSource.getSearchProtect(
-                    searchFilterData = searchFilterData,
-                    lastProtectId = lastProtectId
-                ).handleBaseResponse()
-                    .getOrThrow().toDomain()
             )
         }
 }
