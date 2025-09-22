@@ -28,7 +28,6 @@ fun FindUTopAppBar(
 ) {
     Box(
         modifier = modifier
-            .shadow(elevation = 1.dp)
             .fillMaxWidth()
             .height(56.dp)
     ) {
