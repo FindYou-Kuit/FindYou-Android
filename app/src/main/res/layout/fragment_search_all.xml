@@ -21,14 +21,11 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageButton
+        <ImageButton
                 android:id="@+id/ib_search_all_filter"
                 android:layout_width="39dp"
                 android:layout_height="34dp"
