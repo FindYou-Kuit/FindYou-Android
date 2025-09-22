@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentHomeExtraBinding
 import com.example.findu.presentation.model.HomeExtraContent
 import com.example.findu.presentation.type.view.LoadState
+import com.example.findu.presentation.ui.extra.view.ExtraHomeCenterScreen
 import com.example.findu.presentation.ui.extra.view.ExtraHomeDepartmentScreen
 import com.example.findu.presentation.ui.extra.view.ExtraHomeVolunteerScreen
 import com.example.findu.presentation.ui.extra.viewmodel.HomeExtraUiEvent
@@ -67,17 +68,19 @@ class HomeExtraFragment : Fragment() {
                     LoadState.Idle -> Unit
                     LoadState.Loading -> Unit
                     LoadState.Success -> {
-                        when (val c = uiState.content) {
+                        when (val content = uiState.content) {
                             is HomeExtraContent.Volunteers -> {
-                                ExtraHomeVolunteerScreen(volunteerWorks = c.list)
+                                ExtraHomeVolunteerScreen(volunteerWorks = content.list)
                             }
 
                             is HomeExtraContent.Departments -> {
-                                ExtraHomeDepartmentScreen(departments = c.list)
+                                ExtraHomeDepartmentScreen(departments = content.list)
                             }
 
                             HomeExtraContent.None -> Unit
-                            is HomeExtraContent.Centers -> TODO()
+                            is HomeExtraContent.Centers -> {
+                                ExtraHomeCenterScreen(centers = content.list)
+                            }
                         }
                     }
 

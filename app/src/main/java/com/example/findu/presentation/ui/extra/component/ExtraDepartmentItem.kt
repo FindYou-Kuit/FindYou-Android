@@ -45,7 +45,7 @@ fun ExtraDepartmentItem(
             )
             Spacer(modifier = Modifier.width(10.dp))
             BaseVectorIcon(
-                vectorResource = R.drawable.ic_home_extra_department_copy_15,
+                vectorResource = R.drawable.ic_home_extra_copy_15,
                 modifier = Modifier.noRippleClickable {
                     clipboardManager.setText(AnnotatedString(department.district))
                 })

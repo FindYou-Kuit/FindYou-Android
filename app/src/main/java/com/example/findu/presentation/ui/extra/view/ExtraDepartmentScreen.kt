@@ -22,6 +22,8 @@ fun ExtraHomeDepartmentScreen(
             navigationIconRes = R.drawable.ic_arrow_left,
             onNavigationIconClick = {}
         )
+        //TODO: 지역 선택 드롭다운 구현
+
         LazyColumn {
             items(departments) {
                 ExtraDepartmentItem(department = it)
