@@ -3,7 +3,6 @@ package com.example.findu.presentation.ui.search.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.search.DetailProtectData
-import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase

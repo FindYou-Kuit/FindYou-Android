@@ -1,4 +1,4 @@
-package com.example.findu.data.dataremote.model.response
+package com.example.findu.data.dataremote.model.response.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

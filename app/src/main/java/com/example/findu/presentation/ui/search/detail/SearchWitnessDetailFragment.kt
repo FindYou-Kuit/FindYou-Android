@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
-import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
+import com.example.findu.data.mapper.toDomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailWitnessBinding
-import com.example.findu.domain.model.search.DetailReportData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
 import com.google.android.material.chip.Chip

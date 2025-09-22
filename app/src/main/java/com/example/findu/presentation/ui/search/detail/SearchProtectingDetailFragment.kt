@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.findu.R
-import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
+import com.example.findu.data.mapper.toDomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
 import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel

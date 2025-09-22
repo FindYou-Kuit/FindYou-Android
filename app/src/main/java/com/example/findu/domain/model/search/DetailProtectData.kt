@@ -3,24 +3,25 @@ package com.example.findu.domain.model.search
 import java.io.Serializable
 
 data class DetailProtectData(
-    val imageUrl: String,
+    val imageUrls: List<String>,
     val breed: String,
-    val tag: SearchStatus,
+    val tag: String,
     val age: String,
     val weight: String,
-    val sex: String,
-    val happenDate: String,
     val furColor: String,
+    val sex: String,
     val neutering: String,
     val significant: String,
-    val noticeNumber: String,
-    val noticeDuration: String,
-    val foundLocation: String,
     val careName: String,
     val careAddr: String,
+    val latitude: Double,
+    val longitude: Double,
     val careTel: String,
+    val foundDate: String,
+    val foundLocation: String,
+    val noticeDuration: String,
+    val noticeNumber: String,
     val authority: String,
-    val authorityPhoneNumber: String,
-    var interest: Boolean
+    val interest: Boolean
 ) : Serializable
 

@@ -2,7 +2,7 @@ package com.example.findu.data.dataremote.datasourceimpl
 
 import com.example.findu.data.dataremote.datasource.SearchRemoteDataSource
 import com.example.findu.data.dataremote.model.base.BaseResponse
-import com.example.findu.data.dataremote.model.response.SearchResponseDto
+import com.example.findu.data.dataremote.model.response.search.SearchResponseDto
 import com.example.findu.data.dataremote.service.SearchService
 import com.example.findu.domain.model.search.SearchFilterData
 import javax.inject.Inject
