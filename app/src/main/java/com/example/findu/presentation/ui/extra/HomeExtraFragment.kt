@@ -63,7 +63,6 @@ class HomeExtraFragment : Fragment() {
 
 
 
-
                 when (uiState.loadState) {
                     LoadState.Idle -> Unit
                     LoadState.Loading -> Unit
@@ -72,15 +71,14 @@ class HomeExtraFragment : Fragment() {
                             is HomeExtraContent.Volunteers -> {
                                 ExtraHomeVolunteerScreen(volunteerWorks = content.list)
                             }
-
                             is HomeExtraContent.Departments -> {
                                 ExtraHomeDepartmentScreen(departments = content.list)
                             }
-
-                            HomeExtraContent.None -> Unit
                             is HomeExtraContent.Centers -> {
                                 ExtraHomeCenterScreen(centers = content.list)
                             }
+                            is HomeExtraContent.None -> Unit
+
                         }
                     }
 
