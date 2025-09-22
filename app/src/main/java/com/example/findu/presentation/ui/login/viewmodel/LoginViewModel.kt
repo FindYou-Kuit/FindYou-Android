@@ -21,14 +21,15 @@ class LoginViewModel @Inject constructor(
     private val _startMainActivity = MutableSharedFlow<Unit>()
     val startMainActivity: SharedFlow<Unit> = _startMainActivity
 
-    private val _startOnboardingActivity = MutableSharedFlow<Unit>()
-    val startOnboardingActivity: SharedFlow<Unit> = _startOnboardingActivity
+
+    private val _startOnboardingActivity = MutableSharedFlow<Long>()
+    val startOnboardingActivity: SharedFlow<Long> = _startOnboardingActivity
 
     fun postLogin(kakaoId: Long) {
         viewModelScope.launch {
             loginUseCase.postLogin(kakaoId = kakaoId).onSuccess { loginData ->
                 if (loginData.isFirstLogin) {
-                    startOnboardingActivity()
+                    startOnboardingActivity(kakaoId = kakaoId)
                 } else {
                     setAccessTokenUseCase(accessToken = loginData.userInfo!!.accessToken)
                     startMainActivity()
@@ -62,9 +63,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun startOnboardingActivity() {
+    private fun startOnboardingActivity(kakaoId: Long) {
         viewModelScope.launch {
-            _startOnboardingActivity.emit(Unit)
+            _startOnboardingActivity.emit(kakaoId)
         }
     }
 
