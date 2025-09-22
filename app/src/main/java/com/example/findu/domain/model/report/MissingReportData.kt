@@ -5,7 +5,7 @@ import kotlinx.datetime.Instant
 data class MissingReportData(
     val imageUrls: List<String>,
     val breedId: Int,
-    val sex: SexType,
+    val sex: Gender,
     val furColors: List<FurColorType>,
     val location: String,
     val featureIds: List<Int>,

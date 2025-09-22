@@ -3,53 +3,49 @@ package com.example.findu.data.repositoryimpl
 import com.example.findu.data.dataremote.datasource.AuthRemoteDataSource
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.toDomain
-import com.example.findu.domain.model.CheckEmailData
+import com.example.findu.data.mapper.torequest.toRequestDto
+import com.example.findu.domain.model.GuestLoginData
+import com.example.findu.domain.model.LoginData
+import com.example.findu.domain.model.LoginInfo
+import com.example.findu.domain.model.UserInfo
 import com.example.findu.domain.repository.AuthRepository
-import retrofit2.Response
+import java.io.File
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthRemoteDataSource
 ) : AuthRepository {
-    override suspend fun postLogin(email: String, password: String): Result<String> =
+    override suspend fun postLogin(loginInfo: LoginInfo): Result<LoginData> =
         runCatching {
-            val response: Response<Unit> = authRemoteDataSource.postLogin(email, password)
-
-            if (response.isSuccessful) {
-                val accessToken = response.headers()["Authorization"]?.removePrefix("Bearer ")
-                if (!accessToken.isNullOrEmpty()) {
-                    return@runCatching accessToken
-                } else {
-                    throw Exception("Access Token이 응답 헤더에 없음")
-                }
-            } else {
-                throw Exception("로그인 실패: ${response.code()}")
-            }
+            authRemoteDataSource.postLogin(loginRequestDto = loginInfo.toRequestDto()).handleBaseResponse().getOrThrow()
+                ?.toDomain() ?: error("Login data is null")
         }
 
-    override suspend fun postCheckEmail(email: String): Result<CheckEmailData> =
+    override suspend fun postGuestLogin(deviceId: String): Result<GuestLoginData> =
         runCatching {
-            authRemoteDataSource.postCheckEmail(email).handleBaseResponse().getOrThrow().toDomain()
+            authRemoteDataSource.postGuestLogin(guestLoginRequestDto = deviceId.toRequestDto()).handleBaseResponse()
+                .getOrThrow()
+                ?.toDomain() ?: error("Login data is null")
+        }
+
+    override suspend fun postCheckNickname(nickname: String): Result<Boolean> =
+        runCatching {
+            authRemoteDataSource.postCheckNickname(nickname = nickname).handleBaseResponse().getOrThrow().isDuplicate
         }
 
     override suspend fun postSignup(
-        email: String,
-        password: String,
-        nickname: String
-    ): Result<String> =
-        runCatching {
-            val response: Response<Unit> =
-                authRemoteDataSource.postSignup(email, password, nickname)
-
-            if (response.isSuccessful) {
-                val accessToken = response.headers()["Authorization"]?.removePrefix("Bearer ")
-                if (!accessToken.isNullOrEmpty()) {
-                    return@runCatching accessToken
-                } else {
-                    throw Exception("Access Token이 응답 헤더에 없음")
-                }
-            } else {
-                throw Exception("회원가입 실패: ${response.code()}")
-            }
-        }
+        profileImageFile: File?,
+        defaultImageName: String?,
+        nickname: String,
+        kakaoId: Long,
+        deviceId: String
+    ): Result<UserInfo> = runCatching {
+        authRemoteDataSource.postSignup(
+            profileImageFile = profileImageFile,
+            defaultImageName = defaultImageName,
+            nickname = nickname,
+            kakaoId = kakaoId,
+            deviceId = deviceId
+        ).handleBaseResponse().getOrThrow()?.toDomain() ?: error("Signup data is null")
+    }
 }

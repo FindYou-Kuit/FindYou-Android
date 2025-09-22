@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginRequestDto(
-    @SerialName("email")
-    val email: String,
-    @SerialName("password")
-    val password: String
+    @SerialName("kakaoId")
+    val kakaoId: Long,
+    @SerialName("deviceId")
+    val deviceId: String,
 )

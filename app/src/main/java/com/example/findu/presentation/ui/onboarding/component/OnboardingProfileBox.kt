@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.onboarding.component
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,21 +25,21 @@ import com.example.findu.ui.theme.FindUTheme
 fun OnboardingProfileBox(
     cameraClicked:()->Unit,
     modifier: Modifier = Modifier,
-    defaultProfileType: DefaultProfileType = DefaultProfileType.NONE,
-    profileImgUrl: String,
+    defaultProfileType: DefaultProfileType = DefaultProfileType.DEFAULT,
+    profileImgUri: Uri?,
 ) {
     Box(modifier = modifier.size(145.dp)) {
-        if (profileImgUrl.isEmpty()) {
+        if (profileImgUri==null) {
             val drawableRes = when (defaultProfileType) {
-                DefaultProfileType.NONE -> R.drawable.img_onboarding_default_profile_none_68
-                DefaultProfileType.DOG -> R.drawable.img_onboarding_default_profile_dog_68
+                DefaultProfileType.DEFAULT -> R.drawable.img_onboarding_default_profile_none_68
+                DefaultProfileType.PUPPY -> R.drawable.img_onboarding_default_profile_dog_68
                 DefaultProfileType.CHICK -> R.drawable.img_onboarding_default_profile_chick_68
                 DefaultProfileType.PANDA -> R.drawable.img_onboarding_default_profile_panda_68
             }
             Image(painter = painterResource(drawableRes), contentDescription = null,modifier = Modifier.fillMaxSize())
         } else {
             AsyncImage(
-                model = profileImgUrl,
+                model = profileImgUri,
                 contentDescription = "Profile Image",
                 modifier = Modifier
                     .fillMaxSize()
@@ -63,6 +64,6 @@ fun OnboardingProfileBox(
 private fun OnboardingProfileBoxPreview() {
     FindUTheme { OnboardingProfileBox(
         cameraClicked = {},
-        profileImgUrl = ""
+        profileImgUri = null
     ) }
 }

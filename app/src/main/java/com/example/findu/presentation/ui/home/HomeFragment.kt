@@ -3,34 +3,32 @@ package com.example.findu.presentation.ui.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
-import com.example.findu.R
 import com.example.findu.databinding.FragmentHomeBinding
-import com.example.findu.domain.model.HomeData
-import com.example.findu.presentation.model.HomeRv
+import com.example.findu.domain.model.HomeReportData
+import com.example.findu.domain.model.ReportDataType
+import com.example.findu.domain.model.ReportItem
 import com.example.findu.presentation.type.AnimalStateType
-import com.example.findu.presentation.ui.home.adapter.HomeBannerAdapter
-import com.example.findu.presentation.ui.home.adapter.HomeRVAdapter
+import com.example.findu.presentation.type.view.LoadState
+import com.example.findu.presentation.ui.home.composeview.HomeScreen
 import com.example.findu.presentation.ui.home.dialog.HomeFindDialog
 import com.example.findu.presentation.ui.home.dialog.HomeReportDialog
+import com.example.findu.presentation.ui.home.viewmodel.HomeUiEffect
+import com.example.findu.presentation.ui.home.viewmodel.HomeUiEvent
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -38,218 +36,150 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val homeViewModel by viewModels<HomeViewModel>()
 
-    private val homeBannerImages = listOf(
-        R.drawable.img_home_banner_adopt,
-        R.drawable.img_home_banner_volunteer,
-        R.drawable.img_home_banner_report
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        observeViewModel()
-        homeViewModel.getHomeData()
-
-        setupBanner()
-        setupReportDialog()
-        setupFindDialog()
-
-        initListener()
-
         return binding.root
     }
 
-    private fun initListener() {
-        binding.clHomeBottomPart.setOnClickListener {
-            goWebSite(PART_URL)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding.clHomeBottomCenter.setOnClickListener {
-            goWebSite(CENTER_URL)
-        }
-    }
+        binding.composeView.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+                val lifecycleOwner = LocalLifecycleOwner.current
+                LaunchedEffect(homeViewModel.uiEffect, lifecycleOwner) {
+                    homeViewModel.uiEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                        .collect { sideEffect ->
+                            when (sideEffect) {
+                                is HomeUiEffect.NavigateToProtectDetail -> {
+                                    navigateToProtectDetail(sideEffect.id, sideEffect.tag, sideEffect.name)
+                                }
 
-    private fun goWebSite(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
-    }
+                                is HomeUiEffect.NavigateToReportDetail -> {
+                                    navigateToReportDetail(sideEffect.id, sideEffect.tag, sideEffect.name)
+                                }
 
-    private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(lifecycle.currentState) {
-                launch {
-                    homeViewModel.homeData.collectLatest { homeData ->
-                        homeData?.let {
-                            setupTodayData(it)
-                            setupRV(it)
+                                is HomeUiEffect.ShowReportDialog -> {
+                                    showReportDialog()
+                                }
+
+                                is HomeUiEffect.ShowFindDialog -> {
+                                    showFindDialog()
+                                }
+
+                                is HomeUiEffect.OpenWebLink -> {
+                                    openWebLink(sideEffect.url)
+                                }
+
+                                is HomeUiEffect.ShowToast -> {
+                                    Toast.makeText(requireContext(), sideEffect.message, Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
+                }
+
+
+                uiState.errorMessage?.let { message ->
+                    LaunchedEffect(message) {
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        homeViewModel.handleEvent(HomeUiEvent.ClearError)
                     }
                 }
 
-                launch {
-                    homeViewModel.errorMessage.collectLatest { errorMessage ->
-                        errorMessage?.let {
-                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                        }
+
+                when (uiState.loadState) {
+                    LoadState.Idle -> Unit
+                    LoadState.Loading -> Unit
+                    LoadState.Success -> {
+                        HomeScreen(
+                            uiState = uiState,
+                            reportButtonClicked = {
+                                homeViewModel.handleEvent(HomeUiEvent.OnReportDialogClick)
+                            },
+                            alarmButtonClicked = {
+                                homeViewModel.handleEvent(HomeUiEvent.OnAlarmButtonClick)
+                            },
+                            homeReportData =  uiState.homeReportData,
+                            indicatorClicked = { reportDurationType ->
+                                homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
+                            },
+                            navigationToSearch = {
+                                homeViewModel.handleEvent(HomeUiEvent.OnFindDialogClick)
+                            },
+                            userNickname = "사용자",
+                            navigateToProtectDetail = { protectAnimal ->
+                                homeViewModel.handleEvent(HomeUiEvent.OnProtectAnimalClick(protectAnimal))
+                            },
+                            navigateToReportDetail = { reportAnimal ->
+                                homeViewModel.handleEvent(HomeUiEvent.OnReportAnimalClick(reportAnimal))
+                            },
+                        )
                     }
+
+                    LoadState.Error -> Unit
                 }
             }
         }
     }
 
-    private fun setupFindDialog() {
-        binding.cvHomeFind.setOnClickListener {
-            val dialog = HomeFindDialog(requireContext(), findNavController())
-            dialog.show()
-        }
-    }
 
-    private fun setupReportDialog() {
-        binding.cvHomeReport.setOnClickListener {
-            val dialog = HomeReportDialog(requireContext(), findNavController())
-            dialog.show()
-        }
-    }
-
-    private fun setupRV(homeData: HomeData) {
-        lateinit var homeProtectAdapter: HomeRVAdapter
-        lateinit var homeMissingAdapter: HomeRVAdapter
-        val homeProtectList = homeData.protectAnimalCards.map {
-            HomeRv(
-                imageUrl = it.thumbnailImageUrl,
-                name = it.title,
-                type = AnimalStateType.fromTag(it.tag).state,
-                date = it.noticeStartDate,
-                location = it.careAddress,
-                id = it.protectId
-            )
-        }
-
-        val homeMissingList = homeData.reportAnimalCards.map {
-            HomeRv(
-                imageUrl = it.thumbnailImageUrl,
-                name = it.title,
-                type = AnimalStateType.fromTag(it.tag).state,
-                date = it.registerDate,
-                location = it.happenLocation,
-                id = it.reportId
-            )
-        }
-
-        homeProtectAdapter = HomeRVAdapter(homeProtectList) { item ->
-            navigateToDetail(item)
-        }
-        homeMissingAdapter = HomeRVAdapter(homeMissingList) { item ->
-            navigateToDetail(item)
-        }
-
-        binding.rvHomeProtect.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = homeProtectAdapter
-        }
-
-        binding.rvHomeMissing.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = homeMissingAdapter
-        }
-
-        val size = resources.getDimensionPixelSize(R.dimen.MY_SIZE)
-        val m_size = resources.getDimensionPixelSize(R.dimen.MY_EDGE_MARGIN)
-        val deco = SpaceDecoration(size, m_size)
-        binding.rvHomeProtect.addItemDecoration(deco)
-        binding.rvHomeMissing.addItemDecoration(deco)
-    }
-
-    private fun navigateToDetail(item: HomeRv) {
-
-        when (item.type) {
-            "실종신고" -> {
-                findNavController().navigate(
-                    HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailDisappear(
-                        id = item.id.toString(), tag = item.type, name = item.name
-                    )
-                )
-            }
-
-            "목격신고" -> {
-                findNavController().navigate(
-                    HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailWitness(
-                        id = item.id.toString(), tag = item.type, name = item.name
-                    )
-                )
-            }
-
-            "보호중" -> {
+    private fun navigateToProtectDetail(id: String, tag: String, name: String) {
+        when (tag) {
+            AnimalStateType.PROTECT.state -> {
                 findNavController().navigate(
                     HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailProtecting(
-                        id = item.id.toString(), tag = item.type, name = item.name
+                        id = id,
+                        tag = tag,
+                        name = name
                     )
                 )
             }
         }
     }
 
-    private fun setupTodayData(homeData: HomeData) {
-        binding.tvHomeTodayRescueNum.text =
-            getString(R.string.home_today_bar_rescue_num, homeData.todayRescuedAnimalCount)
-
-        binding.tvHomeTodayReportNum.text =
-            getString(R.string.home_today_bar_report_num, homeData.todayReportAnimalCount)
-    }
-
-    private fun setupBanner() {
-        val vpAdapter = HomeBannerAdapter(homeBannerImages)
-        binding.vpHomeBanner.adapter = vpAdapter
-
-        val startPosition = Int.MAX_VALUE / 2
-        binding.vpHomeBanner.setCurrentItem(
-            startPosition - (startPosition % homeBannerImages.size),
-            false
-        )
-
-
-        binding.vpHomeBanner.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                val currentPage = (position % homeBannerImages.size) + 1
-                val totalPages = homeBannerImages.size
-
-                binding.tvHomeBannerNum.text = getString(
-                    R.string.home_banner_num,
-                    currentPage,
-                    totalPages
+    private fun navigateToReportDetail(id: String, tag: String, name: String) {
+        when (tag) {
+            AnimalStateType.MISSING.state -> {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailDisappear(
+                        id = id,
+                        tag = tag,
+                        name = name
+                    )
                 )
             }
-        })
 
-        val initialPage = (startPosition % homeBannerImages.size) + 1
-        binding.tvHomeBannerNum.text = getString(
-            R.string.home_banner_num,
-            initialPage,
-            homeBannerImages.size
-        )
-
-        val autoScrollHandler = Handler(Looper.getMainLooper())
-        val autoScrollRunnable = object : Runnable {
-            override fun run() {
-                binding.vpHomeBanner.currentItem = binding.vpHomeBanner.currentItem + 1
-                autoScrollHandler.postDelayed(this, 5000L)
+            AnimalStateType.FIND.state -> {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionFragmentHomeToFragmentSearchDetailWitness(
+                        id = id,
+                        tag = tag,
+                        name = name
+                    )
+                )
             }
         }
+    }
 
-        autoScrollHandler.postDelayed(autoScrollRunnable, 5000L)
-        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                autoScrollHandler.removeCallbacks(autoScrollRunnable)
-            }
-        })
+    private fun showReportDialog() {
+        val dialog = HomeReportDialog(requireContext(), findNavController())
+        dialog.show()
+    }
+
+    private fun showFindDialog() {
+        val dialog = HomeFindDialog(requireContext(), findNavController())
+        dialog.show()
+    }
+
+    private fun openWebLink(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        requireActivity().startActivity(intent)
     }
 
     override fun onDestroyView() {
@@ -257,10 +187,4 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-        private const val PART_URL =
-            "https://www.animal.go.kr/front/awtis/relevant/relevantList.do?menuNo=5000000014"
-        private const val CENTER_URL =
-            "https://www.animal.go.kr/front/awtis/institution/institutionList.do?menuNo=1000000059"
-    }
 }

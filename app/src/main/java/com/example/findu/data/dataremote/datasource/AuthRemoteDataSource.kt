@@ -1,22 +1,34 @@
 package com.example.findu.data.dataremote.datasource
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
-import com.example.findu.data.dataremote.model.response.CheckEmailResponseDto
+import com.example.findu.data.dataremote.model.base.NullableBaseResponse
+import com.example.findu.data.dataremote.model.request.GuestLoginRequestDto
+import com.example.findu.data.dataremote.model.request.LoginRequestDto
+import com.example.findu.data.dataremote.model.response.CheckNicknameResponseDto
+import com.example.findu.data.dataremote.model.response.auth.GuestLoginResponseDto
+import com.example.findu.data.dataremote.model.response.auth.LoginResponseDto
+import com.example.findu.data.dataremote.model.response.auth.UserInfoDto
 import retrofit2.Response
+import java.io.File
 
 interface AuthRemoteDataSource {
     suspend fun postLogin(
-        email: String,
-        password: String
-    ): Response<Unit>
+        loginRequestDto: LoginRequestDto
+    ): NullableBaseResponse<LoginResponseDto>
 
-    suspend fun postCheckEmail(
-        email: String
-    ): BaseResponse<CheckEmailResponseDto>
+    suspend fun postGuestLogin(
+        guestLoginRequestDto: GuestLoginRequestDto
+    ): NullableBaseResponse<GuestLoginResponseDto>
+
+    suspend fun postCheckNickname(
+        nickname: String
+    ): BaseResponse<CheckNicknameResponseDto>
 
     suspend fun postSignup(
-        email: String,
-        password: String,
-        nickname: String
-    ): Response<Unit>
+        profileImageFile: File?,
+        defaultImageName: String?,
+        nickname: String,
+        kakaoId: Long,
+        deviceId: String
+    ): NullableBaseResponse<UserInfoDto>
 }

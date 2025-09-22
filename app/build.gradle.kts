@@ -25,9 +25,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", properties["base.url"].toString())
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
-        manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"].toString()
+        manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"].toString().replace("\"", "")
+
         buildConfigField("String", "NAVER_CLIENT_ID", properties["NAVER_CLIENT_ID"].toString())
         buildConfigField("String", "NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"].toString())
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", properties["kakao.native.app.key"].toString())
@@ -37,10 +37,18 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", properties["base.url.release"].toString())
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            isMinifyEnabled = false
+            isDebuggable = true
+            versionNameSuffix = "-DEBUG"
+            buildConfigField("String", "BASE_URL", properties["base.url.dev"].toString())
+
         }
     }
     buildFeatures {
@@ -100,6 +108,7 @@ dependencies {
 
     // Naver Map
     implementation(libs.map.sdk)
+    implementation(libs.naver.map.compose)
 
     // Location Provider Client
     implementation(libs.play.services.location)
@@ -132,7 +141,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.coil.compose)
 
-
     // Kakao
     implementation(libs.bundles.kakao)
+
+    // View Pager
+    implementation(libs.bundles.pager)
+    
+    // Accompanist
+    implementation(libs.accompanist.permissions)
 }

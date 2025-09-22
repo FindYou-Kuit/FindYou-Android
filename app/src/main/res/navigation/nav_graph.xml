@@ -56,23 +56,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_report"
-        android:name="com.example.findu.presentation.ui.report.ReportFragment"
-        android:label="Report"
-        tools:layout="@layout/fragment_report">
-        <action
-            android:id="@+id/action_fragment_report_to_fragment_witness_report"
-            app:destination="@id/fragment_witness_report"
-            app:popUpTo="@id/fragment_report"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_fragment_report_to_fragment_missing_report"
-            app:destination="@id/fragment_missing_report"
-            app:popUpTo="@id/fragment_report"
-            app:popUpToInclusive="true" />
-    </fragment>
-
-    <fragment
         android:id="@+id/fragment_info"
         android:name="com.example.findu.presentation.ui.info.InfoFragment"
         android:label="Info"
@@ -107,6 +90,9 @@
         android:label="My"
         tools:layout="@layout/fragment_my">
         <action
+                android:id="@+id/action_fragment_my_to_fragment_inquire"
+                app:destination="@id/fragment_my_inquire" />
+        <action
             android:id="@+id/action_fragment_my_to_fragment_my_report_history"
             app:destination="@id/fragment_my_report_history" />
         <action
@@ -115,40 +101,6 @@
         <action
             android:id="@+id/action_fragment_my_to_fragment_my_keep_animals"
             app:destination="@id/fragment_my_keep_animals" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/fragment_witness_report"
-        android:name="com.example.findu.presentation.ui.report.WitnessReportFragment"
-        android:label="Witness Report"
-        tools:layout="@layout/fragment_witness_report">
-        <action
-            android:id="@+id/action_fragment_witness_report_to_fragment_home"
-            app:destination="@id/fragment_home"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_fragment_witness_report_to_fragment_report_camera"
-            app:destination="@id/fragment_report_camera" />
-        <action
-            android:id="@+id/action_fragment_witness_report_to_fragment_my_report_history"
-            app:destination="@id/fragment_my_report_history" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/fragment_missing_report"
-        android:name="com.example.findu.presentation.ui.report.MissingReportFragment"
-        android:label="Missing Report"
-        tools:layout="@layout/fragment_missing_report">
-        <action
-            android:id="@+id/action_fragment_missing_report_to_fragment_home"
-            app:destination="@id/fragment_home"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_fragment_missing_report_to_fragment_report_camera"
-            app:destination="@id/fragment_report_camera" />
-        <action
-            android:id="@+id/action_fragment_missing_report_to_fragment_my_report_history"
-            app:destination="@id/fragment_my_report_history" />
     </fragment>
 
     <fragment
@@ -250,6 +202,12 @@
     </fragment>
 
     <fragment
+            android:id="@+id/fragment_my_inquire"
+            android:name="com.example.findu.presentation.ui.my.MyInquireFragment"
+            android:label="문의하기"
+            tools:layout="@layout/fragment_my_inquire" />
+
+    <fragment
         android:id="@+id/fragment_search_detail_protecting"
         android:name="com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment"
         android:label="Search Missing Detail"
@@ -266,6 +224,48 @@
             android:name="tag"
             android:defaultValue=""
             app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_missing_report"
+        android:name="com.example.findu.presentation.ui.report.MissingReportFragment"
+        android:label="Missing Report"
+        tools:layout="@layout/fragment_missing_report">
+        <action
+            android:id="@+id/action_fragment_missing_report_to_fragment_home"
+            app:destination="@id/fragment_home"
+            app:popUpTo="@id/fragment_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_missing_report_to_fragment_report_camera"
+            app:destination="@id/fragment_report_camera" />
+        <action
+            android:id="@+id/action_fragment_missing_report_to_fragment_my_report_history"
+            app:destination="@id/fragment_my_report_history"
+            app:popUpTo="@id/fragment_missing_report"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_witness_report"
+        android:name="com.example.findu.presentation.ui.report.WitnessReportFragment"
+        android:label="Witness Report"
+        tools:layout="@layout/fragment_witness_report">
+        <action
+            android:id="@+id/action_fragment_witness_report_to_fragment_home"
+            app:destination="@id/fragment_home"
+            app:popUpTo="@id/fragment_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_witness_report_to_fragment_report_camera"
+            app:destination="@id/fragment_report_camera" />
+        <action
+            android:id="@+id/action_fragment_witness_report_to_fragment_my_report_history"
+            app:destination="@id/fragment_my_report_history"
+            app:popUpTo="@id/fragment_witness_report"
+            app:popUpToInclusive="true" />
+
     </fragment>
 
 </navigation>

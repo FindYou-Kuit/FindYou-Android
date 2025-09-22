@@ -1,7 +1,9 @@
 package com.example.findu.di
 
+import com.example.findu.data.datalocal.datasource.DeviceLocalDataSource
 import com.example.findu.data.datalocal.datasource.DummyLocalDataSource
 import com.example.findu.data.datalocal.datasource.TokenLocalDataSource
+import com.example.findu.data.datalocal.datasourceimpl.DeviceLocalDataSourceImpl
 import com.example.findu.data.dataremote.datasource.DummyRemoteDataSource
 import com.example.findu.data.datalocal.datasourceimpl.DummyLocalDataSourceImpl
 import com.example.findu.data.datalocal.datasourceimpl.TokenLocalDataSourceImpl
@@ -88,4 +90,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsAuthDataSource(authRemoteDataSourceImpl: AuthRemoteDataSourceImpl): AuthRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsDeviceDataSource(deviceLocalDataSourceImpl: DeviceLocalDataSourceImpl): DeviceLocalDataSource
 }

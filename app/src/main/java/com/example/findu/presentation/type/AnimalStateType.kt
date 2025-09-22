@@ -8,17 +8,17 @@ enum class AnimalStateType(
     @ColorRes val textColor: Int,
     @ColorRes val backgroundChipColor: Int
 ) {
-    Protect(
+    PROTECT(
         state = "보호중",
         textColor = R.color.green1,
         backgroundChipColor = R.color.green2
     ),
-    Missing(
+    MISSING(
         state = "실종신고",
         textColor = R.color.red1,
         backgroundChipColor = R.color.red2
     ),
-    Find(
+    FIND(
         state = "목격신고",
         textColor = R.color.blue1,
         backgroundChipColor = R.color.blue2
@@ -27,10 +27,10 @@ enum class AnimalStateType(
     companion object {
         fun fromTag(tag: String): AnimalStateType =
             when (tag) {
-                "보호중" -> Protect
-                "실종신고" -> Missing
-                "목격신고" -> Find
-                else -> Protect
+                "보호중" -> PROTECT
+                "실종신고" -> MISSING
+                "목격신고" -> FIND
+                else -> PROTECT
             }
     }
 }

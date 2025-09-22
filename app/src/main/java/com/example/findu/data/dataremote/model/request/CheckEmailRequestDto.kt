@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CheckEmailRequestDto(
-    @SerialName("email")
-    val email: String
+data class CheckNicknameRequestDto(
+    @SerialName("nickname")
+    val nickname: String
 )
