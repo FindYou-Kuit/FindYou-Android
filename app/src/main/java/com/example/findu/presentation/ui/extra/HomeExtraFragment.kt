@@ -14,7 +14,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentHomeExtraBinding
+import com.example.findu.presentation.model.HomeExtraContent
 import com.example.findu.presentation.type.view.LoadState
+import com.example.findu.presentation.ui.extra.view.ExtraHomeDepartmentScreen
 import com.example.findu.presentation.ui.extra.view.ExtraHomeVolunteerScreen
 import com.example.findu.presentation.ui.extra.viewmodel.HomeExtraUiEvent
 import com.example.findu.presentation.ui.extra.viewmodel.HomeExtraViewModel
@@ -54,7 +56,7 @@ class HomeExtraFragment : Fragment() {
                         }
                 }
 
-                LaunchedEffect(uiState.homeExtraButtonType){
+                LaunchedEffect(uiState.homeExtraButtonType) {
                     homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
                 }
 
@@ -65,9 +67,18 @@ class HomeExtraFragment : Fragment() {
                     LoadState.Idle -> Unit
                     LoadState.Loading -> Unit
                     LoadState.Success -> {
-                        ExtraHomeVolunteerScreen(
-                            volunteerWorks = uiState.data
-                        )
+                        when (val c = uiState.content) {
+                            is HomeExtraContent.Volunteers -> {
+                                ExtraHomeVolunteerScreen(volunteerWorks = c.list)
+                            }
+
+                            is HomeExtraContent.Departments -> {
+                                ExtraHomeDepartmentScreen(departments = c.list)
+                            }
+
+                            HomeExtraContent.None -> Unit
+                            is HomeExtraContent.Centers -> TODO()
+                        }
                     }
 
                     LoadState.Error -> Unit
@@ -75,7 +86,6 @@ class HomeExtraFragment : Fragment() {
             }
         }
     }
-
 
 
     private fun showFindDialog() {
