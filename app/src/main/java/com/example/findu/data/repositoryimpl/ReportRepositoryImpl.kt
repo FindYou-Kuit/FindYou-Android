@@ -1,11 +1,8 @@
 package com.example.findu.data.repositoryimpl
 
-import android.util.Log
 import com.example.findu.data.dataremote.datasource.GptRemoteDataSource
 import com.example.findu.data.dataremote.datasource.NaverRemoteDataSource
 import com.example.findu.data.dataremote.datasource.ReportRemoteDataSource
-import com.example.findu.data.dataremote.model.request.Content
-import com.example.findu.data.dataremote.model.request.GptRequestConstants.TEXT_TYPE
 import com.example.findu.data.dataremote.model.request.GptRequestConstants.getPromptText
 import com.example.findu.data.dataremote.model.request.GptRequestDto
 import com.example.findu.data.dataremote.model.request.GptRequestDto.Companion.imageContent
@@ -13,7 +10,7 @@ import com.example.findu.data.dataremote.model.request.GptRequestDto.Companion.t
 import com.example.findu.data.dataremote.model.request.ImageUrl
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.report.toDomain
-import com.example.findu.data.mapper.todomain.toDomain
+import com.example.findu.data.mapper.toDomain.toDomain
 import com.example.findu.data.mapper.torequest.toRequestDto
 import com.example.findu.domain.model.report.AddressData
 import com.example.findu.domain.model.report.GptData

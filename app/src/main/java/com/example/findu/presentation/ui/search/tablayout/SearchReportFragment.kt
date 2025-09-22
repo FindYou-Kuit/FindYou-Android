@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
-import com.example.findu.data.mapper.todomain.toSearchRvTag
+import com.example.findu.data.mapper.toDomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchReportBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
@@ -41,7 +41,7 @@ class SearchReportFragment : Fragment() {
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
-    private var lastReportId = Long.MAX_VALUE
+    private var lastId = Long.MAX_VALUE
     private var isNewList = false
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ class SearchReportFragment : Fragment() {
         _binding = FragmentSearchReportBinding.inflate(layoutInflater)
         initRVAdapter()
         observeViewModel()
-        viewModel.getSearchReportData()
+        viewModel.getSearchData("REPORTING");
         initFilterButton()
         initToggleButton()
         return binding.root
@@ -102,7 +102,7 @@ class SearchReportFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.reportSearchData.collectLatest { searchResults ->
                 setupRV(searchResults ?: emptyList())
-                lastReportId = searchResults?.firstOrNull()?.lastReportId ?: Long.MAX_VALUE
+                lastId = searchResults?.firstOrNull()?.lastId ?: Long.MAX_VALUE
             }
         }
 
@@ -119,13 +119,13 @@ class SearchReportFragment : Fragment() {
         val searchList = searchDataList.flatMap { data ->
             data.cards.map {
                 SearchRv(
-                    image = it.thumbnailImageUrl,
+                    image = it.thumbnailImageUrl ?:"",
                     name = it.title,
                     date = it.date,
-                    address = it.location,
+                    address = it.address,
                     isBookmark = it.interest,
                     tag = it.tag.toSearchRvTag(),
-                    cardId = it.cardId
+                    reportId = it.reportId
                 )
             }
         }
@@ -256,7 +256,7 @@ class SearchReportFragment : Fragment() {
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
             onItemClick = { item ->
-                navigateToDetail(item.cardId, item.tag.text, item.name)
+                navigateToDetail(item.reportId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
@@ -285,10 +285,8 @@ class SearchReportFragment : Fragment() {
                 val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
 
                 // 페이징 처리
-                if (rvPosition == totalCount) {
-                    viewModel.getSearchReportData(
-                        lastReportId
-                    )
+                if (rvPosition == totalCount && (viewModel.reportSearchData.value?.firstOrNull()?.isLast == false)) {
+                    viewModel.getSearchData("REPORTING", lastId)
                 }
             }
         })

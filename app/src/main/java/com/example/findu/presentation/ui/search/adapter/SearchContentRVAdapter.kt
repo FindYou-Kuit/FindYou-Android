@@ -22,7 +22,7 @@ class SearchContentRVAdapter(
 
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SearchRv>() {
             override fun areItemsTheSame(oldItem: SearchRv, newItem: SearchRv): Boolean {
-                return oldItem.cardId == newItem.cardId
+                return oldItem.reportId == newItem.reportId
             }
 
             override fun areContentsTheSame(oldItem: SearchRv, newItem: SearchRv): Boolean {
@@ -81,7 +81,7 @@ class SearchContentRVAdapter(
                 root.setOnClickListener { onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
                     item.isBookmark = !item.isBookmark
-                    onBookmarkClick(item.cardId, item.isBookmark, item.tag.text)
+                    onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
                 }
             }

@@ -2,7 +2,6 @@ package com.example.findu.presentation.ui.search.tablayout
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
-import com.example.findu.data.mapper.todomain.toSearchRvTag
+import com.example.findu.data.mapper.toDomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchAllBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
@@ -41,10 +40,9 @@ class SearchAllFragment : Fragment() {
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
-    private var lastProtectId = Long.MAX_VALUE
-    private var lastReportId = Long.MAX_VALUE
-
     private var isNewList = false
+
+    private var lastId: Long = Long.MAX_VALUE
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +51,7 @@ class SearchAllFragment : Fragment() {
         _binding = FragmentSearchAllBinding.inflate(layoutInflater)
         initRVAdapter()
         observeViewModel()
-        viewModel.getSearchAllData()
+        viewModel.getSearchData("ALL")
         initToggleButton()
         initFilterButton()
         return binding.root
@@ -63,8 +61,7 @@ class SearchAllFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.allSearchData.collectLatest { searchResults ->
                 setupRV(searchResults ?: emptyList())
-                lastReportId = searchResults?.firstOrNull()?.lastReportId ?: Long.MAX_VALUE
-                lastProtectId = searchResults?.firstOrNull()?.lastProtectId ?: Long.MAX_VALUE
+                lastId = searchResults?.firstOrNull()?.lastId ?: Long.MAX_VALUE
             }
         }
 
@@ -81,13 +78,13 @@ class SearchAllFragment : Fragment() {
         val searchList = searchDataList.flatMap { data ->
             data.cards.map {
                 SearchRv(
-                    image = it.thumbnailImageUrl,
+                    image = it.thumbnailImageUrl ?: "",
                     name = it.title,
                     date = it.date,
-                    address = it.location,
+                    address = it.address,
                     isBookmark = it.interest,
                     tag = it.tag.toSearchRvTag(),
-                    cardId = it.cardId
+                    reportId = it.reportId
                 )
             }
         }
@@ -220,7 +217,7 @@ class SearchAllFragment : Fragment() {
                             isNewList = true
                             chipGroup.removeView(chip)
                             viewModel.updateAllFilterState(
-                                viewModel.reportFilter?.copy(location = null)
+                                viewModel.allFilter?.copy(location = null)
                             )
                         }
                         chipGroup.addView(locationChip)
@@ -266,7 +263,7 @@ class SearchAllFragment : Fragment() {
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
             onItemClick = { item ->
-                navigateToDetail(item.cardId, item.tag.text, item.name)
+                navigateToDetail(item.reportId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
@@ -297,11 +294,8 @@ class SearchAllFragment : Fragment() {
                 val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
 
                 // 페이징 처리
-                if (rvPosition == totalCount) {
-                    viewModel.getSearchAllData(
-                        lastProtectId,
-                        lastReportId
-                    )
+                if (rvPosition == totalCount && (viewModel.allSearchData.value?.firstOrNull()?.isLast == false)) {
+                    viewModel.getSearchData("ALL", lastId)
                 }
             }
         })

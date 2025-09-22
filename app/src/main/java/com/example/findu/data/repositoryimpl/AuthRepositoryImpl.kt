@@ -2,7 +2,7 @@ package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.dataremote.datasource.AuthRemoteDataSource
 import com.example.findu.data.dataremote.util.handleBaseResponse
-import com.example.findu.data.mapper.todomain.toDomain
+import com.example.findu.data.mapper.toDomain.toDomain
 import com.example.findu.data.mapper.torequest.toRequestDto
 import com.example.findu.domain.model.GuestLoginData
 import com.example.findu.domain.model.LoginData

@@ -68,57 +68,33 @@ class SearchViewModel @Inject constructor(
         fetchBreedData()
     }
 
-    fun getSearchAllData(
-        lastProtectId: Long = Long.MAX_VALUE,
-        lastReportId: Long = Long.MAX_VALUE
+    fun getSearchData(
+        type: String, // ALL PROTECTING REPORTING
+        lastId: Long = Long.MAX_VALUE
     ) {
         viewModelScope.launch {
-            getSearchUseCase.getAllData(
-                _allFilter?.toDomain(),
-                lastProtectId = lastProtectId,
-                lastReportId = lastReportId
-            ).fold(
-                onSuccess = { data ->
-                    _allSearchData.value = data
-                },
-                onFailure = { error ->
-                    _errorMessage.value = error.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
-                }
-            )
-        }
-    }
+            val filter = when (type) {
+                "ALL" -> _allFilter?.toDomain()
+                "PROTECTING" -> _protectFilter?.toDomain()
+                "REPORTING" -> _reportFilter?.toDomain()
+                else -> null
+            }
 
-    fun getSearchReportData(
-        lastReportId: Long = Long.MAX_VALUE
-    ) {
-        viewModelScope.launch {
-            getSearchUseCase.getReportData(
-                _reportFilter?.toDomain(),
-                lastReportId = lastReportId
+            getSearchUseCase.getReports(
+                type = type,
+                searchFilterData = filter,
+                lastId = lastId
             ).fold(
                 onSuccess = { data ->
-                    _reportSearchData.value = data
+                    when (type) {
+                        "ALL" -> _allSearchData.value = data
+                        "PROTECTING" -> _protectSearchData.value = data
+                        "REPORTING" -> _reportSearchData.value = data
+                    }
                 },
                 onFailure = { error ->
-                    _errorMessage.value = error.message ?: "신고 동물 데이터를 불러오는 중 오류가 발생했습니다."
-                }
-            )
-        }
-    }
-
-    fun getSearchProtectData(
-        lastProtectId: Long = Long.MAX_VALUE
-    ) {
-        viewModelScope.launch {
-            getSearchUseCase.getProtectData(
-                _protectFilter?.toDomain(),
-                lastProtectId = lastProtectId,
-            ).fold(
-                onSuccess = { data ->
-                    _protectSearchData.value = data
-                },
-                onFailure = { error ->
-                    _errorMessage.value = error.message ?: "신고 동물 데이터를 불러오는 중 오류가 발생했습니다."
+                    _errorMessage.value =
+                        error.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
                 }
             )
         }
@@ -130,7 +106,7 @@ class SearchViewModel @Inject constructor(
         val newAllFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newAllFilter != _allFilter) {
             _allFilter = newAllFilter
-            getSearchAllData()
+            getSearchData("ALL")
         }
     }
 
@@ -140,7 +116,7 @@ class SearchViewModel @Inject constructor(
         val newReportFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newReportFilter != _reportFilter) {
             _reportFilter = newReportFilter
-            getSearchReportData()
+            getSearchData("PROTECTING")
         }
     }
 
@@ -150,7 +126,7 @@ class SearchViewModel @Inject constructor(
         val newProtectFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newProtectFilter != _protectFilter) {
             _protectFilter = newProtectFilter
-            getSearchProtectData()
+            getSearchData("REPORTING")
         }
     }
 

@@ -8,7 +8,7 @@ data class SearchResponseDto(
     @SerialName("cards")
     val cards: List<SearchAnimalCard>,
     @SerialName("lastId")
-    val lastProtectId : Long?,
+    val lastId : Long?,
     @SerialName("isLast")
     val isLast : Boolean
 )
@@ -16,7 +16,7 @@ data class SearchResponseDto(
 @Serializable
 data class SearchAnimalCard(
     @SerialName("reportId")
-    val cardId: Long,
+    val reportId: Long,
     @SerialName("thumbnailImageUrl")
     val thumbnailImageUrl: String?,
     @SerialName("title")
@@ -25,8 +25,8 @@ data class SearchAnimalCard(
     val tag: String,
     @SerialName("date")
     val date: String,
-    @SerialName("location")
-    val location: String,
+    @SerialName("address")
+    val address: String,
     @SerialName("interest")
     val interest: Boolean = false
 )

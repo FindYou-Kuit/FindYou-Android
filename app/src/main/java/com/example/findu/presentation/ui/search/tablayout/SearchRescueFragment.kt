@@ -14,17 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
-import com.example.findu.data.mapper.todomain.toSearchRvTag
+import com.example.findu.data.mapper.toDomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
-import com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
@@ -40,12 +37,11 @@ class SearchRescueFragment : Fragment() {
     private var _binding: FragmentSearchRescueBinding? = null
     private val binding get() = _binding!!
 
-    private var items = ArrayList<SearchRv>()
     private lateinit var rvAdapter: SearchContentRVAdapter
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
-    private var lastProtectId = Long.MAX_VALUE
+    private var lastId = Long.MAX_VALUE
     private var isNewList = false
 
     override fun onCreateView(
@@ -55,7 +51,7 @@ class SearchRescueFragment : Fragment() {
         _binding = FragmentSearchRescueBinding.inflate(layoutInflater)
         initRVAdapter()
         observeViewModel()
-        viewModel.getSearchProtectData()
+        viewModel.getSearchData("PROTECTING")
         initToggleButton()
         initFilterButton()
         return binding.root
@@ -65,7 +61,7 @@ class SearchRescueFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.protectSearchData.collectLatest { searchResults ->
                 setupRV(searchResults ?: emptyList())
-                lastProtectId = searchResults?.firstOrNull()?.lastProtectId ?: Long.MAX_VALUE
+                lastId = searchResults?.firstOrNull()?.lastId ?: Long.MAX_VALUE
             }
         }
 
@@ -82,13 +78,13 @@ class SearchRescueFragment : Fragment() {
         val searchList = searchDataList.flatMap { data ->
             data.cards.map {
                 SearchRv(
-                    image = it.thumbnailImageUrl,
+                    image = it.thumbnailImageUrl ?: "",
                     name = it.title,
                     date = it.date,
-                    address = it.location,
+                    address = it.address,
                     isBookmark = it.interest,
                     tag = it.tag.toSearchRvTag(),
-                    cardId = it.cardId
+                    reportId = it.reportId
                 )
             }
         }
@@ -260,12 +256,12 @@ class SearchRescueFragment : Fragment() {
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
             onItemClick = { item ->
-                navigateToDetail(item.cardId, item.tag.text, item.name)
+                navigateToDetail(item.reportId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
             }
-        ).apply { submitList(items) }
+        ).apply { submitList(emptyList()) }
         binding.rvSearchRescueHorizontalContent.adapter = rvAdapter
         binding.rvSearchRescueHorizontalContent.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -288,10 +284,8 @@ class SearchRescueFragment : Fragment() {
 
                 val totalCount = recyclerView.adapter?.itemCount?.minus(1) ?: 0
                 // 페이징 처리
-                if (rvPosition == totalCount) {
-                    viewModel.getSearchProtectData(
-                        lastProtectId,
-                    )
+                if (rvPosition == totalCount && (viewModel.protectSearchData.value?.firstOrNull()?.isLast == false)) {
+                    viewModel.getSearchData("PROTECTING",lastId)
                 }
             }
         })

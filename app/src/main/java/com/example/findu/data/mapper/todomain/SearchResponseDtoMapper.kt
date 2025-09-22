@@ -1,4 +1,4 @@
-package com.example.findu.data.mapper.todomain
+package com.example.findu.data.mapper.toDomain
 
 import com.example.findu.data.dataremote.model.response.SearchAnimalCard
 import com.example.findu.data.dataremote.model.response.SearchResponseDto
@@ -10,20 +10,19 @@ import com.example.findu.presentation.ui.search.model.SearchRvTag
 fun SearchResponseDto.toDomain(): SearchData {
     return SearchData(
         cards = this.cards.map { it.toDomain() },
-        lastProtectId = this.lastProtectId ?: -1,
-        lastReportId = this.lastReportId ?: -1,
+        lastId = this.lastId ?: -1,
         isLast = this.isLast
     )
 }
 
 fun SearchAnimalCard.toDomain(): SearchAnimal {
     return SearchAnimal(
-        cardId = this.cardId,
+        reportId = this.reportId,
         thumbnailImageUrl = this.thumbnailImageUrl ?: "",
         title = this.title,
         tag = this.tag.toSearchStatus(),
         date = this.date,
-        location = this.location,
+        address = this.address,
         interest = this.interest,
     )
 }

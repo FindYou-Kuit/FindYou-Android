@@ -4,17 +4,16 @@ import java.io.Serializable
 
 data class SearchData(
     val cards: List<SearchAnimal>,
-    val lastProtectId: Long,
-    val lastReportId: Long,
+    val lastId: Long,
     val isLast: Boolean
 ) : Serializable
 
 data class SearchAnimal(
     val reportId: Long,
-    val thumbnailImageUrl: String,
+    val thumbnailImageUrl: String?,
     val title: String,
     val tag: SearchStatus,
     val date: String,
-    val location: String,
+    val address: String,
     val interest: Boolean
 ) : Serializable
