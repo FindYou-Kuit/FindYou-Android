@@ -26,7 +26,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
-        manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"].toString()
+        manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"].toString().replace("\"", "")
+
         buildConfigField("String", "NAVER_CLIENT_ID", properties["NAVER_CLIENT_ID"].toString())
         buildConfigField("String", "NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"].toString())
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", properties["kakao.native.app.key"].toString())
@@ -106,6 +107,7 @@ dependencies {
 
     // Naver Map
     implementation(libs.map.sdk)
+    implementation(libs.naver.map.compose)
 
     // Location Provider Client
     implementation(libs.play.services.location)
@@ -143,4 +145,7 @@ dependencies {
 
     // View Pager
     implementation(libs.bundles.pager)
+    
+    // Accompanist
+    implementation(libs.accompanist.permissions)
 }

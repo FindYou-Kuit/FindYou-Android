@@ -25,7 +25,6 @@ fun GptResponseDto.toDomain(): GptData =
                     FurColorType.RED.color -> FurColorType.RED
                     FurColorType.YELLOW.color -> FurColorType.YELLOW
                     FurColorType.SPOTTED.color -> FurColorType.SPOTTED
-                    FurColorType.STRIPED.color -> FurColorType.STRIPED
                     else -> FurColorType.OTHER
                 }
             }
