@@ -1,11 +1,8 @@
 package com.example.findu.data.repositoryimpl
 
-import android.util.Log
 import com.example.findu.data.dataremote.datasource.GptRemoteDataSource
 import com.example.findu.data.dataremote.datasource.NaverRemoteDataSource
 import com.example.findu.data.dataremote.datasource.ReportRemoteDataSource
-import com.example.findu.data.dataremote.model.request.Content
-import com.example.findu.data.dataremote.model.request.GptRequestConstants.TEXT_TYPE
 import com.example.findu.data.dataremote.model.request.GptRequestConstants.getPromptText
 import com.example.findu.data.dataremote.model.request.GptRequestDto
 import com.example.findu.data.dataremote.model.request.GptRequestDto.Companion.imageContent

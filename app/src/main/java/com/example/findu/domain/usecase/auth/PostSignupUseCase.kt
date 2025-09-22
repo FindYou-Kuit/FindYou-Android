@@ -1,4 +1,4 @@
-package com.example.findu.domain.usecase
+package com.example.findu.domain.usecase.auth
 
 import com.example.findu.domain.model.UserInfo
 import com.example.findu.domain.repository.AuthRepository

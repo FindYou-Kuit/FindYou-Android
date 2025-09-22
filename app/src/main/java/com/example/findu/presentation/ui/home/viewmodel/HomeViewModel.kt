@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.HomeData
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
-import com.example.findu.domain.usecase.GetHomeUseCase
+import com.example.findu.domain.usecase.home.GetHomeUseCase
 import com.example.findu.presentation.type.HomeReportDurationType
 import com.example.findu.presentation.type.view.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel

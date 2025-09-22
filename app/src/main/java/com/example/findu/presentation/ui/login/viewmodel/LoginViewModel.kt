@@ -3,8 +3,8 @@ package com.example.findu.presentation.ui.login.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.findu.domain.usecase.PostGuestLoginUseCase
-import com.example.findu.domain.usecase.PostLoginUseCase
+import com.example.findu.domain.usecase.auth.PostGuestLoginUseCase
+import com.example.findu.domain.usecase.auth.PostLoginUseCase
 import com.example.findu.domain.usecase.token.SetAccessTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
