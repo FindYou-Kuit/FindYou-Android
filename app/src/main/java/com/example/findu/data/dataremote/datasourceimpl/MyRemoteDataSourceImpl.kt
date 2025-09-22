@@ -8,6 +8,8 @@ import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.example.findu.data.dataremote.service.MyService
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class MyRemoteDataSourceImpl @Inject constructor(
@@ -34,4 +36,12 @@ class MyRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getNickname(): BaseResponse<MyNickNameResponseDto> =
         myService.getNickname()
+
+    override suspend fun patchProfileImageFile(file: MultipartBody.Part): NullableBaseResponse<Unit> =
+        myService.patchProfileImageFile(file)
+
+
+    override suspend fun patchProfileImageDefault(defaultProfileImageName: RequestBody): NullableBaseResponse<Unit> =
+        myService.patchProfileImageDefault(defaultProfileImageName)
+
 }

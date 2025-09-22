@@ -9,10 +9,12 @@ import com.example.findu.domain.model.my.MyProfileData
 import com.example.findu.domain.model.my.MyReportHistoryData
 import com.example.findu.domain.model.my.MyViewedAnimalData
 import com.example.findu.domain.repository.MyRepository
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class MyRepositoryImpl @Inject constructor(
-    private val myRemoteDataSource: MyRemoteDataSource
+    private val myRemoteDataSource: MyRemoteDataSource,
 ) : MyRepository {
     override suspend fun getMyInterest(
         lastId: Long,
@@ -59,5 +61,16 @@ class MyRepositoryImpl @Inject constructor(
                         profileImage = dto.profileImage
                     )
                 }
+        }
+
+    override suspend fun patchProfileImageFile(file: MultipartBody.Part): Result<Unit> =
+        runCatching {
+            myRemoteDataSource.patchProfileImageFile(file).handleBaseResponse().getOrThrow()
+        }
+
+    override suspend fun patchProfileImageDefault(defaultProfileImageName: RequestBody): Result<Unit> =
+        runCatching {
+            myRemoteDataSource.patchProfileImageDefault(defaultProfileImageName)
+                .handleBaseResponse().getOrThrow()
         }
 }

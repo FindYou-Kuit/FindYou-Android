@@ -83,7 +83,14 @@ class MyFragment : Fragment() {
                 myProfileImageDialog = MyProfileImageDialog(
                     context = requireContext(),
                     onDrawableSelected = { resId ->
-                        myViewModel.updateProfileImage(resId)
+                        val defaultName = when (resId) {
+                            R.drawable.img_my_profile_default -> "default"
+                            R.drawable.img_my_profile1 -> "puppy"
+                            R.drawable.img_my_profile2 -> "chick"
+                            R.drawable.img_my_profile3 -> "panda"
+                            else -> "default"
+                        }
+                        myViewModel.updateProfileImage(defaultName)
                     },
                     onGallerySelected = { uri ->
                         myViewModel.updateProfileImageFromGallery(uri)
@@ -252,6 +259,7 @@ class MyFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        myProfileImageDialog = null
         _binding = null
     }
 }

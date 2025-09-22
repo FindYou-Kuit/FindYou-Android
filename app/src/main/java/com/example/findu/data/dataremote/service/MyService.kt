@@ -6,10 +6,14 @@ import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface MyService {
@@ -38,4 +42,16 @@ interface MyService {
 
     @GET("/api/v2/users/me")
     suspend fun getNickname(): BaseResponse<MyNickNameResponseDto>
+
+    @Multipart
+    @PATCH("/api/v2/users/me/profile-image")
+    suspend fun patchProfileImageFile(
+        @Part profileImageFile: MultipartBody.Part
+    ): NullableBaseResponse<Unit>
+
+    @Multipart
+    @PATCH("/api/v2/users/me/profile-image")
+    suspend fun patchProfileImageDefault(
+        @Part("defaultProfileImageName") defaultProfileImageName: RequestBody
+    ): NullableBaseResponse<Unit>
 }

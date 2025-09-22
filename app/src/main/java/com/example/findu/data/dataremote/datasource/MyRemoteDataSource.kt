@@ -6,6 +6,8 @@ import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 interface MyRemoteDataSource {
     suspend fun getInterestAnimals(
@@ -25,4 +27,8 @@ interface MyRemoteDataSource {
     suspend fun patchNickname(newNickname: String): NullableBaseResponse<Unit>
 
     suspend fun getNickname(): BaseResponse<MyNickNameResponseDto>
+
+    suspend fun patchProfileImageFile(file: MultipartBody.Part): NullableBaseResponse<Unit>
+
+    suspend fun patchProfileImageDefault(defaultProfileImageName: RequestBody): NullableBaseResponse<Unit>
 }

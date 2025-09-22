@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.R
 import com.example.findu.domain.model.my.MyProfileData
 import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
@@ -13,6 +14,7 @@ import com.example.findu.domain.usecase.my.GetNickNameUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
+import com.example.findu.domain.usecase.my.PatchProfileImageUseCase
 import com.example.findu.domain.usecase.report.DeleteReportUseCase
 import com.example.findu.presentation.mapper.torvmodel.toRvModel
 import com.example.findu.presentation.model.MyInterestRv
@@ -23,6 +25,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,6 +42,7 @@ class MyViewModel @Inject constructor(
     private val postInterestAnimalUseCase: PostInterestAnimalUseCase,
     private val deleteInterestAnimalUseCase: DeleteInterestAnimalUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
+    private val patchProfileImageFileUseCase: PatchProfileImageUseCase,
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -127,13 +134,35 @@ class MyViewModel @Inject constructor(
         }
     }
 
-    fun updateProfileImage(resId: Int) {
-        _selectedImageResId.value = resId
-    }
 
+    fun updateProfileImage(enumName: String) {
+        viewModelScope.launch {
+            val requestBody = enumName.toRequestBody("text/plain".toMediaType())
+            patchProfileImageFileUseCase.uploadDefault(requestBody).fold(
+                onSuccess = {
+                    fetchMyProfile()
+                },
+                onFailure = {
+                    _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류가 발생했습니다."
+                }
+            )
+        }
+    }
 
     fun updateProfileImageFromGallery(uri: Uri) {
         _selectedProfileImageUri.value = uri
+
+        viewModelScope.launch {
+
+//            patchProfileImageFileUseCase.uploadFile(multipartBody).fold(
+//                onSuccess = {
+//                    fetchMyProfile()
+//                },
+//                onFailure = {
+//                    _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류가 발생했습니다."
+//                }
+//            )
+        }
     }
 
     fun toggleAlarmSetting() {
