@@ -1,0 +1,115 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_search_filter_bottom_sheet_rounded"
+    android:paddingHorizontal="19dp"
+    android:paddingBottom="30dp">
+
+    <ImageView
+        android:id="@+id/iv_search_filter_close_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="19dp"
+        android:src="@drawable/img_search_filters_date_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="320dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="170dp"
+        android:background="@drawable/bg_search_filter_picker_selection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_dialog_filter_date_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_search_filter_close_btn">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="년"
+            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            android:textColor="@color/gray5" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="월"
+            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            android:textColor="@color/gray5" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="일"
+            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            android:textColor="@color/gray5" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_dialog_filter_date_text">
+
+        <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:theme="@style/SearchFilterDatePickerStyle" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_top_mask"
+        android:layout_width="320dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="110dp"
+        android:background="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/fl_bottom_mask"
+        android:layout_width="320dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="230dp"
+        android:background="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_search_filter_date_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/bg_search_filter_check"
+        android:stateListAnimator="@null"
+        android:text="@string/search_filter_check"
+        android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fl_date_picker" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

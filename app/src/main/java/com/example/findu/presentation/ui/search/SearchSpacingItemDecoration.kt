@@ -16,6 +16,14 @@ class SearchSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemD
     ) {
         super.getItemOffsets(outRect, view, parent, state)
 
+        val position = parent.getChildAdapterPosition(view)
+        if (position == RecyclerView.NO_POSITION) return
+
+        if (position == 0) {
+            outRect.set(0, 0, 0, 0)
+            return
+        }
+
         val layoutManager = parent.layoutManager
         if (layoutManager is GridLayoutManager) {
             val layoutParams = view.layoutParams as GridLayoutManager.LayoutParams
