@@ -68,16 +68,9 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="searchCustomRadioButtonLeft" parent="searchCustomRadioButtonBase">
-        <item name="android:background">@drawable/bg_search_filter_button_left</item>
-    </style>
 
     <style name="searchCustomRadioButtonMiddle" parent="searchCustomRadioButtonBase">
         <item name="android:background">@drawable/bg_search_filter_button_middle</item>
-    </style>
-
-    <style name="searchCustomRadioButtonRight" parent="searchCustomRadioButtonBase">
-        <item name="android:background">@drawable/bg_search_filter_button_right</item>
     </style>
 
     <style name="searchFilterBottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
@@ -88,8 +81,19 @@
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/searchFilterBottomSheet</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.6</item>
     </style>
 
     <style name="searchFilterBottomSheetDialogTheme" parent="searchFilterBaseBottomSheetDialog" />
+
+    <style name="SearchFilterDatePickerStyle" parent="android:Widget.Material.DatePicker">
+        <item name="android:textColor">@color/gray6</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textFontWeight">600</item>
+        <item name="android:divider">@drawable/bg_search_filter_picker_selection</item>
+    </style>
 
 </resources>

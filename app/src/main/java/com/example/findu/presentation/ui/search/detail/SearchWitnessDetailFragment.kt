@@ -8,21 +8,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.findu.R
 import com.example.findu.data.mapper.toDomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailWitnessBinding
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
-import com.google.android.material.chip.Chip
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.MapView
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SearchWitnessDetailFragment : Fragment() {
@@ -33,12 +41,19 @@ class SearchWitnessDetailFragment : Fragment() {
     private var name: String? = null
 
     private val args :SearchWitnessDetailFragmentArgs by navArgs()
+    private var isBookmarked = false
+
+    private var naverMap: NaverMap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchDetailWitnessBinding.inflate(layoutInflater)
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.getMapAsync { nMap ->
+            naverMap = nMap
+        }
         return binding.root
     }
 
@@ -55,11 +70,54 @@ class SearchWitnessDetailFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
+        initDummyImages()
 
         observeViewModel()
         fetchDetailData()
         initListener()
 
+    }
+
+    private fun setupMap() {
+        val address = binding.tvValueWitnessLocation.text.toString()
+        if (address.isBlank()) return
+        lifecycleScope.launch(Dispatchers.IO) {
+            runCatching {
+                val geocoder = android.location.Geocoder(requireContext())
+                geocoder.getFromLocationName(address, 1)
+            }.onSuccess { results ->
+                if (!results.isNullOrEmpty()) {
+                    val location = LatLng(results[0].latitude, results[0].longitude)
+                    withContext(Dispatchers.Main) {
+                        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
+                        Marker().apply {
+                            position = location
+                            map = naverMap
+                            icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
+                            height = 23
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }.onFailure { e ->
+                Log.w("SearchDisappearDetail", "Geocoding failed", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun initDummyImages() {
+        val dummyImages = listOf(
+            R.drawable.img_search_detail_content,
+            R.drawable.img_search_detail_content,
+            R.drawable.img_search_detail_content
+        )
+        initViewPager(dummyImages)
     }
 
     private fun fetchDetailData() {
@@ -92,103 +150,58 @@ class SearchWitnessDetailFragment : Fragment() {
         binding.apply {
             tvDetailTitleField.text = name
             tvDetailTagField.text = convertTagToKorean(data.tag.text)
-            tvDetailBreedField.text = data.breed
-            tvDetailFurColorField.text = data.furColor
-            tvDetailUserNameField.text = data.userName
-            tvDetailWriteDateField.text = data.writeDate
-            tvDetailWitnessDateField.text = data.eventDate
-            tvDetailEventDateField.text = data.eventDate
-            tvDetailEventLocationField.text = data.eventLocation
-            tvDetailAdditionalDescriptionField.text = data.additionalDescription
+            tvValueHairColor.text = data.furColor
+            tvSpecialNote.text = data.specialNote
+            tvWitnessLocation.text = data.eventLocation
+            tvValueWitnessLocationAround.text = data.surroundPlace
+            tvValueReporterName.text = data.userName
+            tvWitnessDate.text = data.eventDate
 
-            initViewPager(data.imageUrls)
+            setupMap()
             initTagView(data)
-            initBookmarkUI(data)
-            initMapButtons(data)
-            initFeatureChips(data.features)
         }
     }
 
-    private fun initFeatureChips(features: List<String>) {
-        val chipGroup = binding.cgSearchGroupFeature
-        chipGroup.removeAllViews()
-
-        features.forEach { feature ->
-            val chip = layoutInflater.inflate(R.layout.item_search_features_chip, chipGroup, false) as Chip
-            chip.text = feature
-            chipGroup.addView(chip)
-        }
-    }
-
-
-    private fun initViewPager(imageList: List<String>) {
+    private fun initViewPager(imageList: List<Int>) {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
-        binding.vpSearchDetailImg.setCurrentItem(1, false)
+        binding.vpSearchDetailImg.setCurrentItem(0, false)
 
-        val indicatorCount = imageList.size
-        val pageIndicators = Array(indicatorCount) { View(requireContext()) }
-        val indicatorContainer = binding.llDotsContainer
+        binding.vpSearchDetailImg.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 2
 
-        indicatorContainer.removeAllViews()
-        for (i in pageIndicators.indices) {
-            val indicator = View(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(6, 6).apply {
-                    marginStart = 3
-                    marginEnd = 3
-                }
-                setBackgroundResource(R.drawable.ic_search_indicator_inactive)
-            }
-            indicatorContainer.addView(indicator)
-            pageIndicators[i] = indicator
+            setPageTransformer(
+                MarginPageTransformer(
+                    resources.getDimensionPixelOffset(R.dimen.SEARCH_IMAGE_MARGIN)
+                )
+            )
         }
-        pageIndicators[0].setBackgroundResource(R.drawable.ic_search_indicator_active)
 
-        binding.vpSearchDetailImg.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                val realPosition = when (position) {
-                    0 -> imageList.size - 1
-                    imageList.size + 1 -> 0
-                    else -> position - 1
-                }
-
-                pageIndicators.forEach { it.setBackgroundResource(R.drawable.ic_search_indicator_inactive) }
-                pageIndicators[realPosition].setBackgroundResource(R.drawable.ic_search_indicator_active)
-
-                binding.vpSearchDetailImg.postDelayed({
-                    when (position) {
-                        0 -> binding.vpSearchDetailImg.setCurrentItem(imageList.size, false)
-                        imageList.size + 1 -> binding.vpSearchDetailImg.setCurrentItem(1, false)
-                    }
-                }, 200)
-            }
-        })
     }
 
-    private fun initMapButtons(data: DetailReportData) {
-        binding.btnViewLocation.setOnClickListener {
-            openNaverMap(data.eventLocation)
-        }
-        binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(data.eventLocation)
-        }
-    }
-
-    private fun initListener() {
-        binding.ivSearchDetailBack.setOnClickListener {
+    private fun initListener() = with(binding) {
+        ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+        initBookmarkUI()
+
+        llSendMessage.setOnClickListener {
+            Toast.makeText(requireContext(), "준비 중이에요!", Toast.LENGTH_SHORT).show()
+        }
+
+        llViewMap.setOnClickListener {
+            val address = binding.tvValueWitnessLocation.text.toString()
+            openNaverMap(address)
+        }
     }
 
-    private fun initBookmarkUI(data: DetailReportData) {
-        updateBookmarkUI(data.interest)
+    private fun initBookmarkUI() {
         binding.ivSearchDetailBookmark.setOnClickListener {
-            data.interest = !data.interest
+            isBookmarked = !isBookmarked
             viewModel.setInterestReportAnimal(cardId)
-            updateBookmarkUI(data.interest)
+            updateBookmarkUI(isBookmarked)
         }
     }
 
@@ -240,8 +253,39 @@ class SearchWitnessDetailFragment : Fragment() {
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
             if (bookmark) R.drawable.ic_search_fill_bookmark
-            else R.drawable.ic_search_blank_bookmark
+            else R.drawable.ic_search_detail_blank_bookmark
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onPause() {
+        binding.mapView.onPause()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        binding.mapView.onStop()
+        super.onStop()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onDestroyView() {
+        binding.mapView.onDestroy()
+        super.onDestroyView()
     }
 
 }
