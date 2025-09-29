@@ -14,6 +14,7 @@ import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUse
 import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import com.example.findu.presentation.mapper.todomain.toDomain
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
+import com.example.findu.presentation.ui.search.model.SearchType
 import com.example.findu.presentation.ui.search.model.toSearchFilterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +30,7 @@ class SearchViewModel @Inject constructor(
     private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
     private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
     private val deleteInterestReportAnimalUseCase: DeleteInterestReportAnimalUseCase,
-    private val getBreedDataUseCase: GetBreedDataUseCase
+    private val getBreedDataUseCase: GetBreedDataUseCase,
 ) : ViewModel() {
 
     private var _allFilter: SearchFilterUiModel? = SearchFilterUiModel()
@@ -70,13 +71,13 @@ class SearchViewModel @Inject constructor(
 
     fun getSearchData(
         type: String, // ALL PROTECTING REPORTING
-        lastId: Long = Long.MAX_VALUE
+        lastId: Long = Long.MAX_VALUE,
     ) {
         viewModelScope.launch {
             val filter = when (type) {
-                "ALL" -> _allFilter?.toDomain()
-                "PROTECTING" -> _protectFilter?.toDomain()
-                "REPORTING" -> _reportFilter?.toDomain()
+                SearchType.ALL -> _allFilter?.toDomain()
+                SearchType.PROTECTING -> _protectFilter?.toDomain()
+                SearchType.REPORTING -> _reportFilter?.toDomain()
                 else -> null
             }
 
@@ -87,9 +88,9 @@ class SearchViewModel @Inject constructor(
             ).fold(
                 onSuccess = { data ->
                     when (type) {
-                        "ALL" -> _allSearchData.value = data
-                        "PROTECTING" -> _protectSearchData.value = data
-                        "REPORTING" -> _reportSearchData.value = data
+                        SearchType.ALL -> _allSearchData.value = data
+                        SearchType.PROTECTING -> _protectSearchData.value = data
+                        SearchType.REPORTING -> _reportSearchData.value = data
                     }
                 },
                 onFailure = { error ->
@@ -101,39 +102,39 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateAllFilterState(
-        searchFilterUiModel: SearchFilterUiModel?
+        searchFilterUiModel: SearchFilterUiModel?,
     ) {
         val newAllFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newAllFilter != _allFilter) {
             _allFilter = newAllFilter
-            getSearchData("ALL")
+            getSearchData(SearchType.ALL)
         }
     }
 
     fun updateReportFilterState(
-        searchFilterUiModel: SearchFilterUiModel?
+        searchFilterUiModel: SearchFilterUiModel?,
     ) {
         val newReportFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newReportFilter != _reportFilter) {
             _reportFilter = newReportFilter
-            getSearchData("PROTECTING")
+            getSearchData(SearchType.REPORTING)
         }
     }
 
     fun updateProtectFilterState(
-        searchFilterUiModel: SearchFilterUiModel?
+        searchFilterUiModel: SearchFilterUiModel?,
     ) {
         val newProtectFilter = searchFilterUiModel?.toSearchFilterUiModel() ?: SearchFilterUiModel()
         if (newProtectFilter != _protectFilter) {
             _protectFilter = newProtectFilter
-            getSearchData("REPORTING")
+            getSearchData(SearchType.PROTECTING)
         }
     }
 
     fun setInterest(
         id: Long,
         isInterest: Boolean,
-        tag: String
+        tag: String,
     ) {
         when (tag) {
             "보호중" -> postProtectInterest(id, isInterest)

@@ -303,7 +303,7 @@
                         app:layout_constraintTop_toTopOf="@id/tv_value_lost_location_around" />
 
                     <TextView
-                        android:id="@+id/tv_value_lost_location"
+                        android:id="@+id/tv_value_lost_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

@@ -7,13 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
-import com.example.findu.data.mapper.todomain.toSearchRvTag
+import com.example.findu.data.mapper.toDomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchAnimal
 import com.example.findu.domain.model.search.SearchStatus
@@ -25,8 +27,11 @@ import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
 import com.example.findu.presentation.ui.search.model.DummyProvider
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
+import com.example.findu.presentation.ui.search.model.SearchType
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchRescueFragment : Fragment() {
@@ -49,12 +54,35 @@ class SearchRescueFragment : Fragment() {
     ): View {
         _binding = FragmentSearchRescueBinding.inflate(inflater, container, false)
         initRVAdapter()
-//        observeViewModel()
-//        viewModel.getSearchReportData()
+        observeViewModel()
+        viewModel.getSearchData(SearchType.PROTECTING,lastProtectId)
         initDummyItems()
         setupRV(items)
 
         return binding.root
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.protectSearchData.collectLatest { searchResults ->
+                if (!searchResults.isNullOrEmpty()) {
+                    val animals = searchResults.flatMap { it.cards }
+                    setupRV(animals)
+                    lastProtectId = searchResults.last().lastId
+                } else {
+                    setupRV(emptyList())
+                    lastProtectId = Long.MAX_VALUE
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest { errorMessage ->
+                errorMessage?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     @SuppressLint("VisibleForTests")
@@ -67,13 +95,13 @@ class SearchRescueFragment : Fragment() {
     private fun setupRV(searchDataList: List<SearchAnimal>) {
         val searchList = searchDataList.map { item ->
             SearchRv(
-                image = item.thumbnailImageUrl,
+                image = item.thumbnailImageUrl ?: "",
                 name = item.title,
                 date = item.date,
-                address = item.location,
+                address = item.address,
                 isBookmark = item.interest,
                 tag = item.tag.toSearchRvTag(),
-                cardId = item.cardId
+                reportId = item.reportId
             )
         }
 
@@ -139,7 +167,7 @@ class SearchRescueFragment : Fragment() {
             listAdapter.submitList(emptyList())
             binding.rvSearchRescue.scrollToPosition(0)
 
-            viewModel.getSearchProtectData()
+            viewModel.getSearchData(SearchType.PROTECTING, lastProtectId)
         }
     }
 
@@ -151,7 +179,7 @@ class SearchRescueFragment : Fragment() {
         listAdapter = SearchListAdapter(
             onFilterClick = { navigateToFilter() },
             onToggleClick = { toggleLayoutMode() },
-            onItemClick = { item -> navigateToDetail(item.cardId, item.tag.text, item.name) },
+            onItemClick = { item -> navigateToDetail(item.reportId, item.tag.text, item.name) },
             onBookmarkClick = { cardId, isBookmark, tag -> viewModel.setInterest(cardId, isBookmark, tag) }
         )
 
@@ -172,7 +200,7 @@ class SearchRescueFragment : Fragment() {
                 val total = (recyclerView.adapter?.itemCount ?: 1) - 1
                 //페이징 처리
                 if (lastPos == total) {
-                    viewModel.getSearchReportData(lastProtectId)
+                    viewModel.getSearchData(SearchType.PROTECTING,lastProtectId)
                 }
             }
         })

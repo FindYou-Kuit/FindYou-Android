@@ -2,7 +2,9 @@ package com.example.findu.presentation.ui.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.domain.model.search.DetailMissingData
 import com.example.findu.domain.model.search.DetailProtectData
+import com.example.findu.domain.model.search.DetailWitnessData
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
@@ -19,8 +21,18 @@ class DetailReportViewModel @Inject constructor(
     private val deleteInterestReportAnimalUseCase: DeleteInterestReportAnimalUseCase
 ) : ViewModel() {
 
-    private val _detailSearchData = MutableStateFlow<DetailReportData?>(null)
-    val detailSearchData = _detailSearchData.asStateFlow()
+    private val _detailMissingData = MutableStateFlow<DetailMissingData?>(null)
+    val detailMissingData = _detailMissingData.asStateFlow()
+
+    private val _detailWitnessData = MutableStateFlow<DetailWitnessData?>(null)
+    val detailWitnessData = _detailWitnessData.asStateFlow()
+
+    private val _detailProtectData = MutableStateFlow<DetailProtectData?>(null)
+    val detailProtectData = _detailProtectData.asStateFlow()
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage = _errorMessage.asStateFlow()
+
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()

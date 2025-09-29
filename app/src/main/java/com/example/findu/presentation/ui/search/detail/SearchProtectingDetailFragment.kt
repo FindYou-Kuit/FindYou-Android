@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.search.detail
 
+import DetailSearchViewModel
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -13,12 +14,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.example.findu.R
 import com.example.findu.data.mapper.toDomain.toDetailSearchRvTag
+import com.example.findu.data.mapper.toDomain.toDetailSearchStatus
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
 import com.example.findu.domain.model.search.DetailProtectData
-import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
+import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.MapView
@@ -43,7 +46,6 @@ class SearchProtectingDetailFragment : Fragment() {
 
     private var isBookmarked = false
 
-    private lateinit var mapView: MapView
     private var naverMap: NaverMap? = null
 
     override fun onCreateView(
@@ -78,36 +80,14 @@ class SearchProtectingDetailFragment : Fragment() {
 
     }
 
-    private fun setupMap() {
-        val address = binding.tvValueProtectLocation.text.toString()
-        if (address.isBlank()) return
-        lifecycleScope.launch(Dispatchers.IO) {
-            runCatching {
-                val geocoder = android.location.Geocoder(requireContext())
-                geocoder.getFromLocationName(address, 1)
-            }.onSuccess { results ->
-                if (!results.isNullOrEmpty()) {
-                    val location = LatLng(results[0].latitude, results[0].longitude)
-                    withContext(Dispatchers.Main) {
-                        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
-                        Marker().apply {
-                            position = location
-                            map = naverMap
-                            icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
-                            height = 23
-                        }
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }.onFailure { e ->
-                Log.w("SearchDisappearDetail", "Geocoding failed", e)
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
-                }
-            }
+    private fun setupMap(lat: Double, lon: Double) {
+        val location = LatLng(lat, lon)
+        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
+        Marker().apply {
+            position = location
+            map = naverMap
+            icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
+            height = 23
         }
     }
 
@@ -124,7 +104,7 @@ class SearchProtectingDetailFragment : Fragment() {
 
     private fun observeViewModel() {
         lifecycleScope.launch {
-            viewModel.detailSearchData.collectLatest { data ->
+            viewModel.detailProtectData.collectLatest { data ->
                 data?.let { updateUI(it) }
             }
         }
@@ -141,15 +121,13 @@ class SearchProtectingDetailFragment : Fragment() {
 
     private fun updateUI(data: DetailProtectData) {
         binding.apply {
-            Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
-            tvDetailTagField.text = convertTagToKorean(data.tag.text)
             tvValueName.text = data.breed
             tvValueAge.text = data.age
             tvValueWeight.text = data.weight
             tvValueGender.text = data.sex
-            tvValueNeuter.text = data.happenDate
+            tvValueNeuter.text = data.foundDate
             tvValueHairColor.text = data.furColor
-            tvSpecialNote.text = data.specialNote
+            tvSpecialNote.text = data.significant
             tvShelterLocation.text = data.careAddr
             tvValueShelterName.text = data.careName
             tvValueNotiDate.text = data.noticeDuration
@@ -157,9 +135,30 @@ class SearchProtectingDetailFragment : Fragment() {
             tvValueShelterPhoneNumber.text = data.careTel
             tvValueJurisdiction.text = data.authority
 
-            initTagView(data)
-            setupMap()
+            initTagView(data.tag)
+            if (data.imageUrls.isNotEmpty()) {
+                initViewPager(data.imageUrls)
+            }
+            setupMap(data.latitude, data.longitude)
+        }
 
+    }
+
+    private fun initViewPager(imageList: List<String>) {
+        val adapter = SearchDetailVPAdapter(imageList)
+        binding.vpSearchDetailImg.adapter = adapter
+        binding.vpSearchDetailImg.setCurrentItem(0, false)
+
+        binding.vpSearchDetailImg.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 2
+
+            setPageTransformer(
+                MarginPageTransformer(
+                    resources.getDimensionPixelOffset(R.dimen.SEARCH_IMAGE_MARGIN)
+                )
+            )
         }
 
     }
@@ -193,28 +192,24 @@ class SearchProtectingDetailFragment : Fragment() {
 
     private fun initBookmarkUI() {
         binding.ivSearchDetailBookmark.setOnClickListener {
-            isBookmarked = !isBookmarked
-            viewModel.setInterestProtectingAnimal(cardId)
-            updateBookmarkUI(isBookmarked)
+            viewModel.toggleInterestProtect(cardId)
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.isInterested.collectLatest { interested ->
+                updateBookmarkUI(interested)
+                isBookmarked = interested
+            }
         }
     }
 
-    private fun initTagView(data: DetailProtectData) {
-        val koreanTag = convertTagToKorean(data.tag.toString())
-        binding.tvDetailTagField.text = koreanTag
+    private fun initTagView(tag : String) {
+        val status = tag.toDetailSearchStatus()
+        val tagInfo = status.toDetailSearchRvTag()
 
-        val tagInfo = data.tag.toDetailSearchRvTag()
+        binding.tvDetailTagField.text = tag
         binding.tvDetailTagField.setTextColor(requireContext().getColor(tagInfo.textColor))
         binding.tvDetailTagField.setBackgroundResource(tagInfo.backgroundRes)
-    }
-
-    private fun convertTagToKorean(tag: String?): String {
-        return when (tag) {
-            "WITNESS" -> "목격신고"
-            "MISSING" -> "실종신고"
-            "PROTECTING" -> "보호중"
-            else -> tag ?: "알 수 없음"
-        }
     }
 
     private fun openNaverMap(address: String) {

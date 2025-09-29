@@ -48,14 +48,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_search_detail_img"
-                android:layout_width="320dp"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_search_detail_img"
+                android:layout_width="match_parent"
                 android:layout_height="303dp"
                 android:layout_marginTop="11dp"
                 android:nestedScrollingEnabled="false"
-                android:src="@drawable/img_search_detail_content"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_search_detail_img">
+                app:layout_constraintTop_toBottomOf="@id/vp_search_detail_img">
 
                 <TextView
                     android:id="@+id/tv_value_name"

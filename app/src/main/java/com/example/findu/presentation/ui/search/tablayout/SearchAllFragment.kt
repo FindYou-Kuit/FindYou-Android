@@ -6,25 +6,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
-import com.example.findu.data.mapper.todomain.toSearchRvTag
+import com.example.findu.data.mapper.toDomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchAllBinding
 import com.example.findu.domain.model.search.SearchAnimal
 import com.example.findu.domain.model.search.SearchStatus
+import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
+import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
 import com.example.findu.presentation.ui.search.model.DummyProvider
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
+import com.example.findu.presentation.ui.search.model.SearchType
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchAllFragment : Fragment() {
@@ -35,8 +42,7 @@ class SearchAllFragment : Fragment() {
     private var isGridMode = false
     private val viewModel by viewModels<SearchViewModel>()
 
-    private var lastProtectId = Long.MAX_VALUE
-    private var lastReportId = Long.MAX_VALUE
+    private var lastId = Long.MAX_VALUE
 
     private var isNewList = false
     private var items = ArrayList<SearchAnimal>()
@@ -47,29 +53,44 @@ class SearchAllFragment : Fragment() {
     ): View {
         _binding = FragmentSearchAllBinding.inflate(inflater, container, false)
         initRVAdapter()
-        initDummyItems()
-        setupRV(items)
-
+        observeViewModel()
+        viewModel.getSearchData(SearchType.ALL,lastId)
         return binding.root
     }
 
-    @SuppressLint("VisibleForTests")
-    private fun initDummyItems() {
-        items.addAll(DummyProvider.getDummyAnimals())
-        items.addAll(DummyProvider.getDummyAnimals())
-        items.addAll(DummyProvider.getDummyAnimals())
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.allSearchData.collectLatest { searchResults ->
+                if (!searchResults.isNullOrEmpty()) {
+                    val animals = searchResults.flatMap { it.cards }
+                    setupRV(animals)
+                    lastId = searchResults.last().lastId
+                } else {
+                    setupRV(emptyList())
+                    lastId = Long.MAX_VALUE
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest { errorMessage ->
+                errorMessage?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun setupRV(searchDataList: List<SearchAnimal>) {
         val searchList = searchDataList.map { item ->
             SearchRv(
-                image = item.thumbnailImageUrl,
+                image = item.thumbnailImageUrl ?: "",
                 name = item.title,
                 date = item.date,
-                address = item.location,
+                address = item.address,
                 isBookmark = item.interest,
                 tag = item.tag.toSearchRvTag(),
-                cardId = item.cardId
+                reportId = item.reportId
             )
         }
 
@@ -80,6 +101,33 @@ class SearchAllFragment : Fragment() {
             binding.rvSearchAll.smoothScrollToPosition(0)
         } else {
             listAdapter.addContent(searchList)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        childFragmentManager.setFragmentResultListener(
+            FILTER_RESULTS,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val selected: SearchFilterUiModel? =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
+                }
+
+            viewModel.updateAllFilterState(selected)
+
+            isNewList = true
+            lastId = Long.MAX_VALUE
+
+            listAdapter.submitList(emptyList())
+            binding.rvSearchAll.scrollToPosition(0)
+
+            viewModel.getSearchData(SearchType.ALL, lastId)
         }
     }
 
@@ -120,7 +168,7 @@ class SearchAllFragment : Fragment() {
         listAdapter = SearchListAdapter(
             onFilterClick = { navigateToFilter() },
             onToggleClick = { toggleLayoutMode() },
-            onItemClick = { item -> navigateToDetail(item.cardId, item.tag.text, item.name) },
+            onItemClick = { item -> navigateToDetail(item.reportId, item.tag.text, item.name) },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
             }
@@ -142,7 +190,7 @@ class SearchAllFragment : Fragment() {
                 }
                 val total = (recyclerView.adapter?.itemCount ?: 1) - 1
                 if (lastPos == total) {
-                    viewModel.getSearchAllData(lastProtectId, lastReportId)
+                    viewModel.getSearchData(SearchType.ALL, lastId)
                 }
             }
         })
@@ -172,9 +220,6 @@ class SearchAllFragment : Fragment() {
         }
     }
 
-    companion object {
-        const val HEADER_VIEW_TYPE = 1000
-    }
     override fun onDestroyView() {
         super.onDestroyView()
         binding.rvSearchAll.adapter = null
