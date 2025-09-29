@@ -1,3 +1,5 @@
+package com.example.findu.presentation.ui.search.viewmodel
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.search.DetailMissingData
@@ -9,10 +11,10 @@ import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCa
 import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class DetailSearchViewModel @Inject constructor(
@@ -68,7 +70,7 @@ class DetailSearchViewModel @Inject constructor(
     fun toggleInterestMissing(id: Long) {
         viewModelScope.launch {
             val current = _detailMissingData.value?.interest ?: false
-            if (!current) { // 관심 없음 → 등록
+            if (!current) {
                 postInterestReportAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailMissingData.value = _detailMissingData.value?.copy(interest = true)
@@ -77,7 +79,7 @@ class DetailSearchViewModel @Inject constructor(
                         _errorMessage.value = error.message ?: "실종 관심 등록 실패"
                     }
                 )
-            } else { // 관심 있음 → 해제
+            } else {
                 deleteInterestReportAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailMissingData.value = _detailMissingData.value?.copy(interest = false)

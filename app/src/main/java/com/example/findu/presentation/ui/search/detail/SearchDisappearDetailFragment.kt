@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.search.detail
 
-import DetailSearchViewModel
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -23,6 +22,7 @@ import com.example.findu.data.mapper.toDomain.toDetailSearchStatus
 import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.domain.model.search.DetailMissingData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
+import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
 import com.google.android.material.chip.Chip
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate

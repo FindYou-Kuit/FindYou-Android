@@ -18,13 +18,11 @@ import com.example.findu.R
 import com.example.findu.data.mapper.toDomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchReportBinding
 import com.example.findu.domain.model.search.SearchAnimal
-import com.example.findu.domain.model.search.SearchStatus
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
-import com.example.findu.presentation.ui.search.model.DummyProvider
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.model.SearchType
@@ -57,7 +55,6 @@ class SearchReportFragment : Fragment() {
         initRVAdapter()
         observeViewModel()
         viewModel.getSearchData(SearchType.REPORTING, lastReportId)
-        initDummyItems()
         setupRV(items)
 
         return binding.root
@@ -85,14 +82,6 @@ class SearchReportFragment : Fragment() {
             }
         }
     }
-
-    @SuppressLint("VisibleForTests")
-    private fun initDummyItems() {
-        items.addAll(DummyProvider.getDummyAnimals())
-        items.addAll(DummyProvider.getDummyAnimals())
-        items.addAll(DummyProvider.getDummyAnimals())
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

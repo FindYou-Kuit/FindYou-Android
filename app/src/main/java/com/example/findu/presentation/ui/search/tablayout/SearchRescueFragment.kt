@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.search.tablayout
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,13 +17,11 @@ import com.example.findu.R
 import com.example.findu.data.mapper.toDomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchAnimal
-import com.example.findu.domain.model.search.SearchStatus
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
-import com.example.findu.presentation.ui.search.model.DummyProvider
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.model.SearchType
@@ -56,7 +53,6 @@ class SearchRescueFragment : Fragment() {
         initRVAdapter()
         observeViewModel()
         viewModel.getSearchData(SearchType.PROTECTING,lastProtectId)
-        initDummyItems()
         setupRV(items)
 
         return binding.root
@@ -83,13 +79,6 @@ class SearchRescueFragment : Fragment() {
                 }
             }
         }
-    }
-
-    @SuppressLint("VisibleForTests")
-    private fun initDummyItems() {
-        items.addAll(DummyProvider.getDummyAnimals())
-        items.addAll(DummyProvider.getDummyAnimals())
-        items.addAll(DummyProvider.getDummyAnimals())
     }
 
     private fun setupRV(searchDataList: List<SearchAnimal>) {

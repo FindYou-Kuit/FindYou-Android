@@ -34,7 +34,7 @@ class SearchListAdapter(
                 return when {
                     oldItem is SearchListItem.Header && newItem is SearchListItem.Header -> true
                     oldItem is SearchListItem.Content && newItem is SearchListItem.Content ->
-                        oldItem.data.cardId == newItem.data.cardId
+                        oldItem.data.reportId == newItem.data.reportId
                     else -> false
                 }
             }
@@ -112,7 +112,7 @@ class SearchListAdapter(
                 root.setOnClickListener { onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
                     item.isBookmark = !item.isBookmark
-                    onBookmarkClick(item.cardId, item.isBookmark, item.tag.text)
+                    onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
                 }
             }
@@ -144,7 +144,7 @@ class SearchListAdapter(
                 root.setOnClickListener { onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
                     item.isBookmark = !item.isBookmark
-                    onBookmarkClick(item.cardId, item.isBookmark, item.tag.text)
+                    onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
                 }
             }
