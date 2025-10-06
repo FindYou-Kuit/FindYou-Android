@@ -1,6 +1,9 @@
 package com.example.findu.presentation.ui.search.detail
 
 import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -37,14 +40,14 @@ class SearchWitnessDetailFragment : Fragment() {
     private var tag: String? = null
     private var name: String? = null
 
-    private val args :SearchWitnessDetailFragmentArgs by navArgs()
+    private val args: SearchWitnessDetailFragmentArgs by navArgs()
     private var isBookmarked = false
 
     private var naverMap: NaverMap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentSearchDetailWitnessBinding.inflate(layoutInflater)
         binding.mapView.onCreate(savedInstanceState)
@@ -162,6 +165,23 @@ class SearchWitnessDetailFragment : Fragment() {
             val address = binding.tvValueWitnessLocation.text.toString()
             openNaverMap(address)
         }
+        clWitnessLocationCopy.setOnClickListener {
+            val address = tvValueWitnessLocation.text.toString()
+            if (address.isNotBlank()) {
+                copyToClipboard(address)
+                Toast.makeText(requireContext(), "주소가 복사되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "복사할 주소가 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    private fun copyToClipboard(text: String) {
+        val clipboardManager =
+            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("text", text)
+        clipboardManager.setPrimaryClip(clipData)
     }
 
     private fun initBookmarkUI() {
@@ -177,7 +197,7 @@ class SearchWitnessDetailFragment : Fragment() {
         }
     }
 
-    private fun initTagView(tag : String) {
+    private fun initTagView(tag: String) {
         val status = tag.toDetailSearchStatus()
         val tagInfo = status.toDetailSearchRvTag()
 

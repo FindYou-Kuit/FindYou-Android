@@ -1,21 +1,21 @@
 package com.example.findu.presentation.ui.search.detail
 
 import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.data.mapper.toDomain.toDetailSearchRvTag
 import com.example.findu.data.mapper.toDomain.toDetailSearchStatus
@@ -23,18 +23,14 @@ import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.domain.model.search.DetailMissingData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
-import com.google.android.material.chip.Chip
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SearchDisappearDetailFragment : Fragment() {
@@ -177,7 +173,23 @@ class SearchDisappearDetailFragment : Fragment() {
             openNaverMap(address)
         }
 
+        clLostLocationCopy.setOnClickListener {
+            val address = tvValueLostAddress.text.toString()
+            if (address.isNotBlank()) {
+                copyToClipboard(address)
+                Toast.makeText(requireContext(), "주소가 복사되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "복사할 주소가 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
+    }
+
+    private fun copyToClipboard(text: String) {
+        val clipboardManager =
+            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("text", text)
+        clipboardManager.setPrimaryClip(clipData)
     }
 
     private fun initBookmarkUI() {
