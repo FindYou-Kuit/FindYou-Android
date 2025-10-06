@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.bumptech.glide.Glide
 import com.example.findu.R
 import com.example.findu.databinding.ItemSearchGridContentBinding
@@ -139,7 +141,10 @@ class SearchListAdapter(
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
                 updateBookmarkIcon(item.isBookmark)
 
-                Glide.with(root.context).load(item.image).into(ivSearchContent)
+                ivSearchContent.load(item.image.replace("http://", "https://")) {
+                    crossfade(true)
+                    transformations(RoundedCornersTransformation(12f))
+                }
 
                 root.setOnClickListener { onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
