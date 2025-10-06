@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBinding
@@ -24,10 +26,14 @@ import com.example.findu.presentation.ui.search.dialog.SearchFilterDateDialog
 import com.example.findu.presentation.ui.search.model.LocationData
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.Type
+import com.example.findu.presentation.ui.search.viewmodel.SearchFilterViewModel
 import com.google.android.material.chip.Chip
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@AndroidEntryPoint
 class SearchFilterFragment : Fragment() {
 
     private var _binding: FragmentSearchFilterBinding? = null
@@ -35,6 +41,8 @@ class SearchFilterFragment : Fragment() {
 
     private val fmt = DateTimeFormatter.ISO_DATE
     private val filterModel = SearchFilterUiModel()
+
+    private val filterViewModel: SearchFilterViewModel by viewModels()
 
     private var selectedSpecies: String? = null
 
@@ -53,18 +61,6 @@ class SearchFilterFragment : Fragment() {
         listOf("전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
     private val locationMap = LocationData.locationMap
 
-    private val breedsBySpecies: Map<SpeciesType, List<String>> = mapOf(
-        SpeciesType.DOG to listOf(
-            "말티즈", "푸들", "포메라니안", "시바", "코기", "진돗개", "리트리버", "치와와", "비숑", "시츄", "그레이하운드"
-        ),
-        SpeciesType.CAT to listOf(
-            "코리안숏헤어", "러시안블루", "스코티쉬폴드", "먼치킨", "노르웨이지안숲", "터키시앙고라", "렉돌", "페르시안"
-        ),
-        SpeciesType.ETC to listOf(
-            "햄스터", "고슴도치", "앵무새", "토끼", "페럿", "거북이"
-        )
-    )
-
     private val selectedBreedList = mutableListOf<String>()
     private val maxBreedCount = 10
     private lateinit var breedRvAdapter: SearchBreedRVAdapter
@@ -80,10 +76,25 @@ class SearchFilterFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initListener()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launchWhenStarted {
+            filterViewModel.breedList.collectLatest { breeds ->
+                if (breeds.isNotEmpty()) setBreedData(breeds)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            filterViewModel.errorMessage.collectLatest { msg ->
+                msg?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
+            }
+        }
     }
 
     private fun initViews() {
@@ -172,21 +183,22 @@ class SearchFilterFragment : Fragment() {
                 SpeciesType.DOG -> {
                     selectedSpecies = "개"; filterModel.species = SpeciesType.DOG.name
                     rbSearchFilterDog.setTextAppearance(hiStyle); rbSearchFilterDog.setTextColor(hiColor)
-                    setBreedData(breedsBySpecies[SpeciesType.DOG].orEmpty())
+                    filterViewModel.loadBreeds(SpeciesType.DOG)
                 }
                 SpeciesType.CAT -> {
                     selectedSpecies = "고양이"; filterModel.species = SpeciesType.CAT.name
                     rbSearchFilterCat.setTextAppearance(hiStyle); rbSearchFilterCat.setTextColor(hiColor)
-                    setBreedData(breedsBySpecies[SpeciesType.CAT].orEmpty())
+                    filterViewModel.loadBreeds(SpeciesType.CAT)
                 }
                 SpeciesType.ETC -> {
                     selectedSpecies = "기타"; filterModel.species = SpeciesType.ETC.name
                     rbSearchFilterEtc.setTextAppearance(hiStyle); rbSearchFilterEtc.setTextColor(hiColor)
-                    setBreedData(breedsBySpecies[SpeciesType.ETC].orEmpty())
+                    filterViewModel.loadBreeds(SpeciesType.ETC)
                 }
                 null -> {
                     selectedSpecies = null; filterModel.species = null
-                    if (this@SearchFilterFragment::breedRvAdapter.isInitialized) rvSearchFilterBreed.adapter = null
+                    if (this@SearchFilterFragment::breedRvAdapter.isInitialized)
+                        rvSearchFilterBreed.adapter = null
                 }
             }
         }
