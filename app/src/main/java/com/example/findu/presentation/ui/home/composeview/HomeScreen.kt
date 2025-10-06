@@ -56,7 +56,7 @@ fun HomeScreen(
     alarmButtonClicked: () -> Unit,
     navigateToProtectDetail: (ProtectAnimal) -> Unit,
     navigateToReportDetail: (ReportAnimal) -> Unit,
-    indicatorClicked: (HomeReportDurationType) -> Unit,
+    onIndicatorSelected: (HomeReportDurationType) -> Unit,
     navigationToProtectAnimal: () -> Unit,
     navigationToReportAnimal: () -> Unit,
     navigateToHomeExtra: (HomeExtraButtonType) -> Unit,
@@ -114,7 +114,7 @@ fun HomeScreen(
                         HomeReportCard(
                             modifier = Modifier.padding(15.dp),
                             homeStatistics = it.statistics,
-                            indicatorClicked = indicatorClicked,
+                            onIndicatorSelected = onIndicatorSelected,
                             homeReportDuration = uiState.reportDataDuration
                         )
                     }
@@ -222,7 +222,7 @@ private fun HomeScreenPreview() {
         HomeScreen(
             reportButtonClicked = {},
             alarmButtonClicked = {},
-            indicatorClicked = { clickedLabel -> selected = clickedLabel },
+            onIndicatorSelected = { clickedLabel -> selected = clickedLabel },
             userNickname = "신민석",
             navigateToProtectDetail = {},
             navigateToReportDetail = {},

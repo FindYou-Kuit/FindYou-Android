@@ -1,5 +1,10 @@
-package com.example.findu.data.mapper.todomain.home
+package com.example.findu.data.mapper.todomain
 
+import com.example.findu.data.dataremote.model.response.HomeResponseDto
+import com.example.findu.data.dataremote.model.response.PeriodStatisticsDto
+import com.example.findu.data.dataremote.model.response.ProtectingAnimal
+import com.example.findu.data.dataremote.model.response.Statistics
+import com.example.findu.data.dataremote.model.response.WitnessedOrMissingAnimal
 import com.example.findu.data.dataremote.model.response.home.HomeResponseDto
 import com.example.findu.data.dataremote.model.response.home.PeriodStatistics
 import com.example.findu.data.dataremote.model.response.home.ProtectingAnimal
@@ -8,6 +13,7 @@ import com.example.findu.data.dataremote.model.response.home.WitnessedOrMissingA
 
 import com.example.findu.domain.model.HomeData
 import com.example.findu.domain.model.HomeStatistics
+import com.example.findu.domain.model.PeriodStatistics
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
 
@@ -25,7 +31,7 @@ fun Statistics.toDomain() = HomeStatistics(
     recent1Year = recent1Year.toDomain()
 )
 
-fun PeriodStatistics.toDomain() = com.example.findu.domain.model.PeriodStatistics(
+fun PeriodStatisticsDto.toDomain() = PeriodStatistics(
     rescuedAnimalCount = rescuedAnimalCount,
     protectingAnimalCount = protectingAnimalCount,
     adoptedAnimalCount = adoptedAnimalCount,

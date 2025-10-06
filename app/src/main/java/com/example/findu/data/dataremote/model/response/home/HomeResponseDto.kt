@@ -16,15 +16,15 @@ data class HomeResponseDto(
 @Serializable
 data class Statistics(
     @SerialName("recent7days")
-    val recent7days: PeriodStatistics,
+    val recent7days: PeriodStatisticsDto,
     @SerialName("recent3months")
-    val recent3months: PeriodStatistics,
+    val recent3months: PeriodStatisticsDto,
     @SerialName("recent1Year")
-    val recent1Year: PeriodStatistics
+    val recent1Year: PeriodStatisticsDto
 )
 
 @Serializable
-data class PeriodStatistics(
+data class PeriodStatisticsDto(
     @SerialName("rescuedAnimalCount")
     val rescuedAnimalCount: Int,
     @SerialName("protectingAnimalCount")
