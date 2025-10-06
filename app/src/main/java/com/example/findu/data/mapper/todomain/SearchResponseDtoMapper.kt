@@ -5,6 +5,7 @@ import com.example.findu.data.dataremote.model.response.search.SearchResponseDto
 import com.example.findu.domain.model.search.SearchAnimal
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.model.search.SearchStatus
+import com.example.findu.domain.model.search.toSearchStatus
 import com.example.findu.presentation.ui.search.model.SearchRvTag
 
 fun SearchResponseDto.toDomain(): SearchData {
@@ -22,7 +23,7 @@ fun SearchAnimalCard.toDomain(): SearchAnimal {
         title = this.title,
         tag = this.tag.toSearchStatus(),
         date = this.date,
-        address = this.address,
+        location = this.location,
         interest = this.interest,
     )
 }
@@ -44,4 +45,3 @@ fun SearchStatus.toSearchRvTag(): SearchRvTag {
         SearchStatus.UNKNOWN -> SearchRvTag.UNKNOWN
     }
 }
-

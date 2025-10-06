@@ -1,5 +1,6 @@
 package com.example.findu.di
 
+import android.content.Context
 import com.example.findu.domain.repository.AuthRepository
 import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.domain.repository.BreedRepository
@@ -43,6 +44,7 @@ import com.example.findu.domain.usecase.token.SetRefreshTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -183,9 +185,9 @@ object UseCaseModule {
     @Singleton
     fun providePostGuestLoginUseCase(
         authRepository: AuthRepository,
-        deviceRepository: DeviceRepository
+        @ApplicationContext context: Context
     ): PostGuestLoginUseCase =
-        PostGuestLoginUseCase(authRepository = authRepository, deviceRepository = deviceRepository)
+        PostGuestLoginUseCase(authRepository = authRepository, context = context)
 
     @Provides
     @Singleton

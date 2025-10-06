@@ -14,6 +14,15 @@ data class SearchAnimal(
     val title: String,
     val tag: SearchStatus,
     val date: String,
-    val address: String,
+    val location: String,
     val interest: Boolean
 ) : Serializable
+
+fun String.toSearchStatus(): SearchStatus {
+    return when (this) {
+        "실종신고" -> SearchStatus.MISSING
+        "보호중" -> SearchStatus.PROTECTING
+        "목격신고" -> SearchStatus.WITNESS
+        else -> throw IllegalArgumentException("Unknown tag: $this")
+    }
+}

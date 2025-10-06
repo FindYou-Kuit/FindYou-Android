@@ -87,7 +87,7 @@ class SearchRescueFragment : Fragment() {
                 image = item.thumbnailImageUrl ?: "",
                 name = item.title,
                 date = item.date,
-                address = item.address,
+                location = item.location,
                 isBookmark = item.interest,
                 tag = item.tag.toSearchRvTag(),
                 reportId = item.reportId

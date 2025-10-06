@@ -101,7 +101,7 @@ class SearchListAdapter(
             with(binding) {
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
-                tvSearchContentAddress.text = item.address
+                tvSearchContentAddress.text = item.location
                 tvSearchContentStatus.text = item.tag.text
                 tvSearchContentStatus.setTextColor(root.context.getColor(item.tag.textColor))
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
@@ -133,7 +133,7 @@ class SearchListAdapter(
             with(binding) {
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
-                tvSearchContentAddress.text = item.address
+                tvSearchContentAddress.text = item.location
                 tvSearchContentStatus.text = item.tag.text
                 tvSearchContentStatus.setTextColor(root.context.getColor(item.tag.textColor))
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)

@@ -175,7 +175,10 @@ class MyFragment : Fragment() {
         val latest = "1.0"
         tvMyVersionInfo.text = "버전 정보 $currentVersion"
 
-        val isLatest = currentVersion.replace(".", "").toInt() >= latest.replace(".", "").toInt()
+        val currentNumeric = currentVersion.takeWhile { it.isDigit() }.toIntOrNull() ?: 0
+        val latestNumeric = latest.replace(".", "").toIntOrNull() ?: 0
+        val isLatest = currentNumeric >= latestNumeric
+
         clMyVersionChip.isVisible = isLatest
         clMyGotoUpdate.isVisible = !isLatest
     }

@@ -25,8 +25,8 @@ data class SearchAnimalCard(
     val tag: String,
     @SerialName("date")
     val date: String,
-    @SerialName("address")
-    val address: String,
+    @SerialName("location")
+    val location: String,
     @SerialName("interest")
     val interest: Boolean = false
 )
