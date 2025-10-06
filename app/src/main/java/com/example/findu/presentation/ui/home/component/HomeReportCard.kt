@@ -38,7 +38,7 @@ import com.example.findu.ui.theme.FindUTheme
 fun HomeReportCard(
     homeStatistics: HomeStatistics,
     homeReportDuration: HomeReportDurationType,
-    indicatorClicked: (HomeReportDurationType) -> Unit,
+    onIndicatorSelected: (HomeReportDurationType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val currentPeriodStatistics = when (homeReportDuration) {
@@ -64,8 +64,8 @@ fun HomeReportCard(
         Spacer(modifier = Modifier.height(14.dp))
         HomeReportCardIndicator(
             modifier = Modifier.padding(horizontal = 15.dp),
-            indicatorClicked = indicatorClicked,
-            selected = homeReportDuration
+            onIndicatorSelected = onIndicatorSelected,
+            selectedDuration = homeReportDuration
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -102,9 +102,9 @@ fun HomeReportCard(
 
 @Composable
 fun HomeReportCardIndicator(
-    indicatorClicked: (HomeReportDurationType) -> Unit,
+    onIndicatorSelected: (HomeReportDurationType) -> Unit,
     modifier: Modifier = Modifier,
-    selected: HomeReportDurationType,
+    selectedDuration: HomeReportDurationType,
 ) {
     Row(
         modifier = modifier
@@ -114,7 +114,7 @@ fun HomeReportCardIndicator(
             )
     ) {
         HomeReportDurationType.entries.forEach { duration ->
-            val isSelected = selected == duration
+            val isSelected = selectedDuration == duration
             val backgroundColor = if (isSelected) FindUTheme.colors.white else Color.Unspecified
             val textColor = if (isSelected) FindUTheme.colors.mainColor else FindUTheme.colors.gray6
             val textStyle =
@@ -138,7 +138,7 @@ fun HomeReportCardIndicator(
                             )
                         }
                     )
-                    .noRippleClickable { indicatorClicked(duration) },
+                    .noRippleClickable { onIndicatorSelected(duration) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -166,7 +166,7 @@ private fun HomeReportCardPreview() {
     Column {
         HomeReportCard(
             homeStatistics = homeStatistics,
-            indicatorClicked = { clickedLabel -> selected = clickedLabel },
+            onIndicatorSelected = { clickedLabel -> selected = clickedLabel },
             homeReportDuration = selected
         )
     }

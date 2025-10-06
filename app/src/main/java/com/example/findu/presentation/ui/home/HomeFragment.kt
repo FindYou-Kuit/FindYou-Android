@@ -98,7 +98,7 @@ class HomeFragment : Fragment() {
                             alarmButtonClicked = {
                                 homeViewModel.handleEvent(HomeUiEvent.OnAlarmButtonClick)
                             },
-                            indicatorClicked = { reportDurationType ->
+                            onIndicatorSelected = { reportDurationType ->
                                 homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
                             },
                             userNickname = "사용자",
