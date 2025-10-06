@@ -8,7 +8,9 @@ import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetNicknameUseCase
 import com.example.findu.presentation.type.HomeReportDurationType
+import com.example.findu.presentation.type.HomeUserStatusType
 import com.example.findu.presentation.type.view.LoadState
+import com.example.findu.presentation.util.Nickname.GUEST_NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,9 +31,16 @@ data class HomeUiState(
     val isRefreshing: Boolean = false,
     val bannerCurrentPage: Int = 0,
     val isScrollToTopVisible: Boolean = false,
-    val isReportDialogVisible: Boolean = false
-
-)
+    val isReportDialogVisible: Boolean = false,
+    val locationPermission: Boolean = false
+) {
+    val userHomeUserStatusType: HomeUserStatusType
+        get() = when {
+            !locationPermission -> HomeUserStatusType.LOCATION_DENIED
+            nickname.isEmpty() || nickname.equals(GUEST_NAME, ignoreCase = false) -> HomeUserStatusType.GUEST
+            else -> HomeUserStatusType.MEMBER
+        }
+}
 
 sealed class HomeUiEvent {
     data object LoadHomeData : HomeUiEvent()
@@ -48,6 +57,7 @@ sealed class HomeUiEvent {
     data class OnBannerPageChanged(val page: Int) : HomeUiEvent()
 
     data class OnScrollPositionChanged(val firstVisibleItemIndex: Int) : HomeUiEvent()
+    data class SetLocationPermission(val locationPermission: Boolean) : HomeUiEvent()
 }
 
 sealed class HomeUiEffect {
@@ -74,7 +84,6 @@ class HomeViewModel @Inject constructor(
 
     val uiState = _uiState
         .onStart {
-            _uiState.value = _uiState.value.copy(nickname = getNicknameUseCase())
             handleEvent(HomeUiEvent.LoadHomeData)
         }
         .stateIn(
@@ -102,13 +111,16 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnReportDialogDismiss -> {
                 _uiState.update { it.copy(isReportDialogVisible = false) }
             }
+
+            is HomeUiEvent.SetLocationPermission -> {
+                _uiState.update { it.copy(locationPermission = event.locationPermission) }
+            }
         }
     }
 
     private fun loadHomeData() {
         viewModelScope.launch {
             _uiState.update { it.copy(loadState = LoadState.Loading) }
-
             homeUseCase().fold(
                 onSuccess = { data ->
                     _uiState.update { it.copy(
@@ -124,6 +136,13 @@ class HomeViewModel @Inject constructor(
                     ) }
                 }
             )
+        }
+    }
+
+
+    private fun setUserInfo() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(nickname = getNicknameUseCase()) }
         }
     }
 

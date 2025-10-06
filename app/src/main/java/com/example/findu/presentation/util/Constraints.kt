@@ -8,3 +8,7 @@ object WebViewUrl {
     const val CENTER_URL = "https://www.animal.go.kr/front/awtis/institution/institutionList.do?menuNo=1000000059"
 }
 
+object Nickname{
+    const val GUEST_NAME = "게스트"
+}
+

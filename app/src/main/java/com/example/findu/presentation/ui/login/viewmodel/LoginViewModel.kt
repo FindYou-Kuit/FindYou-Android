@@ -7,6 +7,7 @@ import com.example.findu.domain.usecase.PostGuestLoginUseCase
 import com.example.findu.domain.usecase.PostLoginUseCase
 import com.example.findu.domain.usecase.SetNicknameUseCase
 import com.example.findu.domain.usecase.token.SetAccessTokenUseCase
+import com.example.findu.presentation.util.Nickname.GUEST_NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -50,7 +51,7 @@ class LoginViewModel @Inject constructor(
             guestLoginUseCase.postGuestLogin()
                 .onSuccess { loginData ->
                     setAccessTokenUseCase(accessToken = loginData.accessToken)
-                    setNicknameUseCase(nickname = "사용자")
+                    setNicknameUseCase(nickname = GUEST_NAME)
                     onSuccess()
                     startMainActivity()
                 }
