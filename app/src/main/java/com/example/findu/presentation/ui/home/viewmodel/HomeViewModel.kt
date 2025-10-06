@@ -6,6 +6,7 @@ import com.example.findu.domain.model.HomeData
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.domain.usecase.GetHomeUseCase
+import com.example.findu.domain.usecase.GetNicknameUseCase
 import com.example.findu.presentation.type.HomeReportDurationType
 import com.example.findu.presentation.type.view.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +25,7 @@ data class HomeUiState(
     val homeData: HomeData? = null,
     val reportDataDuration: HomeReportDurationType = HomeReportDurationType.WEEK,
     val errorMessage: String? = null,
+    val nickname: String = "",
     val isRefreshing: Boolean = false,
     val bannerCurrentPage: Int = 0,
     val isScrollToTopVisible: Boolean = false,
@@ -61,7 +64,8 @@ sealed class HomeUiEffect {
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val homeUseCase: GetHomeUseCase
+    private val homeUseCase: GetHomeUseCase,
+    private val getNicknameUseCase: GetNicknameUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
 
@@ -70,6 +74,7 @@ class HomeViewModel @Inject constructor(
 
     val uiState = _uiState
         .onStart {
+            _uiState.value = _uiState.value.copy(nickname = getNicknameUseCase())
             handleEvent(HomeUiEvent.LoadHomeData)
         }
         .stateIn(
@@ -91,32 +96,32 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnHomeReportDurationClick -> changeReportDuration(event.duration)
 
             is HomeUiEvent.OnReportDialogClick -> {
-                _uiState.value = _uiState.value.copy(isReportDialogVisible = true)
+                _uiState.update { it.copy(isReportDialogVisible = true) }
             }
 
             is HomeUiEvent.OnReportDialogDismiss -> {
-                _uiState.value = _uiState.value.copy(isReportDialogVisible = false)
+                _uiState.update { it.copy(isReportDialogVisible = false) }
             }
         }
     }
 
     private fun loadHomeData() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(loadState = LoadState.Loading)
+            _uiState.update { it.copy(loadState = LoadState.Loading) }
 
             homeUseCase().fold(
                 onSuccess = { data ->
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         loadState = LoadState.Success,
                         homeData = data,
                         errorMessage = null
-                    )
+                    ) }
                 },
                 onFailure = { error ->
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         loadState = LoadState.Error,
                         errorMessage = error.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
-                    )
+                    ) }
                 }
             )
         }
@@ -128,19 +133,19 @@ class HomeViewModel @Inject constructor(
 
             homeUseCase().fold(
                 onSuccess = { data ->
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         loadState = LoadState.Success,
                         homeData = data,
                         errorMessage = null,
                         isRefreshing = false
-                    )
+                    ) }
                 },
                 onFailure = { error ->
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         loadState = LoadState.Error,
                         errorMessage = error.message ?: "데이터를 새로고침하는 중 오류가 발생했습니다.",
                         isRefreshing = false
-                    )
+                    ) }
                 }
             )
         }
@@ -156,7 +161,7 @@ class HomeViewModel @Inject constructor(
 
     private fun changeReportDuration(duration: HomeReportDurationType) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(reportDataDuration = duration)
+            _uiState.update { it.copy(reportDataDuration = duration) }
         }
     }
 
@@ -197,12 +202,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateBannerPage(page: Int) {
-        _uiState.value = _uiState.value.copy(bannerCurrentPage = page)
+        _uiState.update { it.copy(bannerCurrentPage = page) }
     }
 
     private fun updateScrollToTopVisibility(firstVisibleItemIndex: Int) {
-        val isVisible = firstVisibleItemIndex > 2 // 3번째 아이템 이후에 보이기
-        _uiState.value = _uiState.value.copy(isScrollToTopVisible = isVisible)
+        val isVisible = firstVisibleItemIndex > 2
+        _uiState.update { it.copy(isScrollToTopVisible = isVisible) }
     }
 
 }

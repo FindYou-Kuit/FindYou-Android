@@ -101,7 +101,7 @@ class HomeFragment : Fragment() {
                             onIndicatorSelected = { reportDurationType ->
                                 homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
                             },
-                            userNickname = "사용자",
+                            userNickname = uiState.nickname,
                             navigateToProtectDetail = { protectAnimal ->
                                 homeViewModel.navigateToProtectDetail(protectAnimal)
                             },

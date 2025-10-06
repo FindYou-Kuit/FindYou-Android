@@ -18,11 +18,23 @@ class DeviceLocalDataSourceImpl @Inject constructor(
         get() = sharedPreferences.getString(DEVICE_ID, INITIAL_VALUE).toString()
         set(value) = sharedPreferences.edit { putString(DEVICE_ID, value) }
 
-    override fun clear() = sharedPreferences.edit { clear() }
 
+    override var nickname: String
+        get() = sharedPreferences.getString(NICKNAME, INITIAL_VALUE).toString()
+        set(value) = sharedPreferences.edit { putString(NICKNAME, value) }
+
+    override fun clear() {
+        val currentDeviceId = deviceId
+        sharedPreferences.edit {
+            clear()
+            putString(DEVICE_ID, currentDeviceId)
+        }
+    }
     private companion object {
         const val PREFERENCES_NAME = "device_preferences"
-        const val DEVICE_ID = "token"
+        const val DEVICE_ID = "deviceId"
+        const val NICKNAME = "nickname"
+
         const val INITIAL_VALUE = ""
     }
 }

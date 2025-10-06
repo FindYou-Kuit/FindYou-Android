@@ -3,7 +3,7 @@ package com.example.findu.di
 import com.example.findu.domain.repository.AuthRepository
 import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.domain.repository.BreedRepository
-import com.example.findu.domain.repository.DeviceRepository
+import com.example.findu.domain.repository.UserInfoRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.repository.HomeRepository
@@ -15,11 +15,13 @@ import com.example.findu.domain.repository.TokenRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
+import com.example.findu.domain.usecase.GetNicknameUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
 import com.example.findu.domain.usecase.PostCheckNicknameUseCase
 import com.example.findu.domain.usecase.PostGuestLoginUseCase
 import com.example.findu.domain.usecase.PostLoginUseCase
 import com.example.findu.domain.usecase.PostSignupUseCase
+import com.example.findu.domain.usecase.SetNicknameUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
@@ -176,16 +178,16 @@ object UseCaseModule {
     @Singleton
     fun providePostLoginUseCase(
         authRepository: AuthRepository,
-        deviceRepository: DeviceRepository
-    ): PostLoginUseCase = PostLoginUseCase(authRepository = authRepository, deviceRepository = deviceRepository)
+        userInfoRepository: UserInfoRepository
+    ): PostLoginUseCase = PostLoginUseCase(authRepository = authRepository, userInfoRepository = userInfoRepository)
 
     @Provides
     @Singleton
     fun providePostGuestLoginUseCase(
         authRepository: AuthRepository,
-        deviceRepository: DeviceRepository
+        userInfoRepository: UserInfoRepository
     ): PostGuestLoginUseCase =
-        PostGuestLoginUseCase(authRepository = authRepository, deviceRepository = deviceRepository)
+        PostGuestLoginUseCase(authRepository = authRepository, userInfoRepository = userInfoRepository)
 
     @Provides
     @Singleton
@@ -197,8 +199,8 @@ object UseCaseModule {
     @Singleton
     fun providePostSignupUseCase(
         authRepository: AuthRepository,
-        deviceRepository: DeviceRepository
-    ): PostSignupUseCase = PostSignupUseCase(authRepository = authRepository, deviceRepository = deviceRepository)
+        userInfoRepository: UserInfoRepository
+    ): PostSignupUseCase = PostSignupUseCase(authRepository = authRepository, userInfoRepository = userInfoRepository)
 
     @Provides
     @Singleton
@@ -235,4 +237,16 @@ object UseCaseModule {
     fun provideClearTokenUseCase(
         tokenRepository: TokenRepository
     ): ClearTokenUseCase = ClearTokenUseCase(tokenRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetLocalNicknameUseCase(
+        userInfoRepository: UserInfoRepository
+    ): GetNicknameUseCase = GetNicknameUseCase(userInfoRepository)
+
+    @Provides
+    @Singleton
+    fun provideSetNicknameUseCase(
+        userInfoRepository: UserInfoRepository
+    ): SetNicknameUseCase = SetNicknameUseCase(userInfoRepository)
 }
