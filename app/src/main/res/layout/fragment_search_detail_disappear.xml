@@ -55,6 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="303dp"
                 android:layout_marginTop="11dp"
+                android:clipToOutline="true"
+                android:background="@drawable/bg_radius_20"
                 android:nestedScrollingEnabled="false"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"

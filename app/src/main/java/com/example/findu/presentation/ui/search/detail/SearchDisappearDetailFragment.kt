@@ -122,6 +122,7 @@ class SearchDisappearDetailFragment : Fragment() {
 
     private fun updateUI(data:DetailMissingData) {
         binding.apply {
+            tvDetailTitleField.text = data.breed
             tvValueAge.text = data.age
             tvValueGender.text = data.sex
             tvValueLostDate.text = data.missingDate
