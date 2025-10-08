@@ -39,7 +39,7 @@ class SearchAllFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var listAdapter: SearchListAdapter
     private var isGridMode = false
-    private val viewModel by activityViewModels<SearchViewModel>()
+    private val viewModel by viewModels<SearchViewModel>()
 
     private var lastId = Long.MAX_VALUE
 
@@ -177,6 +177,8 @@ class SearchAllFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = listAdapter
+            setHasFixedSize(true)
+            itemAnimator = null
         }
 
         binding.rvSearchAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {

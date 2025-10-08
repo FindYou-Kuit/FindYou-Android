@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.request.CachePolicy
 import coil.transform.RoundedCornersTransformation
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.findu.R
 import com.example.findu.databinding.ItemSearchGridContentBinding
 import com.example.findu.databinding.ItemSearchHeaderBinding
@@ -51,7 +53,7 @@ class SearchListAdapter(
     fun setGridMode(enabled: Boolean) {
         if (isGridMode == enabled) return
         isGridMode = enabled
-        notifyDataSetChanged()
+        notifyItemRangeChanged(1, currentList.size - 1)
     }
 
 
@@ -90,9 +92,23 @@ class SearchListAdapter(
 
     inner class HeaderVH(private val binding: ItemSearchHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private var isGridMode = false
+
         fun bind() {
             binding.ibSearchFilter.setOnClickListener { onFilterClick() }
-            binding.ibSearchHorizontalSort.setOnClickListener { onToggleClick() }
+            binding.ibSearchHorizontalSort.setOnClickListener {
+                isGridMode = !isGridMode
+                updateToggleIcon()
+                onToggleClick() }
+        }
+
+        private fun updateToggleIcon() {
+            val iconRes = if (isGridMode) {
+                R.drawable.ic_search_grid_sort
+            } else {
+                R.drawable.ic_search_horizontal_sort
+            }
+            binding.ibSearchHorizontalSort.setImageResource(iconRes)
         }
     }
 
@@ -109,7 +125,11 @@ class SearchListAdapter(
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
                 updateBookmarkIcon(item.isBookmark)
 
-                Glide.with(root.context).load(item.image).into(ivSearchContent)
+                Glide.with(root.context)
+                    .load(item.image.replace("http://", "https://"))
+                    .centerCrop()
+                    .transform(RoundedCorners(24))
+                    .into(ivSearchContent)
 
                 root.setOnClickListener { onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
@@ -123,7 +143,7 @@ class SearchListAdapter(
         private fun updateBookmarkIcon(isBookmarked: Boolean) {
             binding.ivSearchContentBookmark.setImageResource(
                 if (isBookmarked) R.drawable.ic_search_fill_bookmark
-                else R.drawable.ic_search_blank_bookmark
+                else R.drawable.ic_search_blank_bookmark_horizontal
             )
         }
     }
@@ -141,10 +161,11 @@ class SearchListAdapter(
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
                 updateBookmarkIcon(item.isBookmark)
 
-                ivSearchContent.load(item.image.replace("http://", "https://")) {
-                    crossfade(true)
-                    transformations(RoundedCornersTransformation(12f))
-                }
+                Glide.with(root.context)
+                    .load(item.image.replace("http://", "https://"))
+                    .centerCrop()
+                    .transform(RoundedCorners(24))
+                    .into(ivSearchContent)
 
                 root.setOnClickListener { onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {

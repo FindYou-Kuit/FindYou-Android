@@ -52,14 +52,8 @@ class SearchFilterFragment : Fragment() {
     private var selectedCity: String? = null
     private var selectedDistrict: String? = null
 
-    private val cityList =
-        listOf(
-            "전체", "서울특별시", "부산광역시", "인천광역시", "세종특별자치시", "대전광역시", "울산광역시", "경기도", "강원특별자치도", "충청북도",
-            "충청남도", "전북특별자치도", "전라남도", "경상북도", "경상남도", "제주특별자치도",
-        )
+    private val cityList = listOf("전체") + LocationData.locationMap.keys.toList()
 
-    private val districtsList =
-        listOf("전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구")
     private val locationMap = LocationData.locationMap
 
     private val selectedBreedList = mutableListOf<String>()
@@ -343,7 +337,7 @@ class SearchFilterFragment : Fragment() {
         }
 
         districtAdapter =
-            SearchFilterLocationRVAdapter(districtsList, selectedDistrict) { newDistrict ->
+            SearchFilterLocationRVAdapter(listOf("전체"), selectedDistrict) { newDistrict ->
                 selectedDistrict = newDistrict
                 updateSelectedLocation()
             }

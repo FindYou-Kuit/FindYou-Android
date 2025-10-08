@@ -42,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="말티즈"
+                android:maxLength="10"
                 android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +63,7 @@
                 android:id="@+id/iv_search_content_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_blank_bookmark"
+                android:src="@drawable/ic_search_blank_bookmark_horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

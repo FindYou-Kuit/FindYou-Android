@@ -172,18 +172,5 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun selectSpeciesType(speciesType: SpeciesType) {
-        _selectedSpeciesType.value = speciesType
-        when (speciesType) {
-            SpeciesType.DOG -> _selectedBreedList.value =
-                _breedData.value?.dogBreedList?.map { it.breedName } ?: emptyList()
-
-            SpeciesType.CAT -> _selectedBreedList.value =
-                _breedData.value?.catBreedList?.map { it.breedName } ?: emptyList()
-
-            SpeciesType.ETC -> _selectedBreedList.value =
-                _breedData.value?.etcBreedList?.map { it.breedName } ?: emptyList()
-        }
-    }
 
 }
