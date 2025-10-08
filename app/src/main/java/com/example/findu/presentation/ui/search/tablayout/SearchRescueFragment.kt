@@ -2,6 +2,7 @@ package com.example.findu.presentation.ui.search.tablayout
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,6 @@ import com.example.findu.R
 import com.example.findu.data.mapper.toDomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchAnimal
-import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
@@ -27,6 +27,7 @@ import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.model.SearchType
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -52,10 +53,37 @@ class SearchRescueFragment : Fragment() {
         _binding = FragmentSearchRescueBinding.inflate(inflater, container, false)
         initRVAdapter()
         observeViewModel()
-        viewModel.getSearchData(SearchType.PROTECTING,lastProtectId)
         setupRV(items)
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeFilterResult()
+        viewModel.getSearchData(SearchType.PROTECTING, lastProtectId)
+    }
+
+    private fun observeFilterResult() {
+        findNavController().currentBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<SearchFilterUiModel>(SELECTED_FILTER_DATA)
+            ?.observe(viewLifecycleOwner) { selected ->
+                Log.d("SearchFilter", "필터 수신됨: $selected")
+
+                viewModel.updateProtectFilterState(selected)
+                isNewList = true
+                lastProtectId = Long.MAX_VALUE
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(50)
+                    viewModel.getSearchData(SearchType.PROTECTING, lastProtectId)
+                }
+
+                findNavController().currentBackStackEntry
+                    ?.savedStateHandle
+                    ?.remove<SearchFilterUiModel>(SELECTED_FILTER_DATA)
+            }
     }
 
     private fun observeViewModel() {
@@ -130,33 +158,6 @@ class SearchRescueFragment : Fragment() {
                     name = name
                 )
             )
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        childFragmentManager.setFragmentResultListener(
-            FILTER_RESULTS,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            val selected: SearchFilterUiModel? =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
-                } else {
-                    @Suppress("DEPRECATION")
-                    bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
-                }
-
-            viewModel.updateProtectFilterState(selected)
-
-            isNewList = true
-            lastProtectId = Long.MAX_VALUE
-
-            listAdapter.submitList(emptyList())
-            binding.rvSearchRescue.scrollToPosition(0)
-
-            viewModel.getSearchData(SearchType.PROTECTING, lastProtectId)
         }
     }
 

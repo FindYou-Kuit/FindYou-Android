@@ -3,6 +3,7 @@ package com.example.findu.presentation.ui.search
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +15,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.R
 import com.example.findu.databinding.FragmentSearchFilterBinding
 import com.example.findu.domain.model.breed.SpeciesType
-import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.adapter.SearchBreedRVAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
@@ -181,17 +182,17 @@ class SearchFilterFragment : Fragment() {
             styleDefault()
             when (species) {
                 SpeciesType.DOG -> {
-                    selectedSpecies = "개"; filterModel.species = SpeciesType.DOG.name
+                    filterModel.species = SpeciesType.DOG.name
                     rbSearchFilterDog.setTextAppearance(hiStyle); rbSearchFilterDog.setTextColor(hiColor)
                     filterViewModel.loadBreeds(SpeciesType.DOG)
                 }
                 SpeciesType.CAT -> {
-                    selectedSpecies = "고양이"; filterModel.species = SpeciesType.CAT.name
+                    filterModel.species = SpeciesType.CAT.name
                     rbSearchFilterCat.setTextAppearance(hiStyle); rbSearchFilterCat.setTextColor(hiColor)
                     filterViewModel.loadBreeds(SpeciesType.CAT)
                 }
                 SpeciesType.ETC -> {
-                    selectedSpecies = "기타"; filterModel.species = SpeciesType.ETC.name
+                    filterModel.species = SpeciesType.ETC.name
                     rbSearchFilterEtc.setTextAppearance(hiStyle); rbSearchFilterEtc.setTextColor(hiColor)
                     filterViewModel.loadBreeds(SpeciesType.ETC)
                 }
@@ -462,17 +463,16 @@ class SearchFilterFragment : Fragment() {
             startDate = filterModel.startDate,
             endDate = filterModel.endDate,
             species = normalizedSpecies,
-            breeds = if (selectedBreedList.isEmpty()) null
-                else selectedBreedList.toList(),
+            breeds = if (selectedBreedList.isEmpty()) null else selectedBreedList.toList(),
             location = buildLocation()
         )
 
-        val bundle = Bundle().apply {
-            putSerializable(SELECTED_FILTER_DATA, result)
-        }
-        parentFragmentManager.setFragmentResult(FILTER_RESULTS, bundle)
-        parentFragmentManager.popBackStack()
+        // ✅ Navigation SavedStateHandle 로 전달
+        findNavController().previousBackStackEntry
+            ?.savedStateHandle
+            ?.set(SELECTED_FILTER_DATA, result)
 
+        findNavController().popBackStack()
     }
 
     private fun buildLocation(): String? {
