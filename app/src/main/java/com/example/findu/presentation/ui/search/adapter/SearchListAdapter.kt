@@ -5,9 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import coil.request.CachePolicy
-import coil.transform.RoundedCornersTransformation
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.findu.R
@@ -22,11 +19,8 @@ sealed class SearchListItem {
 }
 
 class SearchListAdapter(
-    private val onFilterClick: () -> Unit,
-    private val onToggleClick: () -> Unit,
-    private val onItemClick: (SearchRv) -> Unit,
-    private val onBookmarkClick: (Long, Boolean, String) -> Unit
-) : ListAdapter<SearchListItem, RecyclerView.ViewHolder>(DIFF) {
+    private val listener: SearchListListener
+) : ListAdapter<SearchListItem, SearchListAdapter.BaseVH>(DIFF) {
 
     companion object {
         const val VIEW_TYPE_HEADER = 999
@@ -50,12 +44,12 @@ class SearchListAdapter(
     }
 
     private var isGridMode = false
+
     fun setGridMode(enabled: Boolean) {
         if (isGridMode == enabled) return
         isGridMode = enabled
         notifyItemRangeChanged(1, currentList.size - 1)
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return when (val item = getItem(position)) {
@@ -64,59 +58,57 @@ class SearchListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_HEADER -> {
-                val binding = ItemSearchHeaderBinding.inflate(inflater, parent, false)
-                HeaderVH(binding)
-            }
-            VIEW_TYPE_GRID -> {
-                val binding = ItemSearchGridContentBinding.inflate(inflater, parent, false)
-                GridVH(binding)
-            }
-            else -> {
-                val binding = SearchHorizontalContentItemBinding.inflate(inflater, parent, false)
-                HorizontalVH(binding)
-            }
+            VIEW_TYPE_HEADER -> BaseVH.HeaderVH(
+                ItemSearchHeaderBinding.inflate(inflater, parent, false),
+                listener
+            )
+            VIEW_TYPE_GRID -> BaseVH.GridVH(
+                ItemSearchGridContentBinding.inflate(inflater, parent, false),
+                listener
+            )
+            else -> BaseVH.HorizontalVH(
+                SearchHorizontalContentItemBinding.inflate(inflater, parent, false),
+                listener
+            )
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseVH, position: Int) {
         when (holder) {
-            is HeaderVH -> holder.bind()
-            is GridVH -> holder.bind((getItem(position) as SearchListItem.Content).data)
-            is HorizontalVH -> holder.bind((getItem(position) as SearchListItem.Content).data)
+            is BaseVH.HeaderVH -> holder.bind()
+            is BaseVH.HorizontalVH -> holder.bind((getItem(position) as SearchListItem.Content).data)
+            is BaseVH.GridVH -> holder.bind((getItem(position) as SearchListItem.Content).data)
         }
     }
 
-    inner class HeaderVH(private val binding: ItemSearchHeaderBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        private var isGridMode = false
-
-        fun bind() {
-            binding.ibSearchFilter.setOnClickListener { onFilterClick() }
-            binding.ibSearchHorizontalSort.setOnClickListener {
-                isGridMode = !isGridMode
-                updateToggleIcon()
-                onToggleClick() }
-        }
-
-        private fun updateToggleIcon() {
-            val iconRes = if (isGridMode) {
-                R.drawable.ic_search_grid_sort
-            } else {
-                R.drawable.ic_search_horizontal_sort
+    sealed class BaseVH(bindingRoot: ViewGroup) : RecyclerView.ViewHolder(bindingRoot) {
+        class HeaderVH(
+            private val binding: ItemSearchHeaderBinding,
+            private val listener: SearchListListener
+        ) : BaseVH(binding.root as ViewGroup) {
+            private var isGrid = false
+            fun bind() = with(binding) {
+                ivSearchBanner.setImageResource(listener.getBannerRes())
+                ibSearchFilter.setOnClickListener { listener.onFilterClick() }
+                ibSearchHorizontalSort.setOnClickListener {
+                    isGrid = !isGrid
+                    val iconRes =
+                        if (isGrid) R.drawable.ic_search_grid_sort else R.drawable.ic_search_horizontal_sort
+                    ibSearchHorizontalSort.setImageResource(iconRes)
+                    listener.onToggleClick()
+                }
+                ivSearchBanner.setOnClickListener { listener.onBannerClick() }
             }
-            binding.ibSearchHorizontalSort.setImageResource(iconRes)
         }
-    }
 
-    inner class HorizontalVH(private val binding: SearchHorizontalContentItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: SearchRv) {
-            with(binding) {
+        class HorizontalVH(
+            private val binding: SearchHorizontalContentItemBinding,
+            private val listener: SearchListListener
+        ) : BaseVH(binding.root as ViewGroup) {
+            fun bind(item: SearchRv) = with(binding) {
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
                 tvSearchContentAddress.text = item.location
@@ -131,28 +123,27 @@ class SearchListAdapter(
                     .transform(RoundedCorners(24))
                     .into(ivSearchContent)
 
-                root.setOnClickListener { onItemClick(item) }
+                root.setOnClickListener { listener.onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
                     item.isBookmark = !item.isBookmark
-                    onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
+                    listener.onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
                 }
             }
+
+            private fun updateBookmarkIcon(isBookmarked: Boolean) {
+                binding.ivSearchContentBookmark.setImageResource(
+                    if (isBookmarked) R.drawable.ic_search_fill_bookmark
+                    else R.drawable.ic_search_blank_bookmark_horizontal
+                )
+            }
         }
 
-        private fun updateBookmarkIcon(isBookmarked: Boolean) {
-            binding.ivSearchContentBookmark.setImageResource(
-                if (isBookmarked) R.drawable.ic_search_fill_bookmark
-                else R.drawable.ic_search_blank_bookmark_horizontal
-            )
-        }
-    }
-
-    inner class GridVH(private val binding: ItemSearchGridContentBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: SearchRv) {
-            with(binding) {
+        class GridVH(
+            private val binding: ItemSearchGridContentBinding,
+            private val listener: SearchListListener
+        ) : BaseVH(binding.root as ViewGroup) {
+            fun bind(item: SearchRv) = with(binding) {
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
                 tvSearchContentAddress.text = item.location
@@ -167,20 +158,20 @@ class SearchListAdapter(
                     .transform(RoundedCorners(24))
                     .into(ivSearchContent)
 
-                root.setOnClickListener { onItemClick(item) }
+                root.setOnClickListener { listener.onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
                     item.isBookmark = !item.isBookmark
-                    onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
+                    listener.onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
                 }
             }
-        }
 
-        private fun updateBookmarkIcon(isBookmarked: Boolean) {
-            binding.ivSearchContentBookmark.setImageResource(
-                if (isBookmarked) R.drawable.ic_search_fill_bookmark
-                else R.drawable.ic_search_blank_bookmark
-            )
+            private fun updateBookmarkIcon(isBookmarked: Boolean) {
+                binding.ivSearchContentBookmark.setImageResource(
+                    if (isBookmarked) R.drawable.ic_search_fill_bookmark
+                    else R.drawable.ic_search_blank_bookmark
+                )
+            }
         }
     }
 

@@ -53,6 +53,12 @@
         <action
             android:id="@+id/action_fragment_search_to_fragment_search_filter"
             app:destination="@id/fragment_search_filter" />
+        <action
+            android:id="@+id/action_fragment_search_to_adoptInfoFragment"
+            app:destination="@id/fragment_adopt_info" />
+        <action
+            android:id="@+id/action_fragment_search_to_reportInfoFragment"
+            app:destination="@id/fragment_report_info" />
     </fragment>
 
     <fragment

@@ -22,6 +22,7 @@ import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
+import com.example.findu.presentation.ui.search.adapter.SearchListListener
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.model.SearchType
@@ -32,7 +33,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchRescueFragment : Fragment() {
+class SearchRescueFragment : Fragment(), SearchListListener {
 
     private var _binding: FragmentSearchRescueBinding? = null
     private val binding get() = _binding!!
@@ -166,12 +167,8 @@ class SearchRescueFragment : Fragment() {
     }
 
     private fun initRVAdapter() {
-        listAdapter = SearchListAdapter(
-            onFilterClick = { navigateToFilter() },
-            onToggleClick = { toggleLayoutMode() },
-            onItemClick = { item -> navigateToDetail(item.reportId, item.tag.text, item.name) },
-            onBookmarkClick = { cardId, isBookmark, tag -> viewModel.setInterest(cardId, isBookmark, tag) }
-        )
+        listAdapter = SearchListAdapter(this)
+
 
         binding.rvSearchRescue.apply {
             adapter = listAdapter
@@ -226,5 +223,17 @@ class SearchRescueFragment : Fragment() {
         binding.rvSearchRescue.adapter = null
         _binding = null
     }
+
+    override fun onFilterClick() =  navigateToFilter()
+    override fun onToggleClick() = toggleLayoutMode()
+    override fun onItemClick(item: SearchRv) =
+        navigateToDetail(item.reportId, item.tag.text, item.name)
+
+    override fun onBookmarkClick(id: Long, isBookmark: Boolean, tag: String) =
+        viewModel.setInterest(id, isBookmark, tag)
+
+    override fun onBannerClick() =
+        findNavController().navigate(R.id.action_fragment_search_to_adoptInfoFragment)
+    override fun getBannerRes(): Int = R.drawable.img_search_banner_adopt
 
 }
