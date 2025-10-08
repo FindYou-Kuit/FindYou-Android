@@ -104,15 +104,15 @@ class SearchFilterFragment : Fragment() {
 
         when (args.searchType) {
             SearchType.ALL -> {
-                searchViewModel.updateAllFilterState(null)
+                searchViewModel.clearFilterState(SearchType.ALL)
                 searchViewModel.getSearchData(SearchType.ALL)
             }
             SearchType.REPORTING -> {
-                searchViewModel.updateReportFilterState(null)
+                searchViewModel.clearFilterState(SearchType.REPORTING)
                 searchViewModel.getSearchData(SearchType.REPORTING)
             }
             SearchType.PROTECTING -> {
-                searchViewModel.updateProtectFilterState(null)
+                searchViewModel.clearFilterState(SearchType.PROTECTING)
                 searchViewModel.getSearchData(SearchType.PROTECTING)
             }
         }

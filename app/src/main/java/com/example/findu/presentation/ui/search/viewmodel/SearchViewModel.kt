@@ -32,9 +32,9 @@ class SearchViewModel @Inject constructor(
     private val getBreedDataUseCase: GetBreedDataUseCase,
 ) : ViewModel() {
 
-    private var _allFilter: SearchFilterUiModel? = SearchFilterUiModel()
-    private var _reportFilter: SearchFilterUiModel? = SearchFilterUiModel()
-    private var _protectFilter: SearchFilterUiModel? = SearchFilterUiModel()
+    private var _allFilter: SearchFilterUiModel? = null
+    private var _reportFilter: SearchFilterUiModel? = null
+    private var _protectFilter: SearchFilterUiModel? = null
 
     private val _allSearchData = MutableStateFlow<List<SearchData>?>(null)
     val allSearchData = _allSearchData.asStateFlow()
@@ -91,15 +91,23 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateAllFilterState(filterUiModel: SearchFilterUiModel?) {
-        _allFilter = filterUiModel
+        _allFilter = filterUiModel?.copy()
     }
 
     fun updateReportFilterState(filterUiModel: SearchFilterUiModel?) {
-        _reportFilter = filterUiModel
+        _reportFilter = filterUiModel?.copy()
     }
 
     fun updateProtectFilterState(filterUiModel: SearchFilterUiModel?) {
-        _protectFilter = filterUiModel
+        _protectFilter = filterUiModel?.copy()
+    }
+
+    fun clearFilterState(type: SearchType) {
+        when (type) {
+            SearchType.ALL -> _allFilter = null
+            SearchType.PROTECTING -> _protectFilter = null
+            SearchType.REPORTING -> _reportFilter = null
+        }
     }
 
     fun setInterest(
