@@ -30,7 +30,6 @@ import com.example.findu.presentation.ui.report.viewmodel.WitnessReportUiState
 import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
 
-
 @Composable
 fun WitnessReportAnimalInfoScreen(
     uiState: WitnessReportUiState,
@@ -39,12 +38,7 @@ fun WitnessReportAnimalInfoScreen(
     val buttonEnabled by remember(
         uiState.speciesType,
         uiState.breed,
-    ) {
-        derivedStateOf {
-            uiState.speciesType != null &&
-                    uiState.breed != null
-        }
-    }
+    ) { derivedStateOf { uiState.breed != null } }
 
     Column(
         modifier = Modifier
@@ -62,7 +56,8 @@ fun WitnessReportAnimalInfoScreen(
                 speciesType = uiState.speciesType,
                 breed = uiState.breed,
                 breedState = uiState.breedSearchText,
-                breedList = uiState.breedList,
+                showingBreedList = uiState.showingBreedList,
+                onSearchFieldChange = { onEvent(WitnessReportUiEvent.OnSearchFieldChange) },
                 onSpeciesClick = { onEvent(WitnessReportUiEvent.OnSpeciesClick(it)) },
                 onBreedClick = { onEvent(WitnessReportUiEvent.OnBreedClick(it)) },
                 clearFocus = { onEvent(WitnessReportUiEvent.ClearFocus) },
@@ -88,14 +83,11 @@ fun MissingReportAnimalInfoScreen(
     onEvent: (MissingReportUiEvent) -> Unit,
 ) {
     val buttonEnabled by remember(
-        uiState.speciesType,
         uiState.breed,
         uiState.age,
     ) {
         derivedStateOf {
-            uiState.speciesType != null &&
-                    uiState.breed != null &&
-                    uiState.age.text.isNotEmpty()
+            uiState.breed != null && uiState.age.text.isNotEmpty()
         }
     }
 
@@ -115,8 +107,9 @@ fun MissingReportAnimalInfoScreen(
                 speciesType = uiState.speciesType,
                 breed = uiState.breed,
                 breedState = uiState.breedSearchText,
-                breedList = uiState.breedList,
+                showingBreedList = uiState.showingBreedList,
                 age = uiState.age,
+                onSearchFieldChange = { onEvent(MissingReportUiEvent.OnSearchFieldChange) },
                 onSpeciesClick = { onEvent(MissingReportUiEvent.OnSpeciesClick(it)) },
                 onBreedClick = { onEvent(MissingReportUiEvent.OnBreedClick(it)) },
                 clearFocus = { onEvent(MissingReportUiEvent.ClearFocus) },
@@ -137,13 +130,14 @@ fun MissingReportAnimalInfoScreen(
 
 @Composable
 private fun ReportAnimalInfoScreen(
-    speciesType: SpeciesType? = null,
+    speciesType: SpeciesType,
     breed: Breed? = null,
     breedState: TextFieldState,
-    breedList: List<Breed> = emptyList(),
+    showingBreedList: List<Breed>,
     age: TextFieldState? = null,
     onSpeciesClick: (SpeciesType) -> Unit = {},
     onBreedClick: (Breed) -> Unit = {},
+    onSearchFieldChange: () -> Unit = {},
     clearFocus: () -> Unit = {},
 ) {
     Column(
@@ -154,14 +148,18 @@ private fun ReportAnimalInfoScreen(
     ) {
         ReportSpeciesComponent(
             selectedSpecies = speciesType,
-            onSpeciesClick = onSpeciesClick,
+            onSpeciesClick = {
+                onSpeciesClick(it)
+                clearFocus()
+            },
         )
         VerticalSpacer(30.dp)
         ReportBreedComponent(
             breedState = breedState,
-            breedList = breedList,
+            showingBreedList = showingBreedList,
             onDismissRequest = clearFocus,
             selectedBreed = breed,
+            onSearchFieldChange = onSearchFieldChange,
             onBreedClick = onBreedClick,
         )
         VerticalSpacer(40.dp)

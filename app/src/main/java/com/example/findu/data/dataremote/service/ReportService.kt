@@ -4,6 +4,7 @@ import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.request.MissingReportRequestDto
 import com.example.findu.data.dataremote.model.request.WitnessReportRequestDto
+import com.example.findu.data.dataremote.model.response.report.ImageUploadResponseDto
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -14,10 +15,10 @@ import retrofit2.http.Path
 
 interface ReportService {
     @Multipart
-    @POST("/api/v2/reports/images")
+    @POST("/api/v2/images/upload")
     suspend fun uploadImages(
         @Part files: List<MultipartBody.Part>
-    ): BaseResponse<List<String>>
+    ): BaseResponse<ImageUploadResponseDto>
 
     @POST("/api/v2/reports/new-missing-reports")
     suspend fun postMissingReport(

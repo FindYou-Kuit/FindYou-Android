@@ -1,6 +1,10 @@
 package com.example.findu.presentation.util.extension
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 fun Char.isNotDigit() = this.isDigit().not()
 
@@ -50,3 +54,23 @@ fun String.toCityOrProvince(): String {
     )
     return map[this] ?: this
 }
+
+/**
+ * "2023년 08월 15일" 형식의 날짜를 "2023-08-15" 형식으로 변환
+ */
+fun String.toDateString(): String =
+    if (this.isBlank()) {
+        Clock.System.now()
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .date.toString()
+    } else {
+        val dateParts = this.replace("년 ", "-")
+            .replace("월 ", "-")
+            .replace("일", "")
+            .split("-")
+        val year = dateParts[0].toInt()
+        val month = dateParts[1].toInt()
+        val day = dateParts[2].toInt()
+        LocalDateTime(year, month, day, 0, 0)
+            .date.toString()
+    }

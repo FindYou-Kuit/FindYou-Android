@@ -5,6 +5,7 @@ import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.base.NullableBaseResponse
 import com.example.findu.data.dataremote.model.request.MissingReportRequestDto
 import com.example.findu.data.dataremote.model.request.WitnessReportRequestDto
+import com.example.findu.data.dataremote.model.response.report.ImageUploadResponseDto
 import com.example.findu.data.dataremote.service.ReportService
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -12,7 +13,7 @@ import javax.inject.Inject
 class ReportRemoteDataSourceImpl @Inject constructor(
     private val service: ReportService
 ) : ReportRemoteDataSource {
-    override suspend fun uploadImages(files: List<MultipartBody.Part>): BaseResponse<List<String>> =
+    override suspend fun uploadImages(files: List<MultipartBody.Part>): BaseResponse<ImageUploadResponseDto> =
         service.uploadImages(files)
 
     override suspend fun postMissingReport(requestDto: MissingReportRequestDto): NullableBaseResponse<Unit> =
