@@ -163,7 +163,9 @@ class SearchRescueFragment : Fragment(), SearchListListener {
     }
 
     private fun navigateToFilter() {
-        findNavController().navigate(R.id.action_fragment_search_to_fragment_search_filter)
+        val action = SearchFragmentDirections
+            .actionFragmentSearchToFragmentSearchFilter(SearchType.PROTECTING)
+        findNavController().navigate(action)
     }
 
     private fun initRVAdapter() {
@@ -172,7 +174,8 @@ class SearchRescueFragment : Fragment(), SearchListListener {
 
         binding.rvSearchRescue.apply {
             adapter = listAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             setHasFixedSize(true)
             itemAnimator = null
         }
@@ -187,7 +190,7 @@ class SearchRescueFragment : Fragment(), SearchListListener {
                 val total = (recyclerView.adapter?.itemCount ?: 1) - 1
                 //페이징 처리
                 if (lastPos == total) {
-                    viewModel.getSearchData(SearchType.PROTECTING,lastProtectId)
+                    viewModel.getSearchData(SearchType.PROTECTING, lastProtectId)
                 }
             }
         })
@@ -224,7 +227,7 @@ class SearchRescueFragment : Fragment(), SearchListListener {
         _binding = null
     }
 
-    override fun onFilterClick() =  navigateToFilter()
+    override fun onFilterClick() = navigateToFilter()
     override fun onToggleClick() = toggleLayoutMode()
     override fun onItemClick(item: SearchRv) =
         navigateToDetail(item.reportId, item.tag.text, item.name)
@@ -234,6 +237,7 @@ class SearchRescueFragment : Fragment(), SearchListListener {
 
     override fun onBannerClick() =
         findNavController().navigate(R.id.action_fragment_search_to_adoptInfoFragment)
+
     override fun getBannerRes(): Int = R.drawable.img_search_banner_adopt
 
 }

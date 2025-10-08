@@ -133,9 +133,13 @@
 
     <fragment
         android:id="@+id/fragment_search_filter"
-        android:name="com.example.findu.presentation.ui.search.SearchFilterFragment"
+        android:name="com.example.findu.presentation.ui.search.filter.SearchFilterFragment"
         android:label="Search Filter"
-        tools:layout="@layout/fragment_search_filter" />
+        tools:layout="@layout/fragment_search_filter">
+        <argument
+            android:name="searchType"
+            app:argType="com.example.findu.presentation.ui.search.model.SearchType" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_my_recent_history"

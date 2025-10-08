@@ -165,8 +165,9 @@ class SearchReportFragment : Fragment(), SearchListListener {
 
 
     private fun navigateToFilter() {
-        findNavController().navigate(R.id.action_fragment_search_to_fragment_search_filter)
-    }
+        val action = SearchFragmentDirections
+            .actionFragmentSearchToFragmentSearchFilter(SearchType.REPORTING)
+        findNavController().navigate(action)    }
 
 
     private fun initRVAdapter() {
