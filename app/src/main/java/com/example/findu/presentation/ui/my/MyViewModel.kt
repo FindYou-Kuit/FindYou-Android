@@ -1,6 +1,7 @@
 package com.example.findu.presentation.ui.my
 
 import android.net.Uri
+import android.util.Log
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -173,10 +174,16 @@ class MyViewModel @Inject constructor(
         _nickNameState.value = newNickName
 
         viewModelScope.launch {
+            Log.d("MyViewModel", "닉네임 변경 요청 시작: $newNickName")
+
             patchNickNameUseCase(newNickName).fold(
-                onSuccess = {},
-                onFailure = {
-                    _errorMessage.value = it.message ?: "닉네임 변경 중 오류가 발생했습니다."
+                onSuccess = {
+                    Log.d("MyViewModel", "닉네임 변경 성공 ✅")
+                    fetchMyProfile() // 성공 시 프로필 다시 불러오기
+                },
+                onFailure = { e ->
+                    Log.e("MyViewModel", "닉네임 변경 실패 ❌: ${e.message}", e)
+                    _errorMessage.value = e.message ?: "닉네임 변경 중 오류가 발생했습니다."
                 }
             )
         }

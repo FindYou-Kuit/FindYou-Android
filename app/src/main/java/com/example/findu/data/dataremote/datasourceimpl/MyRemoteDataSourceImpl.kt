@@ -3,11 +3,13 @@ package com.example.findu.data.dataremote.datasourceimpl
 import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.base.NullableBaseResponse
+import com.example.findu.data.dataremote.model.request.PatchNicknameRequestDto
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.example.findu.data.dataremote.service.MyService
+import com.example.findu.data.dataremote.util.handleBaseResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -31,8 +33,8 @@ class MyRemoteDataSourceImpl @Inject constructor(
     override suspend fun deleteUser(): NullableBaseResponse<Unit> =
         myService.deleteUser()
 
-    override suspend fun patchNickname(newNickname: String): NullableBaseResponse<Unit> =
-        myService.patchNickname(newNickname)
+    override suspend fun patchNickname(request: PatchNicknameRequestDto): NullableBaseResponse<Unit> =
+        myService.patchNickname(request)
 
     override suspend fun getNickname(): BaseResponse<MyNickNameResponseDto> =
         myService.getNickname()

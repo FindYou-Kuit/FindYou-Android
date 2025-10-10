@@ -2,6 +2,7 @@ package com.example.findu.data.dataremote.service
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.base.NullableBaseResponse
+import com.example.findu.data.dataremote.model.request.PatchNicknameRequestDto
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
@@ -37,7 +38,7 @@ interface MyService {
 
     @PATCH("/api/v2/users/me/nickname")
     suspend fun patchNickname(
-        @Body newNickname: String
+        @Body newNickname: PatchNicknameRequestDto
     ): NullableBaseResponse<Unit>
 
     @GET("/api/v2/users/me")

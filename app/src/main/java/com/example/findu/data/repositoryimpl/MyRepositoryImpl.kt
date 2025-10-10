@@ -1,6 +1,7 @@
 package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
+import com.example.findu.data.dataremote.model.request.PatchNicknameRequestDto
 import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.my.toDomain
 import com.example.findu.domain.model.my.MyInterestData
@@ -46,7 +47,10 @@ class MyRepositoryImpl @Inject constructor(
 
     override suspend fun patchNickname(newNickname: String): Result<Unit> =
         runCatching {
-            myRemoteDataSource.patchNickname(newNickname).handleBaseResponse().getOrThrow()
+            myRemoteDataSource
+                .patchNickname(PatchNicknameRequestDto(newNickname))
+                .handleBaseResponse()
+                .getOrThrow()
         }
 
     override suspend fun getNickname(): Result<MyProfileData> =

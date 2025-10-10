@@ -2,6 +2,7 @@ package com.example.findu.data.dataremote.datasource
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.base.NullableBaseResponse
+import com.example.findu.data.dataremote.model.request.PatchNicknameRequestDto
 import com.example.findu.data.dataremote.model.response.my.MyInterestResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
@@ -24,7 +25,7 @@ interface MyRemoteDataSource {
 
     suspend fun deleteUser(): NullableBaseResponse<Unit>
 
-    suspend fun patchNickname(newNickname: String): NullableBaseResponse<Unit>
+    suspend fun patchNickname(request: PatchNicknameRequestDto): NullableBaseResponse<Unit>
 
     suspend fun getNickname(): BaseResponse<MyNickNameResponseDto>
 
