@@ -19,14 +19,21 @@ import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
 import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.MapView
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SearchProtectingDetailFragment : Fragment() {
     private lateinit var binding: FragmentSearchDetailProtectingBinding
-    private var isDetailVisible = false
     private val viewModel by viewModels<DetailSearchViewModel>()
     private var cardId: Long = -1
     private var tag: String? = null
@@ -34,11 +41,20 @@ class SearchProtectingDetailFragment : Fragment() {
 
     private val args: SearchProtectingDetailFragmentArgs by navArgs()
 
+    private var isBookmarked = false
+
+    private lateinit var mapView: MapView
+    private var naverMap: NaverMap? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchDetailProtectingBinding.inflate(layoutInflater)
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.getMapAsync { nMap ->
+            naverMap = nMap
+        }
         return binding.root
     }
 
@@ -57,11 +73,44 @@ class SearchProtectingDetailFragment : Fragment() {
         }
         observeViewModel()
         fetchDetailData()
-
-        setContentVisibility()
-        initBackButton()
+        initBookmarkUI()
+        initListener()
 
     }
+
+    private fun setupMap() {
+        val address = binding.tvValueProtectLocation.text.toString()
+        if (address.isBlank()) return
+        lifecycleScope.launch(Dispatchers.IO) {
+            runCatching {
+                val geocoder = android.location.Geocoder(requireContext())
+                geocoder.getFromLocationName(address, 1)
+            }.onSuccess { results ->
+                if (!results.isNullOrEmpty()) {
+                    val location = LatLng(results[0].latitude, results[0].longitude)
+                    withContext(Dispatchers.Main) {
+                        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
+                        Marker().apply {
+                            position = location
+                            map = naverMap
+                            icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
+                            height = 23
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }.onFailure { e ->
+                Log.w("SearchDisappearDetail", "Geocoding failed", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     private fun fetchDetailData() {
         when (tag) {
@@ -94,46 +143,44 @@ class SearchProtectingDetailFragment : Fragment() {
         binding.apply {
             Glide.with(requireContext()).load(data.imageUrl).into(ivSearchDetailImg)
             tvDetailTagField.text = convertTagToKorean(data.tag.text)
-            tvDetailBreedField.text = data.breed
-            tvDetailAgeField.text = data.age
-            tvDetailWeightField.text = data.weight
-            tvDetailSexField.text = data.sex
-            tvDetailHappenDateField.text = data.happenDate
-            tvDetailFurColorField.text = data.furColor
-            tvDetailNeuteringField.text = data.neutering
-            tvDetailSignificantField.text = data.significant
-            tvDetailNoticeNumberField.text = data.noticeNumber
-            tvDetailNoticeDurationField.text = data.noticeDuration
-            tvDetailFoundLocationField.text = data.foundLocation
-            tvDetailCareNameField.text = data.careName
-            tvDetailCareTelField.text = data.careTel
-            tvDetailAuthorityField.text = data.authority
-            tvDetailAuthorityPhoneNumberField.text = data.authorityPhoneNumber
+            tvValueName.text = data.breed
+            tvValueAge.text = data.age
+            tvValueWeight.text = data.weight
+            tvValueGender.text = data.sex
+            tvValueNeuter.text = data.happenDate
+            tvValueHairColor.text = data.furColor
+            tvSpecialNote.text = data.specialNote
+            tvShelterLocation.text = data.careAddr
+            tvValueShelterName.text = data.careName
+            tvValueNotiDate.text = data.noticeDuration
+            tvValueNotiNum.text = data.noticeNumber
+            tvValueShelterPhoneNumber.text = data.careTel
+            tvValueJurisdiction.text = data.authority
 
             initTagView(data)
-            initBookmarkUI(data)
-            initCallButtons(data)
-            initMapButtons(data)
+            setupMap()
+
         }
 
     }
 
-
-    private fun initBackButton() {
-        binding.ivSearchDetailBack.setOnClickListener {
+    private fun initListener() = with(binding) {
+        ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-    }
+        initBookmarkUI()
 
-    private fun initCallButtons(data: DetailProtectData) {
-        binding.tvDetailCareTelField.setOnClickListener {
-            call(data.careTel)
+        llCallPhone.setOnClickListener {
+            val phoneNumber = binding.tvValueShelterPhoneNumber.text.toString()
+            call(phoneNumber)
         }
 
-        binding.tvDetailAuthorityPhoneNumberField.setOnClickListener {
-            call(data.authorityPhoneNumber)
+        llViewMap.setOnClickListener {
+            val address = binding.tvValueProtectLocation.text.toString()
+            openNaverMap(address)
         }
     }
+
 
     private fun call(phoneNumber: String) {
         if (phoneNumber.isNotEmpty()) {
@@ -144,21 +191,11 @@ class SearchProtectingDetailFragment : Fragment() {
         }
     }
 
-    private fun initMapButtons(data: DetailProtectData) {
-        binding.btnViewLocation.setOnClickListener {
-            openNaverMap(data.careAddr)
-        }
-        binding.btnShowFoundPlace.setOnClickListener {
-            openNaverMap(data.foundLocation)
-        }
-    }
-
-    private fun initBookmarkUI(data: DetailProtectData) {
-        updateBookmarkUI(data.interest)
+    private fun initBookmarkUI() {
         binding.ivSearchDetailBookmark.setOnClickListener {
-            data.interest = !data.interest
+            isBookmarked = !isBookmarked
             viewModel.setInterestProtectingAnimal(cardId)
-            updateBookmarkUI(data.interest)
+            updateBookmarkUI(isBookmarked)
         }
     }
 
@@ -211,36 +248,39 @@ class SearchProtectingDetailFragment : Fragment() {
     private fun updateBookmarkUI(bookmark: Boolean) {
         binding.ivSearchDetailBookmark.setImageResource(
             if (bookmark) R.drawable.ic_search_fill_bookmark
-            else R.drawable.ic_search_blank_bookmark
+            else R.drawable.ic_search_detail_blank_bookmark
         )
     }
 
-    private fun setContentVisibility() {
-        binding.clSearchShowMore.setOnClickListener {
-            binding.clSearchContentDetail.visibility = View.VISIBLE
-            binding.clSearchShowMore.visibility = View.INVISIBLE
-        }
-
-        binding.clSearchDetailSpecialNoteBtn.setOnClickListener {
-            isDetailVisible = !isDetailVisible
-            binding.clSearchDetailSpecialNoteDescription.visibility = if (isDetailVisible) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-
-            binding.tvSearchDetailSpecialNote.text = if (isDetailVisible) {
-                "접기"
-            } else {
-                "보기"
-            }
-
-            binding.ivSearchDetailSpecialNoteIcon.rotation = if (isDetailVisible) {
-                180f
-            } else {
-                0f
-            }
-        }
-
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
     }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onPause() {
+        binding.mapView.onPause()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        binding.mapView.onStop()
+        super.onStop()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onDestroyView() {
+        binding.mapView.onDestroy()
+        super.onDestroyView()
+    }
+
 }

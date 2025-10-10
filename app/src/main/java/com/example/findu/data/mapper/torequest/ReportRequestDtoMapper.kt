@@ -7,23 +7,27 @@ import com.example.findu.domain.model.report.WitnessReportData
 
 fun MissingReportData.toRequestDto() =
     MissingReportRequestDto(
-        imageUrls = imageUrls,
-        breed = breedId,
-        sex = sex.value,
-        furColor = furColors.map { it.color },
-        location = location,
-        features = featureIds,
-        description = description,
-        missingDate = missingDate
+        imgUrls = this.imageUrls,
+        species = this.species.displayName,
+        breed = this.breed,
+        age = this.age,
+        sex = this.sex.displayName,
+        rfid = this.rfid,
+        furColor = this.furColors.joinToString(", ") { it.color },
+        missingDate = this.missingDate,
+        significant = this.description,
+        location = this.location,
+        landmark = this.landmark
     )
 
 fun WitnessReportData.toRequestDto() =
     WitnessReportRequestDto(
-        imageUrls = imageUrls,
-        breed = breedId,
-        furColor = furColors.map { it.color },
-        location = location,
-        features = featureIds,
-        description = description,
-        foundDate = foundDate
+        imgUrls = this.imageUrls,
+        breed = this.breed,
+        species = this.species.displayName,
+        furColor = this.furColors.joinToString("&") { it.color },
+        location = this.location,
+        landmark = this.landmark,
+        significant = this.description,
+        foundDate = this.foundDate
     )

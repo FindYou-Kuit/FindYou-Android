@@ -1,22 +1,25 @@
 package com.example.findu.di
 
 import com.example.findu.domain.repository.AuthRepository
-import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.domain.repository.UserInfoRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
+import com.example.findu.domain.repository.DetailSearchRepository
+import com.example.findu.domain.repository.DeviceRepository
 import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.repository.InterestRepository
-import com.example.findu.domain.repository.SearchRepository
-import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import com.example.findu.domain.repository.MyRepository
+import com.example.findu.domain.repository.SearchRepository
 import com.example.findu.domain.repository.TokenRepository
+import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
+import com.example.findu.domain.usecase.GetDetailSearchUseCase
 import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetNicknameUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
+import com.example.findu.domain.usecase.PostAiDetectionUseCase
 import com.example.findu.domain.usecase.PostCheckNicknameUseCase
 import com.example.findu.domain.usecase.PostGuestLoginUseCase
 import com.example.findu.domain.usecase.PostLoginUseCase
@@ -32,8 +35,10 @@ import com.example.findu.domain.usecase.my.GetNickNameUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
+import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.usecase.report.DeleteReportUseCase
 import com.example.findu.domain.usecase.report.GetAddressUseCase
+import com.example.findu.domain.usecase.report.GetLatLngUseCase
 import com.example.findu.domain.usecase.report.PostMissingReportUseCase
 import com.example.findu.domain.usecase.report.PostWitnessReportUseCase
 import com.example.findu.domain.usecase.report.UploadImagesUseCase
@@ -112,6 +117,12 @@ object UseCaseModule {
     fun provideGetAddressUseCase(
         reportRepository: ReportRepository
     ): GetAddressUseCase = GetAddressUseCase(reportRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetLatLngUseCase(
+        reportRepository: ReportRepository,
+    ): GetLatLngUseCase = GetLatLngUseCase(reportRepository)
 
     @Provides
     @Singleton
@@ -249,4 +260,10 @@ object UseCaseModule {
     fun provideSetNicknameUseCase(
         userInfoRepository: UserInfoRepository
     ): SetNicknameUseCase = SetNicknameUseCase(userInfoRepository)
+
+    @Provides
+    @Singleton
+    fun providePostAiDetectBreedUseCase(
+        breedRepository: BreedRepository,
+    ): PostAiDetectionUseCase = PostAiDetectionUseCase(breedRepository)
 }

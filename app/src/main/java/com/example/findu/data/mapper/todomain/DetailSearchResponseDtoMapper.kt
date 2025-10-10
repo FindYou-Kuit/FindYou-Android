@@ -17,7 +17,7 @@ fun DetailProtectResponseDto.toDomain() = DetailProtectData(
     happenDate = this.happenDate,
     furColor = this.furColor,
     neutering = this.neutering,
-    significant = this.significant,
+    specialNote = this.significant,
     noticeNumber = this.noticeNumber,
     noticeDuration = this.noticeDuration,
     foundLocation = this.foundLocation,
@@ -39,10 +39,14 @@ fun DetailReportResponseDto.toDomain() = DetailReportData(
     writeDate = this.writeDate,
     eventDate = this.eventDate,
     eventLocation = this.eventLocation ?: "위치 정보 없음",
-    foundLocation = this.foundLocation?:"위치 정보 없음",
+    foundLocation = this.foundLocation ?: "위치 정보 없음",
     features = this.features,
-    additionalDescription = this.additionalDescription,
+    specialNote = this.additionalDescription,
     interest = this.interest,
+    age = this.age ?: "정보 없음",
+    rfid = this.rfid ?: "정보 없음",
+    userPhone = this.userPhone ?: "정보 없음",
+    surroundPlace = this.surroundPlace ?: "정보 없음"
 )
 
 fun String.toDetailSearchStatus(): SearchStatus {

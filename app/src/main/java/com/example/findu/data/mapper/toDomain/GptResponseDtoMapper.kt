@@ -1,9 +1,9 @@
 package com.example.findu.data.mapper.todomain
 
 import com.example.findu.data.dataremote.model.response.GptResponseDto
+import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.GptData
-import com.example.findu.domain.model.breed.SpeciesType
 
 fun GptResponseDto.toDomain(): GptData =
     this.choices.firstOrNull()?.message?.content?.let { content ->
@@ -11,8 +11,8 @@ fun GptResponseDto.toDomain(): GptData =
 
         GptData(
             species = when (parsedData[0]) {
-                SpeciesType.DOG.species -> SpeciesType.DOG
-                SpeciesType.CAT.species -> SpeciesType.CAT
+                SpeciesType.DOG.displayName -> SpeciesType.DOG
+                SpeciesType.CAT.displayName -> SpeciesType.CAT
                 else -> SpeciesType.ETC
             },
             breed = parsedData[1],
@@ -25,7 +25,6 @@ fun GptResponseDto.toDomain(): GptData =
                     FurColorType.RED.color -> FurColorType.RED
                     FurColorType.YELLOW.color -> FurColorType.YELLOW
                     FurColorType.SPOTTED.color -> FurColorType.SPOTTED
-                    FurColorType.STRIPED.color -> FurColorType.STRIPED
                     else -> FurColorType.OTHER
                 }
             }

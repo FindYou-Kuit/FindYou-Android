@@ -17,7 +17,6 @@
     <string name="login_without_signup_toast_message">가입없이 찾아유 실행</string>
 
 
-
     <!--signup-->
     <string name="signup_email_title">이메일</string>
     <string name="signup_email_hint">example1234@gmail.com</string>
@@ -52,6 +51,10 @@
     <string name="five">5</string>
     <string name="Maltese">말티즈</string>
     <string name="dummy_location_address">서울특별시 광진구 화양동 000–0</string>
+    <string name="asterisk">*</string>
+    <string name="year">년</string>
+    <string name="month">월</string>
+    <string name="day">일</string>
 
     <!-- bottom navigation-->
     <string name="bottom_nav_home">홈</string>
@@ -64,8 +67,8 @@
     <string name="search_main_title">조회하기</string>
     <string name="search_name_welshcorgi">웰시코기</string>
     <string name="search_disappear_title">실종신고</string>
-    <string name="search_detail_found_date">발견날짜</string>
-    <string name="search_detail_found_date_value">2024–11–04</string>
+    <string name="search_detail_found_date">발견 날짜</string>
+    <string name="search_detail_found_date_value">2024.11.04</string>
     <string name="search_detail_gender">성별</string>
     <string name="search_detail_gender_value">암컷</string>
     <string name="search_see_more">더보기</string>
@@ -79,7 +82,7 @@
     <string name="search_detail_report_date">신고 날짜</string>
     <string name="search_detail_report_date_value">2024–11–05</string>
     <string name="search_detail_found_location">발견 장소</string>
-    <string name="search_detail_found_location_value">광진구 화양동</string>
+    <string name="search_detail_found_location_value">마산합포구 진북면 금산리 192 수로</string>
     <string name="search_detail_see_location">위치 보기</string>
     <string name="search_detail_feature_chip1">새끼 강아지에요</string>
     <string name="search_detail_feature_chip2">털이 복슬복슬해요</string>
@@ -94,36 +97,38 @@
     <string name="search_detail_write_date_value">2024–11–05</string>
     <string name="search_detail_see_shelter_location">보호소 위치 보기</string>
     <string name="search_detail_age">나이</string>
-    <string name="search_detail_age_value">2024, 1살</string>
+    <string name="search_detail_age_value">1살</string>
     <string name="search_detail_weight">몸무게</string>
     <string name="search_detail_weight_value">2kg</string>
     <string name="search_detail_post_date">게시 날짜</string>
     <string name="search_detail_post_date_value">2024–11–23</string>
     <string name="search_detail_neuter">중성화</string>
-    <string name="search_detail_neuter_value">아니요</string>
+    <string name="search_detail_neuter_value">Y</string>
     <string name="search_detail_special_note">특이사항</string>
     <string name="search_detail_see">보기</string>
     <string name="search_detail_special_note_value">멀티푸주청 갑옷을 입고 있어서 미용함. 귀병 조금 있음(치료중). 브라백토투여. 사람 엄청 좋아하는 아이\n\n</string>
     <string name="search_detail_noti_num">공고 번호</string>
     <string name="search_detail_noti_num_value">경남–창원1–2024–00545</string>
-    <string name="search_detail_noti_date">공고 기간</string>
+    <string name="search_detail_noti_date">공고 날짜</string>
     <string name="search_detail_noti_date_value">2024.11.23 ~ 2024.12.03</string>
     <string name="search_detail_rescue_location">구조 장소</string>
     <string name="search_detail_rescue_location_value">성산구 내동</string>
     <string name="search_detail_shelter">보호 센터</string>
     <string name="search_detail_shelter_value">태민동물병원</string>
-    <string name="search_detail_shelter_phone_num">010–2868–2108</string>
-    <string name="search_detail_shelter_phone_num_value">관할 기관</string>
-    <string name="search_detail_jurisdiction">창원유기동물보호소</string>
-    <string name="search_detail_jurisdiction_value">055–930–3562</string>
+    <string name="search_detail_shelter_phone_num">전화번호</string>
+    <string name="search_detail_shelter_phone_num_value">010–2868–2108</string>
+    <string name="search_detail_jurisdiction">관할 기관</string>
+    <string name="search_detail_jurisdiction_value">경상북도 청도군</string>
     <string name="search_filter_date">날짜</string>
-    <string name="search_filter_date_input">날짜 입력</string>
+    <string name="search_filter_date_input_start">시작 날짜 선택</string>
+    <string name="search_filter_date_input_end">종료 날짜 선택</string>
+    <string name="search_filter_date_input">날짜 선택</string>
     <string name="search_filter_type">축종</string>
     <string name="search_filter_breed">품종</string>
     <string name="search_filter_location">위치</string>
-    <string name="search_filter_location_city">시/구</string>
-    <string name="search_filter_location_gu">시/구/군</string>
-    <string name="search_filter_breed_hint">품종을 입력하세요</string>
+    <string name="search_filter_location_city">시/도 선택</string>
+    <string name="search_filter_location_gu">시/구/군 선택</string>
+    <string name="search_filter_breed_hint">품종을 선택하거나 입력해주세요.</string>
     <string name="search_species_dog">강아지</string>
     <string name="search_species_cat">고양이</string>
     <string name="search_species_etc">기타</string>
@@ -148,22 +153,51 @@
     <string name="report_dialog_set_location">현 위치로 설정하기</string>
     <string name="report_dialog_default_location_address">서울특별시 광진구 화양동 000–0ddd 광진구 건국대학교 000–00 202호</string>
     <string name="report_dialog_find_location">지도에서 위치 찾기</string>
+    <string name="permission_dialog_title">접근 권한이 없어 해당 기능을 사용할 수 없습니다.</string>
+    <string name="permission_dialog_body">권한을 허용하시려면 설정을 눌러주세요.\n필요 권한: 카메라</string>
 
     <!--  report  -->
     <string name="report_witness">목격신고</string>
     <string name="report_missing">실종신고</string>
     <string name="report_title">신고하기</string>
     <string name="report_upload_image_title">사진을 등록해주세요!</string>
+    <string name="report_upload_image_subtitle">사진은 최대 5장까지 등록할 수 있어요.</string>
+    <string name="report_goto_info_button">선택하기  ></string>
+    <string name="report_species">축종</string>
+    <string name="report_species_placeholder">축종을 선택해주세요.</string>
+    <string name="report_species_introduction">어떤 동물인가요?</string>
+    <string name="report_breed">품종</string>
+    <string name="report_breed_placeholder">품종을 선택해주세요.</string>
+    <string name="report_breed_input_placeholder">품종을 입력하거나 선택해주세요.</string>
+    <string name="report_breed_introduction">어떤 품종인가요?</string>
+    <string name="report_age">나이</string>
+    <string name="report_age_postfix">살</string>
+    <string name="report_age_placeholder">__ 살</string>
+    <string name="report_age_unit">%d 살</string>
+    <string name="report_age_introduction">나이를 선택해주세요.</string>
+    <string name="report_animal_info_title">정보입력</string>
     <string name="report_species_title">어떤 동물인가요?</string>
     <string name="report_species_dog">강아지</string>
     <string name="report_species_cat">고양이</string>
     <string name="report_species_extra">기타</string>
     <string name="report_breed_title">어떤 품종인가요?</string>
     <string name="report_breed_input_hint">품종을 선택해주세요.</string>
-    <string name="report_gender_title">어떤 성별인가요?</string>
-    <string name="report_color_title">반려동물의 털색을 표시해 주세요!</string>
+    <string name="report_gender_title">성별을 선택해주세요</string>
+    <string name="report_rfid_title">RFID 번호를 입력해주세요.</string>
+    <string name="report_rfid_placeholder">아이의 RFID를 알고 계시다면 입력해주세요.</string>
+    <string name="report_color_title">아이의 털색을 선택해 주세요.</string>
+    <string name="report_color_title_additional">(여러 개 선택 가능)</string>
+    <string name="report_witness_date_title">목격 날짜를 확인해주세요.</string>
+    <string name="report_missing_date_title">실종 날짜를 확인해주세요.</string>
+    <string name="report_date_placeholder">날짜를 선택해주세요.</string>
     <string name="report_feature_title">특징을 체크해주세요!</string>
+    <string name="report_description_title">추가 설명 작성하기</string>
+    <string name="report_description_title_additional">(옵션)</string>
+    <string name="report_description_placeholder">특이사항이 있다면 작성해주세요.</string>
     <string name="report_location">주소를 입력해주세요</string>
+    <string name="report_location_title">위치가 맞는지 확인해주세요!</string>
+    <string name="report_missing_near_location_title">실종 지점 주변 장소를 입력해주세요.</string>
+    <string name="report_missing_near_location_placeholder">실종된 아이를 찾는데 도움이 돼요!</string>
     <string name="report_image_count">%d</string>
     <string name="report_cannot_distinction">품종을 인식하지 못했습니다.</string>
 
@@ -188,11 +222,10 @@
     <string name="report_additional_description">추가 설명 작성하기</string>
     <string name="report_option">(옵션)</string>
     <string name="report_description_hint">자유롭게 추가 설명을 작성해주세요!\n\n\n</string>
-    <string name="report_ai_distinction">AI 판별</string>
-    <string name="report_location_title">위치가 맞는지 확인해주세요!</string>
+    <string name="report_ai_distinction">AI 판별하기</string>
     <string name="report_confirm">확인</string>
     <string name="report_witness_date">발견 날짜</string>
-    <string name="report_missing_date_title">실종 날짜</string>
+    <!--<string name="report_missing_date_title">실종 날짜</string>-->
     <string name="report_write_additional_description">추가 설명 작성하기</string>
 
     <!-- home-->
@@ -437,6 +470,38 @@
     <string name="onboarding_profile_title_second">정해주세요!</string>
     <string name="onboarding_next_button_text">다음</string>
     <string name="onboarding_invalid_text_box">다음과 같은 경우에 불가능해요.\n 1. 중복된 닉네임인 경우\n 2. 띄어쓰기만 있는 닉네임인 경우\n 3. 특수문자(!@#$,.^)가 포함되어 있는 경우</string>
+    <string name="search_protect_detail">보호중</string>
+    <string name="search_detail_shelter_location">보호소 위치</string>
+    <string name="search_address_not_found">주소를 찾을 수 없음.</string>
+    <string name="search_detail_lost_date">실종날짜</string>
+    <string name="search_detail_rfid">RFID</string>
+    <string name="search_detail_rfid_value">410097800408315</string>
+    <string name="search_detail_label_note">특이사항</string>
+    <string name="search_detail_label_note_value">수로에 빠져서 119구조. 몸이 엉망이라 목욕 후, 수로에서 나오려고 힘을 많이 썼는지 누워있음.</string>
+    <string name="search_detail_lost_location">실종위치</string>
+    <string name="search_detail_location_around_value">임성중학교</string>
+    <string name="search_detail_location_around">주변에서 실종됐어요.</string>
+    <string name="search_detail_lost_location_value">충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상</string>
+    <string name="search_detail_copy">복사</string>
+    <string name="search_detail_name">name</string>
+    <string name="search_detail_reporter_name_value">김소희</string>
+    <string name="search_detail_reporter_phone">전화번호</string>
+    <string name="search_detail_reporter_phone_value">000-****-0000</string>
+    <string name="search_detail_send_message">메시지 보내기</string>
+    <string name="search_detail_show_map">지도 보기</string>
+    <string name="search_detail_protect_ment">에서 보호 중이에요.</string>
+    <string name="search_detail_protect_location_value">충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상</string>
+    <string name="search_detail_detailed">세부 사항</string>
+    <string name="search_detail_call_phone">전화 걸기</string>
+    <string name="search_detail_witness_location">목격 장소</string>
+    <string name="search_detail_witness_location_value">충청남도 예산군 오가면 윤봉길로 1983-10, 한진고물상</string>
+    <string name="search_detail_witness_date">목격 날짜</string>
+    <string name="search_detail_reporter_name">이름</string>
+    <string name="search_filter_main">조회 필터</string>
+    <string name="search_filter_tilde">~</string>
+    <string name="search_filter_divider">/</string>
+    <string name="search_filter_max_count">10</string>
+    <string name="search_filter_initial">초기화</string>
     <string name="home_button_protect_center">보호소</string>
     <string name="home_button_hospital">동물 병원</string>
     <string name="home_button_protect_part">보호 부서</string>

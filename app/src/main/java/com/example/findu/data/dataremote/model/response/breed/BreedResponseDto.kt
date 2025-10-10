@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BreedResponseDto(
-    @SerialName("breedId")
-    val breedId: Int,
-    @SerialName("breedName")
-    val breedName: String,
-    @SerialName("species")
-    val species : String
+    @SerialName("dogBreedList")
+    val dogBreedList: List<String>,
+    @SerialName("catBreedList")
+    val catBreedList: List<String>,
+    @SerialName("etcBreedList")
+    val etcBreedList: List<String>
 )
 
 @Serializable

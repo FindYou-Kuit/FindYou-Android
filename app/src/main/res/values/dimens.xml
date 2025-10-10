@@ -2,5 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="MY_SIZE">10dp</dimen>
     <dimen name="MY_EDGE_MARGIN">20dp</dimen>
+    <dimen name="SEARCH_IMAGE_MARGIN">10dp</dimen>
 
 </resources>

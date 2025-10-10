@@ -151,7 +151,6 @@
 
                         <RadioButton
                             android:id="@+id/rb_search_filter_dog"
-                            style="@style/searchCustomRadioButtonLeft"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -171,7 +170,6 @@
 
                         <RadioButton
                             android:id="@+id/rb_search_filter_etc"
-                            style="@style/searchCustomRadioButtonRight"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
