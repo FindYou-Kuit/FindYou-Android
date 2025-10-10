@@ -12,7 +12,7 @@ data class DetailProtectData(
     val happenDate: String,
     val furColor: String,
     val neutering: String,
-    val significant: String,
+    val specialNote: String,
     val noticeNumber: String,
     val noticeDuration: String,
     val foundLocation: String,

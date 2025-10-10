@@ -1,7 +1,6 @@
 package com.example.findu.presentation.ui.home
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,7 @@ import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -24,6 +24,7 @@ import com.example.findu.presentation.ui.home.composeview.HomeScreen
 import com.example.findu.presentation.ui.home.viewmodel.HomeUiEffect
 import com.example.findu.presentation.ui.home.viewmodel.HomeUiEvent
 import com.example.findu.presentation.ui.home.viewmodel.HomeViewModel
+import com.example.findu.presentation.util.permission.LocationPermissionManager.hasLocationPermission
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,11 +55,19 @@ class HomeFragment : Fragment() {
                         .collect { sideEffect ->
                             when (sideEffect) {
                                 is HomeUiEffect.NavigateToProtectDetail -> {
-                                    navigateToProtectDetail(id = sideEffect.animal.protectId.toString(), tag =  sideEffect.animal.tag, name =  sideEffect.animal.title)
+                                    navigateToProtectDetail(
+                                        id = sideEffect.animal.protectId.toString(),
+                                        tag = sideEffect.animal.tag,
+                                        name = sideEffect.animal.title
+                                    )
                                 }
 
                                 is HomeUiEffect.NavigateToReportDetail -> {
-                                    navigateToReportDetail(id = sideEffect.animal.reportId.toString(), tag =  sideEffect.animal.tag, name =  sideEffect.animal.title)
+                                    navigateToReportDetail(
+                                        id = sideEffect.animal.reportId.toString(),
+                                        tag = sideEffect.animal.tag,
+                                        name = sideEffect.animal.title
+                                    )
                                 }
 
 
@@ -87,6 +96,7 @@ class HomeFragment : Fragment() {
                 }
 
 
+
                 when (uiState.loadState) {
                     LoadState.Idle -> Unit
                     LoadState.Loading -> Unit
@@ -102,7 +112,7 @@ class HomeFragment : Fragment() {
                             onIndicatorSelected = { reportDurationType ->
                                 homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
                             },
-                            userNickname = "사용자",
+                            userNickname = uiState.nickname,
                             navigateToProtectDetail = { protectAnimal ->
                                 homeViewModel.navigateToProtectDetail(protectAnimal)
                             },
@@ -120,7 +130,7 @@ class HomeFragment : Fragment() {
                             },
                             onLostReportClick = {},
                             onFindReportClick = {},
-                            onPhoneClicked={
+                            onPhoneClicked = {
                                 homeViewModel.dial()
                             },
                             navigateToHomeExtra = { homeExtraButtonType->
@@ -132,6 +142,15 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.handleEvent(
+            HomeUiEvent.SetLocationPermission(
+                locationPermission = requireContext().hasLocationPermission()
+            )
+        )
     }
 
 
@@ -174,12 +193,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun openWebLink(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
         requireActivity().startActivity(intent)
     }
 
     private fun call120() {
-        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:120"))
+        val intent = Intent(Intent.ACTION_DIAL, "tel:120".toUri())
         startActivity(intent)
     }
 

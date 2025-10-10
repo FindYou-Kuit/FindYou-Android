@@ -1,16 +1,22 @@
 package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.datalocal.datasource.DeviceLocalDataSource
-import com.example.findu.domain.repository.DeviceRepository
+import com.example.findu.domain.repository.UserInfoRepository
 import javax.inject.Inject
 
-class DeviceRepositoryImpl @Inject constructor(
+class UserInfoRepositoryImpl @Inject constructor(
     private val deviceLocalDataSource: DeviceLocalDataSource
-) : DeviceRepository {
+) : UserInfoRepository {
     override fun getDeviceId(): String = deviceLocalDataSource.deviceId
 
     override fun setDeviceId(deviceId: String) {
         deviceLocalDataSource.deviceId = deviceId
+    }
+
+    override fun getNickname(): String = deviceLocalDataSource.nickname
+
+    override fun setNickname(nickname: String) {
+        deviceLocalDataSource.nickname = nickname
     }
 
     override fun clear() = deviceLocalDataSource.clear()

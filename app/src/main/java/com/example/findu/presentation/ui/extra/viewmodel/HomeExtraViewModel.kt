@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -60,8 +61,7 @@ class HomeExtraViewModel @Inject constructor(
         when (event) {
             is HomeExtraUiEvent.LoadData -> loadData()
             is HomeExtraUiEvent.SetHomeExtraType -> {
-                _uiState.value = _uiState.value.copy(homeExtraButtonType = event.homeExtraButtonType)
-
+                _uiState.update { it.copy(homeExtraButtonType = event.homeExtraButtonType) }
             }
         }
     }
@@ -77,7 +77,7 @@ class HomeExtraViewModel @Inject constructor(
 
     private fun loadData() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(loadState = LoadState.Loading)
+            _uiState.update { it.copy(loadState = LoadState.Loading) }
 
             when (uiState.value.homeExtraButtonType) {
                 HomeExtraButtonType.PROTECT_CENTER -> {

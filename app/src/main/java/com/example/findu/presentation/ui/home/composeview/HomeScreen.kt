@@ -32,6 +32,7 @@ import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.presentation.type.HomeBannerType
 import com.example.findu.presentation.type.HomeExtraButtonType
 import com.example.findu.presentation.type.HomeReportDurationType
+import com.example.findu.presentation.type.HomeUserStatusType
 import com.example.findu.presentation.ui.home.component.HomeBannerPager
 import com.example.findu.presentation.ui.home.component.HomeExtraButtonList
 import com.example.findu.presentation.ui.home.component.HomeProtectAnimalList
@@ -159,6 +160,7 @@ fun HomeScreen(
                     )
                     HomeProtectAnimalList(
                         nickname = userNickname,
+                        homeUserStatusType = uiState.userHomeUserStatusType,
                         navigationToSearch = navigationToProtectAnimal,
                         animalCards = uiState.homeData!!.protectAnimalCards,
                         navigateToProtectDetail = navigateToProtectDetail
@@ -173,6 +175,7 @@ fun HomeScreen(
                     )
                     HomeReportedAnimalList(
                         nickname = userNickname,
+                        homeUserStatusType = uiState.userHomeUserStatusType,
                         navigationToSearch = navigationToReportAnimal,
                         animalCards = uiState.homeData!!.reportAnimalCards,
                         navigateToReportDetail = navigateToReportDetail

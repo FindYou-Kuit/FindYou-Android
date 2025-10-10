@@ -3,9 +3,11 @@ package com.example.findu.presentation.ui.login.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.findu.domain.usecase.auth.PostGuestLoginUseCase
-import com.example.findu.domain.usecase.auth.PostLoginUseCase
+import com.example.findu.domain.usecase.PostGuestLoginUseCase
+import com.example.findu.domain.usecase.PostLoginUseCase
+import com.example.findu.domain.usecase.SetNicknameUseCase
 import com.example.findu.domain.usecase.token.SetAccessTokenUseCase
+import com.example.findu.presentation.util.Nickname.GUEST_NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,6 +19,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: PostLoginUseCase,
     private val guestLoginUseCase: PostGuestLoginUseCase,
     private val setAccessTokenUseCase: SetAccessTokenUseCase,
+    private val setNicknameUseCase: SetNicknameUseCase
 ) : ViewModel() {
     private val _startMainActivity = MutableSharedFlow<Unit>()
     val startMainActivity: SharedFlow<Unit> = _startMainActivity
@@ -32,6 +35,8 @@ class LoginViewModel @Inject constructor(
                     startOnboardingActivity(kakaoId = kakaoId)
                 } else {
                     setAccessTokenUseCase(accessToken = loginData.userInfo!!.accessToken)
+                    setNicknameUseCase(nickname = loginData.userInfo.nickname)
+                    Log.d("http", "nickname: ${loginData.userInfo.nickname}")
                     startMainActivity()
                 }
             }.onFailure { e ->
@@ -46,6 +51,7 @@ class LoginViewModel @Inject constructor(
             guestLoginUseCase.postGuestLogin()
                 .onSuccess { loginData ->
                     setAccessTokenUseCase(accessToken = loginData.accessToken)
+                    setNicknameUseCase(nickname = GUEST_NAME)
                     onSuccess()
                     startMainActivity()
                 }

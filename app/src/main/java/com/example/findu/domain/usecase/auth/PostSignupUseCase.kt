@@ -2,12 +2,12 @@ package com.example.findu.domain.usecase.auth
 
 import com.example.findu.domain.model.UserInfo
 import com.example.findu.domain.repository.AuthRepository
-import com.example.findu.domain.repository.DeviceRepository
+import com.example.findu.domain.repository.UserInfoRepository
 import java.io.File
 
 class PostSignupUseCase(
     private val authRepository: AuthRepository,
-    private val deviceRepository: DeviceRepository
+    private val userInfoRepository: UserInfoRepository
 ) {
     suspend fun postSignup(
         profileImageFile: File?,
@@ -21,7 +21,7 @@ class PostSignupUseCase(
         } else defaultImageName,
         nickname = nickname,
         kakaoId = kakaoId,
-        deviceId = deviceRepository.getDeviceId()
+        deviceId = userInfoRepository.getDeviceId()
     )
 
 }

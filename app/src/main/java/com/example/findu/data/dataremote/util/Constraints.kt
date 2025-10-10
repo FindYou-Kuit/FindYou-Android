@@ -10,6 +10,17 @@ object ApiConstraints {
 
     // Home
     const val HOME = "home"
+
+    // Report
+    const val REPORT = "reports"
+
+    // Breed
+    const val BREED = "breeds"
+
+    // Naver
+    const val REVERSE_GEOCODE = "map-reversegeocode/v2/gc"
+    const val GEOCODE = "map-geocode/v2/geocode"
+
     // Home Extra
     const val INFORMATION = "informations"
 

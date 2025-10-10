@@ -100,7 +100,7 @@ object ServiceModule {
         json: Json
     ): NaverService {
         val naverRetrofit = Retrofit.Builder()
-            .baseUrl("https://naveropenapi.apigw.ntruss.com/")
+            .baseUrl("https://maps.apigw.ntruss.com/")
             .client(okHttpClient)
             .addConverterFactory(
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull()))

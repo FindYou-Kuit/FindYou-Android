@@ -1,16 +1,29 @@
 package com.example.findu.presentation.ui.report.viewmodel
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.Breed
+import com.example.findu.domain.model.breed.BreedData
 import com.example.findu.domain.model.breed.SpeciesType
 import com.example.findu.domain.model.report.FurColorType
 import com.example.findu.domain.model.report.Gender
+import com.example.findu.domain.model.report.MissingReportData
+import com.example.findu.domain.usecase.GetBreedDataUseCase
+import com.example.findu.domain.usecase.report.GetAddressUseCase
+import com.example.findu.domain.usecase.report.GetLatLngUseCase
+import com.example.findu.domain.usecase.report.PostMissingReportUseCase
+import com.example.findu.domain.usecase.report.UploadImagesUseCase
+import com.example.findu.presentation.type.view.LoadState
+import com.example.findu.presentation.util.UriUtil.toMultiPartBodys
+import com.example.findu.presentation.util.extension.toDateString
 import com.example.findu.presentation.util.extension.toNormalizeAddress
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,12 +38,14 @@ import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 
 data class MissingReportUiState(
+    val loadState: LoadState = LoadState.Idle,
     val isFirstPermissionRequest: Boolean = true,
     val imageUriList: List<Uri> = emptyList(),
-    val speciesType: SpeciesType? = null,
+    val speciesType: SpeciesType = SpeciesType.DOG,
     val breedSearchText: TextFieldState = TextFieldState(),
     val breed: Breed? = null,
-    val breedList: List<Breed> = emptyList(),
+    val breedList: BreedData = BreedData(),
+    val showingBreedList: List<Breed> = emptyList(),
     val age: TextFieldState = TextFieldState(),
     val gender: Gender = Gender.MALE,
     val rfidNumber: TextFieldState = TextFieldState(),
@@ -43,6 +58,7 @@ data class MissingReportUiState(
     val address: String = "",
     val currentLatLng: LatLng? = null,
     val nearPlace: TextFieldState = TextFieldState(),
+    val addingPageIndex: Int = 0,
     val isImageDialogShown: Boolean = false,
     val isSuccessDialogShown: Boolean = false,
     val isAppSettingDialogShown: Boolean = false,
@@ -50,12 +66,14 @@ data class MissingReportUiState(
 
 sealed class MissingReportUiEvent {
     data object OnBackPressed : MissingReportUiEvent()
-    data object OnAddImageClick : MissingReportUiEvent()
+    data class OnAddImageClick(val page: Int) : MissingReportUiEvent()
+    data class OnRemoveImageClick(val uri: Uri) : MissingReportUiEvent()
     data object OnOpenCameraClick : MissingReportUiEvent()
     data object OnOpenGalleryClick : MissingReportUiEvent()
     data object OnSelectAnimalInfoClick : MissingReportUiEvent()
     data class OnImageSelected(val uri: Uri) : MissingReportUiEvent()
     data class OnSpeciesClick(val speciesType: SpeciesType) : MissingReportUiEvent()
+    data object OnSearchFieldChange : MissingReportUiEvent()
     data class OnBreedClick(val breed: Breed) : MissingReportUiEvent()
     data object OnInfoFinishButtonClick : MissingReportUiEvent()
     data class OnGenderSelected(val gender: Gender) : MissingReportUiEvent()
@@ -68,7 +86,7 @@ sealed class MissingReportUiEvent {
     data class OnDateSelected(val dateTime: LocalDateTime) : MissingReportUiEvent()
     data object OnAddressSearchClick : MissingReportUiEvent()
     data class OnAddressUpdated(val address: String) : MissingReportUiEvent()
-    data class OnMapPinMoved(val latLng: LatLng) : MissingReportUiEvent()
+    data class OnCameraTargetMoved(val latLng: LatLng) : MissingReportUiEvent()
     data object OnDismissDialog : MissingReportUiEvent()
     data object OnReportFinishButtonClick : MissingReportUiEvent()
     data object OnDismissKeyboard : MissingReportUiEvent()
@@ -90,7 +108,14 @@ sealed class MissingReportUiEffect {
 }
 
 @HiltViewModel
-class MissingReportViewModel @Inject constructor() : ViewModel() {
+class MissingReportViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val getBreedDataUseCase: GetBreedDataUseCase,
+    private val uploadImagesUseCase: UploadImagesUseCase,
+    private val postMissingReportUseCase: PostMissingReportUseCase,
+    private val getAddressUseCase: GetAddressUseCase,
+    private val getLatLngUseCase: GetLatLngUseCase,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(MissingReportUiState())
     val uiState: StateFlow<MissingReportUiState>
         get() = _uiState.asStateFlow()
@@ -103,17 +128,25 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun fetchBreedList() {
-        // TODO: 실제 API 연동 필요
-        _uiState.update {
-            it.copy(
-                breedList = listOf(
-                    Breed.DogBreed(1, "Labrador Retriever", SpeciesType.DOG),
-                    Breed.DogBreed(2, "German Shepherd", SpeciesType.DOG),
-                    Breed.DogBreed(3, "Golden Retriever", SpeciesType.DOG),
-                    Breed.DogBreed(4, "Bulldog", SpeciesType.DOG),
-                    Breed.DogBreed(5, "Beagle", SpeciesType.DOG),
-                    Breed.DogBreed(6, "Poodle", SpeciesType.DOG),
-                )
+        _uiState.update { it.copy(loadState = LoadState.Loading) }
+        viewModelScope.launch {
+            getBreedDataUseCase().fold(
+                onSuccess = { breedList ->
+                    _uiState.update {
+                        it.copy(
+                            breedList = breedList,
+                            loadState = LoadState.Success,
+                        )
+                    }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "품종 데이터를 불러오지 못했습니다.",
+                        )
+                    )
+                    _uiState.update { it.copy(loadState = LoadState.Error) }
+                }
             )
         }
     }
@@ -121,10 +154,12 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
     fun handleEvent(event: MissingReportUiEvent) {
         when (event) {
             MissingReportUiEvent.OnBackPressed -> navigateUp()
-            MissingReportUiEvent.OnAddImageClick -> setImageDialogVisible()
+            is MissingReportUiEvent.OnAddImageClick -> setImageDialogVisible(event.page)
+            is MissingReportUiEvent.OnRemoveImageClick -> deleteImage(event.uri)
             MissingReportUiEvent.OnAddressSearchClick -> navigateToAddressSearch()
             is MissingReportUiEvent.OnAddressUpdated -> updateAddress(event.address)
             is MissingReportUiEvent.OnBreedClick -> updateBreed(event.breed)
+            is MissingReportUiEvent.OnSearchFieldChange -> updateBreedResult()
             MissingReportUiEvent.OnMissingDateClicked -> setDateBottomSheetVisible(true)
             is MissingReportUiEvent.OnDateSelected -> updateDate(event.dateTime)
             is MissingReportUiEvent.OnFurColorSelected ->
@@ -132,7 +167,7 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
 
             is MissingReportUiEvent.OnGenderSelected -> updateGender(event.gender)
             MissingReportUiEvent.OnInfoFinishButtonClick -> navigateUp()
-            is MissingReportUiEvent.OnMapPinMoved -> updateAddress(event.latLng)
+            is MissingReportUiEvent.OnCameraTargetMoved -> updateAddress(event.latLng)
             MissingReportUiEvent.OnDismissDialog -> setDialogInVisible()
             MissingReportUiEvent.OnOpenCameraClick -> openCamera()
             MissingReportUiEvent.OnOpenGalleryClick -> openGallery()
@@ -146,10 +181,76 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    private fun updateBreedResult() {
+        val showingBreedList = when (_uiState.value.speciesType) {
+            SpeciesType.DOG -> _uiState.value.breedList.dogBreedList
+            SpeciesType.CAT -> _uiState.value.breedList.catBreedList
+            SpeciesType.ETC -> _uiState.value.breedList.etcBreedList
+        }.filter {
+            if (_uiState.value.breedSearchText.text.isBlank()) true
+            else it.name.contains(_uiState.value.breedSearchText.text, ignoreCase = true)
+        }
+        _uiState.update {
+            it.copy(showingBreedList = showingBreedList)
+        }
+    }
+
     private fun postMissingReport() {
-        // TODO : 신고 등록 API 구현
-        val normalizedAddress = _uiState.value.address.toNormalizeAddress()
-        showFinishDialog()
+        _uiState.update { it.copy(loadState = LoadState.Loading) }
+        viewModelScope.launch {
+            val imageUrls = getImageUrls()
+
+            val missingReportData = MissingReportData(
+                imageUrls = imageUrls,
+                species = _uiState.value.speciesType,
+                breed = _uiState.value.breed?.name.orEmpty(),
+                age = "${_uiState.value.age.text}살",
+                sex = _uiState.value.gender,
+                rfid = _uiState.value.rfidNumber.text.toString(),
+                furColors = _uiState.value.selectedFurColors,
+                missingDate = _uiState.value.missingDate.toDateString(),
+                location = _uiState.value.address.toNormalizeAddress(),
+                landmark = _uiState.value.nearPlace.text.toString(),
+                description = _uiState.value.description.text.toString(),
+            )
+            postMissingReportUseCase(
+                missingReportData = missingReportData
+            ).fold(
+                onSuccess = {
+                    showFinishDialog()
+                    _uiState.update { it.copy(loadState = LoadState.Success) }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "목격 신고 등록에 실패했습니다.",
+                        )
+                    )
+                    _uiState.update { it.copy(loadState = LoadState.Error) }
+                    Log.d("http", "Error Message: : $error")
+                }
+            )
+        }
+    }
+
+    private suspend fun getImageUrls(): List<String> {
+        val uriFiles = _uiState.value.imageUriList.toMultiPartBodys(context)
+        return uploadImagesUseCase(uriFiles).fold(
+            onSuccess = { imageUrls ->
+                imageUrls
+            },
+            onFailure = { error ->
+                viewModelScope.launch {
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "이미지 업로드에 실패했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
+                emptyList()
+            }
+        )
     }
 
     private fun clearViewFocus() {
@@ -169,11 +270,22 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateAddress(latLng: LatLng) {
-        // TODO: 주소 변환 api 연동
-        _uiState.update {
-            it.copy(
-                currentLatLng = latLng,
-                address = "위도: ${latLng.latitude}, 경도: ${latLng.longitude}"
+        viewModelScope.launch {
+            getAddressUseCase(
+                lat = latLng.latitude,
+                lng = latLng.longitude
+            ).fold(
+                onSuccess = { addressData ->
+                    _uiState.update { it.copy(address = addressData.address) }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "주소 정보를 불러오지 못했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
             )
         }
     }
@@ -231,6 +343,23 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateAddress(address: String) {
+        viewModelScope.launch {
+            getLatLngUseCase(address).fold(
+                onSuccess = { latLngData ->
+                    _uiState.update {
+                        it.copy(currentLatLng = LatLng(latLngData.lat, latLngData.lng))
+                    }
+                },
+                onFailure = { error ->
+                    _uiEffect.send(
+                        MissingReportUiEffect.ShowToast(
+                            message = error.message ?: "좌표 정보를 불러오지 못했습니다.",
+                        )
+                    )
+                    Log.d("http", "Error Message: : $error")
+                }
+            )
+        }
         _uiState.update { it.copy(address = address) }
     }
 
@@ -277,9 +406,23 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
     }
 
 
-    private fun setImageDialogVisible() {
-        _uiState.update {
-            it.copy(isImageDialogShown = true)
+    private fun setImageDialogVisible(page: Int) {
+        if (_uiState.value.imageUriList.size >= 5) {
+            viewModelScope.launch {
+                _uiEffect.send(
+                    MissingReportUiEffect.ShowToast(
+                        message = "사진은 최대 5장까지 등록할 수 있습니다.",
+                    )
+                )
+            }
+            return
+        } else {
+            _uiState.update {
+                it.copy(
+                    isImageDialogShown = true,
+                    addingPageIndex = page,
+                )
+            }
         }
     }
 
@@ -294,10 +437,23 @@ class MissingReportViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun addImageToList(uri: Uri) {
-        _uiState.update { it ->
+        _uiState.update {
+            val uriList = it.imageUriList.toMutableList().apply {
+                add(it.addingPageIndex, uri)
+            }
             it.copy(
-                imageUriList = listOf(uri) + it.imageUriList,
-                isImageDialogShown = false
+                imageUriList = uriList,
+                isImageDialogShown = false,
+                addingPageIndex = 0,
+            )
+        }
+    }
+
+    private fun deleteImage(uri: Uri) {
+        _uiState.update {
+            val uriList = it.imageUriList.filterNot { imageUri -> imageUri == uri }
+            it.copy(
+                imageUriList = uriList,
             )
         }
     }
