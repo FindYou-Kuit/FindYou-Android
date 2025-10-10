@@ -2,7 +2,7 @@ package com.example.findu.data.repositoryimpl
 
 import com.example.findu.data.dataremote.datasource.DetailSearchRemoteDataSource
 import com.example.findu.data.dataremote.util.handleBaseResponse
-import com.example.findu.data.mapper.toDomain.toDomain
+import com.example.findu.data.mapper.todomain.toDomain
 import com.example.findu.domain.model.search.DetailMissingData
 import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.domain.model.search.DetailWitnessData

@@ -75,9 +75,16 @@ class SearchBreedSelector(
 
     fun setBreeds(breeds: List<String>) = with(binding) {
         if (breeds.isEmpty()) {
+            selectedList.clear()
+            updateChips()
+            setBreedFieldEnabled(false)
             flFilterBreedContainer.isGone = true
+            adapter = null
             return@with
         }
+
+        selectedList.retainAll(breeds)
+        updateChips()
 
         adapter = SearchBreedRVAdapter(
             allItems = breeds,

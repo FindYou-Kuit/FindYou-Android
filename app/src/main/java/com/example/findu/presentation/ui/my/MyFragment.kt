@@ -175,7 +175,7 @@ class MyFragment : Fragment() {
         val latest = "1.0"
         tvMyVersionInfo.text = "버전 정보 $currentVersion"
 
-        val currentNumeric = currentVersion.takeWhile { it.isDigit() }.toIntOrNull() ?: 0
+        val currentNumeric = currentVersion.replace(".", "").toIntOrNull() ?: 0
         val latestNumeric = latest.replace(".", "").toIntOrNull() ?: 0
         val isLatest = currentNumeric >= latestNumeric
 

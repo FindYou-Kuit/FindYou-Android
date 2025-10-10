@@ -48,7 +48,7 @@ class SearchFilterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         speciesSelector = SearchSpeciesSelector(binding, filterViewModel)
-        breedSelector = SearchBreedSelector(binding).apply { init() }
+        breedSelector = SearchBreedSelector(binding)
         locationSelector = SearchLocationSelector(binding)
         calendarSelector = SearchCalendarSelector(binding, filterModel, parentFragmentManager)
 
@@ -76,7 +76,11 @@ class SearchFilterFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             filterViewModel.breedList.collectLatest { breeds ->
-                if (breeds.isNotEmpty()) breedSelector.setBreeds(breeds)
+                if (breeds.isNotEmpty()) {
+                    breedSelector.setBreeds(breeds)
+                } else {
+                    breedSelector.reset()
+                }
             }
         }
 
@@ -86,6 +90,7 @@ class SearchFilterFragment : Fragment() {
             }
         }
     }
+
 
     private fun initListeners() = with(binding) {
         ivSearchFilterCloseBtn.setOnClickListener { findNavController().popBackStack() }

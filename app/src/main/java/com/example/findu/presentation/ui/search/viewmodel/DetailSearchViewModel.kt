@@ -22,7 +22,7 @@ class DetailSearchViewModel @Inject constructor(
     private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
     private val deleteInterestReportAnimalUseCase: DeleteInterestReportAnimalUseCase,
     private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
-    private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase
+    private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
 ) : ViewModel() {
 
     private val _detailMissingData = MutableStateFlow<DetailMissingData?>(null)
@@ -43,7 +43,10 @@ class DetailSearchViewModel @Inject constructor(
     fun getDetailSearchMissing(id: Long) {
         viewModelScope.launch {
             getDetailSearchUseCase.getMissingData(id).fold(
-                onSuccess = { _detailMissingData.value = it },
+                onSuccess = {
+                    _detailMissingData.value = it
+                    _isInterested.value = it.interest
+                },
                 onFailure = { error -> _errorMessage.value = error.message ?: "실종 상세 조회 실패" }
             )
         }
@@ -52,7 +55,10 @@ class DetailSearchViewModel @Inject constructor(
     fun getDetailSearchWitness(id: Long) {
         viewModelScope.launch {
             getDetailSearchUseCase.getWitnessData(id).fold(
-                onSuccess = { _detailWitnessData.value = it },
+                onSuccess = {
+                    _detailWitnessData.value = it
+                    _isInterested.value = it.interest
+                },
                 onFailure = { error -> _errorMessage.value = error.message ?: "목격 상세 조회 실패" }
             )
         }
@@ -61,7 +67,10 @@ class DetailSearchViewModel @Inject constructor(
     fun getDetailSearchProtect(id: Long) {
         viewModelScope.launch {
             getDetailSearchUseCase.getProtectData(id).fold(
-                onSuccess = { _detailProtectData.value = it },
+                onSuccess = {
+                    _detailProtectData.value = it
+                    _isInterested.value = it.interest
+                },
                 onFailure = { error -> _errorMessage.value = error.message ?: "보호 상세 조회 실패" }
             )
         }
@@ -74,6 +83,8 @@ class DetailSearchViewModel @Inject constructor(
                 postInterestReportAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailMissingData.value = _detailMissingData.value?.copy(interest = true)
+                        _isInterested.value = true
+
                     },
                     onFailure = { error ->
                         _errorMessage.value = error.message ?: "실종 관심 등록 실패"
@@ -83,6 +94,8 @@ class DetailSearchViewModel @Inject constructor(
                 deleteInterestReportAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailMissingData.value = _detailMissingData.value?.copy(interest = false)
+                        _isInterested.value = false
+
                     },
                     onFailure = { error ->
                         _errorMessage.value = error.message ?: "실종 관심 해제 실패"
@@ -99,6 +112,7 @@ class DetailSearchViewModel @Inject constructor(
                 postInterestReportAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailWitnessData.value = _detailWitnessData.value?.copy(interest = true)
+                        _isInterested.value = true
                     },
                     onFailure = { error ->
                         _errorMessage.value = error.message ?: "목격 관심 등록 실패"
@@ -108,6 +122,7 @@ class DetailSearchViewModel @Inject constructor(
                 deleteInterestReportAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailWitnessData.value = _detailWitnessData.value?.copy(interest = false)
+                        _isInterested.value = false
                     },
                     onFailure = { error ->
                         _errorMessage.value = error.message ?: "목격 관심 해제 실패"
@@ -124,9 +139,11 @@ class DetailSearchViewModel @Inject constructor(
                 postInterestProtectingAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailProtectData.value = _detailProtectData.value?.copy(interest = true)
+                        _isInterested.value = true
                     },
                     onFailure = { error ->
                         _errorMessage.value = error.message ?: "보호 관심 등록 실패"
+                        _isInterested.value = false
                     }
                 )
             } else {

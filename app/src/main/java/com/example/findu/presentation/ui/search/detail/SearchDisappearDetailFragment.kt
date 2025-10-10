@@ -17,8 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.findu.R
-import com.example.findu.data.mapper.toDomain.toDetailSearchRvTag
-import com.example.findu.data.mapper.toDomain.toDetailSearchStatus
+import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
+import com.example.findu.data.mapper.todomain.toDetailSearchStatus
 import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
 import com.example.findu.domain.model.search.DetailMissingData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter

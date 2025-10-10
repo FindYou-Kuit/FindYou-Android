@@ -12,32 +12,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.bumptech.glide.Glide
 import com.example.findu.R
-import com.example.findu.data.mapper.toDomain.toDetailSearchRvTag
-import com.example.findu.data.mapper.toDomain.toDetailSearchStatus
+import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
+import com.example.findu.data.mapper.todomain.toDetailSearchStatus
 import com.example.findu.databinding.FragmentSearchDetailProtectingBinding
 import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
 import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SearchProtectingDetailFragment : Fragment() {
@@ -52,15 +46,17 @@ class SearchProtectingDetailFragment : Fragment() {
     private var isBookmarked = false
 
     private var naverMap: NaverMap? = null
+    private var pendingLocation: LatLng? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentSearchDetailProtectingBinding.inflate(layoutInflater)
-        binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync { nMap ->
             naverMap = nMap
+            pendingLocation?.let { location ->
+                setupMap(location.latitude, location.longitude)
+            }
         }
         return binding.root
     }
@@ -80,17 +76,22 @@ class SearchProtectingDetailFragment : Fragment() {
         }
         observeViewModel()
         fetchDetailData()
-        initBookmarkUI()
         initListener()
 
     }
 
     private fun setupMap(lat: Double, lon: Double) {
         val location = LatLng(lat, lon)
-        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
+        val map = naverMap
+        if (map == null){
+            pendingLocation = location
+            return
+        }
+        pendingLocation = null
+        map.moveCamera(CameraUpdate.scrollTo(location))
         Marker().apply {
             position = location
-            map = naverMap
+            this.map = map
             icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
             height = 23
         }
@@ -139,6 +140,7 @@ class SearchProtectingDetailFragment : Fragment() {
             tvValueNotiNum.text = data.noticeNumber
             tvValueShelterPhoneNumber.text = data.careTel
             tvValueJurisdiction.text = data.authority
+            tvValueProtectLocation.text = data.foundLocation.ifBlank { data.careAddr }
 
             initTagView(data.tag)
             if (data.imageUrls.isNotEmpty()) {

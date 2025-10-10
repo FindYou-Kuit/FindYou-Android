@@ -1,6 +1,5 @@
 package com.example.findu.presentation.ui.search.tablayout
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.findu.R
-import com.example.findu.data.mapper.toDomain.toSearchRvTag
+import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchAllBinding
 import com.example.findu.domain.model.search.SearchAnimal
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
@@ -51,16 +50,15 @@ class SearchAllFragment : Fragment(), SearchListListener {
     ): View {
         _binding = FragmentSearchAllBinding.inflate(inflater, container, false)
         initRVAdapter()
-        observeViewModel()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
         observeFilterResult()
         viewModel.getSearchData(SearchType.ALL, lastId)
     }
-
     private fun observeFilterResult() {
         findNavController().currentBackStackEntry
             ?.savedStateHandle

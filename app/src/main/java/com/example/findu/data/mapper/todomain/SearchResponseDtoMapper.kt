@@ -1,4 +1,4 @@
-package com.example.findu.data.mapper.toDomain
+package com.example.findu.data.mapper.todomain
 
 import com.example.findu.data.dataremote.model.response.search.SearchAnimalCard
 import com.example.findu.data.dataremote.model.response.search.SearchResponseDto
