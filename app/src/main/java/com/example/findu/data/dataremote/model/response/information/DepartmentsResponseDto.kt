@@ -10,7 +10,7 @@ data class DepartmentsResponseDto(
     val departments: List<DepartmentDto>,
 
     @SerialName("lastId")
-    val lastId: Long,
+    val lastId: Long?,
 
     @SerialName("isLast")
     val isLast: Boolean

@@ -9,7 +9,7 @@ data class CentersResponseDto(
     val centers: List<CenterDto>,
 
     @SerialName("lastId")
-    val lastId: Long,
+    val lastId: Long?,
 
     @SerialName("isLast")
     val isLast: Boolean

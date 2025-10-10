@@ -61,8 +61,6 @@ class HomeExtraFragment : Fragment() {
                     homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
                 }
 
-
-
                 when (uiState.loadState) {
                     LoadState.Idle -> Unit
                     LoadState.Loading -> Unit
@@ -78,7 +76,6 @@ class HomeExtraFragment : Fragment() {
                                 ExtraHomeCenterScreen(centers = content.list)
                             }
                             is HomeExtraContent.None -> Unit
-
                         }
                     }
 
