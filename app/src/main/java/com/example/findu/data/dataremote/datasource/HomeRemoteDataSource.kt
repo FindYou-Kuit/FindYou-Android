@@ -4,5 +4,8 @@ import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.response.HomeResponseDto
 
 interface HomeRemoteDataSource {
-    suspend fun getHome(): BaseResponse<HomeResponseDto>
+    suspend fun getHome(
+        lat: Double? = null,
+        lon: Double? = null
+    ): BaseResponse<HomeResponseDto>
 }

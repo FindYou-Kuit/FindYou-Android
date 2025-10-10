@@ -8,6 +8,9 @@ object ApiConstraints {
     // Auth
     const val AUTH = "auth"
 
+    // Home
+    const val HOME = "home"
+
     // Report
     const val REPORT = "reports"
 
