@@ -19,12 +19,9 @@ import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment
 import com.example.findu.presentation.ui.search.SearchFilterBottomSheet
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
-import com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment
 import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
@@ -88,7 +85,7 @@ class SearchRescueFragment : Fragment() {
                     address = it.location,
                     isBookmark = it.interest,
                     tag = it.tag.toSearchRvTag(),
-                    cardId = it.cardId
+                    reportId = it.reportId
                 )
             }
         }
@@ -260,7 +257,7 @@ class SearchRescueFragment : Fragment() {
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
             onItemClick = { item ->
-                navigateToDetail(item.cardId, item.tag.text, item.name)
+                navigateToDetail(item.reportId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)

@@ -40,22 +40,26 @@ class DetailSearchViewModel @Inject constructor(
 
     fun setInterestProtectingAnimal(id: Long) {
         viewModelScope.launch {
-            if (_detailSearchData.value?.interest == true) {
-                postInterestAnimalUseCase(id).fold(
-                    onSuccess = { },
+            val current = _detailSearchData.value?.interest == true
+            if (current) {
+                deleteInterestAnimalUseCase(id).fold(
+                    onSuccess = {
+                        _detailSearchData.value = _detailSearchData.value?.copy(interest = false)
+                    },
                     onFailure = { error ->
-                        _errorMessage.value = error.message ?: "신고 동물 관심 등록 중 오류가 발생했습니다."
+                        _errorMessage.value = error.message ?: "관심 해제 중 오류가 발생했습니다."
                     }
                 )
             } else {
-                deleteInterestAnimalUseCase(id).fold(
-                    onSuccess = { },
+                postInterestAnimalUseCase(id).fold(
+                    onSuccess = {
+                        _detailSearchData.value = _detailSearchData.value?.copy(interest = true)
+                    },
                     onFailure = { error ->
-                        _errorMessage.value = error.message ?: "신고 동물 관심 해제 중 오류가 발생했습니다."
+                        _errorMessage.value = error.message ?: "관심 등록 중 오류가 발생했습니다."
                     }
                 )
             }
         }
     }
-
 }

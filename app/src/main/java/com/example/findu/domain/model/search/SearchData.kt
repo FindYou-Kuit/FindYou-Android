@@ -10,7 +10,7 @@ data class SearchData(
 ) : Serializable
 
 data class SearchAnimal(
-    val cardId: Long,
+    val reportId: Long,
     val thumbnailImageUrl: String,
     val title: String,
     val tag: SearchStatus,

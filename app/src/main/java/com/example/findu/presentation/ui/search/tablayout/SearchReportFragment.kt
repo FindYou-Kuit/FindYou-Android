@@ -125,7 +125,7 @@ class SearchReportFragment : Fragment() {
                     address = it.location,
                     isBookmark = it.interest,
                     tag = it.tag.toSearchRvTag(),
-                    cardId = it.cardId
+                    reportId = it.reportId
                 )
             }
         }
@@ -256,7 +256,7 @@ class SearchReportFragment : Fragment() {
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
             onItemClick = { item ->
-                navigateToDetail(item.cardId, item.tag.text, item.name)
+                navigateToDetail(item.reportId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)

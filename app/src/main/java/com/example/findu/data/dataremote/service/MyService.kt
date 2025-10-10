@@ -19,17 +19,17 @@ import retrofit2.http.Query
 interface MyService {
     @GET("/api/v2/users/me/interest-animals")
     suspend fun getInterestAnimals(
-        @Query("lastId") lastId: Long
+        @Query("lastId") lastId: Long? = null
     ): BaseResponse<MyInterestResponseDto>
 
     @GET("/api/v2/users/me/reports")
     suspend fun getReportHistory(
-        @Query("lastId") lastId: Long,
+        @Query("lastId") lastId: Long? = null,
     ): BaseResponse<MyReportHistoryResponseDto>
 
     @GET("/api/v2/users/me/viewed-animals")
     suspend fun getViewedAnimals(
-        @Query("lastId") lastId: Long,
+        @Query("lastId") lastId: Long? = null,
     ): BaseResponse<MyViewedAnimalsResponseDto>
 
     @DELETE("/api/v2/users/me")

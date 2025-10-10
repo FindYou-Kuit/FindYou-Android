@@ -18,7 +18,7 @@ fun SearchResponseDto.toDomain(): SearchData {
 
 fun SearchAnimalCard.toDomain(): SearchAnimal {
     return SearchAnimal(
-        cardId = this.cardId,
+        reportId = this.cardId,
         thumbnailImageUrl = this.thumbnailImageUrl ?: "",
         title = this.title,
         tag = this.tag.toSearchStatus(),

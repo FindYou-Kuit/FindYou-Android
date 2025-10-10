@@ -2,7 +2,6 @@ package com.example.findu.presentation.ui.search.tablayout
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -87,7 +86,7 @@ class SearchAllFragment : Fragment() {
                     address = it.location,
                     isBookmark = it.interest,
                     tag = it.tag.toSearchRvTag(),
-                    cardId = it.cardId
+                    reportId = it.reportId
                 )
             }
         }
@@ -266,7 +265,7 @@ class SearchAllFragment : Fragment() {
     private fun initRVAdapter() {
         rvAdapter = SearchContentRVAdapter(
             onItemClick = { item ->
-                navigateToDetail(item.cardId, item.tag.text, item.name)
+                navigateToDetail(item.reportId, item.tag.text, item.name)
             },
             onBookmarkClick = { cardId, isBookmark, tag ->
                 viewModel.setInterest(cardId, isBookmark, tag)
