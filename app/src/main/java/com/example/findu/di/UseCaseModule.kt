@@ -2,16 +2,13 @@ package com.example.findu.di
 
 import com.example.findu.domain.repository.AuthRepository
 import com.example.findu.domain.repository.BreedRepository
-import com.example.findu.domain.repository.UserInfoRepository
-import com.example.findu.domain.repository.report.ReportRepository
-import com.example.findu.domain.usecase.report.AnalysisImageWithGptUseCase
 import com.example.findu.domain.repository.DetailSearchRepository
-import com.example.findu.domain.repository.DeviceRepository
 import com.example.findu.domain.repository.HomeRepository
 import com.example.findu.domain.repository.InterestRepository
 import com.example.findu.domain.repository.MyRepository
 import com.example.findu.domain.repository.SearchRepository
 import com.example.findu.domain.repository.TokenRepository
+import com.example.findu.domain.repository.UserInfoRepository
 import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
