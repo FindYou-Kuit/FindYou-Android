@@ -58,6 +58,8 @@ sealed class HomeUiEvent {
 
     data class OnScrollPositionChanged(val firstVisibleItemIndex: Int) : HomeUiEvent()
     data class SetLocationPermission(val locationPermission: Boolean) : HomeUiEvent()
+    data object SetUserNickname : HomeUiEvent()
+
 }
 
 sealed class HomeUiEffect {
@@ -115,6 +117,8 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.SetLocationPermission -> {
                 _uiState.update { it.copy(locationPermission = event.locationPermission) }
             }
+
+            HomeUiEvent.SetUserNickname -> setUserNickname()
         }
     }
 
@@ -140,7 +144,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    private fun setUserInfo() {
+    private fun setUserNickname() {
         viewModelScope.launch {
             _uiState.update { it.copy(nickname = getNicknameUseCase()) }
         }
