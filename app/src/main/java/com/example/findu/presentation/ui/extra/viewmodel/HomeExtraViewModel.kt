@@ -83,17 +83,17 @@ class HomeExtraViewModel @Inject constructor(
                 HomeExtraButtonType.PROTECT_CENTER -> {
                     getCentersUseCase().fold(
                         onSuccess = { list ->
-                            _uiState.value = _uiState.value.copy(
+                            _uiState.update { it.copy(
                                 loadState = LoadState.Success,
                                 content = HomeExtraContent.Centers(list.items)
-                            )
+                            ) }
                         },
                         onFailure = { e ->
                             Log.e(TAG,e.toString())
-                            _uiState.value = _uiState.value.copy(
+                            _uiState.update { it.copy(
                                 loadState = LoadState.Error,
                                 content = HomeExtraContent.None
-                            )
+                            ) }
                         }
                     )
                 }
@@ -101,17 +101,17 @@ class HomeExtraViewModel @Inject constructor(
                 HomeExtraButtonType.PROTECT_DEPARTMENT -> {
                     getDepartmentsUseCase().fold(
                         onSuccess = { list ->
-                            _uiState.value = _uiState.value.copy(
+                            _uiState.update { it.copy(
                                 loadState = LoadState.Success,
                                 content = HomeExtraContent.Departments(list.items)
-                            )
+                            ) }
                         },
                         onFailure = { e ->
                             Log.e(TAG,e.toString())
-                            _uiState.value = _uiState.value.copy(
+                            _uiState.update { it.copy(
                                 loadState = LoadState.Error,
                                 content = HomeExtraContent.None
-                            )
+                            ) }
                         }
                     )
                 }
@@ -119,26 +119,26 @@ class HomeExtraViewModel @Inject constructor(
                 HomeExtraButtonType.VOLUNTEER -> {
                     getVolunteersUseCase().fold(
                         onSuccess = { list ->
-                            _uiState.value = _uiState.value.copy(
+                            _uiState.update { it.copy(
                                 loadState = LoadState.Success,
                                 content = HomeExtraContent.Volunteers(list.items)
-                            )
+                            ) }
                         },
                         onFailure = { e ->
                             Log.e(TAG,e.toString())
-                            _uiState.value = _uiState.value.copy(
+                            _uiState.update { it.copy(
                                 loadState = LoadState.Error,
                                 content = HomeExtraContent.None
-                            )
+                            ) }
                         }
                     )
                 }
 
                 null -> {
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         loadState = LoadState.Success,
                         content = HomeExtraContent.None
-                    )
+                    ) }
                 }
             }
         }

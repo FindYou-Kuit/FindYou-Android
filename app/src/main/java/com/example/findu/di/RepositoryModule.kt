@@ -75,9 +75,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindDeviceRepository(deviceRepositoryImpl: DeviceRepositoryImpl): DeviceRepository
+    abstract fun bindUserInfoRepository(userInfoRepository: UserInfoRepositoryImpl): UserInfoRepository
 
     @Binds
     @Singleton
-    abstract fun bindUserInfoRepository(userInfoRepository: UserInfoRepositoryImpl): UserInfoRepository
+    abstract fun bindInformationRepository(informationRepositoryImpl: InformationRepositoryImpl): InformationRepository
 }

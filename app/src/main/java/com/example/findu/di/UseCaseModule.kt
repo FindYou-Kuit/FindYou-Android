@@ -14,15 +14,9 @@ import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
-import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetNicknameUseCase
-import com.example.findu.domain.usecase.home.GetHomeUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
 import com.example.findu.domain.usecase.PostAiDetectionUseCase
-import com.example.findu.domain.usecase.PostCheckNicknameUseCase
-import com.example.findu.domain.usecase.PostGuestLoginUseCase
-import com.example.findu.domain.usecase.PostLoginUseCase
-import com.example.findu.domain.usecase.PostSignupUseCase
 import com.example.findu.domain.usecase.SetNicknameUseCase
 import com.example.findu.domain.usecase.auth.PostCheckNicknameUseCase
 import com.example.findu.domain.usecase.auth.PostGuestLoginUseCase
@@ -31,6 +25,7 @@ import com.example.findu.domain.usecase.auth.PostSignupUseCase
 import com.example.findu.domain.usecase.extra.GetCentersUseCase
 import com.example.findu.domain.usecase.extra.GetDepartmentsUseCase
 import com.example.findu.domain.usecase.extra.GetVolunteersUseCase
+import com.example.findu.domain.usecase.home.GetHomeUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
