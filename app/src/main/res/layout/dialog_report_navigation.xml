@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="158dp"
-        android:background="@drawable/bg_report_dialog_rd12"
+        android:background="@drawable/bg_report_dialog_rd15"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

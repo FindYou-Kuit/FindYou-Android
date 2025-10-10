@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_search_filter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="20dp"
+    tools:context=".presentation.ui.search.SearchFilterFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_filter_top"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_search_filter_close_btn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_search_filter_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_filter_main"
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/sv_search_filter"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:scrollbars="none"
+        android:fillViewport="true"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/cl_search_filter_confirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_search_filter_top">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_search_filter_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_search_filter_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_filter_date"
+                    android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_search_filter_date_start"
+                    android:layout_width="150dp"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_radius_8_g3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_date">
+
+                    <TextView
+                        android:id="@+id/tv_search_filter_date_start"
+                        style="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="@string/search_filter_date_input_start"
+                        android:textColor="@color/gray4"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_search_filter_date_drop_start"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@drawable/img_search_calendar"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_search_filter_date_start"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tv_search_filter_date_start" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="6dp"
+                    android:text="@string/search_filter_tilde"
+                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                    android:textColor="@color/gray6"
+                    app:layout_constraintBottom_toBottomOf="@id/cl_search_filter_date_start"
+                    app:layout_constraintEnd_toStartOf="@id/cl_search_filter_date_end"
+                    app:layout_constraintStart_toEndOf="@id/cl_search_filter_date_start"
+                    app:layout_constraintTop_toTopOf="@id/cl_search_filter_date_start" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_search_filter_date_end"
+                    android:layout_width="150dp"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_radius_8_g3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_date">
+
+                    <TextView
+                        android:id="@+id/tv_search_filter_date_end"
+                        style="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="@string/search_filter_date_input_end"
+                        android:textColor="@color/gray4"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_search_filter_date_drop_end"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@drawable/img_search_calendar"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_search_filter_date_end"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tv_search_filter_date_end" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_search_filter_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_search_filter_date">
+
+                <TextView
+                    android:id="@+id/tv_search_filter_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_filter_type"
+                    android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/rg_search_species_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_search_filter_initial"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_type">
+
+                    <RadioButton
+                        android:id="@+id/rb_search_filter_dog"
+                        style="@style/searchCustomRadioButtonMiddle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/search_species_dog"
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColor="@color/gray6" />
+
+                    <RadioButton
+                        android:id="@+id/rb_search_filter_cat"
+                        style="@style/searchCustomRadioButtonMiddle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/search_species_cat"
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColor="@color/gray6" />
+
+                    <RadioButton
+                        android:id="@+id/rb_search_filter_etc"
+                        style="@style/searchCustomRadioButtonMiddle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/search_species_etc"
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColor="@color/gray6" />
+                </RadioGroup>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_search_filter_breed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_search_filter_type">
+
+                <TextView
+                    android:id="@+id/tv_search_filter_breed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_filter_breed"
+                    android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <MultiAutoCompleteTextView
+                    android:id="@+id/actv_search_filter_breed"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_search_radius_8"
+                    android:completionThreshold="1"
+                    android:focusable="true"
+                    android:cursorVisible="true"
+                    android:dropDownHeight="248dp"
+                    android:hint="@string/search_filter_breed_hint"
+                    android:inputType="text"
+                    android:paddingHorizontal="16dp"
+                    android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                    android:textColorHint="@color/gray4"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_breed" />
+
+                <ImageView
+                    android:id="@+id/iv_breed_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search_filter_drop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/actv_search_filter_breed"
+                    app:layout_constraintBottom_toBottomOf="@id/actv_search_filter_breed"
+                    android:layout_marginEnd="12dp"/>
+
+                <FrameLayout
+                    android:id="@+id/fl_filter_breed_container"
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/actv_search_filter_breed"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_search_filter_breed"
+                        android:layout_width="match_parent"
+                        android:layout_height="264dp"
+                        android:nestedScrollingEnabled="true"
+                        android:overScrollMode="always"
+                        android:scrollbars="vertical"
+                        android:background="@drawable/bg_search_radius_8_down"/>
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/actv_search_filter_breed">
+
+                    <TextView
+                        android:id="@+id/tv_search_filter_breed_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/search_bottom_sheet_breed_default"
+                        android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                        android:textColor="@color/main_color" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/search_filter_divider"
+                        android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                        android:textColor="@color/gray4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/search_filter_max_count"
+                        android:textAppearance="@style/TextAppearance.FindU.caption_12"
+                        android:textColor="@color/gray4" />
+
+                </LinearLayout>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_selected_breeds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:chipSpacingHorizontal="2dp"
+                    app:chipSpacingVertical="0dp"
+                    app:singleLine="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/fl_filter_breed_container" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_search_filter_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_search_filter_breed">
+
+                <TextView
+                    android:id="@+id/tv_search_filter_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_filter_location"
+                    android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actv_search_filter_city"
+                        android:layout_width="155dp"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_search_radius_8"
+                        android:completionThreshold="1"
+                        android:cursorVisible="false"
+                        android:dropDownHeight="248dp"
+                        android:focusable="false"
+                        android:hint="@string/search_filter_location_city"
+                        android:inputType="text"
+                        android:paddingHorizontal="16dp"
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColorHint="@color/gray4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_city_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_search_filter_drop"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/actv_search_filter_city"
+                        app:layout_constraintBottom_toBottomOf="@id/actv_search_filter_city"
+                        android:layout_marginEnd="12dp"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_filter_city_container"
+                        android:layout_width="155dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/actv_search_filter_city"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_search_filter_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:scrollbars="vertical"
+                            android:nestedScrollingEnabled="true"
+                            android:overScrollMode="always"
+                            android:background="@drawable/bg_search_radius_8_down"/>
+                    </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_filter_location">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actv_search_filter_district"
+                        android:layout_width="155dp"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_search_radius_8"
+                        android:completionThreshold="1"
+                        android:cursorVisible="false"
+                        android:dropDownHeight="248dp"
+                        android:focusable="false"
+                        android:hint="@string/search_filter_location_gu"
+                        android:inputType="text"
+                        android:paddingHorizontal="16dp"
+                        android:textAppearance="@style/TextAppearance.FindU.Body2_SB_14"
+                        android:textColorHint="@color/gray4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                    android:id="@+id/iv_district_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search_filter_drop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/actv_search_filter_district"
+                    app:layout_constraintBottom_toBottomOf="@id/actv_search_filter_district"
+                    android:layout_marginEnd="12dp"/>
+
+
+                    <FrameLayout
+                        android:id="@+id/fl_filter_district_container"
+                        android:layout_width="155dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/actv_search_filter_district"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_search_filter_district"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:nestedScrollingEnabled="true"
+                            android:overScrollMode="always"
+                            android:scrollbars="vertical"
+                            android:background="@drawable/bg_search_radius_8_down"/>
+                    </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_filter_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_search_filter_reset"
+            android:layout_width="103dp"
+            android:layout_height="51dp"
+            android:background="@drawable/bg_search_filter_initial"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            android:text="@string/search_filter_initial"
+            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            android:textColor="@color/gray4"
+            android:translationZ="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_search_filter_confirm"
+            android:layout_width="212dp"
+            android:layout_height="51dp"
+            android:background="@drawable/bg_search_filter_check"
+            android:stateListAnimator="@null"
+            android:text="@string/search_filter_check"
+            android:textAppearance="@style/TextAppearance.FindU.Body1_SB_16"
+            android:textColor="@color/white"
+            android:translationZ="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

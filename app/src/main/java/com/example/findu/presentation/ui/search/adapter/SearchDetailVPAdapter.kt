@@ -7,20 +7,22 @@ import com.bumptech.glide.Glide
 import com.example.findu.databinding.ItemSearchDetailImgBinding
 import com.example.findu.presentation.ui.search.model.DetailSearchRv
 
-class SearchDetailVPAdapter(private val images:List<String>) :
+class SearchDetailVPAdapter(private val images:List<Any>) :
     RecyclerView.Adapter<SearchDetailVPAdapter.ViewHolder>() {
 
-    private val extendedImg: List<String> = if (images.isNotEmpty()) {
-        listOf(images.last()) + images + listOf(images.first())
-    } else {
-        listOf("default_image_url")
-    }
     inner class ViewHolder(private val binding: ItemSearchDetailImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(imageUrl: String) {
-            Glide.with(binding.root.context)
-                .load(imageUrl)
-                .into(binding.ivSearchDetailContent)
+        fun bind(item: Any) {
+            when (item) {
+                is String -> {
+                    Glide.with(binding.root)
+                        .load(item)
+                        .into(binding.ivSearchDetailContent)
+                }
+                is Int -> {
+                    binding.ivSearchDetailContent.setImageResource(item)
+                }
+            }
         }
     }
 
@@ -32,10 +34,10 @@ class SearchDetailVPAdapter(private val images:List<String>) :
     }
 
     override fun getItemCount(): Int {
-        return extendedImg.size
+        return images.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(extendedImg[position])
+        holder.bind(images[position])
     }
 }

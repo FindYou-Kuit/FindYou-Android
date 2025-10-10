@@ -6,8 +6,11 @@ import com.example.findu.domain.model.HomeData
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.domain.usecase.GetHomeUseCase
+import com.example.findu.domain.usecase.GetNicknameUseCase
 import com.example.findu.presentation.type.HomeReportDurationType
+import com.example.findu.presentation.type.HomeUserStatusType
 import com.example.findu.presentation.type.view.LoadState
+import com.example.findu.presentation.util.Nickname.GUEST_NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,12 +27,20 @@ data class HomeUiState(
     val homeData: HomeData? = null,
     val reportDataDuration: HomeReportDurationType = HomeReportDurationType.WEEK,
     val errorMessage: String? = null,
+    val nickname: String = "",
     val isRefreshing: Boolean = false,
     val bannerCurrentPage: Int = 0,
     val isScrollToTopVisible: Boolean = false,
-    val isReportDialogVisible: Boolean = false
-
-)
+    val isReportDialogVisible: Boolean = false,
+    val locationPermission: Boolean = false
+) {
+    val userHomeUserStatusType: HomeUserStatusType
+        get() = when {
+            !locationPermission -> HomeUserStatusType.LOCATION_DENIED
+            nickname.isEmpty() || nickname.equals(GUEST_NAME, ignoreCase = false) -> HomeUserStatusType.GUEST
+            else -> HomeUserStatusType.MEMBER
+        }
+}
 
 sealed class HomeUiEvent {
     data object LoadHomeData : HomeUiEvent()
@@ -46,6 +57,9 @@ sealed class HomeUiEvent {
     data class OnBannerPageChanged(val page: Int) : HomeUiEvent()
 
     data class OnScrollPositionChanged(val firstVisibleItemIndex: Int) : HomeUiEvent()
+    data class SetLocationPermission(val locationPermission: Boolean) : HomeUiEvent()
+    data object SetUserNickname : HomeUiEvent()
+
 }
 
 sealed class HomeUiEffect {
@@ -62,7 +76,8 @@ sealed class HomeUiEffect {
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val homeUseCase: GetHomeUseCase
+    private val homeUseCase: GetHomeUseCase,
+    private val getNicknameUseCase: GetNicknameUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
 
@@ -96,13 +111,18 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnReportDialogDismiss -> {
                 _uiState.update { it.copy(isReportDialogVisible = false) }
             }
+
+            is HomeUiEvent.SetLocationPermission -> {
+                _uiState.update { it.copy(locationPermission = event.locationPermission) }
+            }
+
+            HomeUiEvent.SetUserNickname -> setUserNickname()
         }
     }
 
     private fun loadHomeData() {
         viewModelScope.launch {
             _uiState.update { it.copy(loadState = LoadState.Loading) }
-
             homeUseCase().fold(
                 onSuccess = { data ->
                     _uiState.update { it.copy(
@@ -121,18 +141,25 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+
+    private fun setUserNickname() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(nickname = getNicknameUseCase()) }
+        }
+    }
+
     private fun refreshData() {
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true) }
 
             homeUseCase().fold(
                 onSuccess = { data ->
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         loadState = LoadState.Success,
                         homeData = data,
                         errorMessage = null,
                         isRefreshing = false
-                    )
+                    ) }
                 },
                 onFailure = { error ->
                     _uiState.update { it.copy(
@@ -200,7 +227,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateScrollToTopVisibility(firstVisibleItemIndex: Int) {
-        val isVisible = firstVisibleItemIndex > 2 // 3번째 아이템 이후에 보이기
+        val isVisible = firstVisibleItemIndex > 2
         _uiState.update { it.copy(isScrollToTopVisible = isVisible) }
     }
 

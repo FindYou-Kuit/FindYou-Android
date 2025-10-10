@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_fragment_search_to_fragment_search_detail_disappear"
             app:destination="@id/fragment_search_detail_disappear" />
+        <action
+            android:id="@+id/action_fragment_search_to_fragment_search_filter"
+            app:destination="@id/fragment_search_filter" />
     </fragment>
 
     <fragment
@@ -135,6 +138,12 @@
             android:id="@+id/action_fragment_my_keep_animals_to_fragment_search_detail_disappear"
             app:destination="@id/fragment_search_detail_disappear" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fragment_search_filter"
+        android:name="com.example.findu.presentation.ui.search.SearchFilterFragment"
+        android:label="Search Filter"
+        tools:layout="@layout/fragment_search_filter" />
 
     <fragment
         android:id="@+id/fragment_my_recent_history"

@@ -12,11 +12,13 @@
 
         <ImageView
             android:id="@+id/iv_search_detail_content"
-            android:layout_width="401dp"
-            android:layout_height="467dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="center"
+            android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="8dp"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

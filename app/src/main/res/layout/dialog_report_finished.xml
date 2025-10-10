@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_report_dialog_rd12">
+    android:background="@drawable/bg_report_dialog_rd15">
 
     <LinearLayout
         android:id="@+id/ll_report_finish_dialog_mention"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
     <LinearLayout
         android:layout_width="248dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginHorizontal="26dp"
         android:layout_marginTop="15dp"
         android:orientation="vertical"
         android:paddingBottom="30dp"
@@ -54,7 +54,8 @@
             android:background="@drawable/bg_button_report_dialog"
             android:backgroundTint="@null"
             android:text="@string/report_dialog_see_history"
-            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+            android:textColor="@color/white" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_report_finish_dialog_go_home"
@@ -64,7 +65,8 @@
             android:background="@drawable/bg_button_report_dialog"
             android:backgroundTint="@null"
             android:text="@string/report_dialog_go_home"
-            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18" />
+            android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

@@ -32,6 +32,7 @@ import com.example.findu.domain.model.ReportAnimal
 import com.example.findu.presentation.type.HomeBannerType
 import com.example.findu.presentation.type.HomeExtraButtonType
 import com.example.findu.presentation.type.HomeReportDurationType
+import com.example.findu.presentation.type.HomeUserStatusType
 import com.example.findu.presentation.ui.home.component.HomeBannerPager
 import com.example.findu.presentation.ui.home.component.HomeExtraButtonList
 import com.example.findu.presentation.ui.home.component.HomeProtectAnimalList
@@ -56,7 +57,7 @@ fun HomeScreen(
     alarmButtonClicked: () -> Unit,
     navigateToProtectDetail: (ProtectAnimal) -> Unit,
     navigateToReportDetail: (ReportAnimal) -> Unit,
-    indicatorClicked: (HomeReportDurationType) -> Unit,
+    onIndicatorSelected: (HomeReportDurationType) -> Unit,
     navigationToProtectAnimal: () -> Unit,
     navigationToReportAnimal: () -> Unit,
     navigateToHomeExtra: (HomeExtraButtonType) -> Unit,
@@ -114,7 +115,7 @@ fun HomeScreen(
                         HomeReportCard(
                             modifier = Modifier.padding(15.dp),
                             homeStatistics = it.statistics,
-                            indicatorClicked = indicatorClicked,
+                            onIndicatorSelected = onIndicatorSelected,
                             homeReportDuration = uiState.reportDataDuration
                         )
                     }
@@ -159,6 +160,7 @@ fun HomeScreen(
                     )
                     HomeProtectAnimalList(
                         nickname = userNickname,
+                        homeUserStatusType = uiState.userHomeUserStatusType,
                         navigationToSearch = navigationToProtectAnimal,
                         animalCards = uiState.homeData!!.protectAnimalCards,
                         navigateToProtectDetail = navigateToProtectDetail
@@ -173,6 +175,7 @@ fun HomeScreen(
                     )
                     HomeReportedAnimalList(
                         nickname = userNickname,
+                        homeUserStatusType = uiState.userHomeUserStatusType,
                         navigationToSearch = navigationToReportAnimal,
                         animalCards = uiState.homeData!!.reportAnimalCards,
                         navigateToReportDetail = navigateToReportDetail
@@ -222,7 +225,7 @@ private fun HomeScreenPreview() {
         HomeScreen(
             reportButtonClicked = {},
             alarmButtonClicked = {},
-            indicatorClicked = { clickedLabel -> selected = clickedLabel },
+            onIndicatorSelected = { clickedLabel -> selected = clickedLabel },
             userNickname = "신민석",
             navigateToProtectDetail = {},
             navigateToReportDetail = {},

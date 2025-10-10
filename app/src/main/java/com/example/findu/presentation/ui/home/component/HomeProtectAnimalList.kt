@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.ProtectAnimal
+import com.example.findu.presentation.type.HomeUserStatusType
 import com.example.findu.presentation.ui.base.BaseVectorIcon
 import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.ui.theme.FindUTheme
@@ -26,6 +27,7 @@ import com.example.findu.ui.theme.FindUTheme
 @Composable
 fun HomeProtectAnimalList(
     nickname: String,
+    homeUserStatusType: HomeUserStatusType,
     navigationToSearch: () -> Unit,
     navigateToProtectDetail: (ProtectAnimal) -> Unit,
     animalCards: List<ProtectAnimal>,
@@ -56,7 +58,11 @@ fun HomeProtectAnimalList(
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = stringResource(R.string.home_adoptable_list_description, nickname),
+                text = if (homeUserStatusType == HomeUserStatusType.MEMBER){
+                    stringResource(homeUserStatusType.protectAnimalListTitleRes, nickname)
+                }else{
+                    stringResource(homeUserStatusType.protectAnimalListTitleRes)
+                },
                 style = FindUTheme.typography.body2Regular14, color = FindUTheme.colors.gray4
             )
         }
@@ -137,5 +143,6 @@ private fun HomeProtectAnimalListPreview() {
         navigationToSearch = {},
         animalCards = dummyAnimalCards,
         navigateToProtectDetail = {},
+        homeUserStatusType = HomeUserStatusType.MEMBER,
     )
 }
