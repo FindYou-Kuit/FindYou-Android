@@ -8,10 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,8 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.extra.Center
+import com.example.findu.presentation.type.HomeExtraDistrictType
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.extra.component.ExtraCenterItem
+import com.example.findu.presentation.ui.extra.component.ExtraDistrictItem
 import com.example.findu.ui.theme.FindUTheme
 
 @Composable
@@ -36,13 +39,21 @@ fun ExtraHomeCenterScreen(
             onNavigationIconClick = {},
             modifier = Modifier.background(color = FindUTheme.colors.white)
         )
-        Row {
-            //TODO: 지역 선택 드롭다운 구현
+        Row (modifier = Modifier.padding(20.dp)){
+            ExtraDistrictItem(
+                districtType = HomeExtraDistrictType.DISTRICT_TYPE_SIDO,
+                onClick = {},
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+
+            ExtraDistrictItem(
+                districtType = HomeExtraDistrictType.DISTRICT_TYPE_SIGUNGU,
+                onClick = {},
+                modifier = Modifier.weight(1f)
+            )
         }
         Spacer(modifier = Modifier.weight(1f))
-        Row {
-            //TODO: 지역 선택 드롭다운 구현
-        }
         Column(
             modifier = Modifier
                 .height(340.dp)
