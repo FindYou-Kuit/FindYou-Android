@@ -85,9 +85,7 @@ class HomeViewModel @Inject constructor(
     val uiEffect = _uiEffect.receiveAsFlow()
 
     val uiState = _uiState
-        .onStart {
-            handleEvent(HomeUiEvent.LoadHomeData)
-        }
+        .onStart { handleEvent(HomeUiEvent.LoadHomeData) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -152,7 +150,7 @@ class HomeViewModel @Inject constructor(
 
     private fun refreshData() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isRefreshing = true)
+            _uiState.update { it.copy(isRefreshing = true) }
 
             homeUseCase().fold(
                 onSuccess = { data ->
@@ -175,10 +173,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun clearError() {
-        _uiState.value = _uiState.value.copy(
+        _uiState.update { it.copy(
             errorMessage = null,
             loadState = if (_uiState.value.homeData != null) LoadState.Success else LoadState.Idle
-        )
+        ) }
     }
 
 

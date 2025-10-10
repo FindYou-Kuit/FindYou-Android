@@ -18,6 +18,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.findu.databinding.FragmentHomeBinding
 import com.example.findu.presentation.type.AnimalStateType
+import com.example.findu.presentation.type.HomeExtraButtonType
 import com.example.findu.presentation.type.view.LoadState
 import com.example.findu.presentation.ui.home.composeview.HomeScreen
 import com.example.findu.presentation.ui.home.viewmodel.HomeUiEffect
@@ -131,7 +132,9 @@ class HomeFragment : Fragment() {
                             onFindReportClick = {},
                             onPhoneClicked = {
                                 homeViewModel.dial()
-                            }
+                            },
+                            navigateToHomeExtra = { homeExtraButtonType->
+                                navigateToHomeExtra(homeExtraButtonType) },
                         )
                     }
 
@@ -197,6 +200,12 @@ class HomeFragment : Fragment() {
     private fun call120() {
         val intent = Intent(Intent.ACTION_DIAL, "tel:120".toUri())
         startActivity(intent)
+    }
+
+    private fun navigateToHomeExtra(homeExtraButtonType: HomeExtraButtonType) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionFragmentHomeToFragmentHomeExtra(homeExtraButtonType)
+        )
     }
 
     override fun onDestroyView() {
