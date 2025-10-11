@@ -32,16 +32,17 @@ data class HomeExtraUiState(
     val selectedSigungu: String = "",
     val sidoList: List<Sido> = emptyList(),
     val sigunguList: List<String> = emptyList(),
+    val latitude: Double = 37.0,
+    val longitude: Double = 127.0
 )
 
 sealed class HomeExtraUiEvent {
     data object LoadData : HomeExtraUiEvent()
     data class SetHomeExtraType(val homeExtraButtonType: HomeExtraButtonType) : HomeExtraUiEvent()
     data object GetSido : HomeExtraUiEvent()
-
     data class SidoSelected(val selectedSido: Sido) : HomeExtraUiEvent()
-
     data class SigunguSelected(val selectedSigungu: String) : HomeExtraUiEvent()
+    data class UpdateLocation(val latitude: Double, val longitude: Double) : HomeExtraUiEvent()
 }
 
 sealed class HomeExtraUiEffect {
@@ -90,6 +91,9 @@ class HomeExtraViewModel @Inject constructor(
             }
 
             is HomeExtraUiEvent.GetSido -> getSido()
+            is HomeExtraUiEvent.UpdateLocation -> {
+                _uiState.update { it.copy(latitude = event.latitude, longitude = event.longitude) }
+            }
         }
     }
 
@@ -128,7 +132,12 @@ class HomeExtraViewModel @Inject constructor(
 
     private fun getCenters() {
         viewModelScope.launch {
-            getCentersUseCase().fold(
+            getCentersUseCase(
+                sido = uiState.value.selectedSido.name,
+                sigungu = uiState.value.selectedSigungu,
+                lat = uiState.value.latitude,
+                lon = uiState.value.longitude
+            ).fold(
                 onSuccess = { list ->
                     _uiState.update {
                         it.copy(

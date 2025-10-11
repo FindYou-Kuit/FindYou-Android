@@ -67,7 +67,9 @@ class HomeExtraFragment : Fragment() {
                     LoadState.Success -> {
                         when (val content = uiState.content) {
                             is HomeExtraContent.Volunteers -> {
-                                ExtraHomeVolunteerScreen(volunteerWorks = content.list)
+                                ExtraHomeVolunteerScreen(
+                                    volunteerWorks = content.list,
+                                    popBackStack = { findNavController().popBackStack() })
                             }
 
                             is HomeExtraContent.Departments -> {
@@ -83,6 +85,7 @@ class HomeExtraFragment : Fragment() {
                                     onSigunguSelected = {
                                         homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
                                     },
+                                    popBackStack = { findNavController().popBackStack() }
                                 )
                             }
 
@@ -99,7 +102,7 @@ class HomeExtraFragment : Fragment() {
                                     onSigunguSelected = {
                                         homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
                                     },
-                                )
+                                    popBackStack = { findNavController().popBackStack() })
                             }
 
                             is HomeExtraContent.None -> Unit

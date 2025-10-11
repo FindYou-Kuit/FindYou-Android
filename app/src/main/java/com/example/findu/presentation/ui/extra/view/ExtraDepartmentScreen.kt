@@ -28,13 +28,14 @@ fun ExtraHomeDepartmentScreen(
     sigunguList: List<String>,
     onSidoSelected: (Sido) -> Unit,
     onSigunguSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    popBackStack: () -> Unit = {}
 ) {
     Column(modifier = modifier) {
         FindUTopAppBar(
             title = R.string.home_extra_department,
             navigationIconRes = R.drawable.ic_arrow_left,
-            onNavigationIconClick = {}
+            onNavigationIconClick = popBackStack
         )
         Row(modifier = Modifier.padding(20.dp)) {
             ExtraDistrictItem(

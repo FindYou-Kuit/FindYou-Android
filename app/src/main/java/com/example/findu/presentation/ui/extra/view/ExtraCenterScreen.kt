@@ -1,10 +1,12 @@
 package com.example.findu.presentation.ui.extra.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,61 +39,74 @@ fun ExtraHomeCenterScreen(
     sigunguList: List<String>,
     onSidoSelected: (Sido) -> Unit,
     onSigunguSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    popBackStack: () -> Unit = {}
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         FindUTopAppBar(
             title = R.string.home_extra_center,
             navigationIconRes = R.drawable.ic_arrow_left,
-            onNavigationIconClick = {},
+            onNavigationIconClick = popBackStack,
             modifier = Modifier.background(color = FindUTheme.colors.white)
         )
-        Row(modifier = Modifier.padding(20.dp)) {
-            ExtraDistrictItem(
-                modifier = Modifier.weight(1f),
-                selectedDistrict =  selectedSido.name ,
-                districtOptions = sidoList,
-                onDistrictSelected = onSidoSelected,
-                hint = stringResource(R.string.home_extra_sido),
-                itemToString = {it.name }
-            )
-            Spacer(modifier = Modifier.width(10.dp))
+        Box(modifier = Modifier.weight(1f)) {
+            
+            //TODO: 지도가 될 아이 입니다.
+            Spacer(modifier = Modifier
+                .padding(bottom = 320.dp)
+                .fillMaxSize()
+                .background(color = Color.Gray))
 
-            ExtraDistrictItem(
-                modifier = Modifier.weight(1f),
-                selectedDistrict = selectedSigungu,
-                districtOptions = sigunguList,
-                onDistrictSelected = onSigunguSelected,
-                hint = stringResource(R.string.home_extra_sigungu),
-                itemToString = {it}
+            Column {
+                Row(modifier = Modifier.padding(20.dp)) {
+                    ExtraDistrictItem(
+                        modifier = Modifier.weight(1f),
+                        selectedDistrict = selectedSido.name,
+                        districtOptions = sidoList,
+                        onDistrictSelected = onSidoSelected,
+                        hint = stringResource(R.string.home_extra_sido),
+                        itemToString = { it.name }
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
 
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Column(
-            modifier = Modifier
-                .height(340.dp)
-                .background(
-                    shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                    color = FindUTheme.colors.white
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            HorizontalDivider(
+                    ExtraDistrictItem(
+                        modifier = Modifier.weight(1f),
+                        selectedDistrict = selectedSigungu,
+                        districtOptions = sigunguList,
+                        onDistrictSelected = onSigunguSelected,
+                        hint = stringResource(R.string.home_extra_sigungu),
+                        itemToString = { it }
+
+                    )
+                }
+            }
+
+            Column(
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .size(width = 120.dp, height = 4.dp)
-                    .background(color = Color(0xFFE5E5E7), shape = RoundedCornerShape(6.dp)),
-                thickness = 1.dp,
-                color = FindUTheme.colors.gray2
-            )
-            LazyColumn {
-                items(centers) {
-                    ExtraCenterItem(center = it)
+                    .fillMaxWidth()
+                    .height(340.dp)
+                    .background(
+                        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+                        color = FindUTheme.colors.white
+                    )
+                    .align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(vertical = 16.dp)
+                        .size(width = 120.dp, height = 4.dp)
+                        .background(color = Color(0xFFE5E5E7), shape = RoundedCornerShape(6.dp)),
+                    thickness = 1.dp,
+                    color = FindUTheme.colors.gray2
+                )
+                LazyColumn {
+                    items(centers) {
+                        ExtraCenterItem(center = it)
+                    }
                 }
             }
         }
-
     }
 }
 
@@ -125,7 +140,7 @@ private fun ExtraHomeCenterScreenPreview() {
         sigunguList = emptyList(),
         onSidoSelected = {},
         onSigunguSelected = {},
-        selectedSido = Sido(id = 0 , name = ""),
+        selectedSido = Sido(id = 0, name = ""),
         selectedSigungu = "",
     )
 }
