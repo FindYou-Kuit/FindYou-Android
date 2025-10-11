@@ -12,16 +12,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.extra.Center
-import com.example.findu.presentation.type.HomeExtraDistrictType
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.extra.component.ExtraCenterItem
 import com.example.findu.presentation.ui.extra.component.ExtraDistrictItem
@@ -30,6 +30,12 @@ import com.example.findu.ui.theme.FindUTheme
 @Composable
 fun ExtraHomeCenterScreen(
     centers: List<Center>,
+    selectedSido: String,
+    selectedSigungu: String,
+    sidoList: List<String>,
+    sigunguList: List<String>,
+    onSidoSelected: (String) -> Unit,
+    onSigunguSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -39,18 +45,22 @@ fun ExtraHomeCenterScreen(
             onNavigationIconClick = {},
             modifier = Modifier.background(color = FindUTheme.colors.white)
         )
-        Row (modifier = Modifier.padding(20.dp)){
+        Row(modifier = Modifier.padding(20.dp)) {
             ExtraDistrictItem(
-                districtType = HomeExtraDistrictType.DISTRICT_TYPE_SIDO,
-                onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                selectedDistrict = selectedSido,
+                districtOptions = sidoList,
+                onDistrictSelected = onSidoSelected,
+                hint = stringResource(R.string.home_extra_sido)
             )
             Spacer(modifier = Modifier.width(10.dp))
 
             ExtraDistrictItem(
-                districtType = HomeExtraDistrictType.DISTRICT_TYPE_SIGUNGU,
-                onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                selectedDistrict = selectedSigungu,
+                districtOptions = sigunguList,
+                onDistrictSelected = onSigunguSelected,
+                hint = stringResource(R.string.home_extra_sigungu)
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -63,13 +73,13 @@ fun ExtraHomeCenterScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .padding(vertical = 16.dp)
                     .size(width = 120.dp, height = 4.dp)
                     .background(color = Color(0xFFE5E5E7), shape = RoundedCornerShape(6.dp)),
-                color = FindUTheme.colors.gray2,
                 thickness = 1.dp,
+                color = FindUTheme.colors.gray2
             )
             LazyColumn {
                 items(centers) {
@@ -106,6 +116,12 @@ private fun ExtraHomeCenterScreenPreview() {
     )
 
     ExtraHomeCenterScreen(
-        centers = dummyCenters
+        centers = dummyCenters,
+        sidoList = emptyList(),
+        sigunguList = emptyList(),
+        onSidoSelected = {},
+        onSigunguSelected = {},
+        selectedSido = "",
+        selectedSigungu = "",
     )
 }

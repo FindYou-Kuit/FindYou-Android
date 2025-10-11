@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.findu.domain.model.extra.Department
 import com.example.findu.domain.usecase.extra.GetCentersUseCase
 import com.example.findu.domain.usecase.extra.GetDepartmentsUseCase
 import com.example.findu.domain.usecase.extra.GetVolunteersUseCase
@@ -24,12 +25,18 @@ import javax.inject.Inject
 data class HomeExtraUiState(
     val loadState: LoadState = LoadState.Idle,
     val homeExtraButtonType: HomeExtraButtonType? = null,
-    val content: HomeExtraContent = HomeExtraContent.None
-)
+    val content: HomeExtraContent = HomeExtraContent.None,
+    val selectedSido: String = "",
+    val selectedSigungu: String = "",
+    val sidoList: List<String> = emptyList(),
+    val sigunguList: List<String> = emptyList(),
+    )
 
 sealed class HomeExtraUiEvent {
     data object LoadData : HomeExtraUiEvent()
     data class SetHomeExtraType(val homeExtraButtonType: HomeExtraButtonType) : HomeExtraUiEvent()
+    data class SetSelectedSido(val selectedSido: String) : HomeExtraUiEvent()
+    data class SetSelectedSigungu(val selectedSigungu: String) : HomeExtraUiEvent()
 }
 
 sealed class HomeExtraUiEffect {
@@ -63,6 +70,12 @@ class HomeExtraViewModel @Inject constructor(
             is HomeExtraUiEvent.SetHomeExtraType -> {
                 _uiState.update { it.copy(homeExtraButtonType = event.homeExtraButtonType) }
             }
+            is HomeExtraUiEvent.SetSelectedSido -> {
+                _uiState.update { it.copy(selectedSido = event.selectedSido) }
+            }
+            is HomeExtraUiEvent.SetSelectedSigungu -> {
+                _uiState.update { it.copy(selectedSigungu = event.selectedSigungu) }
+            }
         }
     }
 
@@ -83,17 +96,21 @@ class HomeExtraViewModel @Inject constructor(
                 HomeExtraButtonType.PROTECT_CENTER -> {
                     getCentersUseCase().fold(
                         onSuccess = { list ->
-                            _uiState.update { it.copy(
-                                loadState = LoadState.Success,
-                                content = HomeExtraContent.Centers(list.items)
-                            ) }
+                            _uiState.update {
+                                it.copy(
+                                    loadState = LoadState.Success,
+                                    content = HomeExtraContent.Centers(list.items)
+                                )
+                            }
                         },
                         onFailure = { e ->
-                            Log.e(TAG,e.toString())
-                            _uiState.update { it.copy(
-                                loadState = LoadState.Error,
-                                content = HomeExtraContent.None
-                            ) }
+                            Log.e(TAG, e.toString())
+                            _uiState.update {
+                                it.copy(
+                                    loadState = LoadState.Error,
+                                    content = HomeExtraContent.None
+                                )
+                            }
                         }
                     )
                 }
@@ -101,17 +118,21 @@ class HomeExtraViewModel @Inject constructor(
                 HomeExtraButtonType.PROTECT_DEPARTMENT -> {
                     getDepartmentsUseCase().fold(
                         onSuccess = { list ->
-                            _uiState.update { it.copy(
-                                loadState = LoadState.Success,
-                                content = HomeExtraContent.Departments(list.items)
-                            ) }
+                            _uiState.update {
+                                it.copy(
+                                    loadState = LoadState.Success,
+                                    content = HomeExtraContent.Departments(list.items)
+                                )
+                            }
                         },
                         onFailure = { e ->
-                            Log.e(TAG,e.toString())
-                            _uiState.update { it.copy(
-                                loadState = LoadState.Error,
-                                content = HomeExtraContent.None
-                            ) }
+                            Log.e(TAG, e.toString())
+                            _uiState.update {
+                                it.copy(
+                                    loadState = LoadState.Error,
+                                    content = HomeExtraContent.None
+                                )
+                            }
                         }
                     )
                 }
@@ -119,26 +140,32 @@ class HomeExtraViewModel @Inject constructor(
                 HomeExtraButtonType.VOLUNTEER -> {
                     getVolunteersUseCase().fold(
                         onSuccess = { list ->
-                            _uiState.update { it.copy(
-                                loadState = LoadState.Success,
-                                content = HomeExtraContent.Volunteers(list.items)
-                            ) }
+                            _uiState.update {
+                                it.copy(
+                                    loadState = LoadState.Success,
+                                    content = HomeExtraContent.Volunteers(list.items)
+                                )
+                            }
                         },
                         onFailure = { e ->
-                            Log.e(TAG,e.toString())
-                            _uiState.update { it.copy(
-                                loadState = LoadState.Error,
-                                content = HomeExtraContent.None
-                            ) }
+                            Log.e(TAG, e.toString())
+                            _uiState.update {
+                                it.copy(
+                                    loadState = LoadState.Error,
+                                    content = HomeExtraContent.None
+                                )
+                            }
                         }
                     )
                 }
 
                 null -> {
-                    _uiState.update { it.copy(
-                        loadState = LoadState.Success,
-                        content = HomeExtraContent.None
-                    ) }
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Success,
+                            content = HomeExtraContent.None
+                        )
+                    }
                 }
             }
         }
