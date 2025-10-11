@@ -104,7 +104,10 @@ class HomeExtraFragment : Fragment() {
                                     },
                                     popBackStack = { findNavController().popBackStack() },
                                     latitude = uiState.latitude,
-                                    longitude = uiState.longitude
+                                    longitude = uiState.longitude,
+                                    searchCurrentLocation = { centerLatLng ->
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SearchCenterFocusedLatLng(centerLatLng))
+                                    }
                                 )
                             }
 

@@ -13,6 +13,7 @@ import com.example.findu.domain.usecase.extra.GetVolunteersUseCase
 import com.example.findu.presentation.model.HomeExtraContent
 import com.example.findu.presentation.type.HomeExtraButtonType
 import com.example.findu.presentation.type.view.LoadState
+import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,6 +44,7 @@ sealed class HomeExtraUiEvent {
     data class SidoSelected(val selectedSido: Sido) : HomeExtraUiEvent()
     data class SigunguSelected(val selectedSigungu: String) : HomeExtraUiEvent()
     data class UpdateLocation(val latitude: Double, val longitude: Double) : HomeExtraUiEvent()
+    data class SearchCenterFocusedLatLng(val centerLatLng: LatLng) : HomeExtraUiEvent()
 }
 
 sealed class HomeExtraUiEffect {
@@ -94,6 +96,9 @@ class HomeExtraViewModel @Inject constructor(
             is HomeExtraUiEvent.UpdateLocation -> {
                 _uiState.update { it.copy(latitude = event.latitude, longitude = event.longitude) }
             }
+            is HomeExtraUiEvent.SearchCenterFocusedLatLng -> {
+                getCenters(lat = event.centerLatLng.latitude , lon = event.centerLatLng.longitude)
+            }
         }
     }
 
@@ -130,13 +135,18 @@ class HomeExtraViewModel @Inject constructor(
     }
 
 
-    private fun getCenters() {
+    private fun getCenters(
+        sido: String = uiState.value.selectedSido.name,
+        sigungu : String = uiState.value.selectedSigungu,
+        lat : Double = uiState.value.latitude,
+        lon:Double = uiState.value.longitude
+                           ) {
         viewModelScope.launch {
             getCentersUseCase(
-                sido = uiState.value.selectedSido.name,
-                sigungu = uiState.value.selectedSigungu,
-                lat = uiState.value.latitude,
-                lon = uiState.value.longitude
+                sido = sido,
+                sigungu = sigungu,
+                lat = lat,
+                lon = lon
             ).fold(
                 onSuccess = { list ->
                     _uiState.update {

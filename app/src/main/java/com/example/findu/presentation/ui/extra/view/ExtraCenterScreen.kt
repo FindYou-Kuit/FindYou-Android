@@ -61,7 +61,8 @@ fun ExtraHomeCenterScreen(
     latitude: Double,
     longitude: Double,
     modifier: Modifier = Modifier,
-    popBackStack: () -> Unit = {}
+    popBackStack: () -> Unit = {},
+    searchCurrentLocation: (centerLatLng: LatLng) -> Unit = { }
 ) {
 
     val scope = rememberCoroutineScope()
@@ -94,15 +95,20 @@ fun ExtraHomeCenterScreen(
                     isCompassEnabled = false
                 )
             ) {
-                // 지도 위에 센터 위치마다 마커 표시
-                centers.forEach { center ->
-                    // 센터 객체에 위도, 경도 정보가 있다고 가정 (예: center.latitude, center.longitude)
-                    // 만약 주소만 있다면 Geocoding을 통해 변환 필요
-                    // Marker(
-                    //     state = rememberMarkerState(position = LatLng(center.latitude, center.longitude)),
-                    //     captionText = center.centerName
-                    // )
-                }
+
+//                cameraPositionState.contentBounds?.let { visibleBounds ->
+//                    val visibleCenters = centers.filter { center ->
+//                        visibleBounds.contains(LatLng(center.latitude, center.longitude))
+//                    }
+//
+//                    visibleCenters.forEach { center ->
+//                        Marker(
+//                            state = rememberMarkerState(position = LatLng(center.latitude, center.longitude)),
+//                            captionText = center.centerName
+//                        )
+//                    }
+//                }
+
             }
 
             Box(
@@ -159,6 +165,7 @@ fun ExtraHomeCenterScreen(
                                         )
                                     )
                                 }
+                                searchCurrentLocation(LatLng(latitude, longitude))
                             }
                     )
                     Spacer(modifier = Modifier.weight(1f))
@@ -166,15 +173,19 @@ fun ExtraHomeCenterScreen(
                         text = "현 지도에서 검색 ",
                         color = FindUTheme.colors.blue1,
                         style = FindUTheme.typography.captionRegular12,
-                        modifier = Modifier.roundedBackgroundWithPadding(
-                            backgroundColor = FindUTheme.colors.white,
-                            cornerRadius = 30.dp,
-                            padding = PaddingValues(vertical = 6.dp, horizontal = 15.dp)
-                        )
+                        modifier = Modifier
+                            .roundedBackgroundWithPadding(
+                                backgroundColor = FindUTheme.colors.white,
+                                cornerRadius = 30.dp,
+                                padding = PaddingValues(vertical = 6.dp, horizontal = 15.dp)
+                            )
+                            .noRippleClickable {
+                                val centerLatLng = cameraPositionState.position.target
+                                searchCurrentLocation(centerLatLng)
+                            }
                     )
                 }
             }
-
 
             Column(
                 modifier = Modifier
