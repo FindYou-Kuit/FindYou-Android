@@ -102,7 +102,10 @@ class HomeExtraFragment : Fragment() {
                                     onSigunguSelected = {
                                         homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
                                     },
-                                    popBackStack = { findNavController().popBackStack() })
+                                    popBackStack = { findNavController().popBackStack() },
+                                    latitude = uiState.latitude,
+                                    longitude = uiState.longitude
+                                )
                             }
 
                             is HomeExtraContent.None -> Unit

@@ -3,6 +3,7 @@ package com.example.findu.presentation.ui.extra.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +16,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,11 +29,26 @@ import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.extra.Center
 import com.example.findu.domain.model.extra.Sido
+import com.example.findu.presentation.ui.base.BaseVectorIcon
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.extra.component.ExtraCenterItem
 import com.example.findu.presentation.ui.extra.component.ExtraDistrictItem
+import com.example.findu.presentation.util.extension.noRippleClickable
+import com.example.findu.presentation.util.extension.roundedBackgroundWithPadding
 import com.example.findu.ui.theme.FindUTheme
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.compose.CameraPositionState
+import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 
+private const val INITIAL_ZOOM_LEVEL = 14.0
+
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun ExtraHomeCenterScreen(
     centers: List<Center>,
@@ -39,9 +58,24 @@ fun ExtraHomeCenterScreen(
     sigunguList: List<String>,
     onSidoSelected: (Sido) -> Unit,
     onSigunguSelected: (String) -> Unit,
+    latitude: Double,
+    longitude: Double,
     modifier: Modifier = Modifier,
     popBackStack: () -> Unit = {}
 ) {
+
+    val scope = rememberCoroutineScope()
+
+    val cameraPositionState: CameraPositionState = rememberCameraPositionState {
+        position = CameraPosition(LatLng(latitude, longitude), INITIAL_ZOOM_LEVEL)
+    }
+
+    LaunchedEffect(latitude, longitude) {
+        cameraPositionState.animate(
+            com.naver.maps.map.CameraUpdate.scrollTo(LatLng(latitude, longitude))
+        )
+    }
+
     Column(modifier = modifier.fillMaxSize()) {
         FindUTopAppBar(
             title = R.string.home_extra_center,
@@ -50,15 +84,38 @@ fun ExtraHomeCenterScreen(
             modifier = Modifier.background(color = FindUTheme.colors.white)
         )
         Box(modifier = Modifier.weight(1f)) {
-            
-            //TODO: 지도가 될 아이 입니다.
-            Spacer(modifier = Modifier
-                .padding(bottom = 320.dp)
-                .fillMaxSize()
-                .background(color = Color.Gray))
 
-            Column {
-                Row(modifier = Modifier.padding(20.dp)) {
+            NaverMap(
+                modifier = Modifier
+                    .padding(bottom = 320.dp)
+                    .fillMaxSize(),
+                cameraPositionState = cameraPositionState,
+                uiSettings = MapUiSettings(
+                    isCompassEnabled = false
+                )
+            ) {
+                // 지도 위에 센터 위치마다 마커 표시
+                centers.forEach { center ->
+                    // 센터 객체에 위도, 경도 정보가 있다고 가정 (예: center.latitude, center.longitude)
+                    // 만약 주소만 있다면 Geocoding을 통해 변환 필요
+                    // Marker(
+                    //     state = rememberMarkerState(position = LatLng(center.latitude, center.longitude)),
+                    //     captionText = center.centerName
+                    // )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 320.dp)
+                    .fillMaxSize()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.TopCenter)
+                        .padding(20.dp)
+                ) {
                     ExtraDistrictItem(
                         modifier = Modifier.weight(1f),
                         selectedDistrict = selectedSido.name,
@@ -79,7 +136,45 @@ fun ExtraHomeCenterScreen(
 
                     )
                 }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(start = 10.dp, end = 10.dp, bottom = 30.dp),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    BaseVectorIcon(
+                        vectorResource = R.drawable.ic_place_now_24,
+                        modifier = Modifier
+                            .roundedBackgroundWithPadding(
+                                backgroundColor = FindUTheme.colors.white,
+                                cornerRadius = 12.dp,
+                                padding = PaddingValues(12.dp)
+                            )
+                            .noRippleClickable {
+                                scope.launch {
+                                    cameraPositionState.animate(
+                                        CameraUpdate.scrollAndZoomTo(
+                                            LatLng(latitude, longitude), INITIAL_ZOOM_LEVEL
+                                        )
+                                    )
+                                }
+                            }
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "현 지도에서 검색 ",
+                        color = FindUTheme.colors.blue1,
+                        style = FindUTheme.typography.captionRegular12,
+                        modifier = Modifier.roundedBackgroundWithPadding(
+                            backgroundColor = FindUTheme.colors.white,
+                            cornerRadius = 30.dp,
+                            padding = PaddingValues(vertical = 6.dp, horizontal = 15.dp)
+                        )
+                    )
+                }
             }
+
 
             Column(
                 modifier = Modifier
@@ -142,5 +237,7 @@ private fun ExtraHomeCenterScreenPreview() {
         onSigunguSelected = {},
         selectedSido = Sido(id = 0, name = ""),
         selectedSigungu = "",
+        latitude = 37.0,
+        longitude = 127.0,
     )
 }

@@ -32,8 +32,8 @@ data class HomeExtraUiState(
     val selectedSigungu: String = "",
     val sidoList: List<Sido> = emptyList(),
     val sigunguList: List<String> = emptyList(),
-    val latitude: Double = 37.0,
-    val longitude: Double = 127.0
+    val latitude: Double = 37.5642135,
+    val longitude: Double = 127.0016985
 )
 
 sealed class HomeExtraUiEvent {
@@ -220,7 +220,7 @@ class HomeExtraViewModel @Inject constructor(
 
     private fun getSigungu(sidoId: Long) {
         viewModelScope.launch {
-            getSigunguUseCase(uiState.value.selectedSido.id).onSuccess { result ->
+            getSigunguUseCase(sidoId).onSuccess { result ->
                 _uiState.update { it.copy(sigunguList = result) }
             }.onFailure {
                 Log.e(TAG, it.toString())
