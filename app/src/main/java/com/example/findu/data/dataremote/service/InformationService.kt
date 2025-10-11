@@ -4,6 +4,8 @@ import com.example.findu.data.dataremote.model.base.BaseResponse
 import com.example.findu.data.dataremote.model.response.home.HomeResponseDto
 import com.example.findu.data.dataremote.model.response.information.CentersResponseDto
 import com.example.findu.data.dataremote.model.response.information.DepartmentsResponseDto
+import com.example.findu.data.dataremote.model.response.information.SidoListDto
+import com.example.findu.data.dataremote.model.response.information.SigunguListDto
 import com.example.findu.data.dataremote.model.response.information.VolunteersResponseDto
 import com.example.findu.data.dataremote.util.ApiConstraints.API
 import com.example.findu.data.dataremote.util.ApiConstraints.INFORMATION
@@ -31,4 +33,11 @@ interface InformationService {
         @Query("district") district: String? = null,
         @Query("lastId") lastId: Long? = Long.MAX_VALUE,
     ): BaseResponse<DepartmentsResponseDto>
+
+    @GET("/$API/$VERSION/sidos")
+    suspend fun getSido(): BaseResponse<SidoListDto>
+
+    @GET("/$API/$VERSION/sigungus")
+    suspend fun getSigungu(
+        @Query("sidoId") sidoId: Long): BaseResponse<SigunguListDto>
 }

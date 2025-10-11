@@ -2,9 +2,8 @@ package com.example.findu.domain.usecase.extra
 
 import com.example.findu.domain.repository.InformationRepository
 
-class GetVolunteersUseCase(
+class GetSigunguUseCase (
     private val repository: InformationRepository
 ) {
-    suspend operator fun invoke(lastId: Long? = Long.MAX_VALUE) =
-        repository.getVolunteers(lastId)
+    suspend operator fun invoke(sidoId: Long): Result<List<String>> = repository.getSigungu(sidoId = sidoId)
 }

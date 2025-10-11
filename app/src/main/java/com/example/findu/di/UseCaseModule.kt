@@ -24,6 +24,8 @@ import com.example.findu.domain.usecase.auth.PostLoginUseCase
 import com.example.findu.domain.usecase.auth.PostSignupUseCase
 import com.example.findu.domain.usecase.extra.GetCentersUseCase
 import com.example.findu.domain.usecase.extra.GetDepartmentsUseCase
+import com.example.findu.domain.usecase.extra.GetSidoUseCase
+import com.example.findu.domain.usecase.extra.GetSigunguUseCase
 import com.example.findu.domain.usecase.extra.GetVolunteersUseCase
 import com.example.findu.domain.usecase.home.GetHomeUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
@@ -286,4 +288,16 @@ object UseCaseModule {
     fun providePostAiDetectBreedUseCase(
         breedRepository: BreedRepository,
     ): PostAiDetectionUseCase = PostAiDetectionUseCase(breedRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSidoUseCase(
+        informationRepository: InformationRepository
+    ): GetSidoUseCase = GetSidoUseCase(informationRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSigunguUseCase(
+        informationRepository: InformationRepository
+    ): GetSigunguUseCase = GetSigunguUseCase(informationRepository)
 }

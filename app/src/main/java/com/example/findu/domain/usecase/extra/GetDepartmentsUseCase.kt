@@ -1,11 +1,8 @@
 package com.example.findu.domain.usecase.extra
 
 import com.example.findu.domain.repository.InformationRepository
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class GetDepartmentsUseCase @Inject constructor(
+class GetDepartmentsUseCase(
     private val repository: InformationRepository
 ) {
     suspend operator fun invoke(

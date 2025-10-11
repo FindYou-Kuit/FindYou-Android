@@ -6,6 +6,7 @@ import com.example.findu.data.mapper.todomain.extra.toDomain
 import com.example.findu.domain.model.extra.Center
 import com.example.findu.domain.model.extra.Department
 import com.example.findu.domain.model.extra.PagedResult
+import com.example.findu.domain.model.extra.Sido
 import com.example.findu.domain.model.extra.VolunteerWork
 import com.example.findu.domain.repository.InformationRepository
 import javax.inject.Inject
@@ -45,4 +46,19 @@ class InformationRepositoryImpl @Inject constructor(
             .getOrThrow()
             .toDomain()
     }
+
+    override suspend fun getSido(): Result<List<Sido>> = runCatching {
+        remote.getSido()
+            .handleBaseResponse()
+            .getOrThrow()
+            .toDomain()
+    }
+
+    override suspend fun getSigungu(sidoId:Long): Result<List<String>> = runCatching {
+        remote.getSigungu(sidoId=sidoId)
+            .handleBaseResponse()
+            .getOrThrow()
+            .sigunguList
+    }
+
 }

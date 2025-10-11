@@ -69,12 +69,39 @@ class HomeExtraFragment : Fragment() {
                             is HomeExtraContent.Volunteers -> {
                                 ExtraHomeVolunteerScreen(volunteerWorks = content.list)
                             }
+
                             is HomeExtraContent.Departments -> {
-                                ExtraHomeDepartmentScreen(departments = content.list)
+                                ExtraHomeDepartmentScreen(
+                                    departments = content.list,
+                                    selectedSido = uiState.selectedSido,
+                                    selectedSigungu = uiState.selectedSigungu,
+                                    sidoList = uiState.sidoList,
+                                    sigunguList = uiState.sigunguList,
+                                    onSidoSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SidoSelected(it))
+                                    },
+                                    onSigunguSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
+                                    },
+                                )
                             }
+
                             is HomeExtraContent.Centers -> {
-                                ExtraHomeCenterScreen(centers = content.list)
+                                ExtraHomeCenterScreen(
+                                    centers = content.list,
+                                    selectedSido = uiState.selectedSido,
+                                    selectedSigungu = uiState.selectedSigungu,
+                                    sidoList = uiState.sidoList,
+                                    sigunguList = uiState.sigunguList,
+                                    onSidoSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SidoSelected(it))
+                                    },
+                                    onSigunguSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
+                                    },
+                                )
                             }
+
                             is HomeExtraContent.None -> Unit
                         }
                     }

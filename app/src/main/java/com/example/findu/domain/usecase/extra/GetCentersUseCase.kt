@@ -2,13 +2,9 @@ package com.example.findu.domain.usecase.extra
 
 import com.example.findu.domain.model.extra.Center
 import com.example.findu.domain.model.extra.PagedResult
-import com.example.findu.domain.model.extra.VolunteerWork
 import com.example.findu.domain.repository.InformationRepository
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class GetCentersUseCase @Inject constructor(
+class GetCentersUseCase (
     private val repository: InformationRepository
 ) {
     suspend operator fun invoke(

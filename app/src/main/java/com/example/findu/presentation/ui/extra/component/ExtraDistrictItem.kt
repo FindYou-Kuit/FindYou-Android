@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +31,11 @@ import com.example.findu.ui.theme.FindUTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExtraDistrictItem(
+fun <T> ExtraDistrictItem(
     selectedDistrict: String,
-    districtOptions: List<String>,
-    onDistrictSelected: (String) -> Unit,
+    districtOptions: List<T>,
+    onDistrictSelected: (T) -> Unit,
+    itemToString: (T) -> String,
     hint: String,
     modifier: Modifier = Modifier
 ) {
@@ -74,7 +73,7 @@ fun ExtraDistrictItem(
         ) {
             districtOptions.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(item) },
+                    text = { Text(itemToString(item)) },
                     onClick = {
                         onDistrictSelected(item)
                         expanded = false
@@ -92,15 +91,16 @@ fun ExtraDistrictItem(
 private fun ExtraDistrictItemPreview() {
     FindUTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            var selectedDistrict by remember { mutableStateOf("") }
+            var selectedItem by remember { mutableStateOf("") }
             val options = listOf("서울특별시", "부산광역시", "인천광역시", "제주자치도")
 
             Column(modifier = Modifier.fillMaxSize()) {
                 ExtraDistrictItem(
-                    selectedDistrict = selectedDistrict,
+                    selectedDistrict = selectedItem,
                     districtOptions = options,
                     hint = stringResource(R.string.home_extra_sido),
-                    onDistrictSelected = { selectedDistrict = it }
+                    onDistrictSelected = { selectedItem = it },
+                    itemToString = { it }
                 )
             }
         }

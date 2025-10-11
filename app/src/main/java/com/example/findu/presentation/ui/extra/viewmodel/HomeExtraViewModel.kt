@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.findu.domain.model.extra.Department
+import com.example.findu.domain.model.extra.Sido
 import com.example.findu.domain.usecase.extra.GetCentersUseCase
 import com.example.findu.domain.usecase.extra.GetDepartmentsUseCase
+import com.example.findu.domain.usecase.extra.GetSidoUseCase
+import com.example.findu.domain.usecase.extra.GetSigunguUseCase
 import com.example.findu.domain.usecase.extra.GetVolunteersUseCase
 import com.example.findu.presentation.model.HomeExtraContent
 import com.example.findu.presentation.type.HomeExtraButtonType
@@ -26,17 +28,20 @@ data class HomeExtraUiState(
     val loadState: LoadState = LoadState.Idle,
     val homeExtraButtonType: HomeExtraButtonType? = null,
     val content: HomeExtraContent = HomeExtraContent.None,
-    val selectedSido: String = "",
+    val selectedSido: Sido = Sido(id = 0, name = ""),
     val selectedSigungu: String = "",
-    val sidoList: List<String> = emptyList(),
+    val sidoList: List<Sido> = emptyList(),
     val sigunguList: List<String> = emptyList(),
-    )
+)
 
 sealed class HomeExtraUiEvent {
     data object LoadData : HomeExtraUiEvent()
     data class SetHomeExtraType(val homeExtraButtonType: HomeExtraButtonType) : HomeExtraUiEvent()
-    data class SetSelectedSido(val selectedSido: String) : HomeExtraUiEvent()
-    data class SetSelectedSigungu(val selectedSigungu: String) : HomeExtraUiEvent()
+    data object GetSido : HomeExtraUiEvent()
+
+    data class SidoSelected(val selectedSido: Sido) : HomeExtraUiEvent()
+
+    data class SigunguSelected(val selectedSigungu: String) : HomeExtraUiEvent()
 }
 
 sealed class HomeExtraUiEffect {
@@ -49,13 +54,16 @@ class HomeExtraViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getVolunteersUseCase: GetVolunteersUseCase,
     private val getCentersUseCase: GetCentersUseCase,
-    private val getDepartmentsUseCase: GetDepartmentsUseCase
+    private val getDepartmentsUseCase: GetDepartmentsUseCase,
+    private val getSidoUseCase: GetSidoUseCase,
+    private val getSigunguUseCase: GetSigunguUseCase
 ) : ViewModel() {
 
     companion object {
         private const val TAG = "HomeExtraViewModel"
 
         private const val HOME_EXTRA_TYPE = "homeExtraType"
+        private const val EMPTY_STRING = ""
     }
 
 
@@ -70,12 +78,18 @@ class HomeExtraViewModel @Inject constructor(
             is HomeExtraUiEvent.SetHomeExtraType -> {
                 _uiState.update { it.copy(homeExtraButtonType = event.homeExtraButtonType) }
             }
-            is HomeExtraUiEvent.SetSelectedSido -> {
-                _uiState.update { it.copy(selectedSido = event.selectedSido) }
+
+            is HomeExtraUiEvent.SidoSelected -> {
+                _uiState.update { it.copy(selectedSido = event.selectedSido, selectedSigungu = EMPTY_STRING) }
+                getSigungu(event.selectedSido.id)
             }
-            is HomeExtraUiEvent.SetSelectedSigungu -> {
+
+            is HomeExtraUiEvent.SigunguSelected -> {
                 _uiState.update { it.copy(selectedSigungu = event.selectedSigungu) }
+                loadData()
             }
+
+            is HomeExtraUiEvent.GetSido -> getSido()
         }
     }
 
@@ -83,6 +97,9 @@ class HomeExtraViewModel @Inject constructor(
         val type: HomeExtraButtonType? = savedStateHandle[HOME_EXTRA_TYPE]
         type?.let {
             handleEvent(HomeExtraUiEvent.SetHomeExtraType(it))
+        }
+        if (type != HomeExtraButtonType.VOLUNTEER) {
+            handleEvent(HomeExtraUiEvent.GetSido)
         }
     }.stateIn(
         scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = HomeExtraUiState()
@@ -93,72 +110,9 @@ class HomeExtraViewModel @Inject constructor(
             _uiState.update { it.copy(loadState = LoadState.Loading) }
 
             when (uiState.value.homeExtraButtonType) {
-                HomeExtraButtonType.PROTECT_CENTER -> {
-                    getCentersUseCase().fold(
-                        onSuccess = { list ->
-                            _uiState.update {
-                                it.copy(
-                                    loadState = LoadState.Success,
-                                    content = HomeExtraContent.Centers(list.items)
-                                )
-                            }
-                        },
-                        onFailure = { e ->
-                            Log.e(TAG, e.toString())
-                            _uiState.update {
-                                it.copy(
-                                    loadState = LoadState.Error,
-                                    content = HomeExtraContent.None
-                                )
-                            }
-                        }
-                    )
-                }
-
-                HomeExtraButtonType.PROTECT_DEPARTMENT -> {
-                    getDepartmentsUseCase().fold(
-                        onSuccess = { list ->
-                            _uiState.update {
-                                it.copy(
-                                    loadState = LoadState.Success,
-                                    content = HomeExtraContent.Departments(list.items)
-                                )
-                            }
-                        },
-                        onFailure = { e ->
-                            Log.e(TAG, e.toString())
-                            _uiState.update {
-                                it.copy(
-                                    loadState = LoadState.Error,
-                                    content = HomeExtraContent.None
-                                )
-                            }
-                        }
-                    )
-                }
-
-                HomeExtraButtonType.VOLUNTEER -> {
-                    getVolunteersUseCase().fold(
-                        onSuccess = { list ->
-                            _uiState.update {
-                                it.copy(
-                                    loadState = LoadState.Success,
-                                    content = HomeExtraContent.Volunteers(list.items)
-                                )
-                            }
-                        },
-                        onFailure = { e ->
-                            Log.e(TAG, e.toString())
-                            _uiState.update {
-                                it.copy(
-                                    loadState = LoadState.Error,
-                                    content = HomeExtraContent.None
-                                )
-                            }
-                        }
-                    )
-                }
-
+                HomeExtraButtonType.PROTECT_CENTER -> getCenters()
+                HomeExtraButtonType.PROTECT_DEPARTMENT -> getDepartments()
+                HomeExtraButtonType.VOLUNTEER -> getVolunteers()
                 null -> {
                     _uiState.update {
                         it.copy(
@@ -167,6 +121,100 @@ class HomeExtraViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+        }
+    }
+
+
+    private fun getCenters() {
+        viewModelScope.launch {
+            getCentersUseCase().fold(
+                onSuccess = { list ->
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Success,
+                            content = HomeExtraContent.Centers(list.items)
+                        )
+                    }
+                },
+                onFailure = { e ->
+                    Log.e(TAG, e.toString())
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Error,
+                            content = HomeExtraContent.None
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    private fun getDepartments() {
+        viewModelScope.launch {
+            getDepartmentsUseCase(district = uiState.value.selectedSido.name + uiState.value.selectedSigungu).fold(
+                onSuccess = { list ->
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Success,
+                            content = HomeExtraContent.Departments(list.items)
+                        )
+                    }
+                },
+                onFailure = { e ->
+                    Log.e(TAG, e.toString())
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Error,
+                            content = HomeExtraContent.None
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+
+    private fun getVolunteers() {
+        viewModelScope.launch {
+            getVolunteersUseCase().fold(
+                onSuccess = { list ->
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Success,
+                            content = HomeExtraContent.Volunteers(list.items)
+                        )
+                    }
+                },
+                onFailure = { e ->
+                    Log.e(TAG, e.toString())
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Error,
+                            content = HomeExtraContent.None
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    private fun getSido() {
+        viewModelScope.launch {
+            getSidoUseCase().onSuccess { result ->
+                _uiState.update { it.copy(sidoList = result) }
+            }.onFailure {
+                Log.e(TAG, it.toString())
+            }
+        }
+    }
+
+    private fun getSigungu(sidoId: Long) {
+        viewModelScope.launch {
+            getSigunguUseCase(uiState.value.selectedSido.id).onSuccess { result ->
+                _uiState.update { it.copy(sigunguList = result) }
+            }.onFailure {
+                Log.e(TAG, it.toString())
             }
         }
     }

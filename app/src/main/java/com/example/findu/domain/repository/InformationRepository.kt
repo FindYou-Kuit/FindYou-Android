@@ -3,6 +3,7 @@ package com.example.findu.domain.repository
 import com.example.findu.domain.model.extra.Center
 import com.example.findu.domain.model.extra.Department
 import com.example.findu.domain.model.extra.PagedResult
+import com.example.findu.domain.model.extra.Sido
 import com.example.findu.domain.model.extra.VolunteerWork
 
 interface InformationRepository {
@@ -23,4 +24,9 @@ interface InformationRepository {
         district: String? = null,
         lastId: Long? = Long.MAX_VALUE
     ): Result<PagedResult<Department>>
+
+    suspend fun getSido(): Result<List<Sido>>
+
+    suspend fun getSigungu(sidoId:Long): Result<List<String>>
+
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
 import com.example.findu.domain.model.extra.Center
+import com.example.findu.domain.model.extra.Sido
 import com.example.findu.presentation.ui.base.FindUTopAppBar
 import com.example.findu.presentation.ui.extra.component.ExtraCenterItem
 import com.example.findu.presentation.ui.extra.component.ExtraDistrictItem
@@ -30,11 +31,11 @@ import com.example.findu.ui.theme.FindUTheme
 @Composable
 fun ExtraHomeCenterScreen(
     centers: List<Center>,
-    selectedSido: String,
+    selectedSido: Sido,
     selectedSigungu: String,
-    sidoList: List<String>,
+    sidoList: List<Sido>,
     sigunguList: List<String>,
-    onSidoSelected: (String) -> Unit,
+    onSidoSelected: (Sido) -> Unit,
     onSigunguSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,10 +49,11 @@ fun ExtraHomeCenterScreen(
         Row(modifier = Modifier.padding(20.dp)) {
             ExtraDistrictItem(
                 modifier = Modifier.weight(1f),
-                selectedDistrict = selectedSido,
+                selectedDistrict =  selectedSido.name ,
                 districtOptions = sidoList,
                 onDistrictSelected = onSidoSelected,
-                hint = stringResource(R.string.home_extra_sido)
+                hint = stringResource(R.string.home_extra_sido),
+                itemToString = {it.name }
             )
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -60,7 +62,9 @@ fun ExtraHomeCenterScreen(
                 selectedDistrict = selectedSigungu,
                 districtOptions = sigunguList,
                 onDistrictSelected = onSigunguSelected,
-                hint = stringResource(R.string.home_extra_sigungu)
+                hint = stringResource(R.string.home_extra_sigungu),
+                itemToString = {it}
+
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -121,7 +125,7 @@ private fun ExtraHomeCenterScreenPreview() {
         sigunguList = emptyList(),
         onSidoSelected = {},
         onSigunguSelected = {},
-        selectedSido = "",
+        selectedSido = Sido(id = 0 , name = ""),
         selectedSigungu = "",
     )
 }
