@@ -136,33 +136,23 @@ class MyViewModel @Inject constructor(
     }
 
 
-    fun updateProfileImage(enumName: String) {
+    fun updateProfileImageFromGallery(uri: Uri) {
         viewModelScope.launch {
-            val requestBody = enumName.toRequestBody("text/plain".toMediaType())
-            patchProfileImageFileUseCase.uploadDefault(requestBody).fold(
+            patchProfileImageFileUseCase.uploadFile(uri.path!!).fold(
                 onSuccess = {
-                    fetchMyProfile()
-                },
-                onFailure = {
-                    _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류가 발생했습니다."
-                }
+                    fetchMyProfile() },
+                onFailure = { _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생" }
             )
         }
     }
 
-    fun updateProfileImageFromGallery(uri: Uri) {
-        _selectedProfileImageUri.value = uri
-
+    fun updateProfileImage(enumName: String) {
         viewModelScope.launch {
-
-//            patchProfileImageFileUseCase.uploadFile(multipartBody).fold(
-//                onSuccess = {
-//                    fetchMyProfile()
-//                },
-//                onFailure = {
-//                    _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류가 발생했습니다."
-//                }
-//            )
+            patchProfileImageFileUseCase.uploadDefault(enumName).fold(
+                onSuccess = {
+                    fetchMyProfile() },
+                onFailure = { _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생" }
+            )
         }
     }
 
@@ -178,11 +168,11 @@ class MyViewModel @Inject constructor(
 
             patchNickNameUseCase(newNickName).fold(
                 onSuccess = {
-                    Log.d("MyViewModel", "닉네임 변경 성공 ✅")
-                    fetchMyProfile() // 성공 시 프로필 다시 불러오기
+                    Log.d("MyViewModel", "닉네임 변경 성공")
+                    fetchMyProfile()
                 },
                 onFailure = { e ->
-                    Log.e("MyViewModel", "닉네임 변경 실패 ❌: ${e.message}", e)
+                    Log.e("MyViewModel", "닉네임 변경 실패 : ${e.message}", e)
                     _errorMessage.value = e.message ?: "닉네임 변경 중 오류가 발생했습니다."
                 }
             )

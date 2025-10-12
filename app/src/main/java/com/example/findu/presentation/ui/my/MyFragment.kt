@@ -29,6 +29,7 @@ import com.example.findu.presentation.ui.my.dialog.MyLogoutDialog
 import com.example.findu.presentation.ui.my.dialog.MyNicknameDialog
 import com.example.findu.presentation.ui.my.dialog.MyProfileImageDialog
 import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
+import com.example.findu.presentation.ui.my.model.ProfileImageType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -211,9 +212,17 @@ class MyFragment : Fragment() {
                             binding.tvMyNickname.text = it.nickname
                             binding.etMyNickname.setText(it.nickname)
 
-                            Glide.with(this@MyFragment)
-                                .load(it.profileImage)
-                                .into(binding.ivMyIllust)
+                            val imageSource = it.profileImage
+                            if (imageSource.startsWith("http")) {
+                                Glide.with(this@MyFragment)
+                                    .load(imageSource)
+                                    .into(binding.ivMyIllust)
+                            } else {
+                                val type = ProfileImageType.fromServerName(imageSource)
+                                Glide.with(this@MyFragment)
+                                    .load(type.drawableRes)
+                                    .into(binding.ivMyIllust)
+                            }
                         }
                     }
                 }

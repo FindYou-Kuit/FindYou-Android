@@ -1,5 +1,6 @@
 package com.example.findu.domain.repository
 
+import android.net.Uri
 import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.domain.model.my.MyInterestData
 import com.example.findu.domain.model.my.MyProfileData
@@ -27,8 +28,8 @@ interface MyRepository {
 
     suspend fun getNickname(): Result<MyProfileData>
 
-    suspend fun patchProfileImageFile(file: MultipartBody.Part): Result<Unit>
+    suspend fun patchProfileImageFile(imagePath: String): Result<Unit>
 
-    suspend fun patchProfileImageDefault(defaultProfileImageName: RequestBody): Result<Unit>
+    suspend fun patchProfileImageDefault(defaultProfileImageName: String): Result<Unit>
 
 }
