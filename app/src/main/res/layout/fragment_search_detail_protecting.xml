@@ -438,7 +438,7 @@
                             android:textColor="@color/gray5" />
 
                         <TextView
-                            android:id="@+id/tv_value_phone_number"
+                            android:id="@+id/tv_value_found_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/search_detail_found_date_value"

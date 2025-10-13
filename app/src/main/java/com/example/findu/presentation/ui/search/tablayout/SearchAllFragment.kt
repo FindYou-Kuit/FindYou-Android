@@ -59,6 +59,7 @@ class SearchAllFragment : Fragment(), SearchListListener {
         observeFilterResult()
         viewModel.getSearchData(SearchType.ALL, lastId)
     }
+
     private fun observeFilterResult() {
         findNavController().currentBackStackEntry
             ?.savedStateHandle
@@ -162,6 +163,7 @@ class SearchAllFragment : Fragment(), SearchListListener {
             SearchFragmentDirections.actionFragmentSearchToFragmentSearchFilter(SearchType.ALL)
         findNavController().navigate(action)
     }
+
     private fun initRVAdapter() {
         listAdapter = SearchListAdapter(this)
         binding.rvSearchAll.apply {
@@ -219,16 +221,24 @@ class SearchAllFragment : Fragment(), SearchListListener {
         _binding = null
     }
 
-    override fun onFilterClick() =  navigateToFilter()
+    // 필터 버튼 클릭 시 검색 필터 화면으로 이동
+    override fun onFilterClick() = navigateToFilter()
+
+    // 정렬 버튼 클릭 시 리스트 모드 전환
     override fun onToggleClick() = toggleLayoutMode()
+
+    // 아이템 항목 클릭 시 상세 화면으로 이동
     override fun onItemClick(item: SearchRv) =
         navigateToDetail(item.reportId, item.tag.text, item.name)
 
+    // 관심 등록/해제 버튼 클릭 시 상태 반영
     override fun onBookmarkClick(id: Long, isBookmark: Boolean, tag: String) =
         viewModel.setInterest(id, isBookmark, tag)
 
+    // 상단 배너 클릭 시 정보 화면으로 이동
     override fun onBannerClick() =
         findNavController().navigate(R.id.action_fragment_search_to_adoptInfoFragment)
 
+    // 배너에 사용할 이미지 리소스 반환
     override fun getBannerRes(): Int = R.drawable.img_search_banner_adopt
 }

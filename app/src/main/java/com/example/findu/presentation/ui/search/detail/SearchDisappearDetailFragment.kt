@@ -45,19 +45,24 @@ class SearchDisappearDetailFragment : Fragment() {
     private var isBookmarked = false
 
     private var naverMap: NaverMap? = null
+    private var pendingLocation: LatLng? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentSearchDetailDisappearBinding.inflate(layoutInflater)
-
+        binding = FragmentSearchDetailDisappearBinding.inflate(inflater, container, false)
         binding.mapView.onCreate(savedInstanceState)
+
         binding.mapView.getMapAsync { nMap ->
             naverMap = nMap
+            pendingLocation?.let { location ->
+                setupMap(location.latitude, location.longitude)
+            }
         }
         return binding.root
     }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,10 +85,16 @@ class SearchDisappearDetailFragment : Fragment() {
 
     private fun setupMap(lat: Double, lon: Double) {
         val location = LatLng(lat, lon)
-        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
+        val map = naverMap
+        if (map == null) {
+            pendingLocation = location
+            return
+        }
+        pendingLocation = null
+        map.moveCamera(CameraUpdate.scrollTo(location))
         Marker().apply {
             position = location
-            map = naverMap
+            this.map = map
             icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
             height = 23
         }
@@ -92,7 +103,7 @@ class SearchDisappearDetailFragment : Fragment() {
 
     private fun fetchDetailData() {
         when (tag) {
-            "목격신고", "실종신고" -> viewModel.getDetailSearchMissing(cardId)
+            "실종신고" -> viewModel.getDetailSearchMissing(cardId)
             else -> {
                 Toast.makeText(requireContext(), "잘못된 태그 값입니다.", Toast.LENGTH_SHORT).show()
                 requireActivity().supportFragmentManager.popBackStack()

@@ -52,6 +52,9 @@ class SearchProtectingDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        binding = FragmentSearchDetailProtectingBinding.inflate(layoutInflater)
+        binding.mapView.onCreate(savedInstanceState)
+
         binding.mapView.getMapAsync { nMap ->
             naverMap = nMap
             pendingLocation?.let { location ->
@@ -131,7 +134,8 @@ class SearchProtectingDetailFragment : Fragment() {
             tvValueAge.text = data.age
             tvValueWeight.text = data.weight
             tvValueGender.text = data.sex
-            tvValueNeuter.text = data.foundDate
+            tvValueNeuter.text = data.noticeNumber
+            tvValueFoundDate.text = data.foundDate
             tvValueHairColor.text = data.furColor
             tvSpecialNote.text = data.significant
             tvShelterLocation.text = data.careAddr

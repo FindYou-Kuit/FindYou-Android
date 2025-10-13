@@ -5,14 +5,15 @@ import com.example.findu.data.dataremote.model.response.search.SearchResponseDto
 import com.example.findu.domain.model.search.SearchAnimal
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.model.search.SearchStatus
-import com.example.findu.domain.model.search.toSearchStatus
 import com.example.findu.presentation.ui.search.model.SearchRvTag
 
-fun SearchResponseDto.toDomain(): SearchData {
-    return SearchData(
-        cards = this.cards.map { it.toDomain() },
-        lastId = this.lastId ?: -1,
-        isLast = this.isLast
+fun SearchResponseDto.toDomain(): List<SearchData> {
+    return listOf(
+        SearchData(
+            cards = this.cards.map { it.toDomain() },
+            lastId = this.lastId ?: -1,
+            isLast = this.isLast
+        )
     )
 }
 

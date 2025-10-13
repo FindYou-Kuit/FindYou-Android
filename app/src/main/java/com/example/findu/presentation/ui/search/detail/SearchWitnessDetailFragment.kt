@@ -44,6 +44,7 @@ class SearchWitnessDetailFragment : Fragment() {
     private var isBookmarked = false
 
     private var naverMap: NaverMap? = null
+    private var pendingLocation: LatLng? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +54,9 @@ class SearchWitnessDetailFragment : Fragment() {
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync { nMap ->
             naverMap = nMap
+            pendingLocation?.let { location ->
+                setupMap(location.latitude, location.longitude)
+            }
         }
         return binding.root
     }
@@ -79,10 +83,16 @@ class SearchWitnessDetailFragment : Fragment() {
 
     private fun setupMap(lat: Double, lon: Double) {
         val location = LatLng(lat, lon)
-        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
+        val map = naverMap
+        if (map == null) {
+            pendingLocation = location
+            return
+        }
+        pendingLocation = null
+        map.moveCamera(CameraUpdate.scrollTo(location))
         Marker().apply {
             position = location
-            map = naverMap
+            this.map = map
             icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
             height = 23
         }

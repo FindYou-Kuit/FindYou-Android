@@ -1,7 +1,6 @@
 package com.example.findu.presentation.ui.my
 
 import android.net.Uri
-import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
@@ -14,7 +13,7 @@ import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
 import com.example.findu.domain.usecase.report.DeleteReportUseCase
-import com.example.findu.presentation.mapper.torvmodel.toRvModel
+import com.example.findu.presentation.mapper.todomain.toRvModel
 import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.model.MyViewedAnimalsRv

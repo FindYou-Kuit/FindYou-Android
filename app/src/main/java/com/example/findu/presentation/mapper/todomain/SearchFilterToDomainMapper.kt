@@ -1,4 +1,4 @@
-package com.example.findu.presentation.mapper.torvmodel
+package com.example.findu.presentation.mapper.todomain
 
 import com.example.findu.domain.model.search.SearchFilterData
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel

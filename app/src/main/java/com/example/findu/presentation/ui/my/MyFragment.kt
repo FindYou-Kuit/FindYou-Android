@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.findu.BuildConfig
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
 import com.example.findu.presentation.ui.login.LoginActivity
@@ -65,6 +63,12 @@ class MyFragment : Fragment() {
         myViewModel.fetchNickName()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeViewModel()
     }
 
     private fun initListener() {
@@ -171,22 +175,31 @@ class MyFragment : Fragment() {
     }
 
     private fun setupVersion() = with(binding) {
-        val currentVersion = BuildConfig.VERSION_NAME
-        val latest = "1.0"
-        tvMyVersionInfo.text = "버전 정보 $currentVersion"
-
-        val currentNumeric = currentVersion.replace(".", "").toIntOrNull() ?: 0
-        val latestNumeric = latest.replace(".", "").toIntOrNull() ?: 0
-        val isLatest = currentNumeric >= latestNumeric
-
-        clMyVersionChip.isVisible = isLatest
-        clMyGotoUpdate.isVisible = !isLatest
+//        val currentVersion = BuildConfig.VERSION_NAME
+//        val latest = remoteConfig.getString("latest_app_version")
+//        tvMyVersionInfo.text = "버전 정보 $currentVersion"
+//
+//        val isLatest = isCurrentVersionLatest(currentVersion, latest)
+//
+//        clMyVersionChip.isVisible = isLatest
+//        clMyGotoUpdate.isVisible = !isLatest
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun isCurrentVersionLatest(current: String, latest: String): Boolean {
+        val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
+        val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
+        val maxLength = maxOf(currentParts.size, latestParts.size)
 
-        observeViewModel()
+        for (i in 0 until maxLength) {
+            val currentPart = currentParts.getOrNull(i) ?: 0
+            val latestPart = latestParts.getOrNull(i) ?: 0
+
+            when {
+                currentPart > latestPart -> return true
+                currentPart < latestPart -> return false
+            }
+        }
+        return true
     }
 
     private fun observeViewModel() {

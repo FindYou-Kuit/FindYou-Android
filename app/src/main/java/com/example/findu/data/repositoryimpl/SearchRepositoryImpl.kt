@@ -17,12 +17,10 @@ class SearchRepositoryImpl @Inject constructor(
         lastId: Long,
     ): Result<List<SearchData>> =
         runCatching {
-            listOf(
-                searchRemoteDataSource.getReports(
-                    type = type,
-                    searchFilterData = searchFilterData,
-                    lastId = lastId
-                ).handleBaseResponse().getOrThrow().toDomain()
-            )
+            searchRemoteDataSource.getReports(
+                type = type,
+                searchFilterData = searchFilterData,
+                lastId = lastId
+            ).handleBaseResponse().getOrThrow().toDomain()
         }
 }
