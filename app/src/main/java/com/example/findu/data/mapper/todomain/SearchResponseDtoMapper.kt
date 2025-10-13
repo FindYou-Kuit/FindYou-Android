@@ -2,9 +2,6 @@ package com.example.findu.data.mapper.todomain
 
 import com.example.findu.data.dataremote.model.response.search.SearchAnimalCard
 import com.example.findu.data.dataremote.model.response.search.SearchResponseDto
-import com.example.findu.data.dataremote.model.response.SearchAnimalCard
-import com.example.findu.data.dataremote.model.response.SearchResponseDto
-import com.example.findu.data.mapper.todomain.home.toDomain
 import com.example.findu.domain.model.search.SearchAnimal
 import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.model.search.SearchStatus

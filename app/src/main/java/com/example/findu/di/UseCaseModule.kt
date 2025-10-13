@@ -28,10 +28,6 @@ import com.example.findu.domain.usecase.extra.GetSidoUseCase
 import com.example.findu.domain.usecase.extra.GetSigunguUseCase
 import com.example.findu.domain.usecase.extra.GetVolunteersUseCase
 import com.example.findu.domain.usecase.home.GetHomeUseCase
-import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
