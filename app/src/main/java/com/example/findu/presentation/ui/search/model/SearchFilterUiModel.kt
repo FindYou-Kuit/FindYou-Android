@@ -14,9 +14,9 @@ data class SearchFilterUiModel(
 
 fun SearchFilterUiModel.toDomain(): SearchFilterData {
     val koreanSpecies = when (this.species) {
-        SpeciesType.DOG.name -> SpeciesType.DOG.species
-        SpeciesType.CAT.name -> SpeciesType.CAT.species
-        SpeciesType.ETC.name -> SpeciesType.ETC.species
+        SpeciesType.DOG.name -> SpeciesType.DOG.displayName
+        SpeciesType.CAT.name -> SpeciesType.CAT.displayName
+        SpeciesType.ETC.name -> SpeciesType.ETC.displayName
         else -> null
     }
     return SearchFilterData(
