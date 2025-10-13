@@ -61,26 +61,57 @@ class HomeExtraFragment : Fragment() {
                     homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
                 }
 
-
-
-
                 when (uiState.loadState) {
                     LoadState.Idle -> Unit
                     LoadState.Loading -> Unit
                     LoadState.Success -> {
                         when (val content = uiState.content) {
                             is HomeExtraContent.Volunteers -> {
-                                ExtraHomeVolunteerScreen(volunteerWorks = content.list)
+                                ExtraHomeVolunteerScreen(
+                                    volunteerWorks = content.list,
+                                    popBackStack = { findNavController().popBackStack() })
                             }
 
                             is HomeExtraContent.Departments -> {
-                                ExtraHomeDepartmentScreen(departments = content.list)
+                                ExtraHomeDepartmentScreen(
+                                    departments = content.list,
+                                    selectedSido = uiState.selectedSido,
+                                    selectedSigungu = uiState.selectedSigungu,
+                                    sidoList = uiState.sidoList,
+                                    sigunguList = uiState.sigunguList,
+                                    onSidoSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SidoSelected(it))
+                                    },
+                                    onSigunguSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
+                                    },
+                                    popBackStack = { findNavController().popBackStack() }
+                                )
                             }
 
-                            HomeExtraContent.None -> Unit
                             is HomeExtraContent.Centers -> {
-                                ExtraHomeCenterScreen(centers = content.list)
+                                ExtraHomeCenterScreen(
+                                    centers = content.list,
+                                    selectedSido = uiState.selectedSido,
+                                    selectedSigungu = uiState.selectedSigungu,
+                                    sidoList = uiState.sidoList,
+                                    sigunguList = uiState.sigunguList,
+                                    onSidoSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SidoSelected(it))
+                                    },
+                                    onSigunguSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
+                                    },
+                                    popBackStack = { findNavController().popBackStack() },
+                                    latitude = uiState.latitude,
+                                    longitude = uiState.longitude,
+                                    searchCurrentLocation = { centerLatLng ->
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SearchCenterFocusedLatLng(centerLatLng))
+                                    }
+                                )
                             }
+
+                            is HomeExtraContent.None -> Unit
                         }
                     }
 

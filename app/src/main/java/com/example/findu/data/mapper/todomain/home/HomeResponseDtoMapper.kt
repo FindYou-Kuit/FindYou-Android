@@ -1,11 +1,10 @@
-package com.example.findu.data.mapper.todomain
+package com.example.findu.data.mapper.todomain.home
 
-import com.example.findu.data.dataremote.model.response.HomeResponseDto
-import com.example.findu.data.dataremote.model.response.PeriodStatisticsDto
-import com.example.findu.data.dataremote.model.response.ProtectingAnimal
-import com.example.findu.data.dataremote.model.response.Statistics
-import com.example.findu.data.dataremote.model.response.WitnessedOrMissingAnimal
-
+import com.example.findu.data.dataremote.model.response.home.HomeResponseDto
+import com.example.findu.data.dataremote.model.response.home.PeriodStatisticsDto
+import com.example.findu.data.dataremote.model.response.home.ProtectingAnimal
+import com.example.findu.data.dataremote.model.response.home.Statistics
+import com.example.findu.data.dataremote.model.response.home.WitnessedOrMissingAnimal
 import com.example.findu.domain.model.HomeData
 import com.example.findu.domain.model.HomeStatistics
 import com.example.findu.domain.model.PeriodStatistics

@@ -23,4 +23,16 @@ data class Center(
     val centerName: String,
     val phoneNumber: String,
     val address: String
+) : HomeExtraDataType
+
+
+data class PagedResult<T>(
+    val items: List<T>,
+    val lastId: Long?,
+    val isLast: Boolean
+)
+
+data class Sido(
+    val id: Long,
+    val name: String
 )
