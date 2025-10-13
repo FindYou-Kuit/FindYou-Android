@@ -1,13 +1,14 @@
 package com.example.findu.presentation.ui.search.tablayout
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,20 +17,22 @@ import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchReportBinding
 import com.example.findu.domain.model.search.SearchAnimal
-import com.example.findu.domain.model.search.SearchStatus
-import com.example.findu.presentation.ui.search.BundleTag.FILTER_RESULTS
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
-import com.example.findu.presentation.ui.search.model.DummyProvider
+import com.example.findu.presentation.ui.search.adapter.SearchListListener
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
+import com.example.findu.presentation.ui.search.model.SearchType
 import com.example.findu.presentation.ui.search.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchReportFragment : Fragment() {
+class SearchReportFragment : Fragment(), SearchListListener {
 
     private var _binding: FragmentSearchReportBinding? = null
     private val binding get() = _binding!!
@@ -50,59 +53,72 @@ class SearchReportFragment : Fragment() {
     ): View {
         _binding = FragmentSearchReportBinding.inflate(inflater, container, false)
         initRVAdapter()
-//        observeViewModel()
-//        viewModel.getSearchReportData()
-        initDummyItems()
-        setupRV(items)
-
         return binding.root
     }
 
-    @SuppressLint("VisibleForTests")
-    private fun initDummyItems() {
-        items.addAll(DummyProvider.getDummyAnimals())
-        items.addAll(DummyProvider.getDummyAnimals())
-        items.addAll(DummyProvider.getDummyAnimals())
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
+        observeFilterResult()
 
-        childFragmentManager.setFragmentResultListener(
-            FILTER_RESULTS,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            val selected: SearchFilterUiModel? =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    bundle.getSerializable(SELECTED_FILTER_DATA, SearchFilterUiModel::class.java)
-                } else {
-                    @Suppress("DEPRECATION")
-                    bundle.getSerializable(SELECTED_FILTER_DATA) as? SearchFilterUiModel
+        viewModel.getSearchData(SearchType.REPORTING, lastReportId)
+    }
+
+    private fun observeFilterResult() {
+        findNavController().currentBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<SearchFilterUiModel>(SELECTED_FILTER_DATA)
+            ?.observe(viewLifecycleOwner) { selected ->
+                Log.d("SearchFilter", "필터 수신됨: $selected")
+
+                viewModel.updateReportFilterState(selected)
+                isNewList = true
+                lastReportId = Long.MAX_VALUE
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(50)
+                    viewModel.getSearchData(SearchType.REPORTING, lastReportId)
                 }
 
-            viewModel.updateReportFilterState(selected)
+                findNavController().currentBackStackEntry
+                    ?.savedStateHandle
+                    ?.remove<SearchFilterUiModel>(SELECTED_FILTER_DATA)
+            }
+    }
 
-            isNewList = true
-            lastReportId = Long.MAX_VALUE
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.reportSearchData.collectLatest { searchResults ->
+                if (!searchResults.isNullOrEmpty()) {
+                    val animals = searchResults.flatMap { it.cards }
+                    setupRV(animals)
+                    lastReportId = searchResults.last().lastId
+                } else {
+                    setupRV(emptyList())
+                    lastReportId = Long.MAX_VALUE
+                }
+            }
+        }
 
-            listAdapter.submitList(emptyList())
-            binding.rvSearchReport.scrollToPosition(0)
-
-            viewModel.getSearchReportData()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.errorMessage.collectLatest { errorMessage ->
+                errorMessage?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
     private fun setupRV(searchDataList: List<SearchAnimal>) {
         val searchList = searchDataList.map { item ->
             SearchRv(
-                image = item.thumbnailImageUrl,
+                image = item.thumbnailImageUrl ?: "",
                 name = item.title,
                 date = item.date,
-                address = item.location,
+                location = item.location,
                 isBookmark = item.interest,
                 tag = item.tag.toSearchRvTag(),
-                cardId = item.cardId
+                reportId = item.reportId
             )
         }
 
@@ -147,21 +163,18 @@ class SearchReportFragment : Fragment() {
 
 
     private fun navigateToFilter() {
-        findNavController().navigate(R.id.action_fragment_search_to_fragment_search_filter)
+        val action = SearchFragmentDirections
+            .actionFragmentSearchToFragmentSearchFilter(SearchType.REPORTING)
+        findNavController().navigate(action)
     }
 
 
     private fun initRVAdapter() {
-        listAdapter = SearchListAdapter(
-            onFilterClick = { navigateToFilter() },
-            onToggleClick = { toggleLayoutMode() },
-            onItemClick = { item -> navigateToDetail(item.cardId, item.tag.text, item.name) },
-            onBookmarkClick = { cardId, isBookmark, tag -> viewModel.setInterest(cardId, isBookmark, tag) }
-        )
-
+        listAdapter = SearchListAdapter(this)
         binding.rvSearchReport.apply {
             adapter = listAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             setHasFixedSize(true)
             itemAnimator = null
         }
@@ -176,7 +189,7 @@ class SearchReportFragment : Fragment() {
                 val total = (recyclerView.adapter?.itemCount ?: 1) - 1
                 //페이징 처리
                 if (lastPos == total) {
-                    viewModel.getSearchReportData(lastReportId)
+                    viewModel.getSearchData(SearchType.REPORTING, lastReportId)
                 }
             }
         })
@@ -211,5 +224,26 @@ class SearchReportFragment : Fragment() {
         binding.rvSearchReport.adapter = null
         _binding = null
     }
+
+    // 필터 버튼 클릭 시 검색 필터 화면으로 이동
+    override fun onFilterClick() = navigateToFilter()
+
+    // 정렬 버튼 클릭 시 리스트 모드 전환
+    override fun onToggleClick() = toggleLayoutMode()
+
+    // 아이템 항목 클릭 시 상세 화면으로 이동
+    override fun onItemClick(item: SearchRv) =
+        navigateToDetail(item.reportId, item.tag.text, item.name)
+
+    // 관심 등록/해제 버튼 클릭 시 상태 반영
+    override fun onBookmarkClick(id: Long, isBookmark: Boolean, tag: String) =
+        viewModel.setInterest(id, isBookmark, tag)
+
+    // 상단 배너 클릭 시 정보 화면으로 이동
+    override fun onBannerClick() =
+        findNavController().navigate(R.id.action_fragment_search_to_reportInfoFragment)
+
+    // 배너에 사용할 이미지 리소스 반환
+    override fun getBannerRes(): Int = R.drawable.img_search_banner_witness
 
 }

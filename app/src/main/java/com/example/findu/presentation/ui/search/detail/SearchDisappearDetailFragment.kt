@@ -1,45 +1,42 @@
 package com.example.findu.presentation.ui.search.detail
 
 import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.example.findu.R
 import com.example.findu.data.mapper.todomain.toDetailSearchRvTag
+import com.example.findu.data.mapper.todomain.toDetailSearchStatus
 import com.example.findu.databinding.FragmentSearchDetailDisappearBinding
-import com.example.findu.domain.model.search.DetailReportData
+import com.example.findu.domain.model.search.DetailMissingData
 import com.example.findu.presentation.ui.search.adapter.SearchDetailVPAdapter
-import com.example.findu.presentation.ui.search.viewmodel.DetailReportViewModel
-import com.google.android.material.chip.Chip
+import com.example.findu.presentation.ui.search.viewmodel.DetailSearchViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SearchDisappearDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchDetailDisappearBinding
-    private val viewModel by viewModels<DetailReportViewModel>()
+    private val viewModel by viewModels<DetailSearchViewModel>()
     private var cardId: Long = -1
     private var tag: String? = null
     private var name: String? = null
@@ -47,21 +44,25 @@ class SearchDisappearDetailFragment : Fragment() {
     private val args: SearchDisappearDetailFragmentArgs by navArgs()
     private var isBookmarked = false
 
-    private lateinit var mapView: MapView
     private var naverMap: NaverMap? = null
+    private var pendingLocation: LatLng? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentSearchDetailDisappearBinding.inflate(layoutInflater)
-
+        binding = FragmentSearchDetailDisappearBinding.inflate(inflater, container, false)
         binding.mapView.onCreate(savedInstanceState)
+
         binding.mapView.getMapAsync { nMap ->
             naverMap = nMap
+            pendingLocation?.let { location ->
+                setupMap(location.latitude, location.longitude)
+            }
         }
         return binding.root
     }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,58 +78,32 @@ class SearchDisappearDetailFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
             return
         }
-//        observeViewModel()
-//        fetchDetailData()
+        observeViewModel()
+        fetchDetailData()
         initListener()
     }
 
-    private fun setupMap() {
-        val address = binding.tvValueLostLocation
-            .text.toString()
-        if (address.isBlank()) return
-        lifecycleScope.launch(Dispatchers.IO) {
-            runCatching {
-                val geocoder = android.location.Geocoder(requireContext())
-                geocoder.getFromLocationName(address, 1)
-            }.onSuccess { results ->
-                if (!results.isNullOrEmpty()) {
-                    val location = LatLng(results[0].latitude, results[0].longitude)
-                    withContext(Dispatchers.Main) {
-                        naverMap?.moveCamera(CameraUpdate.scrollTo(location))
-                        Marker().apply {
-                            position = location
-                            map = naverMap
-                            icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
-                            height = 23
-                        }
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }.onFailure { e ->
-                Log.w("SearchDisappearDetail", "Geocoding failed", e)
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), getString(R.string.search_address_not_found), Toast.LENGTH_SHORT).show()
-                }
-            }
+    private fun setupMap(lat: Double, lon: Double) {
+        val location = LatLng(lat, lon)
+        val map = naverMap
+        if (map == null) {
+            pendingLocation = location
+            return
+        }
+        pendingLocation = null
+        map.moveCamera(CameraUpdate.scrollTo(location))
+        Marker().apply {
+            position = location
+            this.map = map
+            icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
+            height = 23
         }
     }
 
 
-    private fun initDummyImages() {
-        val dummyImages = listOf(
-            R.drawable.img_search_detail_content,
-            R.drawable.img_search_detail_content,
-            R.drawable.img_search_detail_content
-        )
-        initViewPager(dummyImages)
-    }
-
     private fun fetchDetailData() {
         when (tag) {
-            "목격신고", "실종신고" -> viewModel.getDetailSearchReport(cardId)
+            "실종신고" -> viewModel.getDetailSearchMissing(cardId)
             else -> {
                 Toast.makeText(requireContext(), "잘못된 태그 값입니다.", Toast.LENGTH_SHORT).show()
                 requireActivity().supportFragmentManager.popBackStack()
@@ -138,7 +113,7 @@ class SearchDisappearDetailFragment : Fragment() {
 
     private fun observeViewModel() {
         lifecycleScope.launch {
-            viewModel.detailSearchData.collectLatest { data ->
+            viewModel.detailMissingData.collectLatest { data ->
                 data?.let { updateUI(it) }
             }
         }
@@ -152,26 +127,28 @@ class SearchDisappearDetailFragment : Fragment() {
         }
     }
 
-    private fun updateUI(data: DetailReportData) {
+    private fun updateUI(data:DetailMissingData) {
         binding.apply {
-//            tvDetailTitleField.text = name
-//            tvDetailTagField.text = convertTagToKorean(data.tag.text)
+            tvDetailTitleField.text = data.breed
             tvValueAge.text = data.age
             tvValueGender.text = data.sex
-            tvValueLostDate.text = data.eventDate
+            tvValueLostDate.text = data.missingDate
             tvValueRfid.text = data.rfid
-            tvSpecialNote.text = data.specialNote
-            tvValueLostLocationAround.text = data.surroundPlace
-            tvValueLostLocation.text = data.eventLocation
-            tvValueReporterName.text = data.userName
-            tvValuePhoneNumber.text = data.userPhone
+            tvSpecialNote.text = data.significant
+            tvValueLostLocationAround.text = data.missingLocation
+            tvValueLostAddress.text = data.missingAddress
+            tvValueReporterName.text = data.reporterName
+            tvValuePhoneNumber.text = data.reporterTel
 
-            initTagView(data)
-            setupMap()
+            initTagView(data.tag)
+            if (data.imageUrls.isNotEmpty()) {
+                initViewPager(data.imageUrls)
+            }
+            setupMap(data.latitude, data.longitude)
         }
     }
 
-    private fun initViewPager(imageList: List<Int>) {
+    private fun initViewPager(imageList: List<String>) {
         val adapter = SearchDetailVPAdapter(imageList)
         binding.vpSearchDetailImg.adapter = adapter
         binding.vpSearchDetailImg.setCurrentItem(0, false)
@@ -192,7 +169,6 @@ class SearchDisappearDetailFragment : Fragment() {
 
 
     private fun initListener() = with(binding) {
-        initDummyImages()
 
         ivSearchDetailBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
@@ -204,37 +180,50 @@ class SearchDisappearDetailFragment : Fragment() {
         }
 
         llViewMap.setOnClickListener {
-            val address = binding.tvValueLostLocation.text.toString()
+            val address = binding.tvValueLostAddress.text.toString()
             openNaverMap(address)
         }
 
+        clLostLocationCopy.setOnClickListener {
+            val address = tvValueLostAddress.text.toString()
+            if (address.isNotBlank()) {
+                copyToClipboard(address)
+                Toast.makeText(requireContext(), "주소가 복사되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "복사할 주소가 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
+    }
+
+    private fun copyToClipboard(text: String) {
+        val clipboardManager =
+            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("text", text)
+        clipboardManager.setPrimaryClip(clipData)
     }
 
     private fun initBookmarkUI() {
         binding.ivSearchDetailBookmark.setOnClickListener {
-            isBookmarked = !isBookmarked
-            viewModel.setInterestReportAnimal(cardId)
-            updateBookmarkUI(isBookmarked)
+            viewModel.toggleInterestMissing(cardId)
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.isInterested.collectLatest { interested ->
+                updateBookmarkUI(interested)
+                isBookmarked = interested
+            }
         }
     }
 
-    private fun initTagView(data: DetailReportData) {
-        val koreanTag = convertTagToKorean(data.tag.toString())
-        binding.tvDetailTagField.text = koreanTag
 
-        val tagInfo = data.tag.toDetailSearchRvTag()
+    private fun initTagView(tag : String) {
+        val status = tag.toDetailSearchStatus()
+        val tagInfo = status.toDetailSearchRvTag()
+
+        binding.tvDetailTagField.text = tag
         binding.tvDetailTagField.setTextColor(requireContext().getColor(tagInfo.textColor))
         binding.tvDetailTagField.setBackgroundResource(tagInfo.backgroundRes)
-    }
-
-    private fun convertTagToKorean(tag: String?): String {
-        return when (tag) {
-            "WITNESS" -> "목격신고"
-            "MISSING" -> "실종신고"
-            "PROTECTING" -> "보호중"
-            else -> tag ?: "알 수 없음"
-        }
     }
 
     private fun openNaverMap(address: String) {

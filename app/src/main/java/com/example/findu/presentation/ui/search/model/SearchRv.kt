@@ -6,8 +6,8 @@ data class SearchRv(
     val image : String,
     val name : String,
     val date : String,
-    val address : String,
+    val location : String,
     var isBookmark : Boolean,
     var tag : SearchRvTag,
-    val cardId: Long
+    val reportId: Long
 ) : Serializable
