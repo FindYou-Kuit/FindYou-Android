@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MyInterestResponseDto(
-    @SerialName("interestAnimals")
+    @SerialName("cards")
     val interestAnimals: List<InterestAnimalDto>,
     @SerialName("isLast")
     val isLast: Boolean,
@@ -20,12 +20,12 @@ data class MyInterestResponseDto(
         @SerialName("thumbnailImageUrl")
         val thumbnailImageUrl: String,
         @SerialName("title")
-        val title: String,
+        val title: String? = null,
         @SerialName("tag")
         val tag: String,
         @SerialName("date")
         val date: String,
-        @SerialName("address")
+        @SerialName("location")
         val address: String,
 
 
