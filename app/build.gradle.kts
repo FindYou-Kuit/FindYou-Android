@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     id("org.jetbrains.kotlin.kapt")
     alias(libs.plugins.navigationSafeArgs)
-    id("com.google.gms.google-services")
 }
 
 val properties = Properties().apply {
@@ -76,10 +75,6 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.material3.android)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.google.firebase.config.ktx)
-    implementation(libs.firebase.analytics.ktx)
-    implementation(libs.firebase.common.ktx)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
