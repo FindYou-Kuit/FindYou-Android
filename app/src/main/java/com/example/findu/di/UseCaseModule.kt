@@ -32,6 +32,8 @@ import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalU
 import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetNickNameUseCase
@@ -165,28 +167,15 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun providePostInterestReportAnimalUseCase(
+    fun providePostInterestAnimalUseCase(
         interestRepository: InterestRepository
-    ): PostInterestReportAnimalUseCase = PostInterestReportAnimalUseCase(interestRepository)
+    ): PostInterestAnimalUseCase = PostInterestAnimalUseCase(interestRepository)
 
     @Provides
     @Singleton
-    fun providePostInterestProtectingAnimalUseCase(
+    fun provideDeleteInterestAnimalUseCase(
         interestRepository: InterestRepository
-    ): PostInterestProtectingAnimalUseCase = PostInterestProtectingAnimalUseCase(interestRepository)
-
-    @Provides
-    @Singleton
-    fun provideDeleteInterestReportAnimalUseCase(
-        interestRepository: InterestRepository
-    ): DeleteInterestReportAnimalUseCase = DeleteInterestReportAnimalUseCase(interestRepository)
-
-    @Provides
-    @Singleton
-    fun provideDeleteInterestProtectingAnimalUseCase(
-        interestRepository: InterestRepository
-    ): DeleteInterestProtectingAnimalUseCase =
-        DeleteInterestProtectingAnimalUseCase(interestRepository)
+    ): DeleteInterestAnimalUseCase = DeleteInterestAnimalUseCase(interestRepository)
 
     @Provides
     @Singleton

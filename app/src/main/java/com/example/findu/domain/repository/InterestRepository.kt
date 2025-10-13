@@ -1,9 +1,9 @@
 package com.example.findu.domain.repository
 
-interface InterestRepository {
-    suspend fun getInterestProtectingAnimals(id: Long): Result<Unit>
-    suspend fun getInterestReportAnimals(id: Long): Result<Unit>
+import com.example.findu.domain.model.my.MyInterestData
 
-    suspend fun deleteInterestProtectingAnimals(reportId: Long): Result<Unit>
-    suspend fun deleteInterestReportAnimals(reportId: Long): Result<Unit>
+interface InterestRepository {
+    suspend fun getInterestAnimals(lastId: Long): Result<MyInterestData>
+    suspend fun registerInterestAnimal(reportId: Long): Result<Unit>
+    suspend fun deleteInterestAnimal(reportId: Long): Result<Unit>
 }

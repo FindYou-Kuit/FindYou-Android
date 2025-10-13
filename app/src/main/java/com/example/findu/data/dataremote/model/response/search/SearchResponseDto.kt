@@ -1,4 +1,4 @@
-package com.example.findu.data.dataremote.model.response
+package com.example.findu.data.dataremote.model.response.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,20 +7,18 @@ import kotlinx.serialization.Serializable
 data class SearchResponseDto(
     @SerialName("cards")
     val cards: List<SearchAnimalCard>,
-    @SerialName("lastProtectId")
-    val lastProtectId : Long?,
-    @SerialName("lastReportId")
-    val lastReportId : Long? ,
+    @SerialName("lastId")
+    val lastId : Long?,
     @SerialName("isLast")
     val isLast : Boolean
 )
 
 @Serializable
 data class SearchAnimalCard(
-    @SerialName("cardId")
-    val cardId: Long,
+    @SerialName("reportId")
+    val reportId: Long,
     @SerialName("thumbnailImageUrl")
-    val thumbnailImageUrl: String,
+    val thumbnailImageUrl: String?,
     @SerialName("title")
     val title: String,
     @SerialName("tag")

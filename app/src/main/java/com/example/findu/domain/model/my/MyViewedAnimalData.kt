@@ -5,17 +5,16 @@ import kotlinx.serialization.Serializable
 
 data class MyViewedAnimalData(
     val isLast: Boolean,
-    val lastViewedProtectId: Long,
-    val lastViewedReportId: Long,
-    val viewedAnimals: List<ViewedAnimal>
+    val lastId: Long,
+    val cards: List<Card>
 ) {
-    data class ViewedAnimal(
-        val cardId: Long,
-        val date: String,
-        val interest: Boolean,
-        val location: String,
-        val tag: String,
+    data class Card(
+        val reportId: Long,
         val thumbnailImageUrl: String,
-        val title: String
+        val title: String,
+        val tag: String,
+        val date: String,
+        val location: String,
+        val interest: Boolean,
     )
 }

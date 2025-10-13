@@ -10,26 +10,24 @@ data class MyInterestResponseDto(
     val interestAnimals: List<InterestAnimalDto>,
     @SerialName("isLast")
     val isLast: Boolean,
-    @SerialName("lastInterestProtectId")
-    val lastInterestProtectId: Long,
-    @SerialName("lastInterestReportId")
-    val lastInterestReportId: Long
+    @SerialName("lastId")
+    val lastId: Long,
 ) {
     @Serializable
     data class InterestAnimalDto(
-        @SerialName("animalId")
-        val animalId: Long,
-        @SerialName("date")
-        val date: String,
-        @SerialName("interest")
-        val interest: Boolean,
-        @SerialName("location")
-        val location: String,
-        @SerialName("tag")
-        val tag: String,
+        @SerialName("reportId")
+        val reportId: Long,
         @SerialName("thumbnailImageUrl")
         val thumbnailImageUrl: String,
         @SerialName("title")
-        val title: String
-    )
+        val title: String,
+        @SerialName("tag")
+        val tag: String,
+        @SerialName("date")
+        val date: String,
+        @SerialName("address")
+        val address: String,
+
+
+        )
 }

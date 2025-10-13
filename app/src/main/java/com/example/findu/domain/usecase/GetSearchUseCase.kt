@@ -7,32 +7,14 @@ import com.example.findu.domain.repository.SearchRepository
 class GetSearchUseCase(
     private val searchRepository: SearchRepository
 ) {
-    suspend fun getAllData(
+    suspend fun getReports(
+        type: String,
         searchFilterData: SearchFilterData?,
-        lastProtectId: Long = Long.MAX_VALUE,
-        lastReportId: Long = Long.MAX_VALUE
+        lastId: Long = Long.MAX_VALUE
     ): Result<List<SearchData>> =
-        searchRepository.getSearchAll(
+        searchRepository.getReports(
+            type = type,
             searchFilterData = searchFilterData,
-            lastProtectId = lastProtectId,
-            lastReportId = lastReportId
-        )
-
-    suspend fun getProtectData(
-        searchFilterData: SearchFilterData?,
-        lastProtectId: Long = Long.MAX_VALUE
-    ): Result<List<SearchData>> =
-        searchRepository.getSearchProtect(
-            searchFilterData = searchFilterData,
-            lastProtectId = lastProtectId,
-        )
-
-    suspend fun getReportData(
-        searchFilterData: SearchFilterData?,
-        lastReportId: Long = Long.MAX_VALUE
-    ): Result<List<SearchData>> =
-        searchRepository.getSearchReport(
-            searchFilterData = searchFilterData,
-            lastReportId = lastReportId
+            lastId = lastId
         )
 }

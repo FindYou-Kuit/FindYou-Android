@@ -7,10 +7,8 @@ class GetViewedAnimalUseCase @Inject constructor(
     private val myRepository: MyRepository
 ) {
     suspend operator fun invoke(
-        lastReportId: Long,
-        lastProtectId: Long,
+        lastId: Long,
     ) = myRepository.getMyViewedAnimals(
-        lastReportId = lastReportId,
-        lastProtectId = lastProtectId
+        lastId = lastId
     )
 }

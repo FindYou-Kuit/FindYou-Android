@@ -10,7 +10,7 @@ data class MyReportHistoryRv(
 )
 
 data class MyViewedAnimalsRv(
-    val cardId: Long,
+    val reportId: Long,
     val thumbnailImageUrl: String,
     val title: String,
     val tag: String,
@@ -20,11 +20,11 @@ data class MyViewedAnimalsRv(
 )
 
 data class MyInterestRv(
-    val animalId: Long,
+    val reportId: Long,
     val thumbnailImageUrl: String,
     val title: String,
     val tag: String,
     val date: String,
-    val location: String,
+    val address: String,
     var interest: Boolean,
 )

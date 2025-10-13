@@ -1,5 +1,7 @@
 package com.example.findu.data.mapper.todomain
 
+import com.example.findu.data.dataremote.model.response.search.SearchAnimalCard
+import com.example.findu.data.dataremote.model.response.search.SearchResponseDto
 import com.example.findu.data.dataremote.model.response.SearchAnimalCard
 import com.example.findu.data.dataremote.model.response.SearchResponseDto
 import com.example.findu.data.mapper.todomain.home.toDomain
@@ -8,18 +10,19 @@ import com.example.findu.domain.model.search.SearchData
 import com.example.findu.domain.model.search.SearchStatus
 import com.example.findu.presentation.ui.search.model.SearchRvTag
 
-fun SearchResponseDto.toDomain(): SearchData {
-    return SearchData(
-        cards = this.cards.map { it.toDomain() },
-        lastProtectId = this.lastProtectId ?: -1,
-        lastReportId = this.lastReportId ?: -1,
-        isLast = this.isLast
+fun SearchResponseDto.toDomain(): List<SearchData> {
+    return listOf(
+        SearchData(
+            cards = this.cards.map { it.toDomain() },
+            lastId = this.lastId ?: -1,
+            isLast = this.isLast
+        )
     )
 }
 
 fun SearchAnimalCard.toDomain(): SearchAnimal {
     return SearchAnimal(
-        cardId = this.cardId,
+        reportId = this.reportId,
         thumbnailImageUrl = this.thumbnailImageUrl ?: "",
         title = this.title,
         tag = this.tag.toSearchStatus(),
@@ -46,4 +49,3 @@ fun SearchStatus.toSearchRvTag(): SearchRvTag {
         SearchStatus.UNKNOWN -> SearchRvTag.UNKNOWN
     }
 }
-

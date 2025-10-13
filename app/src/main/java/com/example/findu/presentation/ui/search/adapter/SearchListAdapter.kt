@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.findu.R
 import com.example.findu.databinding.ItemSearchGridContentBinding
 import com.example.findu.databinding.ItemSearchHeaderBinding
@@ -18,11 +19,8 @@ sealed class SearchListItem {
 }
 
 class SearchListAdapter(
-    private val onFilterClick: () -> Unit,
-    private val onToggleClick: () -> Unit,
-    private val onItemClick: (SearchRv) -> Unit,
-    private val onBookmarkClick: (Long, Boolean, String) -> Unit
-) : ListAdapter<SearchListItem, RecyclerView.ViewHolder>(DIFF) {
+    private val listener: SearchListListener
+) : ListAdapter<SearchListItem, SearchListAdapter.BaseVH>(DIFF) {
 
     companion object {
         const val VIEW_TYPE_HEADER = 999
@@ -34,7 +32,7 @@ class SearchListAdapter(
                 return when {
                     oldItem is SearchListItem.Header && newItem is SearchListItem.Header -> true
                     oldItem is SearchListItem.Content && newItem is SearchListItem.Content ->
-                        oldItem.data.cardId == newItem.data.cardId
+                        oldItem.data.reportId == newItem.data.reportId
                     else -> false
                 }
             }
@@ -46,12 +44,12 @@ class SearchListAdapter(
     }
 
     private var isGridMode = false
+
     fun setGridMode(enabled: Boolean) {
         if (isGridMode == enabled) return
         isGridMode = enabled
-        notifyDataSetChanged()
+        notifyItemRangeChanged(1, currentList.size - 1)
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return when (val item = getItem(position)) {
@@ -60,101 +58,120 @@ class SearchListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_HEADER -> {
-                val binding = ItemSearchHeaderBinding.inflate(inflater, parent, false)
-                HeaderVH(binding)
-            }
-            VIEW_TYPE_GRID -> {
-                val binding = ItemSearchGridContentBinding.inflate(inflater, parent, false)
-                GridVH(binding)
-            }
-            else -> {
-                val binding = SearchHorizontalContentItemBinding.inflate(inflater, parent, false)
-                HorizontalVH(binding)
-            }
+            VIEW_TYPE_HEADER -> BaseVH.HeaderVH(
+                ItemSearchHeaderBinding.inflate(inflater, parent, false),
+                listener
+            )
+            VIEW_TYPE_GRID -> BaseVH.GridVH(
+                ItemSearchGridContentBinding.inflate(inflater, parent, false),
+                listener
+            )
+            else -> BaseVH.HorizontalVH(
+                SearchHorizontalContentItemBinding.inflate(inflater, parent, false),
+                listener
+            )
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseVH, position: Int) {
         when (holder) {
-            is HeaderVH -> holder.bind()
-            is GridVH -> holder.bind((getItem(position) as SearchListItem.Content).data)
-            is HorizontalVH -> holder.bind((getItem(position) as SearchListItem.Content).data)
+            is BaseVH.HeaderVH -> holder.bind()
+            is BaseVH.HorizontalVH -> holder.bind((getItem(position) as SearchListItem.Content).data)
+            is BaseVH.GridVH -> holder.bind((getItem(position) as SearchListItem.Content).data)
         }
     }
 
-    inner class HeaderVH(private val binding: ItemSearchHeaderBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind() {
-            binding.ibSearchFilter.setOnClickListener { onFilterClick() }
-            binding.ibSearchHorizontalSort.setOnClickListener { onToggleClick() }
+    sealed class BaseVH(bindingRoot: ViewGroup) : RecyclerView.ViewHolder(bindingRoot) {
+        class HeaderVH(
+            private val binding: ItemSearchHeaderBinding,
+            private val listener: SearchListListener
+        ) : BaseVH(binding.root as ViewGroup) {
+            private var isGrid = false
+            fun bind() = with(binding) {
+                ivSearchBanner.setImageResource(listener.getBannerRes())
+                ibSearchFilter.setOnClickListener { listener.onFilterClick() }
+                ibSearchHorizontalSort.setOnClickListener {
+                    isGrid = !isGrid
+                    val iconRes =
+                        if (isGrid) R.drawable.ic_search_grid_sort else R.drawable.ic_search_horizontal_sort
+                    ibSearchHorizontalSort.setImageResource(iconRes)
+                    listener.onToggleClick()
+                }
+                ivSearchBanner.setOnClickListener { listener.onBannerClick() }
+            }
         }
-    }
 
-    inner class HorizontalVH(private val binding: SearchHorizontalContentItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: SearchRv) {
-            with(binding) {
+        class HorizontalVH(
+            private val binding: SearchHorizontalContentItemBinding,
+            private val listener: SearchListListener
+        ) : BaseVH(binding.root as ViewGroup) {
+            fun bind(item: SearchRv) = with(binding) {
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
-                tvSearchContentAddress.text = item.address
+                tvSearchContentAddress.text = item.location
                 tvSearchContentStatus.text = item.tag.text
                 tvSearchContentStatus.setTextColor(root.context.getColor(item.tag.textColor))
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
                 updateBookmarkIcon(item.isBookmark)
 
-                Glide.with(root.context).load(item.image).into(ivSearchContent)
+                Glide.with(root.context)
+                    .load(item.image.replace("http://", "https://"))
+                    .centerCrop()
+                    .transform(RoundedCorners(24))
+                    .into(ivSearchContent)
 
-                root.setOnClickListener { onItemClick(item) }
+                root.setOnClickListener { listener.onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
                     item.isBookmark = !item.isBookmark
-                    onBookmarkClick(item.cardId, item.isBookmark, item.tag.text)
+                    listener.onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
                 }
             }
+
+            private fun updateBookmarkIcon(isBookmarked: Boolean) {
+                binding.ivSearchContentBookmark.setImageResource(
+                    if (isBookmarked) R.drawable.ic_search_fill_bookmark
+                    else R.drawable.ic_search_blank_bookmark_horizontal
+                )
+            }
         }
 
-        private fun updateBookmarkIcon(isBookmarked: Boolean) {
-            binding.ivSearchContentBookmark.setImageResource(
-                if (isBookmarked) R.drawable.ic_search_fill_bookmark
-                else R.drawable.ic_search_blank_bookmark
-            )
-        }
-    }
-
-    inner class GridVH(private val binding: ItemSearchGridContentBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: SearchRv) {
-            with(binding) {
+        class GridVH(
+            private val binding: ItemSearchGridContentBinding,
+            private val listener: SearchListListener
+        ) : BaseVH(binding.root as ViewGroup) {
+            fun bind(item: SearchRv) = with(binding) {
                 tvSearchContentName.text = item.name
                 tvSearchContentDate.text = item.date
-                tvSearchContentAddress.text = item.address
+                tvSearchContentAddress.text = item.location
                 tvSearchContentStatus.text = item.tag.text
                 tvSearchContentStatus.setTextColor(root.context.getColor(item.tag.textColor))
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
                 updateBookmarkIcon(item.isBookmark)
 
-                Glide.with(root.context).load(item.image).into(ivSearchContent)
+                Glide.with(root.context)
+                    .load(item.image.replace("http://", "https://"))
+                    .centerCrop()
+                    .transform(RoundedCorners(24))
+                    .into(ivSearchContent)
 
-                root.setOnClickListener { onItemClick(item) }
+                root.setOnClickListener { listener.onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
                     item.isBookmark = !item.isBookmark
-                    onBookmarkClick(item.cardId, item.isBookmark, item.tag.text)
+                    listener.onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
                 }
             }
-        }
 
-        private fun updateBookmarkIcon(isBookmarked: Boolean) {
-            binding.ivSearchContentBookmark.setImageResource(
-                if (isBookmarked) R.drawable.ic_search_fill_bookmark
-                else R.drawable.ic_search_blank_bookmark
-            )
+            private fun updateBookmarkIcon(isBookmarked: Boolean) {
+                binding.ivSearchContentBookmark.setImageResource(
+                    if (isBookmarked) R.drawable.ic_search_fill_bookmark
+                    else R.drawable.ic_search_blank_bookmark
+                )
+            }
         }
     }
 

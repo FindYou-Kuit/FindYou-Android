@@ -7,11 +7,30 @@ import com.example.findu.domain.model.my.MyInterestData
 import com.example.findu.domain.model.my.MyReportHistoryData
 import com.example.findu.domain.model.my.MyViewedAnimalData
 
-fun MyInterestResponseDto.toDomain(): MyInterestData {
-    return MyInterestData(
-        interestAnimals = interestAnimals.map {
-            MyInterestData.InterestAnimal(
-                animalId = it.animalId,
+
+fun MyReportHistoryResponseDto.toDomain(): MyReportHistoryData {
+    return MyReportHistoryData(
+        reports = reports.map {
+            MyReportHistoryData.Report(
+                date = it.date,
+                location = it.location,
+                reportId = it.reportId,
+                tag = it.tag,
+                thumbnailImageUrl = it.thumbnailImageUrl,
+                title = it.title,
+                interest = it.interest
+            )
+        },
+        isLast = isLast,
+        lastId = lastId,
+    )
+}
+
+fun MyViewedAnimalsResponseDto.toDomain(): MyViewedAnimalData {
+    return MyViewedAnimalData(
+        cards = cards.map {
+            MyViewedAnimalData.Card(
+                reportId = it.reportId,
                 date = it.date,
                 interest = it.interest,
                 location = it.location,
@@ -21,44 +40,6 @@ fun MyInterestResponseDto.toDomain(): MyInterestData {
             )
         },
         isLast = isLast,
-        lastInterestProtectId = lastInterestProtectId,
-        lastInterestReportId = lastInterestReportId
-    )
-}
-
-
-fun MyReportHistoryResponseDto.toDomain(): MyReportHistoryData {
-    return MyReportHistoryData(
-        isLast = isLast,
-        lastReportId = lastReportId,
-        reports = reports.map {
-            MyReportHistoryData.Report(
-                date = it.date,
-                location = it.location,
-                reportId = it.reportId,
-                tag = it.tag,
-                thumbnailImageUrl = it.thumbnailImageUrl,
-                title = it.title
-            )
-        }
-    )
-}
-
-fun MyViewedAnimalsResponseDto.toDomain(): MyViewedAnimalData {
-    return MyViewedAnimalData(
-        isLast = isLast,
-        lastViewedProtectId = lastViewedProtectId,
-        lastViewedReportId = lastViewedReportId,
-        viewedAnimals = viewedAnimals.map {
-            MyViewedAnimalData.ViewedAnimal(
-                cardId = it.cardId,
-                date = it.date,
-                interest = it.interest,
-                location = it.location,
-                tag = it.tag,
-                thumbnailImageUrl = it.thumbnailImageUrl,
-                title = it.title
-            )
-        }
+        lastId = lastId,
     )
 }

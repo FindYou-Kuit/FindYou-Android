@@ -1,20 +1,21 @@
 package com.example.findu.presentation.ui.my
 
 import android.net.Uri
-import android.widget.ImageView
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
+import com.example.findu.domain.model.my.MyProfileData
+import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
 import com.example.findu.domain.usecase.my.GetInterestUseCase
 import com.example.findu.domain.usecase.my.GetNickNameUseCase
 import com.example.findu.domain.usecase.my.GetReportHistoryUseCase
 import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
+import com.example.findu.domain.usecase.my.PatchProfileImageUseCase
 import com.example.findu.domain.usecase.report.DeleteReportUseCase
-import com.example.findu.presentation.mapper.torvmodel.toRvModel
+import com.example.findu.presentation.mapper.todomain.toRvModel
 import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.model.MyViewedAnimalsRv
@@ -33,11 +34,10 @@ class MyViewModel @Inject constructor(
     private val deleteUserUseCase: DeleteUserUseCase,
     private val patchNickNameUseCase: PatchNickNameUseCase,
     private val getNickNameUseCase: GetNickNameUseCase,
-    private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
-    private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
-    private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
-    private val deleteInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
+    private val postInterestAnimalUseCase: PostInterestAnimalUseCase,
+    private val deleteInterestAnimalUseCase: DeleteInterestAnimalUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
+    private val patchProfileImageFileUseCase: PatchProfileImageUseCase,
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -58,6 +58,10 @@ class MyViewModel @Inject constructor(
     private val _nickNameState = MutableStateFlow<String?>(null)
     val nickNameState = _nickNameState.asStateFlow()
 
+    private val _myProfile = MutableStateFlow<MyProfileData?>(null)
+    val myProfile = _myProfile.asStateFlow()
+
+
     private val _selectedImageResId = MutableStateFlow<Int?>(null)
     val selectedImageResId = _selectedImageResId.asStateFlow()
 
@@ -65,13 +69,12 @@ class MyViewModel @Inject constructor(
     val selectedProfileImageUri: StateFlow<Uri?> = _selectedProfileImageUri
 
     private val _alarmEnabled = MutableStateFlow(false)
-    val alarmEnabled : StateFlow<Boolean> = _alarmEnabled
+    val alarmEnabled: StateFlow<Boolean> = _alarmEnabled
 
     fun fetchInterestAnimals() {
         viewModelScope.launch {
             getInterestUseCase(
-                lastReportId = Long.MAX_VALUE,
-                lastProtectId = Long.MAX_VALUE
+                lastId = Long.MAX_VALUE,
             ).fold(
                 onSuccess = { data ->
                     _interestAnimals.value = data.interestAnimals.map { it.toRvModel() }
@@ -86,7 +89,7 @@ class MyViewModel @Inject constructor(
     fun fetchReportHistory() {
         viewModelScope.launch {
             getReportHistoryUseCase(
-                lastReportId = Long.MAX_VALUE,
+                lastId = Long.MAX_VALUE,
             ).fold(
                 onSuccess = { data ->
                     _reportHistory.value = data.reports.map { it.toRvModel() }
@@ -101,11 +104,10 @@ class MyViewModel @Inject constructor(
     fun fetchViewedAnimals() {
         viewModelScope.launch {
             getViewedAnimalUseCase(
-                lastReportId = Long.MAX_VALUE,
-                lastProtectId = Long.MAX_VALUE
+                lastId = Long.MAX_VALUE,
             ).fold(
                 onSuccess = { data ->
-                    _viewedAnimals.value = data.viewedAnimals.map { it.toRvModel() }
+                    _viewedAnimals.value = data.cards.map { it.toRvModel() }
                 },
                 onFailure = {
                     _errorMessage.value = it.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
@@ -127,16 +129,28 @@ class MyViewModel @Inject constructor(
         }
     }
 
-    fun updateProfileImage(resId: Int) {
-        _selectedImageResId.value = resId
-    }
-
 
     fun updateProfileImageFromGallery(uri: Uri) {
-        _selectedProfileImageUri.value = uri
+        viewModelScope.launch {
+            patchProfileImageFileUseCase.uploadFile(uri.path!!).fold(
+                onSuccess = {
+                    fetchMyProfile() },
+                onFailure = { _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생" }
+            )
+        }
     }
 
-    fun toggleAlarmSetting(){
+    fun updateProfileImage(enumName: String) {
+        viewModelScope.launch {
+            patchProfileImageFileUseCase.uploadDefault(enumName).fold(
+                onSuccess = {
+                    fetchMyProfile() },
+                onFailure = { _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생" }
+            )
+        }
+    }
+
+    fun toggleAlarmSetting() {
         _alarmEnabled.value = !_alarmEnabled.value
     }
 
@@ -144,76 +158,46 @@ class MyViewModel @Inject constructor(
         _nickNameState.value = newNickName
 
         viewModelScope.launch {
+            Log.d("MyViewModel", "닉네임 변경 요청 시작: $newNickName")
+
             patchNickNameUseCase(newNickName).fold(
-                onSuccess = {},
-                onFailure = {
-                    _errorMessage.value = it.message ?: "닉네임 변경 중 오류가 발생했습니다."
+                onSuccess = {
+                    Log.d("MyViewModel", "닉네임 변경 성공")
+                    fetchMyProfile()
+                },
+                onFailure = { e ->
+                    Log.e("MyViewModel", "닉네임 변경 실패 : ${e.message}", e)
+                    _errorMessage.value = e.message ?: "닉네임 변경 중 오류가 발생했습니다."
                 }
             )
         }
     }
 
 
-    fun fetchNickName() {
+    fun fetchMyProfile() {
         viewModelScope.launch {
             getNickNameUseCase().fold(
-                onSuccess = {
-                    _nickNameState.value = it
+                onSuccess = { data ->
+                    _myProfile.value = data
                 },
                 onFailure = {
-                    _errorMessage.value = it.message ?: "닉네임을 불러오는 중 오류가 발생했습니다."
+                    _errorMessage.value = it.message ?: "프로필 정보를 불러오는 중 오류가 발생했습니다."
                 }
             )
         }
     }
 
-    fun setInterest(
-        id: Long,
-        isInterest: Boolean,
-        tag: String,
-    ) {
-        when (tag) {
-            "보호중" -> postProtectInterest(id, isInterest)
-            "목격신고" -> postReportInterest(id, isInterest)
-            "실종신고" -> postReportInterest(id, isInterest)
-            else -> {
-                _errorMessage.value = "잘못된 태그 값입니다."
-            }
-        }
-
-    }
-
-    private fun postProtectInterest(id: Long, isInterest: Boolean) {
+    fun setInterest(id: Long, isInterest: Boolean) {
         viewModelScope.launch {
-            if (isInterest) {
-                postInterestProtectingAnimalUseCase(id).fold(
+            val result = if (isInterest) {
+                postInterestAnimalUseCase(id).fold(
                     onSuccess = {},
                     onFailure = {
                         _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
                     }
                 )
             } else {
-                deleteInterestProtectingAnimalUseCase(id).fold(
-                    onSuccess = {},
-                    onFailure = {
-                        _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."
-                    }
-                )
-            }
-        }
-    }
-
-    private fun postReportInterest(id: Long, isInterest: Boolean) {
-        viewModelScope.launch {
-            if (isInterest) {
-                postInterestReportAnimalUseCase(id).fold(
-                    onSuccess = {},
-                    onFailure = {
-                        _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
-                    }
-                )
-            } else {
-                deleteInterestReportAnimalUseCase(id).fold(
+                deleteInterestAnimalUseCase(id).fold(
                     onSuccess = {},
                     onFailure = {
                         _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."

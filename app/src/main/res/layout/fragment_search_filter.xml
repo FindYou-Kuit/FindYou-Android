@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginHorizontal="20dp"
-    tools:context=".presentation.ui.search.SearchFilterFragment">
+    tools:context=".presentation.ui.search.filter.SearchFilterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_filter_top"

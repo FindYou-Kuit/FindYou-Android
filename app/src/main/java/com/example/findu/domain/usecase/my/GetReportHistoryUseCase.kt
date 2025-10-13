@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetReportHistoryUseCase @Inject constructor(
     private val myRepository: MyRepository
 ) {
-    suspend operator fun invoke(lastReportId: Long) = myRepository.getMyReportHistory(lastReportId)
+    suspend operator fun invoke(lastId: Long) = myRepository.getMyReportHistory(lastId)
 }

@@ -1,24 +1,13 @@
 package com.example.findu.data.dataremote.datasource
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
-import com.example.findu.data.dataremote.model.response.SearchResponseDto
+import com.example.findu.data.dataremote.model.response.search.SearchResponseDto
 import com.example.findu.domain.model.search.SearchFilterData
-import retrofit2.http.Query
 
 interface SearchRemoteDataSource {
-    suspend fun getSearchAll(
+    suspend fun getReports(
+        type: String,
         searchFilterData: SearchFilterData?,
-        lastProtectId: Long = Long.MAX_VALUE,
-        lastReportId: Long = Long.MAX_VALUE
-    ): BaseResponse<SearchResponseDto>
-
-    suspend fun getSearchReport(
-        searchFilterData: SearchFilterData?,
-        lastReportId: Long = Long.MAX_VALUE
-    ): BaseResponse<SearchResponseDto>
-
-    suspend fun getSearchProtect(
-        searchFilterData: SearchFilterData?,
-        lastProtectId: Long = Long.MAX_VALUE
+        lastId: Long = Long.MAX_VALUE,
     ): BaseResponse<SearchResponseDto>
 }

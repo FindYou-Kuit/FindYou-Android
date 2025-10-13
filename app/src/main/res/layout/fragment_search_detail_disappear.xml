@@ -55,6 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="303dp"
                 android:layout_marginTop="11dp"
+                android:clipToOutline="true"
+                android:background="@drawable/bg_radius_20"
                 android:nestedScrollingEnabled="false"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
@@ -303,7 +305,7 @@
                         app:layout_constraintTop_toTopOf="@id/tv_value_lost_location_around" />
 
                     <TextView
-                        android:id="@+id/tv_value_lost_location"
+                        android:id="@+id/tv_value_lost_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -318,9 +320,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_value_lost_location"
-                        app:layout_constraintStart_toEndOf="@id/tv_value_lost_location"
-                        app:layout_constraintTop_toTopOf="@id/tv_value_lost_location">
+                        app:layout_constraintBottom_toBottomOf="@id/tv_value_lost_address"
+                        app:layout_constraintStart_toEndOf="@id/tv_value_lost_address"
+                        app:layout_constraintTop_toTopOf="@id/tv_value_lost_address">
 
                         <ImageView
                             android:id="@+id/iv_search_copy"

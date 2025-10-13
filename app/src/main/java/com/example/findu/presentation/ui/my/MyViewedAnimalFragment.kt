@@ -29,7 +29,6 @@ class MyViewedAnimalFragment : Fragment() {
             myViewModel.setInterest(
                 id = animalId,
                 isInterest = interest,
-                tag = tag
             )
         },
         onItemClick = { cardId, tag, name ->
