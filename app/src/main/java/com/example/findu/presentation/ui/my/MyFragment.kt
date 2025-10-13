@@ -19,6 +19,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.example.findu.BuildConfig
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyBinding
 import com.example.findu.presentation.ui.login.LoginActivity
@@ -26,6 +28,7 @@ import com.example.findu.presentation.ui.my.dialog.MyLogoutDialog
 import com.example.findu.presentation.ui.my.dialog.MyNicknameDialog
 import com.example.findu.presentation.ui.my.dialog.MyProfileImageDialog
 import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
+import com.example.findu.presentation.ui.my.model.ProfileImageType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -60,7 +63,7 @@ class MyFragment : Fragment() {
         _binding = FragmentMyBinding.inflate(inflater, container, false)
 
         initListener()
-        myViewModel.fetchNickName()
+        myViewModel.fetchMyProfile()
 
         return binding.root
     }
@@ -86,7 +89,14 @@ class MyFragment : Fragment() {
                 myProfileImageDialog = MyProfileImageDialog(
                     context = requireContext(),
                     onDrawableSelected = { resId ->
-                        myViewModel.updateProfileImage(resId)
+                        val defaultName = when (resId) {
+                            R.drawable.img_my_profile_default -> "default"
+                            R.drawable.img_my_profile1 -> "puppy"
+                            R.drawable.img_my_profile2 -> "chick"
+                            R.drawable.img_my_profile3 -> "panda"
+                            else -> "default"
+                        }
+                        myViewModel.updateProfileImage(defaultName)
                     },
                     onGallerySelected = { uri ->
                         myViewModel.updateProfileImageFromGallery(uri)
@@ -175,44 +185,46 @@ class MyFragment : Fragment() {
     }
 
     private fun setupVersion() = with(binding) {
-//        val currentVersion = BuildConfig.VERSION_NAME
-//        val latest = remoteConfig.getString("latest_app_version")
-//        tvMyVersionInfo.text = "버전 정보 $currentVersion"
-//
-//        val isLatest = isCurrentVersionLatest(currentVersion, latest)
-//
-//        clMyVersionChip.isVisible = isLatest
-//        clMyGotoUpdate.isVisible = !isLatest
-    }
+        val currentVersion = BuildConfig.VERSION_NAME
+        val latest = "1.0"
+        tvMyVersionInfo.text = "버전 정보 $currentVersion"
 
-    private fun isCurrentVersionLatest(current: String, latest: String): Boolean {
-        val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
-        val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
-        val maxLength = maxOf(currentParts.size, latestParts.size)
+        val currentNumber = currentVersion.substringBefore("-")
+            .replace(".", "")
+            .toIntOrNull() ?: 0
 
-        for (i in 0 until maxLength) {
-            val currentPart = currentParts.getOrNull(i) ?: 0
-            val latestPart = latestParts.getOrNull(i) ?: 0
+        val latestNumber = latest.replace(".", "").toIntOrNull() ?: 0
 
-            when {
-                currentPart > latestPart -> return true
-                currentPart < latestPart -> return false
-            }
-        }
-        return true
+        val isLatest = currentNumber >= latestNumber
+
+        clMyVersionChip.isVisible = isLatest
+        clMyGotoUpdate.isVisible = !isLatest
     }
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    myViewModel.nickNameState.collect { nickName ->
-                        nickName?.let {
-                            binding.tvMyNickname.text = nickName
-                            binding.etMyNickname.setText(nickName)
+                    myViewModel.myProfile.collect { profile ->
+                        profile?.let {
+                            binding.tvMyNickname.text = it.nickname
+                            binding.etMyNickname.setText(it.nickname)
+
+                            val imageSource = it.profileImage
+                            if (imageSource.startsWith("http")) {
+                                Glide.with(this@MyFragment)
+                                    .load(imageSource)
+                                    .into(binding.ivMyIllust)
+                            } else {
+                                val type = ProfileImageType.fromServerName(imageSource)
+                                Glide.with(this@MyFragment)
+                                    .load(type.drawableRes)
+                                    .into(binding.ivMyIllust)
+                            }
                         }
                     }
                 }
+
                 launch {
                     myViewModel.deleteUserMessage.collect { message ->
                         message?.let {
@@ -254,6 +266,7 @@ class MyFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        myProfileImageDialog = null
         _binding = null
     }
 }

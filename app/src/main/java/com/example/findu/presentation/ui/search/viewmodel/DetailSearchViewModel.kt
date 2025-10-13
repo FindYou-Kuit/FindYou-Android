@@ -6,10 +6,8 @@ import com.example.findu.domain.model.search.DetailMissingData
 import com.example.findu.domain.model.search.DetailProtectData
 import com.example.findu.domain.model.search.DetailWitnessData
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
-import com.example.findu.domain.usecase.interest.DeleteInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.DeleteInterestReportAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestProtectingAnimalUseCase
-import com.example.findu.domain.usecase.interest.PostInterestReportAnimalUseCase
+import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
+import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,10 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailSearchViewModel @Inject constructor(
     private val getDetailSearchUseCase: GetDetailSearchUseCase,
-    private val postInterestReportAnimalUseCase: PostInterestReportAnimalUseCase,
-    private val deleteInterestReportAnimalUseCase: DeleteInterestReportAnimalUseCase,
-    private val postInterestProtectingAnimalUseCase: PostInterestProtectingAnimalUseCase,
-    private val deleteInterestProtectingAnimalUseCase: DeleteInterestProtectingAnimalUseCase,
+    private val postInterestAnimalUseCase: PostInterestAnimalUseCase,
+    private val deleteInterestAnimalUseCase: DeleteInterestAnimalUseCase
+
 ) : ViewModel() {
 
     private val _detailMissingData = MutableStateFlow<DetailMissingData?>(null)
@@ -80,7 +77,7 @@ class DetailSearchViewModel @Inject constructor(
         viewModelScope.launch {
             val current = _detailMissingData.value?.interest ?: false
             if (!current) {
-                postInterestReportAnimalUseCase(id).fold(
+                postInterestAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailMissingData.value = _detailMissingData.value?.copy(interest = true)
                         _isInterested.value = true
@@ -91,7 +88,7 @@ class DetailSearchViewModel @Inject constructor(
                     }
                 )
             } else {
-                deleteInterestReportAnimalUseCase(id).fold(
+                deleteInterestAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailMissingData.value = _detailMissingData.value?.copy(interest = false)
                         _isInterested.value = false
@@ -109,7 +106,7 @@ class DetailSearchViewModel @Inject constructor(
         viewModelScope.launch {
             val current = _detailWitnessData.value?.interest ?: false
             if (!current) {
-                postInterestReportAnimalUseCase(id).fold(
+                postInterestAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailWitnessData.value = _detailWitnessData.value?.copy(interest = true)
                         _isInterested.value = true
@@ -119,7 +116,7 @@ class DetailSearchViewModel @Inject constructor(
                     }
                 )
             } else {
-                deleteInterestReportAnimalUseCase(id).fold(
+                deleteInterestAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailWitnessData.value = _detailWitnessData.value?.copy(interest = false)
                         _isInterested.value = false
@@ -136,7 +133,7 @@ class DetailSearchViewModel @Inject constructor(
         viewModelScope.launch {
             val current = _detailProtectData.value?.interest ?: false
             if (!current) {
-                postInterestProtectingAnimalUseCase(id).fold(
+                postInterestAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailProtectData.value = _detailProtectData.value?.copy(interest = true)
                         _isInterested.value = true
@@ -147,7 +144,7 @@ class DetailSearchViewModel @Inject constructor(
                     }
                 )
             } else {
-                deleteInterestProtectingAnimalUseCase(id).fold(
+                deleteInterestAnimalUseCase(id).fold(
                     onSuccess = {
                         _detailProtectData.value = _detailProtectData.value?.copy(interest = false)
                     },

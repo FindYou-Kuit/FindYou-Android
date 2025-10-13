@@ -8,28 +8,27 @@ import kotlinx.serialization.Serializable
 data class MyViewedAnimalsResponseDto(
     @SerialName("isLast")
     val isLast: Boolean,
-    @SerialName("lastViewedProtectId")
-    val lastViewedProtectId: Long,
-    @SerialName("lastViewedReportId")
-    val lastViewedReportId: Long,
-    @SerialName("viewedAnimals")
-    val viewedAnimals: List<ViewedAnimal>
+    @SerialName("lastId")
+    val lastId: Long,
+    @SerialName("cards")
+    val cards: List<Card>
 ) {
     @Serializable
-    data class ViewedAnimal(
-        @SerialName("cardId")
-        val cardId: Long,
-        @SerialName("date")
-        val date: String,
-        @SerialName("interest")
-        val interest: Boolean,
-        @SerialName("location")
-        val location: String,
-        @SerialName("tag")
-        val tag: String,
+    data class Card(
+        @SerialName("reportId")
+        val reportId: Long,
         @SerialName("thumbnailImageUrl")
         val thumbnailImageUrl: String,
         @SerialName("title")
-        val title: String
+        val title: String,
+        @SerialName("tag")
+        val tag: String,
+        @SerialName("date")
+        val date: String,
+        @SerialName("location")
+        val location: String,
+        @SerialName("interest")
+        val interest: Boolean,
+
     )
 }

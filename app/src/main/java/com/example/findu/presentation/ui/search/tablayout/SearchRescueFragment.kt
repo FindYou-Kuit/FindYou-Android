@@ -18,10 +18,11 @@ import com.example.findu.data.mapper.todomain.toSearchRvTag
 import com.example.findu.databinding.FragmentSearchRescueBinding
 import com.example.findu.domain.model.search.SearchAnimal
 import com.example.findu.presentation.ui.search.BundleTag.SELECTED_FILTER_DATA
-import com.example.findu.presentation.ui.search.SearchFragmentDirections
-import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
 import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchListListener
+import com.example.findu.presentation.ui.search.SearchFragmentDirections
+import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
+import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.model.SearchType
@@ -169,7 +170,6 @@ class SearchRescueFragment : Fragment(), SearchListListener {
 
     private fun initRVAdapter() {
         listAdapter = SearchListAdapter(this)
-
 
         binding.rvSearchRescue.apply {
             adapter = listAdapter

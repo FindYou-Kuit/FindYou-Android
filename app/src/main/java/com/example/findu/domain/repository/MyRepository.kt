@@ -1,27 +1,35 @@
 package com.example.findu.domain.repository
 
+import android.net.Uri
+import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.domain.model.my.MyInterestData
+import com.example.findu.domain.model.my.MyProfileData
 import com.example.findu.domain.model.my.MyReportHistoryData
 import com.example.findu.domain.model.my.MyViewedAnimalData
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 interface MyRepository {
     suspend fun getMyInterest(
-        lastReportId: Long,
-        lastProtectId: Long,
+        lastId : Long
     ): Result<MyInterestData>
 
     suspend fun getMyReportHistory(
-        lastReportId: Long
+        lastId: Long
     ): Result<MyReportHistoryData>
 
     suspend fun getMyViewedAnimals(
-        lastReportId: Long,
-        lastProtectId: Long
+        lastId: Long,
     ): Result<MyViewedAnimalData>
 
     suspend fun deleteUser(): Result<Unit>
 
     suspend fun patchNickname(newNickname: String): Result<Unit>
 
-    suspend fun getNickname(): Result<String>
+    suspend fun getNickname(): Result<MyProfileData>
+
+    suspend fun patchProfileImageFile(imagePath: String): Result<Unit>
+
+    suspend fun patchProfileImageDefault(defaultProfileImageName: String): Result<Unit>
+
 }
