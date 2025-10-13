@@ -85,7 +85,7 @@ class MyFragment : Fragment() {
                 ).show()
             }
 
-            clMyProflieImage.setOnClickListener {
+            clMyProfileImage.setOnClickListener {
                 myProfileImageDialog = MyProfileImageDialog(
                     context = requireContext(),
                     onDrawableSelected = { resId ->
@@ -96,10 +96,13 @@ class MyFragment : Fragment() {
                             R.drawable.img_my_profile3 -> "panda"
                             else -> "default"
                         }
-                        myViewModel.updateProfileImage(defaultName)
+                        myViewModel.updateProfileImage(enumName = defaultName)
                     },
                     onGallerySelected = { uri ->
-                        myViewModel.updateProfileImageFromGallery(uri)
+                        myViewModel.updateProfileImageFromGallery(
+                            context = requireContext(),
+                            uri = uri
+                        )
                     },
                     launchGallery = {
                         pickMedia.launch(

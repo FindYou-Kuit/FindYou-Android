@@ -26,7 +26,10 @@ class MainActivity : AppCompatActivity() {
         val deviceId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
             ?: "unknown_device_id"
 
-        setDeviceIdUseCase(deviceId=deviceId)
+//        setDeviceIdUseCase(deviceId=deviceId)
+        setDeviceIdUseCase(
+            deviceId = "8483f57930bb6a8a")
+
 
 
         binding = ActivityMainBinding.inflate(layoutInflater)

@@ -6,9 +6,11 @@ import javax.inject.Inject
 class PatchProfileImageUseCase @Inject constructor(
     private val myRepository: MyRepository
 ) {
-    suspend fun uploadFile(imagePath: String) =
-        myRepository.patchProfileImageFile(imagePath)
-
-    suspend fun uploadDefault(defaultProfileImageName: String) =
-        myRepository.patchProfileImageDefault(defaultProfileImageName)
+    suspend fun upload(
+        imagePath: String? = null,
+        defaultProfileImageName: String? = null
+    ) = myRepository.patchProfileImage(
+        imagePath = imagePath,
+        defaultProfileImageName = defaultProfileImageName
+    )
 }

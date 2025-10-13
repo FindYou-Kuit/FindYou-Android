@@ -1,5 +1,6 @@
 package com.example.findu.presentation.ui.my
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,7 @@ import com.example.findu.presentation.mapper.todomain.toRvModel
 import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.model.MyViewedAnimalsRv
+import com.example.findu.presentation.util.UriUtil.toSingleImageFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,7 +39,7 @@ class MyViewModel @Inject constructor(
     private val postInterestAnimalUseCase: PostInterestAnimalUseCase,
     private val deleteInterestAnimalUseCase: DeleteInterestAnimalUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
-    private val patchProfileImageFileUseCase: PatchProfileImageUseCase,
+    private val patchProfileImageUseCase : PatchProfileImageUseCase,
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -130,22 +132,31 @@ class MyViewModel @Inject constructor(
     }
 
 
-    fun updateProfileImageFromGallery(uri: Uri) {
+    fun updateProfileImage(enumName: String) {
         viewModelScope.launch {
-            patchProfileImageFileUseCase.uploadFile(uri.path!!).fold(
-                onSuccess = {
-                    fetchMyProfile() },
+            patchProfileImageUseCase.upload(
+                imagePath = null,
+                defaultProfileImageName = enumName
+            ).fold(
+                onSuccess = { fetchMyProfile() },
                 onFailure = { _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생" }
             )
         }
     }
 
-    fun updateProfileImage(enumName: String) {
+
+    fun updateProfileImageFromGallery(context: Context, uri: Uri) {
         viewModelScope.launch {
-            patchProfileImageFileUseCase.uploadDefault(enumName).fold(
-                onSuccess = {
-                    fetchMyProfile() },
-                onFailure = { _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생" }
+            val file = uri.toSingleImageFile(context)
+
+            patchProfileImageUseCase.upload(
+                imagePath = file.absolutePath,
+                defaultProfileImageName = null
+            ).fold(
+                onSuccess = { fetchMyProfile() },
+                onFailure = {
+                    _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생"
+                }
             )
         }
     }

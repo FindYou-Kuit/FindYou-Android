@@ -111,7 +111,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_my_proflie_image"
+                android:id="@+id/cl_my_profile_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
@@ -152,7 +152,7 @@
                 android:weightSum="3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_my_proflie_image">
+                app:layout_constraintTop_toBottomOf="@id/cl_my_profile_image">
 
                 <LinearLayout
                     android:id="@+id/btn_my_report_history"

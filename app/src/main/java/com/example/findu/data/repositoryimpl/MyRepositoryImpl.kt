@@ -69,18 +69,17 @@ class MyRepositoryImpl @Inject constructor(
                 .toDomain()
         }
 
-
-    override suspend fun patchProfileImageFile(imagePath: String): Result<Unit> =
+    override suspend fun patchProfileImage(
+        imagePath: String?,
+        defaultProfileImageName: String?
+    ): Result<Unit> =
         runCatching {
-            val file = File(imagePath)
-            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-            val multipartBody = MultipartBody.Part.createFormData("profileImageFile", file.name, requestFile)
-            myRemoteDataSource.patchProfileImageFile(multipartBody).handleBaseResponse().getOrThrow()
+            val file = imagePath?.let { File(it) }
+
+            myRemoteDataSource.patchProfileImage(
+                profileImageFile = file,
+                defaultImageName = defaultProfileImageName
+            ).handleBaseResponse().getOrThrow()
         }
 
-    override suspend fun patchProfileImageDefault(defaultProfileImageName: String): Result<Unit> =
-        runCatching {
-            val requestBody = defaultProfileImageName.toRequestBody("text/plain".toMediaType())
-            myRemoteDataSource.patchProfileImageDefault(requestBody).handleBaseResponse().getOrThrow()
-        }
 }
