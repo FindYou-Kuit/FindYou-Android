@@ -9,6 +9,9 @@ import javax.inject.Inject
 class HomeRemoteDataSourceImpl @Inject constructor(
     private val homeService: HomeService
 ): HomeRemoteDataSource {
-    override suspend fun getHome(): BaseResponse<HomeResponseDto> =
-        homeService.getHome()
+    override suspend fun getHome(
+        lat: Double?,
+        lon: Double?
+    ): BaseResponse<HomeResponseDto> =
+        homeService.getHome(lat, lon)
 }

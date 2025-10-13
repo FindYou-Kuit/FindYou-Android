@@ -21,6 +21,7 @@
         android:background="@drawable/bg_button_report_dialog"
         android:backgroundTint="@null"
         android:text="@string/report_dialog_capture"
+        android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.FindU.Head3_SB_18"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

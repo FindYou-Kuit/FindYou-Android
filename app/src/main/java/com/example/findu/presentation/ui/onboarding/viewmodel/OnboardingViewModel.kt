@@ -23,6 +23,7 @@ import javax.inject.Inject
 
 data class OnboardingUiState(
     val pageState: Int = 1,
+    val kakaoId:Long = -1L,
     val profileImageUri: Uri? = null,
     val defaultProfileType: DefaultProfileType = DefaultProfileType.DEFAULT,
     val nickname: String = "",
@@ -117,7 +118,7 @@ class OnboardingViewModel @Inject constructor(
                 profileImageFile = uiState.value.profileImageUri?.let { uriToFile(uri = it) },
                 defaultImageName = uiState.value.defaultProfileType.string,
                 nickname = uiState.value.nickname,
-                kakaoId = 4241046198
+                kakaoId = uiState.value.kakaoId
             ).onSuccess {
                 startMainActivity()
             }.onFailure {e->
@@ -149,6 +150,10 @@ class OnboardingViewModel @Inject constructor(
             e.printStackTrace()
             null
         }
+    }
+
+    fun setKakaoId(id: Long) {
+        _uiState.update { it.copy(kakaoId = id) }
     }
 
     companion object {

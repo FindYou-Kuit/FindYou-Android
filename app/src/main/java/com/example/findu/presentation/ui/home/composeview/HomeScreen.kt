@@ -27,17 +27,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
-import com.example.findu.domain.model.HomeReportData
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
-import com.example.findu.domain.model.ReportDataType
-import com.example.findu.domain.model.ReportItem
 import com.example.findu.presentation.type.HomeBannerType
+import com.example.findu.presentation.type.HomeExtraButtonType
 import com.example.findu.presentation.type.HomeReportDurationType
+import com.example.findu.presentation.type.HomeUserStatusType
 import com.example.findu.presentation.ui.home.component.HomeBannerPager
-import com.example.findu.presentation.ui.home.component.HomeButtonList
+import com.example.findu.presentation.ui.home.component.HomeExtraButtonList
 import com.example.findu.presentation.ui.home.component.HomeProtectAnimalList
 import com.example.findu.presentation.ui.home.component.HomeReportCard
+import com.example.findu.presentation.ui.home.component.HomeReportDialog
 import com.example.findu.presentation.ui.home.component.HomeReportedAnimalList
 import com.example.findu.presentation.ui.home.component.HomeScrollToTopButton
 import com.example.findu.presentation.ui.home.component.HomeTopBar
@@ -53,17 +53,22 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
-    uiState: HomeUiState = HomeUiState(),
     reportButtonClicked: () -> Unit,
     alarmButtonClicked: () -> Unit,
-    homeReportData: HomeReportData,
     navigateToProtectDetail: (ProtectAnimal) -> Unit,
     navigateToReportDetail: (ReportAnimal) -> Unit,
-    indicatorClicked: (HomeReportDurationType) -> Unit,
-    navigationToSearch: () -> Unit,
+    onIndicatorSelected: (HomeReportDurationType) -> Unit,
+    navigationToProtectAnimal: () -> Unit,
+    navigationToReportAnimal: () -> Unit,
+    navigateToHomeExtra: (HomeExtraButtonType) -> Unit,
     userNickname: String,
+    onReportDialogDismiss: () -> Unit,
+    onLostReportClick: () -> Unit,
+    onFindReportClick: () -> Unit,
+    onPhoneClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    innerPaddingValues: PaddingValues = PaddingValues(0.dp)
+    uiState: HomeUiState = HomeUiState(),
+    innerPaddingValues: PaddingValues = PaddingValues(0.dp),
 ) {
     val bannerList = HomeBannerType.entries
     val pagerState = rememberPagerState()
@@ -106,12 +111,14 @@ fun HomeScreen(
                     .background(color = FindUTheme.colors.gray2)
             ) {
                 item {
-                    HomeReportCard(
-                        modifier = Modifier.padding(15.dp),
-                        homeReportData = homeReportData,
-                        indicatorClicked = indicatorClicked,
-                        homeReportDuration = uiState.reportDataDuration
-                    )
+                    uiState.homeData?.let {
+                        HomeReportCard(
+                            modifier = Modifier.padding(15.dp),
+                            homeStatistics = it.statistics,
+                            onIndicatorSelected = onIndicatorSelected,
+                            homeReportDuration = uiState.reportDataDuration
+                        )
+                    }
                 }
                 item {
                     Column(
@@ -123,14 +130,11 @@ fun HomeScreen(
                             )
                     ) {
                         Spacer(modifier = Modifier.height(20.dp))
-                        HomeButtonList(
+                        HomeExtraButtonList(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 33.dp),
-                            navigateToProtectCenter = {},
-                            navigateToHospital = {},
-                            navigateToProtectPart = {},
-                            navigateToVolunteer = {}
+                            navigateToHomeExtra = navigateToHomeExtra,
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         Text(
@@ -156,7 +160,8 @@ fun HomeScreen(
                     )
                     HomeProtectAnimalList(
                         nickname = userNickname,
-                        navigationToSearch = navigationToSearch,
+                        homeUserStatusType = uiState.userHomeUserStatusType,
+                        navigationToSearch = navigationToProtectAnimal,
                         animalCards = uiState.homeData!!.protectAnimalCards,
                         navigateToProtectDetail = navigateToProtectDetail
                     )
@@ -170,7 +175,8 @@ fun HomeScreen(
                     )
                     HomeReportedAnimalList(
                         nickname = userNickname,
-                        navigationToSearch = navigationToSearch,
+                        homeUserStatusType = uiState.userHomeUserStatusType,
+                        navigationToSearch = navigationToReportAnimal,
                         animalCards = uiState.homeData!!.reportAnimalCards,
                         navigateToReportDetail = navigateToReportDetail
                     )
@@ -193,6 +199,20 @@ fun HomeScreen(
                     .padding(bottom = 60.dp, end = 20.dp)
             )
         }
+        if (uiState.isReportDialogVisible) {
+            HomeReportDialog(
+                onDismissRequest = onReportDialogDismiss,
+                onLostReportButtonClicked = {
+                    onLostReportClick()
+                    onReportDialogDismiss()
+                },
+                onFindReportButtonClicked = {
+                    onFindReportClick()
+                    onReportDialogDismiss()
+                },
+                onPhoneClicked = onPhoneClicked
+            )
+        }
     }
 }
 
@@ -200,24 +220,22 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     var selected by remember { mutableStateOf(HomeReportDurationType.WEEK) }
-    val homeReportData = HomeReportData(
-        reports = listOf(
-            ReportItem(ReportDataType.RESCUE, 1833),
-            ReportItem(ReportDataType.PROTECTION, 1744),
-            ReportItem(ReportDataType.ADOPTION, 1),
-            ReportItem(ReportDataType.REPORT, 6)
-        )
-    )
+
     FindUTheme {
         HomeScreen(
             reportButtonClicked = {},
             alarmButtonClicked = {},
-            homeReportData = homeReportData,
-            indicatorClicked = { clickedLabel -> selected = clickedLabel },
-            navigationToSearch = {},
+            onIndicatorSelected = { clickedLabel -> selected = clickedLabel },
             userNickname = "신민석",
             navigateToProtectDetail = {},
-            navigateToReportDetail = {}
+            navigateToReportDetail = {},
+            onReportDialogDismiss = {},
+            onLostReportClick = {},
+            onFindReportClick = {},
+            navigationToProtectAnimal = {},
+            navigationToReportAnimal = {},
+            onPhoneClicked = {},
+            navigateToHomeExtra = {},
         )
     }
 }

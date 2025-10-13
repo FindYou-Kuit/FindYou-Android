@@ -124,7 +124,7 @@ fun ReportSpeciesComponent(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = species.species,
+                            text = species.displayName,
                             style = FindUTheme.typography.body1SemiBold16.copy(
                                 color = if (selectedSpecies == species) FindUTheme.colors.mainColor else FindUTheme.colors.gray6
                             ),

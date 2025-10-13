@@ -1,7 +1,9 @@
 package com.example.findu.presentation.ui.report.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,6 +22,8 @@ fun MissingReportNavHost(
     NavHost(
         navController = navController,
         startDestination = MissingReportRoute.MissingReport,
+        enterTransition = { fadeIn(tween(0)) },
+        exitTransition = { fadeOut(tween(0)) },
     ) {
         composable<MissingReportRoute.MissingReport> {
             MissingReportScreen(
@@ -31,9 +35,6 @@ fun MissingReportNavHost(
             enterTransition = {
                 slideInHorizontally(initialOffsetX = { it })
             },
-            exitTransition = {
-                slideOutHorizontally(targetOffsetX = { -it })
-            }
         ) {
             MissingReportAnimalInfoScreen(
                 uiState = uiState,

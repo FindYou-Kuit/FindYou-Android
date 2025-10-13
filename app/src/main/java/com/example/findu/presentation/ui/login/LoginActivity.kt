@@ -26,6 +26,7 @@ class LoginActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "LoginActivity"
+        private const val KAKAO_ID = "kakaoId"
     }
 
     private val loginViewModel: LoginViewModel by viewModels()
@@ -60,7 +61,7 @@ class LoginActivity : ComponentActivity() {
                     )
                 },
                 withoutSignUpButtonClicked = {
-                    loginViewModel.postGuestLogin{
+                    loginViewModel.postGuestLogin {
                         this.showToast(message = getString(R.string.login_without_signup_toast_message))
                     }
                 },
@@ -78,8 +79,11 @@ class LoginActivity : ComponentActivity() {
                 }
 
                 launch {
-                    loginViewModel.startOnboardingActivity.collect {
-                        startActivity(Intent(this@LoginActivity, OnboardingActivity::class.java))
+                    loginViewModel.startOnboardingActivity.collect { kakaoId ->
+                        startActivity(
+                            Intent(this@LoginActivity, OnboardingActivity::class.java)
+                                .putExtra(KAKAO_ID, kakaoId)
+                        )
                         finish()
                     }
                 }

@@ -1,21 +1,40 @@
 package com.example.findu.data.mapper.todomain
 
 import com.example.findu.data.dataremote.model.response.HomeResponseDto
-import com.example.findu.data.dataremote.model.response.ProtectAnimalCard
-import com.example.findu.data.dataremote.model.response.ReportAnimalCard
+import com.example.findu.data.dataremote.model.response.PeriodStatisticsDto
+import com.example.findu.data.dataremote.model.response.ProtectingAnimal
+import com.example.findu.data.dataremote.model.response.Statistics
+import com.example.findu.data.dataremote.model.response.WitnessedOrMissingAnimal
+
 import com.example.findu.domain.model.HomeData
+import com.example.findu.domain.model.HomeStatistics
+import com.example.findu.domain.model.PeriodStatistics
 import com.example.findu.domain.model.ProtectAnimal
 import com.example.findu.domain.model.ReportAnimal
 
 fun HomeResponseDto.toDomain() = HomeData(
-    todayRescuedAnimalCount = yesterdayRescuedAnimalCount,
-    todayReportAnimalCount = yesterdayReportedAnimalCount,
-    protectAnimalCards = protectAnimalCards.map { it.toDomain() },
-    reportAnimalCards = reportAnimalCards.map { it.toDomain() }
+    todayRescuedAnimalCount = statistics.recent7days.rescuedAnimalCount,
+    todayReportAnimalCount = statistics.recent7days.lostAnimalCount,
+    protectAnimalCards = protectingAnimals.map { it.toDomain() },
+    reportAnimalCards = witnessedOrMissingAnimals.map { it.toDomain() },
+    statistics = statistics.toDomain()
 )
 
-fun ProtectAnimalCard.toDomain() = ProtectAnimal(
-    protectId = protectId,
+fun Statistics.toDomain() = HomeStatistics(
+    recent7days = recent7days.toDomain(),
+    recent3months = recent3months.toDomain(),
+    recent1Year = recent1Year.toDomain()
+)
+
+fun PeriodStatisticsDto.toDomain() = PeriodStatistics(
+    rescuedAnimalCount = rescuedAnimalCount,
+    protectingAnimalCount = protectingAnimalCount,
+    adoptedAnimalCount = adoptedAnimalCount,
+    reportedAnimalCount = lostAnimalCount
+)
+
+fun ProtectingAnimal.toDomain() = ProtectAnimal(
+    protectId = reportId,
     thumbnailImageUrl = thumbnailImageUrl,
     title = title,
     tag = tag,
@@ -23,11 +42,11 @@ fun ProtectAnimalCard.toDomain() = ProtectAnimal(
     careAddress = careAddress
 )
 
-fun ReportAnimalCard.toDomain() = ReportAnimal(
+fun WitnessedOrMissingAnimal.toDomain() = ReportAnimal(
     reportId = reportId,
     thumbnailImageUrl = thumbnailImageUrl,
     title = title,
     tag = tag,
-    registerDate = registerDate,
-    happenLocation = happenLocation
+    registerDate = happenDate,
+    happenLocation = careAddress
 )

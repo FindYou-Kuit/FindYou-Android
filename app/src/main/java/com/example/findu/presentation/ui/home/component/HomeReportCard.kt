@@ -26,9 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.findu.R
-import com.example.findu.domain.model.HomeReportData
-import com.example.findu.domain.model.ReportDataType
-import com.example.findu.domain.model.ReportItem
+import com.example.findu.domain.model.HomeStatistics
+import com.example.findu.domain.model.PeriodStatistics
 import com.example.findu.presentation.type.HomeReportDurationType
 import com.example.findu.presentation.util.extension.noRippleClickable
 import com.example.findu.presentation.util.extension.roundedBackgroundWithPadding
@@ -37,11 +36,17 @@ import com.example.findu.ui.theme.FindUTheme
 
 @Composable
 fun HomeReportCard(
-    homeReportData: HomeReportData,
+    homeStatistics: HomeStatistics,
     homeReportDuration: HomeReportDurationType,
-    indicatorClicked: (HomeReportDurationType) -> Unit,
+    onIndicatorSelected: (HomeReportDurationType) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val currentPeriodStatistics = when (homeReportDuration) {
+        HomeReportDurationType.WEEK -> homeStatistics.recent7days
+        HomeReportDurationType.THREE_MONTHS -> homeStatistics.recent3months
+        HomeReportDurationType.YEAR -> homeStatistics.recent1Year
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -58,30 +63,31 @@ fun HomeReportCard(
         )
         Spacer(modifier = Modifier.height(14.dp))
         HomeReportCardIndicator(
-            modifier = Modifier.padding(horizontal = 15.dp), indicatorClicked = indicatorClicked,
-            selected = homeReportDuration
+            modifier = Modifier.padding(horizontal = 15.dp),
+            onIndicatorSelected = onIndicatorSelected,
+            selectedDuration = homeReportDuration
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            homeReportData.reports.forEachIndexed { index, data ->
+            currentPeriodStatistics.getAllStatistics().forEachIndexed { index, (label, count) ->
                 Column(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = data.count.toStringWithComma(),
+                        text = count.toStringWithComma(),
                         style = FindUTheme.typography.head3SemiBold18,
                         color = FindUTheme.colors.gray6
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        text = data.type.label,
+                        text = label,
                         style = FindUTheme.typography.captionRegular12,
                         color = FindUTheme.colors.gray5
                     )
                 }
 
-                if (index < homeReportData.reports.lastIndex) {
+                if (index < currentPeriodStatistics.getAllStatistics().lastIndex) {
                     Spacer(
                         modifier = Modifier
                             .width(1.dp)
@@ -96,9 +102,9 @@ fun HomeReportCard(
 
 @Composable
 fun HomeReportCardIndicator(
-    indicatorClicked: (HomeReportDurationType) -> Unit,
+    onIndicatorSelected: (HomeReportDurationType) -> Unit,
     modifier: Modifier = Modifier,
-    selected: HomeReportDurationType,
+    selectedDuration: HomeReportDurationType,
 ) {
     Row(
         modifier = modifier
@@ -108,7 +114,7 @@ fun HomeReportCardIndicator(
             )
     ) {
         HomeReportDurationType.entries.forEach { duration ->
-            val isSelected = selected == duration
+            val isSelected = selectedDuration == duration
             val backgroundColor = if (isSelected) FindUTheme.colors.white else Color.Unspecified
             val textColor = if (isSelected) FindUTheme.colors.mainColor else FindUTheme.colors.gray6
             val textStyle =
@@ -132,7 +138,7 @@ fun HomeReportCardIndicator(
                             )
                         }
                     )
-                    .noRippleClickable { indicatorClicked(duration) },
+                    .noRippleClickable { onIndicatorSelected(duration) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -147,23 +153,21 @@ fun HomeReportCardIndicator(
 }
 
 
+
 @Preview
 @Composable
 private fun HomeReportCardPreview() {
     var selected by remember { mutableStateOf(HomeReportDurationType.WEEK) }
-    val homeReportData = HomeReportData(
-        reports = listOf(
-            ReportItem(ReportDataType.RESCUE, 1833),
-            ReportItem(ReportDataType.PROTECTION, 1744),
-            ReportItem(ReportDataType.ADOPTION, 1),
-            ReportItem(ReportDataType.REPORT, 6)
-        )
+    val homeStatistics = HomeStatistics(
+        recent7days = PeriodStatistics(1833, 1744, 1, 6),
+        recent3months = PeriodStatistics(5000, 4500, 50, 100),
+        recent1Year = PeriodStatistics(20000, 18000, 500, 800)
     )
     Column {
         HomeReportCard(
-            homeReportData = homeReportData,
-            indicatorClicked = { clickedLabel -> selected = clickedLabel },
-            homeReportDuration = HomeReportDurationType.YEAR
+            homeStatistics = homeStatistics,
+            onIndicatorSelected = { clickedLabel -> selected = clickedLabel },
+            homeReportDuration = selected
         )
     }
 }
