@@ -3,7 +3,10 @@ package com.example.findu.presentation.ui.search.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.findu.domain.model.breed.SpeciesType
+import com.example.findu.domain.model.extra.Sido
 import com.example.findu.domain.repository.BreedRepository
+import com.example.findu.domain.usecase.extra.GetSidoUseCase
+import com.example.findu.domain.usecase.extra.GetSigunguUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,11 +15,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchFilterViewModel @Inject constructor(
-    private val breedRepository: BreedRepository
+    private val breedRepository: BreedRepository,
+    private val getSidoUseCase: GetSidoUseCase,
+    private val getSigunguUseCase: GetSigunguUseCase,
 ) : ViewModel() {
 
     private val _breedList = MutableStateFlow<List<String>>(emptyList())
     val breedList: StateFlow<List<String>> = _breedList
+
+    private val _sidoList = MutableStateFlow<List<Sido>>(emptyList())
+    val sidoList: StateFlow<List<Sido>> = _sidoList
+
+    private val _sigunguList = MutableStateFlow<List<String>>(emptyList())
+    val sigunguList: StateFlow<List<String>> = _sigunguList
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
@@ -35,6 +46,26 @@ class SearchFilterViewModel @Inject constructor(
                 .onFailure { e ->
                     _errorMessage.value = e.message ?: "품종 정보를 불러오지 못했습니다."
                 }
+        }
+    }
+
+    fun loadSido() {
+        viewModelScope.launch {
+            getSidoUseCase().onSuccess {
+                _sidoList.value = it
+            }.onFailure {
+                _errorMessage.value = it.message
+            }
+        }
+    }
+
+    fun loadSigungu(sidoId: Long) {
+        viewModelScope.launch {
+            getSigunguUseCase(sidoId).onSuccess {
+                _sigunguList.value = it
+            }.onFailure {
+                _errorMessage.value = it.message
+            }
         }
     }
 }
