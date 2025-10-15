@@ -29,6 +29,9 @@ import com.example.findu.presentation.ui.my.dialog.MyNicknameDialog
 import com.example.findu.presentation.ui.my.dialog.MyProfileImageDialog
 import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
 import com.example.findu.presentation.ui.my.model.ProfileImageType
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -188,20 +191,36 @@ class MyFragment : Fragment() {
     }
 
     private fun setupVersion() = with(binding) {
-        val currentVersion = BuildConfig.VERSION_NAME
-        val latest = "1.0"
-        tvMyVersionInfo.text = "버전 정보 $currentVersion"
+        val remoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings { minimumFetchIntervalInSeconds = 3600 }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.setDefaultsAsync(mapOf("latest_version" to "1.0"))
 
-        val currentNumber = currentVersion.substringBefore("-")
-            .replace(".", "")
-            .toIntOrNull() ?: 0
+        remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+            val latest = if (task.isSuccessful) remoteConfig.getString("latest_version") else "1.0"
+            val currentVersion = BuildConfig.VERSION_NAME
+            val isLatest = compareVersions(currentVersion.substringBefore("-"), latest)
+            tvMyVersionInfo.text = "버전 정보 $currentVersion"
+            clMyVersionChip.isVisible = isLatest
+            clMyGotoUpdate.isVisible = !isLatest
+        }
+    }
 
-        val latestNumber = latest.replace(".", "").toIntOrNull() ?: 0
+    private fun compareVersions(current: String, latest: String): Boolean {
+        val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
+        val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
+        val maxLength = maxOf(currentParts.size, latestParts.size)
 
-        val isLatest = currentNumber >= latestNumber
+        for (i in 0 until maxLength) {
+            val currentPart = currentParts.getOrNull(i) ?: 0
+            val latestPart = latestParts.getOrNull(i) ?: 0
 
-        clMyVersionChip.isVisible = isLatest
-        clMyGotoUpdate.isVisible = !isLatest
+            when {
+                currentPart > latestPart -> return true
+                currentPart < latestPart -> return false
+            }
+        }
+        return true
     }
 
     private fun observeViewModel() {
