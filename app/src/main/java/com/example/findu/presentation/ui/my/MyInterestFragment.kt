@@ -13,8 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyInterestBinding
-import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.ui.my.adapter.MyInterestRvAdapter
+import com.example.findu.presentation.ui.my.viewmodel.MyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

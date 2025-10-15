@@ -7,6 +7,7 @@ import com.example.findu.data.dataremote.service.DummyService
 import com.example.findu.data.dataremote.service.GptService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.example.findu.data.dataremote.service.HomeService
+import com.example.findu.data.dataremote.service.InquiryService
 import com.example.findu.data.dataremote.service.InterestService
 import com.example.findu.data.dataremote.service.SearchService
 import com.example.findu.data.dataremote.service.MyService
@@ -103,4 +104,9 @@ object ServiceModule {
 
         return naverRetrofit.create(NaverService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideInquiryService(retrofit: Retrofit): InquiryService =
+        retrofit.create(InquiryService::class.java)
 }

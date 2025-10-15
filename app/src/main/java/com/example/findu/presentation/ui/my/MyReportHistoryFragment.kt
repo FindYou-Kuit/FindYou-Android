@@ -11,9 +11,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.findu.databinding.FragmentMyReportHistoryBinding
-import com.example.findu.presentation.model.MyReportHistoryRv
 import com.example.findu.presentation.ui.my.adapter.MyReportHistoryAdapter
 import com.example.findu.presentation.ui.my.dialog.MyDeleteHistoryDialog
+import com.example.findu.presentation.ui.my.viewmodel.MyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
