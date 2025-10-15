@@ -125,8 +125,9 @@ class SearchReportFragment : Fragment(), SearchListListener {
         if (isNewList) {
             listAdapter.submitContent(searchList)
             isNewList = false
-            binding.rvSearchReport.scrollToPosition(0)
-            binding.rvSearchReport.smoothScrollToPosition(0)
+            binding.rvSearchReport.post {
+                binding.rvSearchReport.scrollToPosition(0)
+            }
         } else {
             listAdapter.addContent(searchList)
         }

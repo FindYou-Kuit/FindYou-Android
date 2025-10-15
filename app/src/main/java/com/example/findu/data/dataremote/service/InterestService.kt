@@ -22,9 +22,9 @@ interface InterestService {
         @Body request: MyInterestRequestDto
     ) : NullableBaseResponse<Unit>
 
-    @DELETE("/api/v2/users/me/interest-animals")
+    @DELETE("/api/v2/users/me/interest-animals/{reportId}")
     suspend fun deleteInterestAnimal(
-        @Query("reportId") reportId : Long
+        @Path("reportId") reportId: Long
     ) : NullableBaseResponse<Unit>
 
 }

@@ -22,7 +22,6 @@ import com.example.findu.presentation.ui.search.adapter.SearchListAdapter
 import com.example.findu.presentation.ui.search.adapter.SearchListListener
 import com.example.findu.presentation.ui.search.SearchFragmentDirections
 import com.example.findu.presentation.ui.search.SearchSpacingItemDecoration
-import com.example.findu.presentation.ui.search.adapter.SearchContentRVAdapter
 import com.example.findu.presentation.ui.search.model.SearchFilterUiModel
 import com.example.findu.presentation.ui.search.model.SearchRv
 import com.example.findu.presentation.ui.search.model.SearchType
@@ -126,8 +125,9 @@ class SearchRescueFragment : Fragment(), SearchListListener {
         if (isNewList) {
             listAdapter.submitContent(searchList)
             isNewList = false
-            binding.rvSearchRescue.scrollToPosition(0)
-            binding.rvSearchRescue.smoothScrollToPosition(0)
+            binding.rvSearchRescue.post {
+                binding.rvSearchRescue.scrollToPosition(0)
+            }
         } else {
             listAdapter.addContent(searchList)
         }

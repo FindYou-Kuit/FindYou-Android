@@ -113,7 +113,7 @@ class SearchAllFragment : Fragment(), SearchListListener {
                 image = item.thumbnailImageUrl ?: "",
                 name = item.title,
                 date = item.date,
-                location = item.location ?: "",
+                location = item.location,
                 isBookmark = item.interest,
                 tag = item.tag.toSearchRvTag(),
                 reportId = item.reportId
@@ -123,8 +123,9 @@ class SearchAllFragment : Fragment(), SearchListListener {
         if (isNewList) {
             listAdapter.submitContent(searchList)
             isNewList = false
-            binding.rvSearchAll.scrollToPosition(0)
-            binding.rvSearchAll.smoothScrollToPosition(0)
+            binding.rvSearchAll.post {
+                binding.rvSearchAll.scrollToPosition(0)
+            }
         } else {
             listAdapter.addContent(searchList)
         }
