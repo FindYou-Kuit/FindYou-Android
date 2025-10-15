@@ -16,6 +16,7 @@ import com.example.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.example.findu.domain.usecase.my.PatchNickNameUseCase
 import com.example.findu.domain.usecase.my.PatchProfileImageUseCase
 import com.example.findu.domain.usecase.report.DeleteReportUseCase
+import com.example.findu.domain.usecase.token.ClearTokenUseCase
 import com.example.findu.presentation.mapper.todomain.toRvModel
 import com.example.findu.presentation.model.MyInterestRv
 import com.example.findu.presentation.model.MyReportHistoryRv
@@ -40,6 +41,7 @@ class MyViewModel @Inject constructor(
     private val deleteInterestAnimalUseCase: DeleteInterestAnimalUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
     private val patchProfileImageUseCase : PatchProfileImageUseCase,
+    private val clearTokenUseCase: ClearTokenUseCase
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -228,4 +230,11 @@ class MyViewModel @Inject constructor(
             )
         }
     }
+
+    fun clearToken() {
+        viewModelScope.launch {
+            clearTokenUseCase()
+        }
+    }
+
 }

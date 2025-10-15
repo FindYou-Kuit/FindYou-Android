@@ -140,6 +140,7 @@ class MyFragment : Fragment() {
                 MyLogoutDialog(
                     context = requireContext(),
                     onLogoutClick = {
+                        myViewModel.clearToken()
                         with(requireActivity()) {
                             startActivity(Intent(requireContext(), LoginActivity::class.java))
                             finish()
@@ -173,10 +174,9 @@ class MyFragment : Fragment() {
                     context = requireContext(),
                     onWithdrawalClick = {
                         myViewModel.deleteUserData()
+                        myViewModel.clearToken()
                         with(requireActivity()) {
-                            startActivity(
-                                Intent(requireContext(), LoginActivity::class.java)
-                            )
+                            startActivity(Intent(requireContext(), LoginActivity::class.java))
                             finish()
                         }
                     }).show()
