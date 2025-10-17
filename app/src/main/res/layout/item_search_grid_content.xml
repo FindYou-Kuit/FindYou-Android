@@ -17,7 +17,6 @@
             android:id="@+id/iv_search_content"
             android:layout_width="155dp"
             android:layout_height="155dp"
-            android:background="@drawable/img_sample_dog"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
