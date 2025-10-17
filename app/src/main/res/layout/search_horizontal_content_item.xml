@@ -16,6 +16,7 @@
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:scaleType="centerCrop"
+            android:background="@color/gray2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/SearchRvRoundedImageView" />

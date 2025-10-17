@@ -10,5 +10,6 @@
         android:id="@+id/iv_search_detail_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/gray2"
         android:scaleType="centerCrop" />
 </com.google.android.material.card.MaterialCardView>
