@@ -42,8 +42,11 @@ import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.rememberMarkerState
+import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.coroutines.launch
 
 private const val INITIAL_ZOOM_LEVEL = 14.0
@@ -77,6 +80,15 @@ fun ExtraHomeCenterScreen(
         )
     }
 
+    LaunchedEffect(centers) {
+        if (centers.isNotEmpty()) {
+            val firstCenter = centers.first()
+            cameraPositionState.animate(
+                CameraUpdate.scrollTo(LatLng(firstCenter.latitude, firstCenter.longitude))
+            )
+        }
+    }
+
     Column(modifier = modifier.fillMaxSize()) {
         FindUTopAppBar(
             title = R.string.home_extra_center,
@@ -96,18 +108,18 @@ fun ExtraHomeCenterScreen(
                 )
             ) {
 
-//                cameraPositionState.contentBounds?.let { visibleBounds ->
-//                    val visibleCenters = centers.filter { center ->
-//                        visibleBounds.contains(LatLng(center.latitude, center.longitude))
-//                    }
-//
-//                    visibleCenters.forEach { center ->
-//                        Marker(
-//                            state = rememberMarkerState(position = LatLng(center.latitude, center.longitude)),
-//                            captionText = center.centerName
-//                        )
-//                    }
-//                }
+                cameraPositionState.contentBounds?.let { visibleBounds ->
+                    val visibleCenters = centers.filter { center ->
+                        visibleBounds.contains(LatLng(center.latitude, center.longitude))
+                    }
+
+                    visibleCenters.forEach { center ->
+                        Marker(
+                            state = rememberMarkerState(position = LatLng(center.latitude, center.longitude)),
+                            icon = OverlayImage.fromResource(R.drawable.ic_home_extra_volunteer_gps_20)
+                        )
+                    }
+                }
 
             }
 
@@ -224,19 +236,25 @@ private fun ExtraHomeCenterScreenPreview() {
             jurisdiction = listOf("서울특별시 강남구", "서울특별시 서초구"),
             centerName = "한국동물구조관리협회",
             phoneNumber = "02-764-3708",
-            address = "서울특별시 강남구 삼성로 1 삼성빌딩 1층"
+            address = "서울특별시 강남구 삼성로 1 삼성빌딩 1층",
+            latitude = 37.497942,
+            longitude = 127.027683
         ),
         Center(
             jurisdiction = listOf("부산광역시 해운대구", "부산광역시 수영구"),
             centerName = "부산 유기동물 구조센터",
             phoneNumber = "051-987-6543",
-            address = "부산광역시 해운대구 해운대로 123"
+            address = "부산광역시 해운대구 해운대로 123",
+            latitude = 37.497942,
+            longitude = 127.027683
         ),
         Center(
             jurisdiction = listOf("경기도 성남시 분당구"),
             centerName = "경기 동물보호소",
             phoneNumber = "031-555-1111",
-            address = "경기도 성남시 분당구 정자동 100"
+            address = "경기도 성남시 분당구 정자동 100",
+            latitude = 37.497942,
+            longitude = 127.027683
         )
     )
 

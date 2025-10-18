@@ -22,7 +22,9 @@ data class Center(
     val jurisdiction: List<String>,
     val centerName: String,
     val phoneNumber: String,
-    val address: String
+    val address: String,
+    val latitude: Double,
+    val longitude: Double
 ) : HomeExtraDataType
 
 

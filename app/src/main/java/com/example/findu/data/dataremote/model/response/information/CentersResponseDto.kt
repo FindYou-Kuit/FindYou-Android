@@ -26,6 +26,9 @@ data class CenterDto(
     @SerialName("phoneNumber")
     val phoneNumber: String,
 
-    @SerialName("address")
-    val address: String
+    @SerialName("address") val address: String,
+
+    @SerialName("latitude") val latitude: Double,
+
+    @SerialName("longitude") val longitude: Double
 )

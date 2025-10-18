@@ -26,12 +26,12 @@ class InformationRepositoryImpl @Inject constructor(
 
     override suspend fun getCenters(
         lastId: Long?,
-        sido: String?,
-        sigungu: String?,
+        district: String?,
         lat: Double?,
-        long: Double?
+        long: Double?,
+        size: Int?
     ): Result<PagedResult<Center>> = runCatching {
-        remote.getCenters(lastId, sido, sigungu, lat, long)
+        remote.getCenters(lastId, district, lat, long, size)
             .handleBaseResponse()
             .getOrThrow()
             .toDomain()
@@ -54,8 +54,8 @@ class InformationRepositoryImpl @Inject constructor(
             .toDomain()
     }
 
-    override suspend fun getSigungu(sidoId:Long): Result<List<String>> = runCatching {
-        remote.getSigungu(sidoId=sidoId)
+    override suspend fun getSigungu(sidoId: Long): Result<List<String>> = runCatching {
+        remote.getSigungu(sidoId = sidoId)
             .handleBaseResponse()
             .getOrThrow()
             .sigunguList

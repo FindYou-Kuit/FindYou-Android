@@ -20,11 +20,11 @@ class InformationRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getCenters(
         lastId: Long?,
-        sido: String?,
-        sigungu: String?,
+        district: String?,
         lat: Double?,
-        long: Double?
-    ): BaseResponse<CentersResponseDto> = informationService.getCenters(lastId, sido, sigungu, lat, long)
+        long: Double?,
+        size: Int?
+    ): BaseResponse<CentersResponseDto> = informationService.getCenters(lastId, district, lat, long, size)
 
 
     override suspend fun getDepartments(
@@ -34,6 +34,7 @@ class InformationRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getSido(): BaseResponse<SidoListDto> = informationService.getSido()
 
-    override suspend fun getSigungu(sidoId:Long): BaseResponse<SigunguListDto> = informationService.getSigungu(sidoId = sidoId)
+    override suspend fun getSigungu(sidoId: Long): BaseResponse<SigunguListDto> =
+        informationService.getSigungu(sidoId = sidoId)
 
 }

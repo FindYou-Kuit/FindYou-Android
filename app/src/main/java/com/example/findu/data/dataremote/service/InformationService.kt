@@ -21,17 +21,17 @@ interface InformationService {
 
     @GET("/$API/$VERSION/$INFORMATION/protection-centers")
     suspend fun getCenters(
-        @Query("lastId") lastId: Long? = Long.MAX_VALUE,
-        @Query("sido") sido: String? = null,
-        @Query("sigungu") sigungu: String? = null,
+        @Query("lastId") lastId: Long? = null,
+        @Query("district") sido: String? = null,
         @Query("lat") lat: Double? = null,
-        @Query("long") long: Double? = null
-    ): BaseResponse<CentersResponseDto>
+        @Query("long") long: Double? = null,
+        @Query("size") size: Int? = null,
+        ): BaseResponse<CentersResponseDto>
 
     @GET("/$API/$VERSION/$INFORMATION/departments")
     suspend fun getDepartments(
         @Query("district") district: String? = null,
-        @Query("lastId") lastId: Long? = Long.MAX_VALUE,
+        @Query("lastId") lastId: Long? = null,
     ): BaseResponse<DepartmentsResponseDto>
 
     @GET("/$API/$VERSION/sidos")

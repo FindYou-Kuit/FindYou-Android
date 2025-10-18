@@ -13,19 +13,19 @@ interface InformationRemoteDataSource {
     ): BaseResponse<VolunteersResponseDto>
 
     suspend fun getCenters(
-        lastId: Long? = Long.MAX_VALUE,
-        sido: String? = null,
-        sigungu: String? = null,
+        lastId: Long? = null,
+        district: String? = null,
         lat: Double? = null,
-        long: Double? = null
+        long: Double? = null,
+        size: Int? = null
     ): BaseResponse<CentersResponseDto>
 
     suspend fun getDepartments(
         district: String? = null,
-        lastId: Long? = Long.MAX_VALUE,
+        lastId: Long? = null,
     ): BaseResponse<DepartmentsResponseDto>
 
     suspend fun getSido(): BaseResponse<SidoListDto>
 
-    suspend fun getSigungu(sidoId:Long): BaseResponse<SigunguListDto>
+    suspend fun getSigungu(sidoId: Long): BaseResponse<SigunguListDto>
 }

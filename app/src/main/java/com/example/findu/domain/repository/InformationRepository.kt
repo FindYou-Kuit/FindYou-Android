@@ -13,20 +13,20 @@ interface InformationRepository {
     ): Result<PagedResult<VolunteerWork>>
 
     suspend fun getCenters(
-        lastId: Long? = Long.MAX_VALUE,
-        sido: String? = null,
-        sigungu: String? = null,
+        lastId: Long? = null,
+        district: String? = null,
         lat: Double? = null,
-        long: Double? = null
+        long: Double? = null,
+        size: Int? = null
     ): Result<PagedResult<Center>>
 
     suspend fun getDepartments(
         district: String? = null,
-        lastId: Long? = Long.MAX_VALUE
+        lastId: Long? = null
     ): Result<PagedResult<Department>>
 
     suspend fun getSido(): Result<List<Sido>>
 
-    suspend fun getSigungu(sidoId:Long): Result<List<String>>
+    suspend fun getSigungu(sidoId: Long): Result<List<String>>
 
 }

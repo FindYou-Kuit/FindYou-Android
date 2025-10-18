@@ -32,7 +32,9 @@ fun CentersResponseDto.toDomain(): PagedResult<Center> =
                 jurisdiction = it.jurisdiction,
                 centerName = it.centerName,
                 phoneNumber = it.phoneNumber,
-                address = it.address
+                address = it.address,
+                latitude = it.latitude,
+                longitude = it.longitude
             )
         },
         lastId = lastId,

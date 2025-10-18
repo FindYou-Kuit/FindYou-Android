@@ -7,7 +7,7 @@ class GetDepartmentsUseCase(
 ) {
     suspend operator fun invoke(
         district: String? = null,
-        lastId: Long? = Long.MAX_VALUE
+        lastId: Long? = null
     ) = repository.getDepartments(
         district = district,
         lastId = lastId

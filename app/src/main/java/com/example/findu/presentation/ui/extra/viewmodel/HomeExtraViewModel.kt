@@ -143,8 +143,7 @@ class HomeExtraViewModel @Inject constructor(
                            ) {
         viewModelScope.launch {
             getCentersUseCase(
-                sido = sido,
-                sigungu = sigungu,
+                district = sido + sigungu,
                 lat = lat,
                 lon = lon
             ).fold(
