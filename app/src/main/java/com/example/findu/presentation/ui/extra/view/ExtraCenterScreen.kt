@@ -1,5 +1,10 @@
 package com.example.findu.presentation.ui.extra.view
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,9 +28,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.example.findu.R
 import com.example.findu.domain.model.extra.Center
 import com.example.findu.domain.model.extra.Sido
@@ -67,8 +74,17 @@ fun ExtraHomeCenterScreen(
     popBackStack: () -> Unit = {},
     searchCurrentLocation: (centerLatLng: LatLng) -> Unit = { }
 ) {
-
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (!isGranted) {
+                Toast.makeText(context, "위치 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    )
 
     val cameraPositionState: CameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(latitude, longitude), INITIAL_ZOOM_LEVEL)
@@ -170,14 +186,28 @@ fun ExtraHomeCenterScreen(
                                 padding = PaddingValues(12.dp)
                             )
                             .noRippleClickable {
-                                scope.launch {
-                                    cameraPositionState.animate(
-                                        CameraUpdate.scrollAndZoomTo(
-                                            LatLng(latitude, longitude), INITIAL_ZOOM_LEVEL
-                                        )
-                                    )
+                                when (PackageManager.PERMISSION_GRANTED) {
+                                    ContextCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.ACCESS_FINE_LOCATION
+                                    ) -> {
+                                        scope.launch {
+                                            cameraPositionState.animate(
+                                                CameraUpdate.scrollAndZoomTo(
+                                                    LatLng(latitude, longitude), INITIAL_ZOOM_LEVEL
+                                                )
+                                            )
+                                        }
+                                        searchCurrentLocation(LatLng(latitude, longitude))
+                                    }
+
+                                    else -> {
+                                        Toast
+                                            .makeText(context, "현재 위치로 이동하려면 위치 권한이 필요합니다.", Toast.LENGTH_SHORT)
+                                            .show()
+                                        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                                    }
                                 }
-                                searchCurrentLocation(LatLng(latitude, longitude))
                             }
                     )
                     Spacer(modifier = Modifier.weight(1f))
