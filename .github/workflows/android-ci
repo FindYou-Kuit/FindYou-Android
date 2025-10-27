@@ -34,5 +34,12 @@ jobs: # CI에서 수행할 작업을 정의한다.
         run: |
           echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
 
+      - name: Generate keystore.properties
+        run: |
+          echo '${{ secrets.KEYSTORE_PROPERTIES }}' >> ./keystore.properties
+
+      - name: Generate google-services.json
+        run: echo '${{ secrets.GOOGLE_SERVICES }}' | base64 -d > ./app/google-services.json
+
       - name: Run build
         run: ./gradlew buildDebug --stacktrace
