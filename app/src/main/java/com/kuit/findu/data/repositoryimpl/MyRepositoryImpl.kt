@@ -1,0 +1,82 @@
+package com.kuit.findu.data.repositoryimpl
+
+import com.kuit.findu.data.dataremote.datasource.MyRemoteDataSource
+import com.kuit.findu.data.dataremote.model.request.PatchNicknameRequestDto
+import com.kuit.findu.data.dataremote.util.handleBaseResponse
+import com.kuit.findu.data.mapper.todomain.my.toDomain
+import com.kuit.findu.domain.model.my.MyInterestData
+import com.kuit.findu.domain.model.my.MyProfileData
+import com.kuit.findu.domain.model.my.MyReportHistoryData
+import com.kuit.findu.domain.model.my.MyViewedAnimalData
+import com.kuit.findu.domain.repository.MyRepository
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
+import javax.inject.Inject
+
+class MyRepositoryImpl @Inject constructor(
+    private val myRemoteDataSource: MyRemoteDataSource,
+) : MyRepository {
+    override suspend fun getMyInterest(
+        lastId: Long,
+    ): Result<MyInterestData> =
+        runCatching {
+            myRemoteDataSource.getInterestAnimals(
+                lastId = lastId,
+            ).handleBaseResponse().getOrThrow().toDomain()
+        }
+
+    override suspend fun getMyReportHistory(lastId: Long): Result<MyReportHistoryData> =
+        runCatching {
+            myRemoteDataSource.getReportHistory(lastId = lastId)
+                .handleBaseResponse().getOrThrow().toDomain()
+        }
+
+    override suspend fun getMyViewedAnimals(
+        lastId: Long,
+    ): Result<MyViewedAnimalData> =
+        runCatching {
+            myRemoteDataSource.getViewedAnimals(
+                lastId = lastId,
+            ).handleBaseResponse().getOrThrow().toDomain()
+        }
+
+    override suspend fun deleteUser(): Result<Unit> =
+        runCatching {
+            myRemoteDataSource.deleteUser().handleBaseResponse().getOrThrow()
+        }
+
+    override suspend fun patchNickname(newNickname: String): Result<Unit> =
+        runCatching {
+            myRemoteDataSource
+                .patchNickname(PatchNicknameRequestDto(newNickname))
+                .handleBaseResponse()
+                .getOrThrow()
+        }
+
+    override suspend fun getNickname(): Result<MyProfileData> =
+        runCatching {
+            myRemoteDataSource.getNickname()
+                .handleBaseResponse()
+                .getOrThrow()
+                .toDomain()
+        }
+
+
+    override suspend fun patchProfileImageFile(imagePath: String): Result<Unit> =
+        runCatching {
+            val file = File(imagePath)
+            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+            val multipartBody = MultipartBody.Part.createFormData("profileImageFile", file.name, requestFile)
+            myRemoteDataSource.patchProfileImageFile(multipartBody).handleBaseResponse().getOrThrow()
+        }
+
+    override suspend fun patchProfileImageDefault(defaultProfileImageName: String): Result<Unit> =
+        runCatching {
+            val requestBody = defaultProfileImageName.toRequestBody("text/plain".toMediaType())
+            myRemoteDataSource.patchProfileImageDefault(requestBody).handleBaseResponse().getOrThrow()
+        }
+}

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragment_home"
-        android:name="com.example.findu.presentation.ui.home.HomeFragment"
+        android:name="com.kuit.findu.presentation.ui.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
         <action
@@ -35,18 +35,18 @@
 
     <fragment
         android:id="@+id/fragment_home_extra"
-        android:name="com.example.findu.presentation.ui.extra.HomeExtraFragment"
+        android:name="com.kuit.findu.presentation.ui.extra.HomeExtraFragment"
         android:label="Home Extra"
         tools:layout="@layout/fragment_home_extra">
 
         <argument
             android:name="homeExtraType"
-            app:argType="com.example.findu.presentation.type.HomeExtraButtonType"/>
+            app:argType="com.kuit.findu.presentation.type.HomeExtraButtonType"/>
     </fragment>
 
     <fragment
         android:id="@+id/fragment_search"
-        android:name="com.example.findu.presentation.ui.search.SearchFragment"
+        android:name="com.kuit.findu.presentation.ui.search.SearchFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search">
         <action
@@ -77,13 +77,13 @@
 
     <fragment
         android:id="@+id/fragment_info"
-        android:name="com.example.findu.presentation.ui.info.InfoFragment"
+        android:name="com.kuit.findu.presentation.ui.info.InfoFragment"
         android:label="Info"
         tools:layout="@layout/fragment_info" />
 
     <fragment
         android:id="@+id/fragment_report_info"
-        android:name="com.example.findu.presentation.ui.info.ReportInfoFragment"
+        android:name="com.kuit.findu.presentation.ui.info.ReportInfoFragment"
         android:label="Report Info"
         tools:layout="@layout/fragment_report_info">
         <action
@@ -94,19 +94,19 @@
 
     <fragment
         android:id="@+id/fragment_adopt_info"
-        android:name="com.example.findu.presentation.ui.info.AdoptInfoFragment"
+        android:name="com.kuit.findu.presentation.ui.info.AdoptInfoFragment"
         android:label="Adopt Info"
         tools:layout="@layout/fragment_adopt_info" />
 
     <fragment
         android:id="@+id/fragment_volunteer_info"
-        android:name="com.example.findu.presentation.ui.info.VolunteerInfoFragment"
+        android:name="com.kuit.findu.presentation.ui.info.VolunteerInfoFragment"
         android:label="Adopt Info"
         tools:layout="@layout/fragment_volunteer_info" />
 
     <fragment
         android:id="@+id/fragment_my"
-        android:name="com.example.findu.presentation.ui.my.MyFragment"
+        android:name="com.kuit.findu.presentation.ui.my.MyFragment"
         android:label="My"
         tools:layout="@layout/fragment_my">
         <action
@@ -125,13 +125,13 @@
 
     <fragment
         android:id="@+id/fragment_report_camera"
-        android:name="com.example.findu.presentation.ui.report.ReportCameraFragment"
+        android:name="com.kuit.findu.presentation.ui.report.ReportCameraFragment"
         android:label="Report Camera"
         tools:layout="@layout/fragment_report_camera" />
 
     <fragment
         android:id="@+id/fragment_my_keep_animals"
-        android:name="com.example.findu.presentation.ui.my.MyInterestFragment"
+        android:name="com.kuit.findu.presentation.ui.my.MyInterestFragment"
         android:label="My Keep Animals"
         tools:layout="@layout/fragment_my_interest">
         <action
@@ -147,17 +147,17 @@
 
     <fragment
         android:id="@+id/fragment_search_filter"
-        android:name="com.example.findu.presentation.ui.search.filter.SearchFilterFragment"
+        android:name="com.kuit.findu.presentation.ui.search.filter.SearchFilterFragment"
         android:label="Search Filter"
         tools:layout="@layout/fragment_search_filter">
         <argument
             android:name="searchType"
-            app:argType="com.example.findu.presentation.ui.search.model.SearchType" />
+            app:argType="com.kuit.findu.presentation.ui.search.model.SearchType" />
     </fragment>
 
     <fragment
         android:id="@+id/fragment_my_recent_history"
-        android:name="com.example.findu.presentation.ui.my.MyViewedAnimalFragment"
+        android:name="com.kuit.findu.presentation.ui.my.MyViewedAnimalFragment"
         android:label="My Recent History"
         tools:layout="@layout/fragment_my_viewed_animal">
         <action
@@ -173,7 +173,7 @@
 
     <fragment
         android:id="@+id/fragment_my_report_history"
-        android:name="com.example.findu.presentation.ui.my.MyReportHistoryFragment"
+        android:name="com.kuit.findu.presentation.ui.my.MyReportHistoryFragment"
         android:label="My Report History"
         tools:layout="@layout/fragment_my_report_history">
         <action
@@ -189,7 +189,7 @@
 
     <fragment
         android:id="@+id/fragment_search_detail_disappear"
-        android:name="com.example.findu.presentation.ui.search.detail.SearchDisappearDetailFragment"
+        android:name="com.kuit.findu.presentation.ui.search.detail.SearchDisappearDetailFragment"
         android:label="Search Disappear Detail"
         tools:layout="@layout/fragment_search_detail_disappear">
         <argument
@@ -208,7 +208,7 @@
 
     <fragment
         android:id="@+id/fragment_search_detail_witness"
-        android:name="com.example.findu.presentation.ui.search.detail.SearchWitnessDetailFragment"
+        android:name="com.kuit.findu.presentation.ui.search.detail.SearchWitnessDetailFragment"
         android:label="Search Witness Detail"
         tools:layout="@layout/fragment_search_detail_witness">
         <argument
@@ -227,13 +227,13 @@
 
     <fragment
             android:id="@+id/fragment_my_inquire"
-            android:name="com.example.findu.presentation.ui.my.MyInquireFragment"
+            android:name="com.kuit.findu.presentation.ui.my.MyInquireFragment"
             android:label="문의하기"
             tools:layout="@layout/fragment_my_inquire" />
 
     <fragment
         android:id="@+id/fragment_search_detail_protecting"
-        android:name="com.example.findu.presentation.ui.search.detail.SearchProtectingDetailFragment"
+        android:name="com.kuit.findu.presentation.ui.search.detail.SearchProtectingDetailFragment"
         android:label="Search Missing Detail"
         tools:layout="@layout/fragment_search_detail_protecting">
         <argument
@@ -252,7 +252,7 @@
 
     <fragment
         android:id="@+id/fragment_missing_report"
-        android:name="com.example.findu.presentation.ui.report.MissingReportFragment"
+        android:name="com.kuit.findu.presentation.ui.report.MissingReportFragment"
         android:label="Missing Report"
         tools:layout="@layout/fragment_missing_report">
         <action
@@ -273,7 +273,7 @@
 
     <fragment
         android:id="@+id/fragment_witness_report"
-        android:name="com.example.findu.presentation.ui.report.WitnessReportFragment"
+        android:name="com.kuit.findu.presentation.ui.report.WitnessReportFragment"
         android:label="Witness Report"
         tools:layout="@layout/fragment_witness_report">
         <action

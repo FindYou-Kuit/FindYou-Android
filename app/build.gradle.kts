@@ -14,11 +14,11 @@ val properties = Properties().apply {
 }
 
 android {
-    namespace = "com.example.findu"
+    namespace = "com.kuit.findu"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.findu"
+        applicationId = "com.kuit.findu"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
