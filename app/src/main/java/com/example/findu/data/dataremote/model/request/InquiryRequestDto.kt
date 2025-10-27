@@ -9,6 +9,6 @@ data class PostInquiryRequestDto(
     val title: String,
     @SerialName("content")
     val content: String,
-    @SerialName("category")
+    @SerialName("categories")
     val category: List<String>
 )
