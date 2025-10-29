@@ -5,8 +5,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.findu.domain.usecase.PostCheckNicknameUseCase
-import com.example.findu.domain.usecase.PostSignupUseCase
+import com.example.findu.domain.usecase.auth.PostCheckNicknameUseCase
+import com.example.findu.domain.usecase.auth.PostSignupUseCase
 import com.example.findu.presentation.type.DefaultProfileType
 import com.example.findu.presentation.type.NicknameValidType
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -4,6 +4,7 @@ import com.example.findu.domain.repository.AuthRepository
 import com.example.findu.domain.repository.BreedRepository
 import com.example.findu.domain.repository.DetailSearchRepository
 import com.example.findu.domain.repository.HomeRepository
+import com.example.findu.domain.repository.InformationRepository
 import com.example.findu.domain.repository.InterestRepository
 import com.example.findu.domain.repository.MyRepository
 import com.example.findu.domain.repository.SearchRepository
@@ -13,15 +14,20 @@ import com.example.findu.domain.repository.report.ReportRepository
 import com.example.findu.domain.usecase.GetBreedDataUseCase
 import com.example.findu.domain.usecase.GetBreedValidationUseCase
 import com.example.findu.domain.usecase.GetDetailSearchUseCase
-import com.example.findu.domain.usecase.GetHomeUseCase
 import com.example.findu.domain.usecase.GetNicknameUseCase
 import com.example.findu.domain.usecase.GetSearchUseCase
 import com.example.findu.domain.usecase.PostAiDetectionUseCase
-import com.example.findu.domain.usecase.PostCheckNicknameUseCase
-import com.example.findu.domain.usecase.PostGuestLoginUseCase
-import com.example.findu.domain.usecase.PostLoginUseCase
-import com.example.findu.domain.usecase.PostSignupUseCase
 import com.example.findu.domain.usecase.SetNicknameUseCase
+import com.example.findu.domain.usecase.auth.PostCheckNicknameUseCase
+import com.example.findu.domain.usecase.auth.PostGuestLoginUseCase
+import com.example.findu.domain.usecase.auth.PostLoginUseCase
+import com.example.findu.domain.usecase.auth.PostSignupUseCase
+import com.example.findu.domain.usecase.extra.GetCentersUseCase
+import com.example.findu.domain.usecase.extra.GetDepartmentsUseCase
+import com.example.findu.domain.usecase.extra.GetSidoUseCase
+import com.example.findu.domain.usecase.extra.GetSigunguUseCase
+import com.example.findu.domain.usecase.extra.GetVolunteersUseCase
+import com.example.findu.domain.usecase.home.GetHomeUseCase
 import com.example.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
 import com.example.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import com.example.findu.domain.usecase.my.DeleteUserUseCase
@@ -231,6 +237,25 @@ object UseCaseModule {
         tokenRepository: TokenRepository
     ): ClearTokenUseCase = ClearTokenUseCase(tokenRepository)
 
+
+    @Provides
+    @Singleton
+    fun provideGetDepartmentsUseCase(
+        informationRepository: InformationRepository
+    ): GetDepartmentsUseCase = GetDepartmentsUseCase(informationRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetVolunteersUseCase(
+        informationRepository: InformationRepository
+    ): GetVolunteersUseCase = GetVolunteersUseCase(informationRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetCentersUseCase(
+        informationRepository: InformationRepository
+    ): GetCentersUseCase = GetCentersUseCase(informationRepository)
+
     @Provides
     @Singleton
     fun provideGetLocalNicknameUseCase(
@@ -248,4 +273,16 @@ object UseCaseModule {
     fun providePostAiDetectBreedUseCase(
         breedRepository: BreedRepository,
     ): PostAiDetectionUseCase = PostAiDetectionUseCase(breedRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSidoUseCase(
+        informationRepository: InformationRepository
+    ): GetSidoUseCase = GetSidoUseCase(informationRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSigunguUseCase(
+        informationRepository: InformationRepository
+    ): GetSigunguUseCase = GetSigunguUseCase(informationRepository)
 }

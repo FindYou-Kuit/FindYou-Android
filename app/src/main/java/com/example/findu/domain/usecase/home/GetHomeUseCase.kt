@@ -1,4 +1,4 @@
-package com.example.findu.domain.usecase
+package com.example.findu.domain.usecase.home
 
 import com.example.findu.domain.model.HomeData
 import com.example.findu.domain.repository.HomeRepository
