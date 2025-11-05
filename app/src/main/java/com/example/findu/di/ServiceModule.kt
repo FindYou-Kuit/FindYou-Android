@@ -8,6 +8,7 @@ import com.example.findu.data.dataremote.service.GptService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.example.findu.data.dataremote.service.HomeService
 import com.example.findu.data.dataremote.service.InquiryService
+import com.example.findu.data.dataremote.service.InformationService
 import com.example.findu.data.dataremote.service.InterestService
 import com.example.findu.data.dataremote.service.SearchService
 import com.example.findu.data.dataremote.service.MyService
@@ -70,6 +71,11 @@ object ServiceModule {
     @Singleton
     fun provideAuthService(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideInformationService(retrofit: Retrofit): InformationService =
+        retrofit.create(InformationService::class.java)
 
     @Provides
     @Singleton

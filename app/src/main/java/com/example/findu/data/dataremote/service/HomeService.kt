@@ -1,7 +1,7 @@
 package com.example.findu.data.dataremote.service
 
 import com.example.findu.data.dataremote.model.base.BaseResponse
-import com.example.findu.data.dataremote.model.response.HomeResponseDto
+import com.example.findu.data.dataremote.model.response.home.HomeResponseDto
 import com.example.findu.data.dataremote.util.ApiConstraints.API
 import com.example.findu.data.dataremote.util.ApiConstraints.HOME
 import com.example.findu.data.dataremote.util.ApiConstraints.VERSION
