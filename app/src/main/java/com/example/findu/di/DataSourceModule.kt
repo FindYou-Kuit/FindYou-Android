@@ -14,6 +14,7 @@ import com.example.findu.data.dataremote.datasourceimpl.BreedRemoteDataSourceImp
 import com.example.findu.data.dataremote.datasource.GptRemoteDataSource
 import com.example.findu.data.dataremote.datasource.MyRemoteDataSource
 import com.example.findu.data.dataremote.datasource.DetailSearchRemoteDataSource
+import com.example.findu.data.dataremote.datasource.InquiryRemoteDataSource
 import com.example.findu.data.dataremote.datasource.InformationRemoteDataSource
 import com.example.findu.data.dataremote.datasource.InterestRemoteDataSource
 import com.example.findu.data.dataremote.datasource.SearchRemoteDataSource
@@ -24,6 +25,7 @@ import com.example.findu.data.dataremote.datasourceimpl.AuthRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.DummyRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.GptRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.HomeRemoteDataSourceImpl
+import com.example.findu.data.dataremote.datasourceimpl.InquiryRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.InformationRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.InterestRemoteDataSourceImpl
 import com.example.findu.data.dataremote.datasourceimpl.SearchRemoteDataSourceImpl
@@ -97,6 +99,10 @@ abstract class DataSourceModule {
     @Singleton
     abstract fun bindsDeviceDataSource(deviceLocalDataSourceImpl: DeviceLocalDataSourceImpl): DeviceLocalDataSource
 
+    @Binds
+    @Singleton
+    abstract fun bindInquiryRemoteDataSource(impl: InquiryRemoteDataSourceImpl): InquiryRemoteDataSource
+  
     @Binds
     @Singleton
     abstract fun bindsInformationDataSource(informationRemoteDataSourceImpl: InformationRemoteDataSourceImpl): InformationRemoteDataSource
