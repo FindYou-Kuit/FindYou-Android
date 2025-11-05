@@ -44,6 +44,7 @@ class SearchAllFragment : Fragment(), SearchListListener {
     private var lastId = Long.MAX_VALUE
 
     private var isNewList = false
+    private var isLoading = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,6 +88,7 @@ class SearchAllFragment : Fragment(), SearchListListener {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.allSearchData.collectLatest { searchResults ->
+                isLoading = false
                 if (!searchResults.isNullOrEmpty()) {
                     val animals = searchResults.flatMap { it.cards }
                     setupRV(animals)
@@ -100,6 +102,7 @@ class SearchAllFragment : Fragment(), SearchListListener {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.errorMessage.collectLatest { errorMessage ->
+                isLoading = false
                 errorMessage?.let {
                     Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                 }
@@ -179,14 +182,13 @@ class SearchAllFragment : Fragment(), SearchListListener {
         binding.rvSearchAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val lm = recyclerView.layoutManager
-                val lastPos = when (lm) {
-                    is LinearLayoutManager -> lm.findLastVisibleItemPosition()
-                    is GridLayoutManager -> lm.findLastVisibleItemPosition()
-                    else -> return
-                }
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastPos = layoutManager.findLastVisibleItemPosition()
                 val total = (recyclerView.adapter?.itemCount ?: 1) - 1
-                if (lastPos == total) {
+
+                if (lastPos >= total - 2 && !isLoading) {
+                    isLoading = true
+                    Log.d("SearchFragment", "페이징 요청 발생 (lastId=$lastId)")
                     viewModel.getSearchData(SearchType.ALL, lastId)
                 }
             }

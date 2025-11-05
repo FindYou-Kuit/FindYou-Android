@@ -43,8 +43,7 @@ class SearchRescueFragment : Fragment(), SearchListListener {
 
     private var lastProtectId = Long.MAX_VALUE
     private var isNewList = false
-
-    private var items = ArrayList<SearchAnimal>()
+    private var isLoading = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,6 +88,7 @@ class SearchRescueFragment : Fragment(), SearchListListener {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.protectSearchData.collectLatest { searchResults ->
+                isLoading = false
                 if (!searchResults.isNullOrEmpty()) {
                     val animals = searchResults.flatMap { it.cards }
                     setupRV(animals)
@@ -102,6 +102,7 @@ class SearchRescueFragment : Fragment(), SearchListListener {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.errorMessage.collectLatest { errorMessage ->
+                isLoading = false
                 errorMessage?.let {
                     Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                 }
@@ -182,13 +183,14 @@ class SearchRescueFragment : Fragment(), SearchListListener {
         binding.rvSearchRescue.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val lastPos = when (val manager = recyclerView.layoutManager) {
-                    is LinearLayoutManager -> manager.findLastVisibleItemPosition()
-                    else -> return
-                }
+
+                val lm = recyclerView.layoutManager as? LinearLayoutManager ?: return
+                val lastPos = lm.findLastVisibleItemPosition()
                 val total = (recyclerView.adapter?.itemCount ?: 1) - 1
-                //페이징 처리
-                if (lastPos == total) {
+
+                if (lastPos >= total - 2 && !isLoading) {
+                    isLoading = true
+                    Log.d("SearchFragment", "페이징 요청 발생 (lastId=$lastProtectId)")
                     viewModel.getSearchData(SearchType.PROTECTING, lastProtectId)
                 }
             }
