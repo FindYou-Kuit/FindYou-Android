@@ -12,7 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.findu.R
 import com.example.findu.databinding.FragmentMyInquireBinding
 import com.example.findu.presentation.ui.my.viewmodel.InquiryViewModel
@@ -86,28 +88,32 @@ class MyInquireFragment : Fragment() {
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.errorMessage.collectLatest { msg ->
-                msg?.let { showCustomToast(it) }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.loadingState.collectLatest { isLoading ->
-                binding.btnInquireCheck.isEnabled = !isLoading
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.postInquirySuccess.collectLatest { success ->
-                success?.let {
-                    if (it) {
-                        showCustomToast("문의가 정상적으로 전송되었습니다.")
-                        parentFragmentManager.popBackStack()
-                    } else {
-                        showCustomToast("문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.")
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.errorMessage.collectLatest { msg ->
+                        msg?.let { showCustomToast(it) }
                     }
                 }
-                viewModel.resetInquiryState()
+
+                launch {
+                    viewModel.loadingState.collectLatest { isLoading ->
+                        binding.btnInquireCheck.isEnabled = !isLoading
+                    }
+                }
+
+                launch {
+                    viewModel.postInquirySuccess.collectLatest { success ->
+                        success?.let {
+                            if (it) {
+                                showCustomToast("문의가 정상적으로 전송되었습니다.")
+                                parentFragmentManager.popBackStack()
+                            } else {
+                                showCustomToast("문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.")
+                            }
+                        }
+                        viewModel.resetInquiryState()
+                    }
+                }
             }
         }
     }
