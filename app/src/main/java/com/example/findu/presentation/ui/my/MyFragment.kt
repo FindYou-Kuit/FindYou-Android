@@ -182,9 +182,10 @@ class MyFragment : Fragment() {
                     }).show()
             }
 
-            clMyAlarmSetting.setOnClickListener {
-                myViewModel.toggleAlarmSetting()
-            }
+//            clMyAlarmSetting.setOnClickListener {
+//                myViewModel.toggleAlarmSetting()
+//            }
+            binding.clMyAlarmSetting.isEnabled = false
 
             setupVersion()
         }
