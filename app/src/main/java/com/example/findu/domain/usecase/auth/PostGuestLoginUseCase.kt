@@ -9,8 +9,7 @@ class PostGuestLoginUseCase(
     private val userInfoRepository: UserInfoRepository
 ) {
     suspend fun postGuestLogin(): Result<GuestLoginData> = authRepository.postGuestLogin(
-//        deviceId = userInfoRepository.getDeviceId()
-        deviceId = "8483f57930bb6a8a"
+        deviceId = userInfoRepository.getDeviceId()
 
     )
 }

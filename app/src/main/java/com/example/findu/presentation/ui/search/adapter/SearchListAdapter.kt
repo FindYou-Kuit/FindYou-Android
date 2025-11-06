@@ -38,13 +38,7 @@ class SearchListAdapter(
             }
 
             override fun areContentsTheSame(oldItem: SearchListItem, newItem: SearchListItem): Boolean {
-                return when {
-                    oldItem is SearchListItem.Content && newItem is SearchListItem.Content ->
-                        oldItem.data == newItem.data ||
-                                (oldItem.data.reportId == newItem.data.reportId &&
-                                        oldItem.data.isBookmark == newItem.data.isBookmark)
-                    else -> oldItem == newItem
-                }
+                return oldItem == newItem
             }
         }
     }
@@ -131,7 +125,7 @@ class SearchListAdapter(
 
                 root.setOnClickListener { listener.onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
-                    // 1️⃣ 즉시 UI 반영
+
                     item.isBookmark = !item.isBookmark
                     updateBookmarkIcon(item.isBookmark)
 

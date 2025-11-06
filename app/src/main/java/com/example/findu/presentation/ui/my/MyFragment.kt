@@ -198,12 +198,17 @@ class MyFragment : Fragment() {
         remoteConfig.setDefaultsAsync(mapOf("latest_version" to "1.0"))
 
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+            val b = _binding ?: return@addOnCompleteListener
+
             val latest = if (task.isSuccessful) remoteConfig.getString("latest_version") else "1.0"
             val currentVersion = BuildConfig.VERSION_NAME
             val isLatest = compareVersions(currentVersion.substringBefore("-"), latest)
-            tvMyVersionInfo.text = "버전 정보 $currentVersion"
-            clMyVersionChip.isVisible = isLatest
-            clMyGotoUpdate.isVisible = !isLatest
+
+            with(b) {
+                tvMyVersionInfo.text = "버전 정보 $currentVersion"
+                clMyVersionChip.isVisible = isLatest
+                clMyGotoUpdate.isVisible = !isLatest
+            }
         }
     }
 
