@@ -10,5 +10,6 @@ class PostGuestLoginUseCase(
 ) {
     suspend fun postGuestLogin(): Result<GuestLoginData> = authRepository.postGuestLogin(
         deviceId = userInfoRepository.getDeviceId()
+
     )
 }

@@ -17,7 +17,7 @@
             android:id="@+id/iv_search_content"
             android:layout_width="155dp"
             android:layout_height="155dp"
-            android:background="@drawable/img_sample_dog"
+            android:background="@color/gray2"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -79,9 +79,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_search_content_date"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/tv_search_content_date">
 
             <ImageView
                 android:id="@+id/iv_search_content_address"

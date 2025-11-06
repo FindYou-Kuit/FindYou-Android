@@ -1,13 +1,10 @@
 package com.example.findu.domain.repository
 
-import android.net.Uri
-import com.example.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.example.findu.domain.model.my.MyInterestData
 import com.example.findu.domain.model.my.MyProfileData
+import com.example.findu.domain.model.my.MyProfileImageUpdate
 import com.example.findu.domain.model.my.MyReportHistoryData
 import com.example.findu.domain.model.my.MyViewedAnimalData
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 
 interface MyRepository {
     suspend fun getMyInterest(
@@ -28,8 +25,6 @@ interface MyRepository {
 
     suspend fun getNickname(): Result<MyProfileData>
 
-    suspend fun patchProfileImageFile(imagePath: String): Result<Unit>
-
-    suspend fun patchProfileImageDefault(defaultProfileImageName: String): Result<Unit>
+    suspend fun patchProfileImage(update: MyProfileImageUpdate): Result<Unit>
 
 }

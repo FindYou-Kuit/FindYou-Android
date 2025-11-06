@@ -9,7 +9,7 @@ fun MyInterestResponseDto.toDomain(): MyInterestData =
             MyInterestData.InterestAnimal(
                 reportId = it.reportId,
                 thumbnailImageUrl = it.thumbnailImageUrl,
-                title = it.title,
+                title = it.title?: "",
                 tag = it.tag,
                 date = it.date,
                 address = it.address

@@ -76,31 +76,23 @@ class DetailSearchViewModel @Inject constructor(
     fun toggleInterestMissing(id: Long) {
         viewModelScope.launch {
             val current = _detailMissingData.value?.interest ?: false
-            if (!current) {
-                postInterestAnimalUseCase(id).fold(
-                    onSuccess = {
-                        _detailMissingData.value = _detailMissingData.value?.copy(interest = true)
-                        _isInterested.value = true
-
-                    },
-                    onFailure = { error ->
-                        _errorMessage.value = error.message ?: "실종 관심 등록 실패"
-                    }
-                )
+            val result = if (!current) {
+                postInterestAnimalUseCase(id)
             } else {
-                deleteInterestAnimalUseCase(id).fold(
-                    onSuccess = {
-                        _detailMissingData.value = _detailMissingData.value?.copy(interest = false)
-                        _isInterested.value = false
-
-                    },
-                    onFailure = { error ->
-                        _errorMessage.value = error.message ?: "실종 관심 해제 실패"
-                    }
-                )
+                deleteInterestAnimalUseCase(id)
             }
+
+            result.fold(
+                onSuccess = {
+                    getDetailSearchMissing(id)
+                },
+                onFailure = { error ->
+                    _errorMessage.value = error.message ?: "관심 상태 변경 실패"
+                }
+            )
         }
     }
+
 
     fun toggleInterestWitness(id: Long) {
         viewModelScope.launch {

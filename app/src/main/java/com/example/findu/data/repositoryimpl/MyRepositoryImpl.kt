@@ -8,6 +8,7 @@ import com.example.findu.data.dataremote.util.handleBaseResponse
 import com.example.findu.data.mapper.todomain.my.toDomain
 import com.example.findu.domain.model.my.MyInterestData
 import com.example.findu.domain.model.my.MyProfileData
+import com.example.findu.domain.model.my.MyProfileImageUpdate
 import com.example.findu.domain.model.my.MyReportHistoryData
 import com.example.findu.domain.model.my.MyViewedAnimalData
 import com.example.findu.domain.repository.MyRepository
@@ -69,18 +70,24 @@ class MyRepositoryImpl @Inject constructor(
                 .toDomain()
         }
 
-
-    override suspend fun patchProfileImageFile(imagePath: String): Result<Unit> =
+    override suspend fun patchProfileImage(update: MyProfileImageUpdate): Result<Unit> =
         runCatching {
-            val file = File(imagePath)
-            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-            val multipartBody = MultipartBody.Part.createFormData("profileImageFile", file.name, requestFile)
-            myRemoteDataSource.patchProfileImageFile(multipartBody).handleBaseResponse().getOrThrow()
+            when (update) {
+                is MyProfileImageUpdate.FilePath -> {
+                    val file = File(update.path)
+                    myRemoteDataSource.patchProfileImage(
+                        profileImageFile = file,
+                        defaultImageName = null
+                    ).handleBaseResponse().getOrThrow()
+                }
+
+                is MyProfileImageUpdate.Default -> {
+                    myRemoteDataSource.patchProfileImage(
+                        profileImageFile = null,
+                        defaultImageName = update.name
+                    ).handleBaseResponse().getOrThrow()
+                }
+            }
         }
 
-    override suspend fun patchProfileImageDefault(defaultProfileImageName: String): Result<Unit> =
-        runCatching {
-            val requestBody = defaultProfileImageName.toRequestBody("text/plain".toMediaType())
-            myRemoteDataSource.patchProfileImageDefault(requestBody).handleBaseResponse().getOrThrow()
-        }
 }

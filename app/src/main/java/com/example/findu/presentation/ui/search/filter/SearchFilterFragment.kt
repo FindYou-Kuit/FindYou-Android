@@ -54,7 +54,7 @@ class SearchFilterFragment : Fragment() {
 
         speciesSelector.init()
         breedSelector.init()
-        locationSelector.init()
+        locationSelector.init(filterViewModel, viewLifecycleOwner)
         calendarSelector.init()
 
         connectSpeciesAndBreed()

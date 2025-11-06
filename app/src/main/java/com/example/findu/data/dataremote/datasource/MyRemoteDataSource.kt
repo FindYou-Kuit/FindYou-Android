@@ -9,6 +9,7 @@ import com.example.findu.data.dataremote.model.response.my.MyReportHistoryRespon
 import com.example.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
 
 interface MyRemoteDataSource {
     suspend fun getInterestAnimals(
@@ -29,7 +30,7 @@ interface MyRemoteDataSource {
 
     suspend fun getNickname(): BaseResponse<MyNickNameResponseDto>
 
-    suspend fun patchProfileImageFile(file: MultipartBody.Part): NullableBaseResponse<Unit>
-
-    suspend fun patchProfileImageDefault(defaultProfileImageName: RequestBody): NullableBaseResponse<Unit>
-}
+    suspend fun patchProfileImage(
+        profileImageFile: File?,
+        defaultImageName: String?
+    ): NullableBaseResponse<Unit>}

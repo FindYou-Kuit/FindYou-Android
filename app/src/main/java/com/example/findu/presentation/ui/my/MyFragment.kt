@@ -30,6 +30,9 @@ import com.example.findu.presentation.ui.my.dialog.MyProfileImageDialog
 import com.example.findu.presentation.ui.my.dialog.MyWithdrawalDialog
 import com.example.findu.presentation.ui.my.model.ProfileImageType
 import com.example.findu.presentation.ui.my.viewmodel.MyViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -86,7 +89,7 @@ class MyFragment : Fragment() {
                 ).show()
             }
 
-            clMyProflieImage.setOnClickListener {
+            clMyProfileImage.setOnClickListener {
                 myProfileImageDialog = MyProfileImageDialog(
                     context = requireContext(),
                     onDrawableSelected = { resId ->
@@ -97,10 +100,13 @@ class MyFragment : Fragment() {
                             R.drawable.img_my_profile3 -> "panda"
                             else -> "default"
                         }
-                        myViewModel.updateProfileImage(defaultName)
+                        myViewModel.updateProfileImage(enumName = defaultName)
                     },
                     onGallerySelected = { uri ->
-                        myViewModel.updateProfileImageFromGallery(uri)
+                        myViewModel.updateProfileImageFromGallery(
+                            context = requireContext(),
+                            uri = uri
+                        )
                     },
                     launchGallery = {
                         pickMedia.launch(
@@ -135,6 +141,7 @@ class MyFragment : Fragment() {
                 MyLogoutDialog(
                     context = requireContext(),
                     onLogoutClick = {
+                        myViewModel.clearToken()
                         with(requireActivity()) {
                             startActivity(Intent(requireContext(), LoginActivity::class.java))
                             finish()
@@ -168,38 +175,59 @@ class MyFragment : Fragment() {
                     context = requireContext(),
                     onWithdrawalClick = {
                         myViewModel.deleteUserData()
+                        myViewModel.clearToken()
                         with(requireActivity()) {
-                            startActivity(
-                                Intent(requireContext(), LoginActivity::class.java)
-                            )
+                            startActivity(Intent(requireContext(), LoginActivity::class.java))
                             finish()
                         }
                     }).show()
             }
 
-            clMyAlarmSetting.setOnClickListener {
-                myViewModel.toggleAlarmSetting()
-            }
+//            clMyAlarmSetting.setOnClickListener {
+//                myViewModel.toggleAlarmSetting()
+//            }
+            binding.clMyAlarmSetting.isEnabled = false
 
             setupVersion()
         }
     }
 
     private fun setupVersion() = with(binding) {
-        val currentVersion = BuildConfig.VERSION_NAME
-        val latest = "1.0"
-        tvMyVersionInfo.text = "버전 정보 $currentVersion"
+        val remoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings { minimumFetchIntervalInSeconds = 3600 }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.setDefaultsAsync(mapOf("latest_version" to "1.0"))
 
-        val currentNumber = currentVersion.substringBefore("-")
-            .replace(".", "")
-            .toIntOrNull() ?: 0
+        remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+            val b = _binding ?: return@addOnCompleteListener
 
-        val latestNumber = latest.replace(".", "").toIntOrNull() ?: 0
+            val latest = if (task.isSuccessful) remoteConfig.getString("latest_version") else "1.0"
+            val currentVersion = BuildConfig.VERSION_NAME
+            val isLatest = compareVersions(currentVersion.substringBefore("-"), latest)
 
-        val isLatest = currentNumber >= latestNumber
+            with(b) {
+                tvMyVersionInfo.text = "버전 정보 $currentVersion"
+                clMyVersionChip.isVisible = isLatest
+                clMyGotoUpdate.isVisible = !isLatest
+            }
+        }
+    }
 
-        clMyVersionChip.isVisible = isLatest
-        clMyGotoUpdate.isVisible = !isLatest
+    private fun compareVersions(current: String, latest: String): Boolean {
+        val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
+        val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
+        val maxLength = maxOf(currentParts.size, latestParts.size)
+
+        for (i in 0 until maxLength) {
+            val currentPart = currentParts.getOrNull(i) ?: 0
+            val latestPart = latestParts.getOrNull(i) ?: 0
+
+            when {
+                currentPart > latestPart -> return true
+                currentPart < latestPart -> return false
+            }
+        }
+        return true
     }
 
     private fun observeViewModel() {

@@ -61,4 +61,11 @@ object UriUtil {
             MultipartBody.Part.createFormData("files", file.name, image)
         }
     }
+
+    fun Uri.toSingleImageFile(context: Context): File {
+        val fileName = getFileName(context, this)
+        val file = FileUtil.createTempFile(context, fileName)
+        FileUtil.compressAndSave(context, this, file)
+        return file
+    }
 }
