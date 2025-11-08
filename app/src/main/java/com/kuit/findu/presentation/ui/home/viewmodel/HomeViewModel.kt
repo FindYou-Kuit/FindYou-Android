@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.kuit.findu.domain.model.HomeData
 import com.kuit.findu.domain.model.ProtectAnimal
 import com.kuit.findu.domain.model.ReportAnimal
-import com.kuit.findu.domain.usecase.GetHomeUseCase
 import com.kuit.findu.domain.usecase.GetNicknameUseCase
+import com.kuit.findu.domain.usecase.home.GetHomeUseCase
 import com.kuit.findu.presentation.type.HomeReportDurationType
 import com.kuit.findu.presentation.type.HomeUserStatusType
 import com.kuit.findu.presentation.type.view.LoadState

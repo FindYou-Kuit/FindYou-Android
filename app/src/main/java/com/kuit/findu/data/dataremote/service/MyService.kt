@@ -46,13 +46,9 @@ interface MyService {
 
     @Multipart
     @PATCH("/api/v2/users/me/profile-image")
-    suspend fun patchProfileImageFile(
-        @Part profileImageFile: MultipartBody.Part
+    suspend fun patchProfileImage(
+        @Part profileImageFile: MultipartBody.Part? = null,
+        @Part("defaultProfileImageName") defaultProfileImageName: RequestBody? = null
     ): NullableBaseResponse<Unit>
 
-    @Multipart
-    @PATCH("/api/v2/users/me/profile-image")
-    suspend fun patchProfileImageDefault(
-        @Part("defaultProfileImageName") defaultProfileImageName: RequestBody
-    ): NullableBaseResponse<Unit>
 }

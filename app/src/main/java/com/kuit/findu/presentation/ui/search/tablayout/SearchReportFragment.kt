@@ -43,9 +43,7 @@ class SearchReportFragment : Fragment(), SearchListListener {
 
     private var lastReportId = Long.MAX_VALUE
     private var isNewList = false
-
-    private var items = ArrayList<SearchAnimal>()
-
+    private var isLoading = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,6 +87,7 @@ class SearchReportFragment : Fragment(), SearchListListener {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.reportSearchData.collectLatest { searchResults ->
+                isLoading = false
                 if (!searchResults.isNullOrEmpty()) {
                     val animals = searchResults.flatMap { it.cards }
                     setupRV(animals)
@@ -102,6 +101,7 @@ class SearchReportFragment : Fragment(), SearchListListener {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.errorMessage.collectLatest { errorMessage ->
+                isLoading = false
                 errorMessage?.let {
                     Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                 }
@@ -125,8 +125,9 @@ class SearchReportFragment : Fragment(), SearchListListener {
         if (isNewList) {
             listAdapter.submitContent(searchList)
             isNewList = false
-            binding.rvSearchReport.scrollToPosition(0)
-            binding.rvSearchReport.smoothScrollToPosition(0)
+            binding.rvSearchReport.post {
+                binding.rvSearchReport.scrollToPosition(0)
+            }
         } else {
             listAdapter.addContent(searchList)
         }
@@ -182,13 +183,14 @@ class SearchReportFragment : Fragment(), SearchListListener {
         binding.rvSearchReport.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val lastPos = when (val manager = recyclerView.layoutManager) {
-                    is LinearLayoutManager -> manager.findLastVisibleItemPosition()
-                    else -> return
-                }
+
+                val lm = recyclerView.layoutManager as? LinearLayoutManager ?: return
+                val lastPos = lm.findLastVisibleItemPosition()
                 val total = (recyclerView.adapter?.itemCount ?: 1) - 1
-                //페이징 처리
-                if (lastPos == total) {
+
+                if (lastPos >= total - 2 && !isLoading) {
+                    isLoading = true
+                    Log.d("SearchFragment", "페이징 요청 발생 (lastId=$lastReportId)")
                     viewModel.getSearchData(SearchType.REPORTING, lastReportId)
                 }
             }

@@ -1,12 +1,17 @@
 package com.kuit.findu.presentation.ui.extra
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -15,6 +20,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.kuit.findu.databinding.FragmentHomeExtraBinding
 import com.kuit.findu.presentation.model.HomeExtraContent
+import com.kuit.findu.presentation.type.HomeExtraButtonType
 import com.kuit.findu.presentation.type.view.LoadState
 import com.kuit.findu.presentation.ui.extra.view.ExtraHomeCenterScreen
 import com.kuit.findu.presentation.ui.extra.view.ExtraHomeDepartmentScreen
@@ -22,6 +28,7 @@ import com.kuit.findu.presentation.ui.extra.view.ExtraHomeVolunteerScreen
 import com.kuit.findu.presentation.ui.extra.viewmodel.HomeExtraUiEvent
 import com.kuit.findu.presentation.ui.extra.viewmodel.HomeExtraViewModel
 import com.kuit.findu.presentation.ui.home.dialog.HomeFindDialog
+import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,6 +36,23 @@ class HomeExtraFragment : Fragment() {
     private var _binding: FragmentHomeExtraBinding? = null
     private val binding get() = _binding!!
     private val homeExtraViewModel by viewModels<HomeExtraViewModel>()
+
+    private val fusedLocationClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireActivity())
+    }
+
+    private val locationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            if (permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
+                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false)
+            ) {
+                requestLocationAndLoadData()
+            } else {
+                Toast.makeText(requireContext(), "위치 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+                homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
+            }
+        }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,11 +82,12 @@ class HomeExtraFragment : Fragment() {
                 }
 
                 LaunchedEffect(uiState.homeExtraButtonType) {
-                    homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
+                    if (uiState.homeExtraButtonType == HomeExtraButtonType.PROTECT_CENTER) {
+                        requestLocationAndLoadData()
+                    } else {
+                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
+                    }
                 }
-
-
-
 
                 when (uiState.loadState) {
                     LoadState.Idle -> Unit
@@ -70,23 +95,95 @@ class HomeExtraFragment : Fragment() {
                     LoadState.Success -> {
                         when (val content = uiState.content) {
                             is HomeExtraContent.Volunteers -> {
-                                ExtraHomeVolunteerScreen(volunteerWorks = content.list)
+                                ExtraHomeVolunteerScreen(
+                                    volunteerWorks = content.list,
+                                    popBackStack = { findNavController().popBackStack() })
                             }
 
                             is HomeExtraContent.Departments -> {
-                                ExtraHomeDepartmentScreen(departments = content.list)
+                                ExtraHomeDepartmentScreen(
+                                    departments = content.list,
+                                    selectedSido = uiState.selectedSido,
+                                    selectedSigungu = uiState.selectedSigungu,
+                                    sidoList = uiState.sidoList,
+                                    sigunguList = uiState.sigunguList,
+                                    onSidoSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SidoSelected(it))
+                                    },
+                                    onSigunguSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
+                                    },
+                                    popBackStack = { findNavController().popBackStack() }
+                                )
                             }
 
-                            HomeExtraContent.None -> Unit
                             is HomeExtraContent.Centers -> {
-                                ExtraHomeCenterScreen(centers = content.list)
+                                ExtraHomeCenterScreen(
+                                    centers = content.list,
+                                    selectedSido = uiState.selectedSido,
+                                    selectedSigungu = uiState.selectedSigungu,
+                                    sidoList = uiState.sidoList,
+                                    sigunguList = uiState.sigunguList,
+                                    onSidoSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SidoSelected(it))
+                                    },
+                                    onSigunguSelected = {
+                                        homeExtraViewModel.handleEvent(HomeExtraUiEvent.SigunguSelected(it))
+                                    },
+                                    popBackStack = { findNavController().popBackStack() },
+                                    latitude = uiState.latitude,
+                                    longitude = uiState.longitude,
+                                    searchCurrentLocation = { centerLatLng ->
+                                        homeExtraViewModel.handleEvent(
+                                            HomeExtraUiEvent.SearchCenterFocusedLatLng(
+                                                centerLatLng
+                                            )
+                                        )
+                                    }
+                                )
                             }
+
+                            is HomeExtraContent.None -> Unit
                         }
                     }
 
                     LoadState.Error -> Unit
                 }
             }
+        }
+    }
+
+    private fun requestLocationAndLoadData() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        homeExtraViewModel.handleEvent(
+                            HomeExtraUiEvent.UpdateLocation(
+                                latitude = location.latitude,
+                                longitude = location.longitude
+                            )
+                        )
+                    }
+                    homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
+                }
+                .addOnFailureListener {
+                    homeExtraViewModel.handleEvent(HomeExtraUiEvent.LoadData)
+                }
+        } else {
+            locationPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kuit.findu.databinding.FragmentMyReportHistoryBinding
 import com.kuit.findu.presentation.ui.my.adapter.MyReportHistoryAdapter
 import com.kuit.findu.presentation.ui.my.dialog.MyDeleteHistoryDialog
+import com.kuit.findu.presentation.ui.my.viewmodel.MyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

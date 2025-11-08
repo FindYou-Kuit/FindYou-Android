@@ -1,17 +1,19 @@
 package com.kuit.findu.di
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuit.findu.data.dataremote.service.AuthService
-import com.kuit.findu.data.dataremote.service.DetailSearchService
 import com.kuit.findu.data.dataremote.service.BreedService
+import com.kuit.findu.data.dataremote.service.DetailSearchService
 import com.kuit.findu.data.dataremote.service.DummyService
 import com.kuit.findu.data.dataremote.service.GptService
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuit.findu.data.dataremote.service.HomeService
+import com.kuit.findu.data.dataremote.service.InformationService
+import com.kuit.findu.data.dataremote.service.InquiryService
 import com.kuit.findu.data.dataremote.service.InterestService
-import com.kuit.findu.data.dataremote.service.SearchService
 import com.kuit.findu.data.dataremote.service.MyService
 import com.kuit.findu.data.dataremote.service.NaverService
 import com.kuit.findu.data.dataremote.service.ReportService
+import com.kuit.findu.data.dataremote.service.SearchService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -72,9 +74,14 @@ object ServiceModule {
 
     @Provides
     @Singleton
+    fun provideInformationService(retrofit: Retrofit): InformationService =
+        retrofit.create(InformationService::class.java)
+
+    @Provides
+    @Singleton
     fun provideGptService(
         okHttpClient: OkHttpClient,
-        json: Json
+        json: Json,
     ): GptService {
         val gptRetrofit = Retrofit.Builder()
             .baseUrl("https://api.openai.com/")
@@ -91,7 +98,7 @@ object ServiceModule {
     @Singleton
     fun provideNaverService(
         okHttpClient: OkHttpClient,
-        json: Json
+        json: Json,
     ): NaverService {
         val naverRetrofit = Retrofit.Builder()
             .baseUrl("https://maps.apigw.ntruss.com/")
@@ -103,4 +110,9 @@ object ServiceModule {
 
         return naverRetrofit.create(NaverService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideInquiryService(retrofit: Retrofit): InquiryService =
+        retrofit.create(InquiryService::class.java)
 }

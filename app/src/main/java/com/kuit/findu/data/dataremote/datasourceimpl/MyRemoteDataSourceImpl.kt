@@ -9,8 +9,9 @@ import com.kuit.findu.data.dataremote.model.response.my.MyNickNameResponseDto
 import com.kuit.findu.data.dataremote.model.response.my.MyReportHistoryResponseDto
 import com.kuit.findu.data.dataremote.model.response.my.MyViewedAnimalsResponseDto
 import com.kuit.findu.data.dataremote.service.MyService
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import com.kuit.findu.data.mapper.torequest.toImageMultipart
+import com.kuit.findu.data.mapper.torequest.toPlainTextRequestBody
+import java.io.File
 import javax.inject.Inject
 
 class MyRemoteDataSourceImpl @Inject constructor(
@@ -38,11 +39,13 @@ class MyRemoteDataSourceImpl @Inject constructor(
     override suspend fun getNickname(): BaseResponse<MyNickNameResponseDto> =
         myService.getNickname()
 
-    override suspend fun patchProfileImageFile(file: MultipartBody.Part): NullableBaseResponse<Unit> =
-        myService.patchProfileImageFile(file)
-
-
-    override suspend fun patchProfileImageDefault(defaultProfileImageName: RequestBody): NullableBaseResponse<Unit> =
-        myService.patchProfileImageDefault(defaultProfileImageName)
+    override suspend fun patchProfileImage(
+        profileImageFile: File?,
+        defaultImageName: String?,
+    ): NullableBaseResponse<Unit> =
+        myService.patchProfileImage(
+            profileImageFile = profileImageFile?.toImageMultipart("profileImageFile"),
+            defaultProfileImageName = defaultImageName?.toPlainTextRequestBody()
+        )
 
 }

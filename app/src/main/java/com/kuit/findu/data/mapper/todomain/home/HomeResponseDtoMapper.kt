@@ -1,11 +1,10 @@
-package com.kuit.findu.data.mapper.todomain
+package com.kuit.findu.data.mapper.todomain.home
 
-import com.kuit.findu.data.dataremote.model.response.HomeResponseDto
-import com.kuit.findu.data.dataremote.model.response.PeriodStatisticsDto
-import com.kuit.findu.data.dataremote.model.response.ProtectingAnimal
-import com.kuit.findu.data.dataremote.model.response.Statistics
-import com.kuit.findu.data.dataremote.model.response.WitnessedOrMissingAnimal
-
+import com.kuit.findu.data.dataremote.model.response.home.HomeResponseDto
+import com.kuit.findu.data.dataremote.model.response.home.PeriodStatisticsDto
+import com.kuit.findu.data.dataremote.model.response.home.ProtectingAnimal
+import com.kuit.findu.data.dataremote.model.response.home.Statistics
+import com.kuit.findu.data.dataremote.model.response.home.WitnessedOrMissingAnimal
 import com.kuit.findu.domain.model.HomeData
 import com.kuit.findu.domain.model.HomeStatistics
 import com.kuit.findu.domain.model.PeriodStatistics

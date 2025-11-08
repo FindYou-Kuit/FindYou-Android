@@ -14,6 +14,8 @@ import com.kuit.findu.data.dataremote.datasourceimpl.BreedRemoteDataSourceImpl
 import com.kuit.findu.data.dataremote.datasource.GptRemoteDataSource
 import com.kuit.findu.data.dataremote.datasource.MyRemoteDataSource
 import com.kuit.findu.data.dataremote.datasource.DetailSearchRemoteDataSource
+import com.kuit.findu.data.dataremote.datasource.InquiryRemoteDataSource
+import com.kuit.findu.data.dataremote.datasource.InformationRemoteDataSource
 import com.kuit.findu.data.dataremote.datasource.InterestRemoteDataSource
 import com.kuit.findu.data.dataremote.datasource.SearchRemoteDataSource
 import com.kuit.findu.data.dataremote.datasourceimpl.DetailSearchRemoteDataSourceImpl
@@ -23,6 +25,8 @@ import com.kuit.findu.data.dataremote.datasourceimpl.AuthRemoteDataSourceImpl
 import com.kuit.findu.data.dataremote.datasourceimpl.DummyRemoteDataSourceImpl
 import com.kuit.findu.data.dataremote.datasourceimpl.GptRemoteDataSourceImpl
 import com.kuit.findu.data.dataremote.datasourceimpl.HomeRemoteDataSourceImpl
+import com.kuit.findu.data.dataremote.datasourceimpl.InquiryRemoteDataSourceImpl
+import com.kuit.findu.data.dataremote.datasourceimpl.InformationRemoteDataSourceImpl
 import com.kuit.findu.data.dataremote.datasourceimpl.InterestRemoteDataSourceImpl
 import com.kuit.findu.data.dataremote.datasourceimpl.SearchRemoteDataSourceImpl
 import com.kuit.findu.data.dataremote.datasourceimpl.MyRemoteDataSourceImpl
@@ -94,4 +98,12 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsDeviceDataSource(deviceLocalDataSourceImpl: DeviceLocalDataSourceImpl): DeviceLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindInquiryRemoteDataSource(impl: InquiryRemoteDataSourceImpl): InquiryRemoteDataSource
+  
+    @Binds
+    @Singleton
+    abstract fun bindsInformationDataSource(informationRemoteDataSourceImpl: InformationRemoteDataSourceImpl): InformationRemoteDataSource
 }

@@ -1,5 +1,6 @@
 package com.kuit.findu.data.repositoryimpl
 
+import android.util.Log
 import com.kuit.findu.data.dataremote.datasource.SearchRemoteDataSource
 import com.kuit.findu.data.dataremote.util.handleBaseResponse
 import com.kuit.findu.data.mapper.todomain.toDomain
@@ -17,6 +18,10 @@ class SearchRepositoryImpl @Inject constructor(
         lastId: Long,
     ): Result<List<SearchData>> =
         runCatching {
+            Log.d(
+                "SearchRepositoryImpl",
+                "서버 요청 발생"
+            )
             searchRemoteDataSource.getReports(
                 type = type,
                 searchFilterData = searchFilterData,

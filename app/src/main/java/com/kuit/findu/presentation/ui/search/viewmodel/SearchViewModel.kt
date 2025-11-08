@@ -111,21 +111,22 @@ class SearchViewModel @Inject constructor(
         tag: String,
     ) {
         viewModelScope.launch {
-            if (isInterest) {
-                postInterestAnimalUseCase(id).fold(
-                    onSuccess = {},
-                    onFailure = {
-                        _errorMessage.value = it.message ?: "관심 등록 중 오류가 발생했습니다."
+            val request = if (isInterest) postInterestAnimalUseCase(id) else deleteInterestAnimalUseCase(id)
+
+            request.fold(
+                onSuccess = {
+                    when (tag) {
+                        "보호중" -> getSearchData(SearchType.PROTECTING)
+                        "실종신고" -> getSearchData(SearchType.REPORTING)
+                        "목격신고" -> getSearchData(SearchType.REPORTING)
+                        else -> getSearchData(SearchType.ALL)
                     }
-                )
-            } else {
-                deleteInterestAnimalUseCase(id).fold(
-                    onSuccess = {},
-                    onFailure = {
-                        _errorMessage.value = it.message ?: "관심 해제 중 오류가 발생했습니다."
-                    }
-                )
-            }
+                },
+                onFailure = {
+                    val msg = if (isInterest) "관심 등록 중 오류가 발생했습니다." else "관심 해제 중 오류가 발생했습니다."
+                    _errorMessage.value = it.message ?: msg
+                }
+            )
         }
     }
 

@@ -1,4 +1,4 @@
-package com.kuit.findu.domain.usecase
+package com.kuit.findu.domain.usecase.auth
 
 import com.kuit.findu.domain.model.LoginData
 import com.kuit.findu.domain.model.LoginInfo

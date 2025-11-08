@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kuit.findu.databinding.FragmentMyViewedAnimalBinding
 import com.kuit.findu.presentation.ui.my.adapter.MyViewedAnimalsRvAdapter
+import com.kuit.findu.presentation.ui.my.viewmodel.MyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest

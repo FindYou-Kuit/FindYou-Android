@@ -3,9 +3,9 @@ package com.kuit.findu.presentation.ui.login.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kuit.findu.domain.usecase.PostGuestLoginUseCase
-import com.kuit.findu.domain.usecase.PostLoginUseCase
 import com.kuit.findu.domain.usecase.SetNicknameUseCase
+import com.kuit.findu.domain.usecase.auth.PostGuestLoginUseCase
+import com.kuit.findu.domain.usecase.auth.PostLoginUseCase
 import com.kuit.findu.domain.usecase.token.SetAccessTokenUseCase
 import com.kuit.findu.presentation.util.Nickname.GUEST_NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +36,6 @@ class LoginViewModel @Inject constructor(
                 } else {
                     setAccessTokenUseCase(accessToken = loginData.userInfo!!.accessToken)
                     setNicknameUseCase(nickname = loginData.userInfo.nickname)
-                    Log.d("http", "nickname: ${loginData.userInfo.nickname}")
                     startMainActivity()
                 }
             }.onFailure { e ->

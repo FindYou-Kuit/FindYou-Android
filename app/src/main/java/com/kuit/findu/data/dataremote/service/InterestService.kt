@@ -7,23 +7,24 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface InterestService {
 
     @GET("/api/v2/users/me/interest-animals")
     suspend fun getInterestAnimals(
-        @Query("lastId") lastId: Long
+        @Query("lastId") lastId: Long,
     ): NullableBaseResponse<MyInterestResponseDto>
 
     @POST("/api/v2/users/me/interest-animals")
     suspend fun registerInterestAnimal(
-        @Body request: MyInterestRequestDto
-    ) : NullableBaseResponse<Unit>
+        @Body request: MyInterestRequestDto,
+    ): NullableBaseResponse<Unit>
 
-    @DELETE("/api/v2/users/me/interest-animals")
+    @DELETE("/api/v2/users/me/interest-animals/{reportId}")
     suspend fun deleteInterestAnimal(
-        @Query("reportId") reportId : Long
-    ) : NullableBaseResponse<Unit>
+        @Path("reportId") reportId: Long,
+    ): NullableBaseResponse<Unit>
 
 }

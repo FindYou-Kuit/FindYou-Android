@@ -3,11 +3,15 @@ package com.kuit.findu.presentation.ui.search.filter
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isGone
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kuit.findu.R
 import com.kuit.findu.databinding.FragmentSearchFilterBinding
 import com.kuit.findu.presentation.ui.search.adapter.SearchFilterLocationRVAdapter
-import com.kuit.findu.presentation.ui.search.model.LocationData
+import com.kuit.findu.presentation.ui.search.viewmodel.SearchFilterViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SearchLocationSelector(
     private val binding: FragmentSearchFilterBinding,
@@ -17,36 +21,39 @@ class SearchLocationSelector(
     private lateinit var cityAdapter: SearchFilterLocationRVAdapter
     private var districtAdapter: SearchFilterLocationRVAdapter? = null
 
-    fun init() = with(binding) {
-        val cities = listOf("전체") + LocationData.locationMap.keys.toList()
-
-        cityAdapter = SearchFilterLocationRVAdapter(cities, selectedCity) { newCity ->
-            selectedCity = newCity
-            actvSearchFilterCity.setText(newCity)
-
-            if (newCity == "전체") {
-                selectedDistrict = null
-                actvSearchFilterDistrict.isEnabled = false
-                actvSearchFilterDistrict.setText("")
-                setDistrictList(listOf("전체"))
-            } else {
-                actvSearchFilterDistrict.isEnabled = true
-                selectedDistrict = null
-                actvSearchFilterDistrict.setText("")
-                val districts = (LocationData.locationMap[newCity] ?: emptyList())
-                setDistrictList(districts)
+    fun init(
+        viewModel: SearchFilterViewModel, lifecycleOwner: LifecycleOwner) = with(binding) {
+        lifecycleOwner.lifecycleScope.launch {
+            viewModel.loadSido()
+            viewModel.sidoList.collectLatest { sidoList ->
+                val cities = listOf("전체") + sidoList.map { it.name }
+                cityAdapter = SearchFilterLocationRVAdapter(cities, selectedCity) { newCity ->
+                    selectedCity = newCity
+                    actvSearchFilterCity.setText(newCity)
+                    val selected = sidoList.find { it.name == newCity }
+                    if (selected != null) {
+                        viewModel.loadSigungu(selected.id)
+                    }
+                }
+                rvSearchFilterCity.layoutManager = LinearLayoutManager(root.context)
+                rvSearchFilterCity.adapter = cityAdapter
+            }
+        }
+        lifecycleOwner.lifecycleScope.launch {
+            viewModel.sigunguList.collectLatest { sigunguList ->
+                setDistrictList(listOf("전체") + sigunguList)
             }
         }
 
-        rvSearchFilterCity.layoutManager = LinearLayoutManager(root.context)
-        rvSearchFilterCity.adapter = cityAdapter
+        setupClickListeners()
 
-        setDistrictList(listOf("전체"))
-        actvSearchFilterDistrict.isEnabled = false
+    }
 
+    private fun setupClickListeners() = with(binding) {
         actvSearchFilterCity.setOnClickListener {
             toggleRecyclerView(flFilterCityContainer, actvSearchFilterCity, ivCityArrow)
         }
+
         actvSearchFilterDistrict.setOnClickListener {
             if (actvSearchFilterDistrict.isEnabled) {
                 toggleRecyclerView(

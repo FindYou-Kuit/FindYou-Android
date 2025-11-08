@@ -1,0 +1,14 @@
+package com.kuit.findu.data.dataremote.model.request
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class PostInquiryRequestDto(
+    @SerialName("title")
+    val title: String,
+    @SerialName("content")
+    val content: String,
+    @SerialName("categories")
+    val category: List<String>
+)

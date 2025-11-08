@@ -6,6 +6,8 @@ import com.kuit.findu.data.repositoryimpl.BreedRepositoryImpl
 import com.kuit.findu.data.repositoryimpl.UserInfoRepositoryImpl
 import com.kuit.findu.data.repositoryimpl.DummyRepositoryImpl
 import com.kuit.findu.data.repositoryimpl.HomeRepositoryImpl
+import com.kuit.findu.data.repositoryimpl.InquiryRepositoryImpl
+import com.kuit.findu.data.repositoryimpl.InformationRepositoryImpl
 import com.kuit.findu.data.repositoryimpl.InterestRepositoryImpl
 import com.kuit.findu.data.repositoryimpl.SearchRepositoryImpl
 import com.kuit.findu.domain.repository.DetailSearchRepository
@@ -18,6 +20,8 @@ import com.kuit.findu.domain.repository.UserInfoRepository
 import com.kuit.findu.domain.repository.DummyRepository
 import com.kuit.findu.domain.repository.report.ReportRepository
 import com.kuit.findu.domain.repository.HomeRepository
+import com.kuit.findu.domain.repository.InquiryRepository
+import com.kuit.findu.domain.repository.InformationRepository
 import com.kuit.findu.domain.repository.InterestRepository
 import com.kuit.findu.domain.repository.SearchRepository
 import com.kuit.findu.domain.repository.MyRepository
@@ -50,7 +54,7 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindBreedRepository(breedRepositoryImpl: BreedRepositoryImpl): BreedRepository
-  
+
     @Binds
     @Singleton
     abstract fun bindReportRepository(reportRepositoryImpl: ReportRepositoryImpl): ReportRepository
@@ -74,4 +78,12 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindUserInfoRepository(userInfoRepository: UserInfoRepositoryImpl): UserInfoRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindInquiryRepository(inquiryRepositoryImpl: InquiryRepositoryImpl): InquiryRepository
+  
+    @Binds
+    @Singleton
+    abstract fun bindInformationRepository(informationRepositoryImpl: InformationRepositoryImpl): InformationRepository
 }

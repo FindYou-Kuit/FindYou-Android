@@ -125,9 +125,11 @@ class SearchListAdapter(
 
                 root.setOnClickListener { listener.onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
+
                     item.isBookmark = !item.isBookmark
-                    listener.onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
+
+                    listener.onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                 }
             }
 
@@ -161,8 +163,8 @@ class SearchListAdapter(
                 root.setOnClickListener { listener.onItemClick(item) }
                 ivSearchContentBookmark.setOnClickListener {
                     item.isBookmark = !item.isBookmark
-                    listener.onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                     updateBookmarkIcon(item.isBookmark)
+                    listener.onBookmarkClick(item.reportId, item.isBookmark, item.tag.text)
                 }
             }
 
@@ -175,12 +177,12 @@ class SearchListAdapter(
         }
     }
 
-    fun submitContent(list: List<SearchRv>) {
+    fun submitContent(list: List<SearchRv>, onCommitted: (() -> Unit)? = null) {
         val display = buildList {
             add(SearchListItem.Header)
             addAll(list.map { SearchListItem.Content(it) })
         }
-        submitList(display)
+        submitList(display) { onCommitted?.invoke() }
     }
 
     fun addContent(list: List<SearchRv>) {

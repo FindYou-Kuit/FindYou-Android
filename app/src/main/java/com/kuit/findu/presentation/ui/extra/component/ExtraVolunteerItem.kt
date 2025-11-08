@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -26,17 +28,24 @@ import com.kuit.findu.ui.theme.FindUTheme
 @Composable
 fun ExtraVolunteerItem(
     volunteerWork: VolunteerWork,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_VIEW, volunteerWork.webLink.toUri())
 
 
-    Column(modifier = modifier.padding(top=20.dp, start = 20.dp, end = 20.dp).noRippleClickable{
-        context.startActivity(intent)
-    }) {
-        Row (verticalAlignment = Alignment.CenterVertically){
-            Text(text = volunteerWork.institution, style = FindUTheme.typography.head2SemiBold20)
-            Spacer(modifier = Modifier.weight(1f))
+    Column(modifier = modifier
+        .padding(top = 20.dp, start = 20.dp, end = 20.dp)
+        .noRippleClickable {
+            context.startActivity(intent)
+        }) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = volunteerWork.institution, style = FindUTheme.typography.head2SemiBold20,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
             Text(text = "상세보기", style = FindUTheme.typography.body2SemiBold14, color = FindUTheme.colors.gray4)
             Spacer(modifier = Modifier.width(2.dp))
             BaseVectorIcon(
@@ -44,36 +53,55 @@ fun ExtraVolunteerItem(
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-        Row (verticalAlignment = Alignment.CenterVertically){
+        Row(verticalAlignment = Alignment.CenterVertically) {
             BaseVectorIcon(vectorResource = R.drawable.ic_home_extra_volunteer_calendar_20)
             Spacer(modifier = Modifier.width(5.dp))
             Text("모집 기간", style = FindUTheme.typography.body2Regular14, color = FindUTheme.colors.gray5)
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = volunteerWork.recruitmentPeriod, style = FindUTheme.typography.body2SemiBold14, color = FindUTheme.colors.gray5)
+            Text(
+                text = volunteerWork.recruitmentPeriod,
+                style = FindUTheme.typography.body2SemiBold14,
+                color = FindUTheme.colors.gray5
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Row (verticalAlignment = Alignment.CenterVertically){
+        Row(verticalAlignment = Alignment.CenterVertically) {
             BaseVectorIcon(vectorResource = R.drawable.ic_home_extra_volunteer_gps_20)
             Spacer(modifier = Modifier.width(5.dp))
             Text("장소", style = FindUTheme.typography.body2Regular14, color = FindUTheme.colors.gray5)
-            Spacer(modifier = Modifier.weight(1f))
-            Text(text = volunteerWork.address, style = FindUTheme.typography.body2SemiBold14, color = FindUTheme.colors.gray5)
+            Text(
+                text = volunteerWork.address,
+                style = FindUTheme.typography.body2SemiBold14,
+                color = FindUTheme.colors.gray5,
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Row (verticalAlignment = Alignment.CenterVertically){
+        Row(verticalAlignment = Alignment.CenterVertically) {
             BaseVectorIcon(vectorResource = R.drawable.ic_home_extra_volunteer_time_calendar_20)
             Spacer(modifier = Modifier.width(5.dp))
             Text("봉사 날짜", style = FindUTheme.typography.body2Regular14, color = FindUTheme.colors.gray5)
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = volunteerWork.workPeriod, style = FindUTheme.typography.body2SemiBold14, color = FindUTheme.colors.gray5)
+            Text(
+                text = volunteerWork.workPeriod,
+                style = FindUTheme.typography.body2SemiBold14,
+                color = FindUTheme.colors.gray5
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Row (verticalAlignment = Alignment.CenterVertically){
+        Row(verticalAlignment = Alignment.CenterVertically) {
             BaseVectorIcon(vectorResource = R.drawable.ic_home_extra_volunteer_time_20)
             Spacer(modifier = Modifier.width(5.dp))
             Text("봉사 시간", style = FindUTheme.typography.body2Regular14, color = FindUTheme.colors.gray5)
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = volunteerWork.workTime, style = FindUTheme.typography.body2SemiBold14, color = FindUTheme.colors.gray5)
+            Text(
+                text = volunteerWork.workTime,
+                style = FindUTheme.typography.body2SemiBold14,
+                color = FindUTheme.colors.gray5
+            )
         }
         Spacer(modifier = Modifier.height(20.dp))
         Divider(

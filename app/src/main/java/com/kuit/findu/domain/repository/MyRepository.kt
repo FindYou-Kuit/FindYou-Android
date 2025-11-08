@@ -2,6 +2,7 @@ package com.kuit.findu.domain.repository
 
 import com.kuit.findu.domain.model.my.MyInterestData
 import com.kuit.findu.domain.model.my.MyProfileData
+import com.kuit.findu.domain.model.my.MyProfileImageUpdate
 import com.kuit.findu.domain.model.my.MyReportHistoryData
 import com.kuit.findu.domain.model.my.MyViewedAnimalData
 
@@ -24,8 +25,6 @@ interface MyRepository {
 
     suspend fun getNickname(): Result<MyProfileData>
 
-    suspend fun patchProfileImageFile(imagePath: String): Result<Unit>
-
-    suspend fun patchProfileImageDefault(defaultProfileImageName: String): Result<Unit>
+    suspend fun patchProfileImage(update: MyProfileImageUpdate): Result<Unit>
 
 }

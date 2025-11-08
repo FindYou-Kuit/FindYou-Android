@@ -1,10 +1,12 @@
-package com.kuit.findu.presentation.ui.my
+package com.kuit.findu.presentation.ui.my.viewmodel
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.findu.domain.model.my.MyProfileData
+import com.kuit.findu.domain.model.my.MyProfileImageUpdate
 import com.kuit.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
 import com.kuit.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import com.kuit.findu.domain.usecase.my.DeleteUserUseCase
@@ -15,15 +17,20 @@ import com.kuit.findu.domain.usecase.my.GetViewedAnimalUseCase
 import com.kuit.findu.domain.usecase.my.PatchNickNameUseCase
 import com.kuit.findu.domain.usecase.my.PatchProfileImageUseCase
 import com.kuit.findu.domain.usecase.report.DeleteReportUseCase
+import com.kuit.findu.domain.usecase.token.ClearTokenUseCase
 import com.kuit.findu.presentation.mapper.todomain.toRvModel
 import com.kuit.findu.presentation.model.MyInterestRv
 import com.kuit.findu.presentation.model.MyReportHistoryRv
 import com.kuit.findu.presentation.model.MyViewedAnimalsRv
+import com.kuit.findu.presentation.util.UriUtil.toSingleImageFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,7 +44,8 @@ class MyViewModel @Inject constructor(
     private val postInterestAnimalUseCase: PostInterestAnimalUseCase,
     private val deleteInterestAnimalUseCase: DeleteInterestAnimalUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
-    private val patchProfileImageFileUseCase: PatchProfileImageUseCase,
+    private val patchProfileImageUseCase: PatchProfileImageUseCase,
+    private val clearTokenUseCase: ClearTokenUseCase,
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -130,23 +138,41 @@ class MyViewModel @Inject constructor(
     }
 
 
-    fun updateProfileImageFromGallery(uri: Uri) {
+    fun updateProfileImage(enumName: String) {
         viewModelScope.launch {
-            patchProfileImageFileUseCase.uploadFile(uri.path!!).fold(
-                onSuccess = {
-                    fetchMyProfile() },
+            val update = MyProfileImageUpdate.Default(enumName)
+
+            patchProfileImageUseCase.upload(update).fold(
+                onSuccess = { fetchMyProfile() },
                 onFailure = { _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생" }
             )
         }
     }
 
-    fun updateProfileImage(enumName: String) {
+    fun updateProfileImageFromGallery(context: Context, uri: Uri) {
         viewModelScope.launch {
-            patchProfileImageFileUseCase.uploadDefault(enumName).fold(
-                onSuccess = {
-                    fetchMyProfile() },
-                onFailure = { _errorMessage.value = it.message ?: "프로필 이미지 변경 중 오류 발생" }
-            )
+            var file: File? = null
+            try {
+                file = withContext(Dispatchers.IO) {
+                    uri.toSingleImageFile(context)
+                }
+                val update = MyProfileImageUpdate.FilePath(file.absolutePath)
+
+                patchProfileImageUseCase.upload(update).fold(
+                    onSuccess = {
+                        fetchMyProfile()
+                    },
+                    onFailure = { e ->
+                        _errorMessage.value = e.message ?: "프로필 이미지 변경 중 오류 발생"
+                    }
+                )
+            } catch (e: Exception) {
+                _errorMessage.value = e.message ?: "이미지 파일 변환 중 오류 발생"
+            } finally {
+                runCatching {
+                    if (file?.exists() == true) file.delete()
+                }
+            }
         }
     }
 
@@ -217,4 +243,11 @@ class MyViewModel @Inject constructor(
             )
         }
     }
+
+    fun clearToken() {
+        viewModelScope.launch {
+            clearTokenUseCase()
+        }
+    }
+
 }

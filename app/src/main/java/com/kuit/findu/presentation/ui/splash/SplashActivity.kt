@@ -2,6 +2,7 @@ package com.kuit.findu.presentation.ui.splash
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -12,13 +13,14 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.kuit.findu.R
 import com.kuit.findu.databinding.ActivitySplashBinding
+import com.kuit.findu.domain.usecase.SetDeviceIdUseCase
 import com.kuit.findu.domain.usecase.token.GetAccessTokenUseCase
 import com.kuit.findu.presentation.ui.login.LoginActivity
 import com.kuit.findu.presentation.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import jakarta.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -26,9 +28,17 @@ class SplashActivity : AppCompatActivity() {
     @Inject
     lateinit var getAccessTokenUseCase: GetAccessTokenUseCase
 
+    @Inject
+    lateinit var setDeviceIdUseCase: SetDeviceIdUseCase
+
     private lateinit var binding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val deviceId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+            ?: "unknown_device_id"
+
+        setDeviceIdUseCase(deviceId=deviceId)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)

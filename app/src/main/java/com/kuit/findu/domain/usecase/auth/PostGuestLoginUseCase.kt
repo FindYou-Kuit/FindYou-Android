@@ -1,4 +1,4 @@
-package com.kuit.findu.domain.usecase
+package com.kuit.findu.domain.usecase.auth
 
 import com.kuit.findu.domain.model.GuestLoginData
 import com.kuit.findu.domain.repository.AuthRepository
@@ -10,5 +10,6 @@ class PostGuestLoginUseCase(
 ) {
     suspend fun postGuestLogin(): Result<GuestLoginData> = authRepository.postGuestLogin(
         deviceId = userInfoRepository.getDeviceId()
+
     )
 }

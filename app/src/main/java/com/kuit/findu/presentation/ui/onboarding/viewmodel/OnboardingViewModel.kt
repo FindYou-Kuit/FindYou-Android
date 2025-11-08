@@ -5,8 +5,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kuit.findu.domain.usecase.PostCheckNicknameUseCase
-import com.kuit.findu.domain.usecase.PostSignupUseCase
+import com.kuit.findu.domain.usecase.auth.PostCheckNicknameUseCase
+import com.kuit.findu.domain.usecase.auth.PostSignupUseCase
 import com.kuit.findu.presentation.type.DefaultProfileType
 import com.kuit.findu.presentation.type.NicknameValidType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 data class OnboardingUiState(
     val pageState: Int = 1,
-    val kakaoId:Long = -1L,
+    val kakaoId: Long = -1L,
     val profileImageUri: Uri? = null,
     val defaultProfileType: DefaultProfileType = DefaultProfileType.DEFAULT,
     val nickname: String = "",
@@ -34,7 +34,7 @@ data class OnboardingUiState(
 class OnboardingViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val postCheckNicknameUseCase: PostCheckNicknameUseCase,
-    private val postSignupUseCase: PostSignupUseCase
+    private val postSignupUseCase: PostSignupUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OnboardingUiState())
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
@@ -121,7 +121,7 @@ class OnboardingViewModel @Inject constructor(
                 kakaoId = uiState.value.kakaoId
             ).onSuccess {
                 startMainActivity()
-            }.onFailure {e->
+            }.onFailure { e ->
                 Log.d("http", "Error Message: : $e")
             }
         }

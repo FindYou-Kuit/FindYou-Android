@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     id("org.jetbrains.kotlin.kapt")
     alias(libs.plugins.navigationSafeArgs)
+    id("com.google.gms.google-services")
 }
 
 val properties = Properties().apply {
@@ -160,4 +161,9 @@ dependencies {
     
     // Accompanist
     implementation(libs.accompanist.permissions)
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-config-ktx")
 }
