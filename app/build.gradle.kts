@@ -15,15 +15,15 @@ val properties = Properties().apply {
 }
 
 android {
-    namespace = "com.example.findu"
+    namespace = "com.kuit.findu"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.findu"
+        applicationId = "com.kuit.findu"
         minSdk = 28
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 35
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
@@ -33,6 +33,18 @@ android {
         buildConfigField("String", "NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"].toString())
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", properties["kakao.native.app.key"].toString())
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY_MANIFEST"] = properties["kakao.native.app.key.manifest"].toString()
+    }
+
+    signingConfigs {
+        create("release") {
+            val propertiesFile = rootProject.file("keystore.properties")
+            val properties = Properties()
+            properties.load(propertiesFile.inputStream())
+            storeFile = file(properties["STORE_FILE"] as String)
+            storePassword = properties["STORE_PASSWORD"] as String
+            keyAlias = properties["KEY_ALIAS"] as String
+            keyPassword = properties["KEY_PASSWORD"] as String
+        }
     }
 
     buildTypes {

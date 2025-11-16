@@ -1,0 +1,38 @@
+package com.kuit.findu.data.dataremote.service
+
+import com.kuit.findu.data.dataremote.model.base.BaseResponse
+import com.kuit.findu.data.dataremote.model.base.NullableBaseResponse
+import com.kuit.findu.data.dataremote.model.request.MissingReportRequestDto
+import com.kuit.findu.data.dataremote.model.request.WitnessReportRequestDto
+import com.kuit.findu.data.dataremote.model.response.report.ImageUploadResponseDto
+import okhttp3.MultipartBody
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Path
+
+interface ReportService {
+    @Multipart
+    @POST("/api/v2/images/upload")
+    suspend fun uploadImages(
+        @Part files: List<MultipartBody.Part>
+    ): BaseResponse<ImageUploadResponseDto>
+
+    @POST("/api/v2/reports/new-missing-reports")
+    suspend fun postMissingReport(
+        @Body request: MissingReportRequestDto
+    ): NullableBaseResponse<Unit>
+
+    @POST("/api/v2/reports/new-witness-reports")
+    suspend fun postWitnessReport(
+        @Body request: WitnessReportRequestDto
+    ): NullableBaseResponse<Unit>
+
+    @DELETE("/api/v1/reports/{report_id}")
+    suspend fun deleteReport(
+        @Path("report_id") reportId: Long
+    ): NullableBaseResponse<Unit>
+
+}

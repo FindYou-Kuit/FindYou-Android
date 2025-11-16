@@ -1,0 +1,105 @@
+package com.kuit.findu.presentation.ui.my.adapter
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.kuit.findu.databinding.ItemMyHistoryBinding
+import com.kuit.findu.presentation.model.MyInterestRv
+import com.kuit.findu.presentation.type.AnimalStateType
+
+class MyInterestRvAdapter(
+    private val onKeepClick: (Long, Boolean, String) -> Unit,
+    private val onItemClick: (Long, String, String) -> Unit
+) : ListAdapter<MyInterestRv, MyInterestRvAdapter.MyListRvViewHolder>(diffUtil) {
+
+    inner class MyListRvViewHolder(private val binding: ItemMyHistoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: MyInterestRv) {
+
+            setUpView(item)
+            initListener(item)
+
+            Glide.with(binding.root.context)
+                .load(item.thumbnailImageUrl)
+                .into(binding.ivMyHistoryImage)
+        }
+
+        private fun setUpView(item: MyInterestRv) {
+            with(binding) {
+                tvMyHistoryTitle.text = item.title
+                tvMyHistoryDate.text = item.date
+                tvMyHistoryLocation.text = item.address
+
+                chipMyHistoryAnimalState.text = item.tag
+                val stateType = AnimalStateType.entries.first { it.state == item.tag }
+                chipMyHistoryAnimalState.setTextColor(
+                    binding.root.context.getColor(stateType.textColor)
+                )
+                chipMyHistoryAnimalState.chipBackgroundColor =
+                    binding.root.context.getColorStateList(stateType.backgroundChipColor)
+
+                tvMyHistoryDelete.visibility = View.GONE
+
+                if (item.interest) {
+                    binding.ivMyHistoryKeep.visibility = View.VISIBLE
+                    binding.ivMyHistoryNonKeep.visibility = View.GONE
+                } else {
+                    binding.ivMyHistoryKeep.visibility = View.GONE
+                    binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        private fun initListener(item: MyInterestRv) {
+            with(binding) {
+                flMyHistoryKeep.setOnClickListener {
+                    item.interest = !item.interest
+                    onKeepClick(item.reportId, item.interest, item.tag)
+                    if (item.interest) {
+                        binding.ivMyHistoryKeep.visibility = View.VISIBLE
+                        binding.ivMyHistoryNonKeep.visibility = View.GONE
+                    } else {
+                        binding.ivMyHistoryKeep.visibility = View.GONE
+                        binding.ivMyHistoryNonKeep.visibility = View.VISIBLE
+                    }
+                }
+                clMyHistoryContainer.setOnClickListener { onItemClick(item.reportId, item.tag, item.title) }
+            }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyListRvViewHolder {
+        val binding =
+            ItemMyHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyListRvViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: MyListRvViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<MyInterestRv>() {
+
+            override fun areItemsTheSame(
+                oldItem: MyInterestRv,
+                newItem: MyInterestRv
+            ): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: MyInterestRv,
+                newItem: MyInterestRv
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
+
+}
