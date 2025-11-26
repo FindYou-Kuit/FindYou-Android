@@ -54,7 +54,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             guestLoginUseCase.postGuestLogin()
                 .onSuccess { loginData ->
-                    analyticsHelper.logUserSignIn(userName = GUEST_NAME, type = "Kakao")
+                    analyticsHelper.logUserSignIn(userName = GUEST_NAME, type = "Guest")
                     setAccessTokenUseCase(accessToken = loginData.accessToken)
                     setNicknameUseCase(nickname = GUEST_NAME)
                     onSuccess()
