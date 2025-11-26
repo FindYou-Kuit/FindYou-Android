@@ -1,18 +1,17 @@
 package com.kuit.findu
 
 import android.app.Application
-import com.kuit.findu.BuildConfig.KAKAO_NATIVE_APP_KEY
-import dagger.hilt.android.HiltAndroidApp
 import com.kakao.sdk.common.KakaoSdk
+import com.naver.maps.map.NaverMapSdk
+import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class FindUApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        setKakao()
-    }
 
-    private fun setKakao() {
-        KakaoSdk.init(this, KAKAO_NATIVE_APP_KEY)
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
+        NaverMapSdk.getInstance(this).client =
+            NaverMapSdk.NcpKeyClient(BuildConfig.NAVER_CLIENT_ID)
     }
 }
