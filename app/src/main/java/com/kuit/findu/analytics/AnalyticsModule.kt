@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -17,9 +17,11 @@ abstract class AnalyticsModule {
     @Singleton
     abstract fun bindsAnalyticsHelper(analyticsHelperImpl: AnalyticsHelperImpl): AnalyticsHelper
 
-    @Provides
-    @Singleton
-    fun provideFirebaseAnalytics(): FirebaseAnalytics {
-        return Firebase.analytics
+    companion object {
+        @Provides
+        @Singleton
+        fun provideFirebaseAnalytics(): FirebaseAnalytics {
+            return Firebase.analytics
+        }
     }
 }
