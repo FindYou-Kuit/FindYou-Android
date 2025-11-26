@@ -4,11 +4,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt)
     id("org.jetbrains.kotlin.kapt")
     alias(libs.plugins.navigationSafeArgs)
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
+    alias(libs.plugins.googleServices)
+    alias(libs.plugins.firebaseCrashlytics)
 }
 
 val properties = Properties().apply {
@@ -78,7 +79,6 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    composeOptions { kotlinCompilerExtensionVersion = "1.5.14" }
 }
 
 dependencies {
@@ -164,8 +164,8 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-config-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ndk")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.crashlytics)
 }
