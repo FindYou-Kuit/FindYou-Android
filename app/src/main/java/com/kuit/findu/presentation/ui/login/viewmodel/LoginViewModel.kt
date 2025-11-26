@@ -3,6 +3,8 @@ package com.kuit.findu.presentation.ui.login.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuit.findu.analytics.AnalyticsHelper
+import com.kuit.findu.analytics.logUserSignIn
 import com.kuit.findu.domain.usecase.SetNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostGuestLoginUseCase
 import com.kuit.findu.domain.usecase.auth.PostLoginUseCase
@@ -19,7 +21,8 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: PostLoginUseCase,
     private val guestLoginUseCase: PostGuestLoginUseCase,
     private val setAccessTokenUseCase: SetAccessTokenUseCase,
-    private val setNicknameUseCase: SetNicknameUseCase
+    private val setNicknameUseCase: SetNicknameUseCase,
+    private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _startMainActivity = MutableSharedFlow<Unit>()
     val startMainActivity: SharedFlow<Unit> = _startMainActivity
@@ -34,6 +37,9 @@ class LoginViewModel @Inject constructor(
                 if (loginData.isFirstLogin) {
                     startOnboardingActivity(kakaoId = kakaoId)
                 } else {
+                    analyticsHelper.logUserSignIn(
+                        userName = loginData.userInfo?.nickname ?: "Null Nickname", type = "kakao"
+                    )
                     setAccessTokenUseCase(accessToken = loginData.userInfo!!.accessToken)
                     setNicknameUseCase(nickname = loginData.userInfo.nickname)
                     startMainActivity()
@@ -44,11 +50,11 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-
     fun postGuestLogin(onSuccess: () -> Unit) {
         viewModelScope.launch {
             guestLoginUseCase.postGuestLogin()
                 .onSuccess { loginData ->
+                    analyticsHelper.logUserSignIn(userName = GUEST_NAME, type = "Kakao")
                     setAccessTokenUseCase(accessToken = loginData.accessToken)
                     setNicknameUseCase(nickname = GUEST_NAME)
                     onSuccess()
@@ -59,7 +65,6 @@ class LoginViewModel @Inject constructor(
                 }
         }
     }
-
 
 
     private fun startMainActivity() {
