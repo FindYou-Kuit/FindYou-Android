@@ -7,21 +7,21 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.kuit.findu.R
+import com.kuit.findu.analytics.AnalyticsHelper
+import com.kuit.findu.analytics.logScreenView
 import com.kuit.findu.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
-
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -39,6 +39,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setBottomNaviVisible(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            val screenName = try {
+                resources.getResourceEntryName(destination.id)
+            } catch (_: Exception) {
+                "unknown_screen"
+            }
+
+            analyticsHelper.logScreenView(screenName)
+
             binding.bnvMain.visibility = when (destination.id) {
                 R.id.fragment_home, R.id.fragment_search, R.id.fragment_info, R.id.fragment_my -> View.VISIBLE
                 R.id.fragment_search_detail_witness, R.id.fragment_search_detail_disappear, R.id.fragment_search_detail_protecting -> View.VISIBLE
