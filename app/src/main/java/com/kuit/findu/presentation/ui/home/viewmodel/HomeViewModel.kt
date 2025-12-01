@@ -32,12 +32,16 @@ data class HomeUiState(
     val bannerCurrentPage: Int = 0,
     val isScrollToTopVisible: Boolean = false,
     val isReportDialogVisible: Boolean = false,
-    val locationPermission: Boolean = false
+    val locationPermission: Boolean = false,
 ) {
     val userHomeUserStatusType: HomeUserStatusType
         get() = when {
             !locationPermission -> HomeUserStatusType.LOCATION_DENIED
-            nickname.isEmpty() || nickname.equals(GUEST_NAME, ignoreCase = false) -> HomeUserStatusType.GUEST
+            nickname.isEmpty() || nickname.equals(
+                GUEST_NAME,
+                ignoreCase = false
+            ) -> HomeUserStatusType.GUEST
+
             else -> HomeUserStatusType.MEMBER
         }
 }
@@ -68,6 +72,8 @@ sealed class HomeUiEffect {
     data object NavigateToReportList : HomeUiEffect()
     data class NavigateToProtectDetail(val animal: ProtectAnimal) : HomeUiEffect()
     data class NavigateToReportDetail(val animal: ReportAnimal) : HomeUiEffect()
+    data object NavigateToLostReport : HomeUiEffect()
+    data object NavigateToFindReport : HomeUiEffect()
     data class OpenWebLink(val url: String) : HomeUiEffect()
     data class ShowToast(val message: String) : HomeUiEffect()
 
@@ -77,7 +83,7 @@ sealed class HomeUiEffect {
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val homeUseCase: GetHomeUseCase,
-    private val getNicknameUseCase: GetNicknameUseCase
+    private val getNicknameUseCase: GetNicknameUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
 
@@ -125,17 +131,21 @@ class HomeViewModel @Inject constructor(
             _uiState.update { it.copy(loadState = LoadState.Loading) }
             homeUseCase().fold(
                 onSuccess = { data ->
-                    _uiState.update { it.copy(
-                        loadState = LoadState.Success,
-                        homeData = data,
-                        errorMessage = null
-                    ) }
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Success,
+                            homeData = data,
+                            errorMessage = null
+                        )
+                    }
                 },
                 onFailure = { error ->
-                    _uiState.update { it.copy(
-                        loadState = LoadState.Error,
-                        errorMessage = error.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
-                    ) }
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Error,
+                            errorMessage = error.message ?: "데이터를 불러오는 중 오류가 발생했습니다."
+                        )
+                    }
                 }
             )
         }
@@ -154,29 +164,35 @@ class HomeViewModel @Inject constructor(
 
             homeUseCase().fold(
                 onSuccess = { data ->
-                    _uiState.update { it.copy(
-                        loadState = LoadState.Success,
-                        homeData = data,
-                        errorMessage = null,
-                        isRefreshing = false
-                    ) }
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Success,
+                            homeData = data,
+                            errorMessage = null,
+                            isRefreshing = false
+                        )
+                    }
                 },
                 onFailure = { error ->
-                    _uiState.update { it.copy(
-                        loadState = LoadState.Error,
-                        errorMessage = error.message ?: "데이터를 새로고침하는 중 오류가 발생했습니다.",
-                        isRefreshing = false
-                    ) }
+                    _uiState.update {
+                        it.copy(
+                            loadState = LoadState.Error,
+                            errorMessage = error.message ?: "데이터를 새로고침하는 중 오류가 발생했습니다.",
+                            isRefreshing = false
+                        )
+                    }
                 }
             )
         }
     }
 
     private fun clearError() {
-        _uiState.update { it.copy(
-            errorMessage = null,
-            loadState = if (_uiState.value.homeData != null) LoadState.Success else LoadState.Idle
-        ) }
+        _uiState.update {
+            it.copy(
+                errorMessage = null,
+                loadState = if (_uiState.value.homeData != null) LoadState.Success else LoadState.Idle
+            )
+        }
     }
 
 
@@ -215,6 +231,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun navigateToLostReport() {
+        viewModelScope.launch {
+            _uiEffect.send(HomeUiEffect.NavigateToLostReport)
+        }
+    }
+
+    fun navigateToFindReport() {
+        viewModelScope.launch {
+            _uiEffect.send(HomeUiEffect.NavigateToFindReport)
+        }
+    }
 
     fun dial() {
         viewModelScope.launch {

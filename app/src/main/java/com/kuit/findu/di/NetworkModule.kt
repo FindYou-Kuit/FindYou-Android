@@ -1,11 +1,13 @@
 package com.kuit.findu.di
 
 import android.content.Context
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuit.findu.BuildConfig
 import com.kuit.findu.BuildConfig.DEBUG
 import com.kuit.findu.data.datalocal.datasource.TokenLocalDataSource
 import com.kuit.findu.data.dataremote.util.AuthInterceptor
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.kuit.findu.data.dataremote.util.ErrorTrackingInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,13 +41,15 @@ object NetworkModule {
     @Singleton
     fun providesOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        errorTrackingInterceptor: ErrorTrackingInterceptor,
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
             connectTimeout(10, TimeUnit.SECONDS)
             writeTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
             if (DEBUG) addInterceptor(loggingInterceptor)
+            else addInterceptor(errorTrackingInterceptor)
             addInterceptor(authInterceptor)
         }.build()
 
@@ -60,9 +64,17 @@ object NetworkModule {
     @Singleton
     fun provideAuthInterceptor(
         tokenLocalDataSource: TokenLocalDataSource,
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): AuthInterceptor {
         return AuthInterceptor(tokenLocalDataSource, context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideErrorTrackingInterceptor(
+        firebaseCrashlytics: FirebaseCrashlytics,
+    ): ErrorTrackingInterceptor {
+        return ErrorTrackingInterceptor(firebaseCrashlytics)
     }
 
     @ExperimentalSerializationApi
@@ -70,7 +82,7 @@ object NetworkModule {
     @Singleton
     fun providesRetrofit(
         okHttpClient: OkHttpClient,
-        json: Json
+        json: Json,
     ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)

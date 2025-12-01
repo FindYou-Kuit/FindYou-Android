@@ -5,6 +5,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuit.findu.analytics.AnalyticsHelper
+import com.kuit.findu.analytics.logUserSignUp
 import com.kuit.findu.domain.usecase.auth.PostCheckNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostSignupUseCase
 import com.kuit.findu.presentation.type.DefaultProfileType
@@ -35,6 +37,7 @@ class OnboardingViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val postCheckNicknameUseCase: PostCheckNicknameUseCase,
     private val postSignupUseCase: PostSignupUseCase,
+    private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OnboardingUiState())
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
@@ -120,6 +123,7 @@ class OnboardingViewModel @Inject constructor(
                 nickname = uiState.value.nickname,
                 kakaoId = uiState.value.kakaoId
             ).onSuccess {
+                analyticsHelper.logUserSignUp(userName = uiState.value.nickname)
                 startMainActivity()
             }.onFailure { e ->
                 Log.d("http", "Error Message: : $e")

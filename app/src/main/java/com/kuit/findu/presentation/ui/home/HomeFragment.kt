@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -76,11 +76,22 @@ class HomeFragment : Fragment() {
                                 }
 
                                 is HomeUiEffect.ShowToast -> {
-                                    Toast.makeText(requireContext(), sideEffect.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        requireContext(),
+                                        sideEffect.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
 
-                                is HomeUiEffect.NavigateToProtectList -> TODO()
-                                is HomeUiEffect.NavigateToReportList -> TODO()
+                                is HomeUiEffect.NavigateToProtectList -> {}
+                                is HomeUiEffect.NavigateToReportList -> {}
+
+                                is HomeUiEffect.NavigateToFindReport -> {
+                                    navigateToFindReport()
+                                }
+                                is HomeUiEffect.NavigateToLostReport -> {
+                                    navigateToLostReport()
+                                }
 
                                 is HomeUiEffect.Dial -> call120()
                             }
@@ -110,7 +121,11 @@ class HomeFragment : Fragment() {
                                 homeViewModel.handleEvent(HomeUiEvent.OnAlarmButtonClick)
                             },
                             onIndicatorSelected = { reportDurationType ->
-                                homeViewModel.handleEvent(HomeUiEvent.OnHomeReportDurationClick(reportDurationType))
+                                homeViewModel.handleEvent(
+                                    HomeUiEvent.OnHomeReportDurationClick(
+                                        reportDurationType
+                                    )
+                                )
                             },
                             userNickname = uiState.nickname,
                             navigateToProtectDetail = { protectAnimal ->
@@ -128,13 +143,18 @@ class HomeFragment : Fragment() {
                             onReportDialogDismiss = {
                                 homeViewModel.handleEvent(HomeUiEvent.OnReportDialogDismiss)
                             },
-                            onLostReportClick = {},
-                            onFindReportClick = {},
+                            onLostReportClick = {
+                                homeViewModel.navigateToLostReport()
+                            },
+                            onFindReportClick = {
+                                homeViewModel.navigateToFindReport()
+                            },
                             onPhoneClicked = {
                                 homeViewModel.dial()
                             },
-                            navigateToHomeExtra = { homeExtraButtonType->
-                                navigateToHomeExtra(homeExtraButtonType) },
+                            navigateToHomeExtra = { homeExtraButtonType ->
+                                navigateToHomeExtra(homeExtraButtonType)
+                            },
                         )
                     }
 
@@ -190,6 +210,18 @@ class HomeFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun navigateToLostReport() {
+        findNavController().navigate(
+            HomeFragmentDirections.actionFragmentHomeToFragmentMissingReport()
+        )
+    }
+
+    private fun navigateToFindReport() {
+        findNavController().navigate(
+            HomeFragmentDirections.actionFragmentHomeToFragmentWitnessReport()
+        )
     }
 
     private fun openWebLink(url: String) {
