@@ -186,7 +186,7 @@ class MyFragment : Fragment() {
 //            clMyAlarmSetting.setOnClickListener {
 //                myViewModel.toggleAlarmSetting()
 //            }
-            binding.clMyAlarmSetting.isEnabled = false
+//            binding.clMyAlarmSetting.isEnabled = false
 
             setupVersion()
         }
@@ -284,9 +284,9 @@ class MyFragment : Fragment() {
                 }
                 launch {
                     myViewModel.alarmEnabled.collect { enabled ->
-                        binding.ivMyAlarmIcon.setImageResource(
-                            if (enabled) R.drawable.img_my_alarm_on else R.drawable.img_my_alarm_off
-                        )
+//                        binding.ivMyAlarmIcon.setImageResource(
+//                            if (enabled) R.drawable.img_my_alarm_on else R.drawable.img_my_alarm_off
+//                        )
                     }
                 }
             }
