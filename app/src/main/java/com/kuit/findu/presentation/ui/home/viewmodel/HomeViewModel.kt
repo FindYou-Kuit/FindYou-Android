@@ -2,6 +2,7 @@ package com.kuit.findu.presentation.ui.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuit.findu.data.dataremote.util.AuthenticationException
 import com.kuit.findu.domain.model.HomeData
 import com.kuit.findu.domain.model.ProtectAnimal
 import com.kuit.findu.domain.model.ReportAnimal
@@ -78,6 +79,7 @@ sealed class HomeUiEffect {
     data class ShowToast(val message: String) : HomeUiEffect()
 
     data object Dial : HomeUiEffect()
+    data object NavigateToLogin : HomeUiEffect()
 }
 
 @HiltViewModel
@@ -140,6 +142,10 @@ class HomeViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
+                    if(error is AuthenticationException) {
+                        _uiEffect.send(HomeUiEffect.NavigateToLogin)
+                        return@fold
+                    }
                     _uiState.update {
                         it.copy(
                             loadState = LoadState.Error,

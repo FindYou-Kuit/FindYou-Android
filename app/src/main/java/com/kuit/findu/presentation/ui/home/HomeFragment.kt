@@ -24,6 +24,7 @@ import com.kuit.findu.presentation.ui.home.composeview.HomeScreen
 import com.kuit.findu.presentation.ui.home.viewmodel.HomeUiEffect
 import com.kuit.findu.presentation.ui.home.viewmodel.HomeUiEvent
 import com.kuit.findu.presentation.ui.home.viewmodel.HomeViewModel
+import com.kuit.findu.presentation.ui.login.LoginActivity
 import com.kuit.findu.presentation.util.permission.LocationPermissionManager.hasLocationPermission
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -89,11 +90,13 @@ class HomeFragment : Fragment() {
                                 is HomeUiEffect.NavigateToFindReport -> {
                                     navigateToFindReport()
                                 }
+
                                 is HomeUiEffect.NavigateToLostReport -> {
                                     navigateToLostReport()
                                 }
 
                                 is HomeUiEffect.Dial -> call120()
+                                is HomeUiEffect.NavigateToLogin -> startLoginActivity()
                             }
                         }
                 }
@@ -173,6 +176,11 @@ class HomeFragment : Fragment() {
         )
     }
 
+    private fun startLoginActivity() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
 
     private fun navigateToProtectDetail(id: String, tag: String, name: String) {
         when (tag) {
