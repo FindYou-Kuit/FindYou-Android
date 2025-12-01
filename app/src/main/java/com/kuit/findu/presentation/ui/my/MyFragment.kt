@@ -188,6 +188,13 @@ class MyFragment : Fragment() {
 //            }
 //            binding.clMyAlarmSetting.isEnabled = false
 
+            clMyGotoLogin.setOnClickListener {
+                with(requireActivity()) {
+                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+                    finish()
+                }
+            }
+
             setupVersion()
         }
     }
@@ -249,6 +256,14 @@ class MyFragment : Fragment() {
                                 Glide.with(this@MyFragment)
                                     .load(type.drawableRes)
                                     .into(binding.ivMyIllust)
+                            }
+
+                            if(it.nickname == "게스트") {
+                                binding.ivMyEditPen.visibility = View.GONE
+                                binding.clMyWithdrawal.visibility = View.GONE
+                                binding.clMyLogout.visibility = View.GONE
+                            } else {
+                                binding.clMyGotoLogin.visibility = View.GONE
                             }
                         }
                     }
