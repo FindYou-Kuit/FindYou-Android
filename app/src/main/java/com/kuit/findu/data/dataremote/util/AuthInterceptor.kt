@@ -24,7 +24,7 @@ class AuthInterceptor @Inject constructor(
 
     private fun addAuthorizationHeader(request: Request): Request =
         request.newBuilder()
-            .addHeader(AUTHORIZATION, "$BEARER ${tokenLocalDataSource.accessToken}")
+            .addHeader(AUTHORIZATION, "$BEARER 1${tokenLocalDataSource.accessToken}")
             .build()
 
     companion object {

@@ -1,5 +1,6 @@
 package com.kuit.findu.presentation.ui.home.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.findu.data.dataremote.util.AuthenticationException
@@ -142,7 +143,8 @@ class HomeViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
-                    if(error is AuthenticationException) {
+                    Log.e("HomeViewModel", "loadHomeData: $error")
+                    if(error.message?.contains("401") == true) {
                         _uiEffect.send(HomeUiEffect.NavigateToLogin)
                         return@fold
                     }

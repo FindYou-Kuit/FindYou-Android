@@ -9,10 +9,6 @@ fun <T> BaseResponse<T>.handleBaseResponse(): Result<T> =
             Result.success(this.data)
         }
 
-        401 -> {
-            Result.failure(AuthenticationException())
-        }
-
         in 400..499 -> { // 클라이언트 에러
             Result.failure(Exception("Client error : ${this.message}"))
         }
