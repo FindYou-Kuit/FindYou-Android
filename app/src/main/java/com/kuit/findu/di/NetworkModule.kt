@@ -6,6 +6,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.kuit.findu.BuildConfig
 import com.kuit.findu.BuildConfig.DEBUG
 import com.kuit.findu.data.datalocal.datasource.TokenLocalDataSource
+import com.kuit.findu.data.dataremote.util.AuthAuthenticator
 import com.kuit.findu.data.dataremote.util.AuthInterceptor
 import com.kuit.findu.data.dataremote.util.ErrorTrackingInterceptor
 import dagger.Module
@@ -42,15 +43,17 @@ object NetworkModule {
     fun providesOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
+        authAuthenticator: AuthAuthenticator,
         errorTrackingInterceptor: ErrorTrackingInterceptor,
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
             connectTimeout(10, TimeUnit.SECONDS)
             writeTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
+            addInterceptor(authInterceptor)
             if (DEBUG) addInterceptor(loggingInterceptor)
             else addInterceptor(errorTrackingInterceptor)
-            addInterceptor(authInterceptor)
+            addInterceptor(authAuthenticator)
         }.build()
 
     @Provides
@@ -67,6 +70,15 @@ object NetworkModule {
         @ApplicationContext context: Context,
     ): AuthInterceptor {
         return AuthInterceptor(tokenLocalDataSource, context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthAuthenticator(
+        tokenLocalDataSource: TokenLocalDataSource,
+        @ApplicationContext context: Context,
+    ): AuthAuthenticator {
+        return AuthAuthenticator(tokenLocalDataSource, context)
     }
 
     @Provides
