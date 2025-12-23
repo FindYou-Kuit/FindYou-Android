@@ -61,6 +61,7 @@
         android:paddingHorizontal="5dp"
         android:drawablePadding="5dp"
         android:text="신고하기"
+        android:visibility="invisible"
         android:textAppearance="@style/TextAppearance.FindU.Head2_SB_20"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

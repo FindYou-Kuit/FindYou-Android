@@ -28,7 +28,7 @@ import com.kuit.findu.ui.theme.FindUTheme
 fun LoginScreen(
     kakaoLoginButtonClicked: () -> Unit,
     withoutSignUpButtonClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -66,12 +66,13 @@ fun LoginScreen(
             tint = Color.Unspecified,
         )
         Spacer(modifier = Modifier.height(53.dp))
-        Icon(
-            painter = painterResource(R.drawable.img_kakao_login),
-            contentDescription = null,
-            modifier = Modifier.noRippleClickable(kakaoLoginButtonClicked),
-            tint = Color.Unspecified
-        )
+//        Icon(
+//            painter = painterResource(R.drawable.img_kakao_login),
+//            contentDescription = null,
+//            modifier = Modifier.noRippleClickable(),
+//            tint = Color.Unspecified
+//        )
+        Spacer(modifier = Modifier.height(50.dp))
         Spacer(modifier = Modifier.height(15.dp))
         Text(
             text = stringResource(R.string.login_without_signup),

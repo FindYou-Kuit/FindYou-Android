@@ -57,6 +57,7 @@ class SearchProtectingDetailFragment : Fragment() {
 
         binding.mapView.getMapAsync { nMap ->
             naverMap = nMap
+            naverMap?.uiSettings?.isLogoClickEnabled = false
             pendingLocation?.let { location ->
                 setupMap(location.latitude, location.longitude)
             }

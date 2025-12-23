@@ -4,7 +4,8 @@
     android:layout_width="320dp"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_my_dialog"
-    android:padding="20dp">
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="20dp">
 
     <TextView
         android:id="@+id/tv_dialog_title"
@@ -99,7 +100,7 @@
 
     <android.widget.Button
         android:id="@+id/btn_change_profile_image"
-        android:layout_width="288dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:background="@drawable/bg_radius_8_g3"

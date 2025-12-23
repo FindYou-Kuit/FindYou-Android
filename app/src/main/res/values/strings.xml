@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FindU</string>
+    <string name="app_name">찾아유</string>
 
     <!-- login -->
     <string name="login_description">유기동물 관심의 시작,</string>

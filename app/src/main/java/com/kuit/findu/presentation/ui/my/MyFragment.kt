@@ -186,7 +186,14 @@ class MyFragment : Fragment() {
 //            clMyAlarmSetting.setOnClickListener {
 //                myViewModel.toggleAlarmSetting()
 //            }
-            binding.clMyAlarmSetting.isEnabled = false
+//            binding.clMyAlarmSetting.isEnabled = false
+
+            clMyGotoLogin.setOnClickListener {
+                with(requireActivity()) {
+                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+                    finish()
+                }
+            }
 
             setupVersion()
         }
@@ -250,6 +257,14 @@ class MyFragment : Fragment() {
                                     .load(type.drawableRes)
                                     .into(binding.ivMyIllust)
                             }
+
+                            if(it.nickname == "게스트") {
+                                binding.ivMyEditPen.visibility = View.GONE
+                                binding.clMyWithdrawal.visibility = View.GONE
+                                binding.clMyLogout.visibility = View.GONE
+                            } else {
+                                binding.clMyGotoLogin.visibility = View.GONE
+                            }
                         }
                     }
                 }
@@ -284,9 +299,9 @@ class MyFragment : Fragment() {
                 }
                 launch {
                     myViewModel.alarmEnabled.collect { enabled ->
-                        binding.ivMyAlarmIcon.setImageResource(
-                            if (enabled) R.drawable.img_my_alarm_on else R.drawable.img_my_alarm_off
-                        )
+//                        binding.ivMyAlarmIcon.setImageResource(
+//                            if (enabled) R.drawable.img_my_alarm_on else R.drawable.img_my_alarm_off
+//                        )
                     }
                 }
             }
