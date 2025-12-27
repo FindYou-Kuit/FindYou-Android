@@ -35,6 +35,7 @@ android {
         buildConfigField("String", "NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"].toString())
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", properties["kakao.native.app.key"].toString())
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY_MANIFEST"] = properties["kakao.native.app.key.manifest"].toString()
+        buildConfigField("String", "DISCORD_WEBHOOK_URL", properties["DISCORD_WEBHOOK_URL"].toString())
     }
 
     signingConfigs {
