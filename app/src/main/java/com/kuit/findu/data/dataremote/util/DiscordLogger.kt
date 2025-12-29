@@ -3,7 +3,6 @@ package com.kuit.findu.data.dataremote.util
 import com.kuit.findu.data.dataremote.service.WebhookService
 import com.kuit.findu.domain.model.DiscordLogBody
 import com.kuit.findu.domain.repository.UserInfoRepository
-import retrofit2.HttpException
 import javax.inject.Inject
 
 class DiscordLogger @Inject constructor(

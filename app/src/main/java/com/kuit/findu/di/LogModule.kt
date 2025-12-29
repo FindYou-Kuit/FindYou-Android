@@ -1,5 +1,6 @@
 package com.kuit.findu.di
 
+import com.kuit.findu.BuildConfig
 import com.kuit.findu.data.dataremote.service.WebhookService
 import com.kuit.findu.data.dataremote.util.DiscordLogger
 import com.kuit.findu.domain.repository.UserInfoRepository
@@ -12,7 +13,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object LogModule {
-
     @Provides
     @Singleton
     fun provideDiscordLogger(

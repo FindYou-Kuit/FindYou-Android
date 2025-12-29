@@ -8,6 +8,7 @@ import com.kuit.findu.BuildConfig.DEBUG
 import com.kuit.findu.data.datalocal.datasource.TokenLocalDataSource
 import com.kuit.findu.data.dataremote.util.AuthAuthenticator
 import com.kuit.findu.data.dataremote.util.AuthInterceptor
+import com.kuit.findu.data.dataremote.util.DiscordLogger
 import com.kuit.findu.data.dataremote.util.ErrorTrackingInterceptor
 import dagger.Module
 import dagger.Provides
@@ -85,8 +86,12 @@ object NetworkModule {
     @Singleton
     fun provideErrorTrackingInterceptor(
         firebaseCrashlytics: FirebaseCrashlytics,
+        discordLogger: DiscordLogger
     ): ErrorTrackingInterceptor {
-        return ErrorTrackingInterceptor(firebaseCrashlytics)
+        return ErrorTrackingInterceptor(
+            firebaseCrashlytics= firebaseCrashlytics,
+            discordLogger = discordLogger
+        )
     }
 
     @ExperimentalSerializationApi
@@ -103,4 +108,5 @@ object NetworkModule {
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull()))
             )
             .build()
+
 }
