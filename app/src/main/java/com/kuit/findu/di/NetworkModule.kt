@@ -108,5 +108,4 @@ object NetworkModule {
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull()))
             )
             .build()
-
 }
