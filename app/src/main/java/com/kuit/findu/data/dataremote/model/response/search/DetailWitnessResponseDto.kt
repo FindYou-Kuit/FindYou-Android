@@ -12,8 +12,8 @@ data class DetailWitnessResponseDto(
     @SerialName("significant") val significant: String,
     @SerialName("witnessLocation") val witnessLocation: String,
     @SerialName("witnessAddress") val witnessAddress: String,
-    @SerialName("latitude") val latitude: Double,
-    @SerialName("longitude") val longitude: Double,
+    @SerialName("latitude") val latitude: Double?,
+    @SerialName("longitude") val longitude: Double?,
     @SerialName("reporterInfo") val reporterInfo: String,
     @SerialName("witnessDate") val witnessDate: String,
     @SerialName("interest") val interest: Boolean

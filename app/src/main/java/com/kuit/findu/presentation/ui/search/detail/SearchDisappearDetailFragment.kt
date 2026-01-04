@@ -97,7 +97,7 @@ class SearchDisappearDetailFragment : Fragment() {
             position = location
             this.map = map
             icon = OverlayImage.fromResource(R.drawable.ic_search_map_marker)
-            height = 23
+            height = 40
         }
     }
 
@@ -145,7 +145,14 @@ class SearchDisappearDetailFragment : Fragment() {
             if (data.imageUrls.isNotEmpty()) {
                 initViewPager(data.imageUrls)
             }
-            setupMap(data.latitude, data.longitude)
+
+            // latitude, longitude가 null이면 지도 숨기기
+            if (data.latitude != null && data.longitude != null) {
+                clSearchMap.visibility = View.VISIBLE
+                setupMap(data.latitude, data.longitude)
+            } else {
+                clSearchMap.visibility = View.GONE
+            }
         }
     }
 

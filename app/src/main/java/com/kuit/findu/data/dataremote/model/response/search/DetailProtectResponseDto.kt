@@ -28,9 +28,9 @@ data class DetailProtectResponseDto(
     @SerialName("careAddr")
     val careAddr: String,
     @SerialName("latitude")
-    val latitude: Double,
+    val latitude: Double?,
     @SerialName("longitude")
-    val longitude: Double,
+    val longitude: Double?,
     @SerialName("careTel")
     val careTel: String,
     @SerialName("foundDate")
