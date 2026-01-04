@@ -24,7 +24,7 @@ import java.io.File
 import javax.inject.Inject
 
 data class OnboardingUiState(
-    val pageState: Int = 1,
+    val pageState: Int = 2,
     val kakaoId: Long = -1L,
     val profileImageUri: Uri? = null,
     val defaultProfileType: DefaultProfileType = DefaultProfileType.DEFAULT,

@@ -38,8 +38,8 @@ interface AuthService {
     @Multipart
     @POST("/$API/$VERSION/users")
     suspend fun postSignup(
-        @Part profileImage: MultipartBody.Part?,
-        @Part("defaultProfileImageName") defaultImageName: RequestBody?,
+//        @Part profileImage: MultipartBody.Part?,
+//        @Part("defaultProfileImageName") defaultImageName: RequestBody?,
         @Part("nickname") nickname: RequestBody,
         @Part("kakaoId") kakaoId: RequestBody,
         @Part("deviceId") deviceId: RequestBody

@@ -35,8 +35,8 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         kakaoId: Long,
         deviceId: String
     ): NullableBaseResponse<UserInfoDto> = authService.postSignup(
-        profileImage = profileImageFile?.toImageMultipart("profileImage"),
-        defaultImageName = defaultImageName?.toPlainTextRequestBody(),
+//        profileImage = profileImageFile?.toImageMultipart("profileImage"),
+//        defaultImageName = defaultImageName?.toPlainTextRequestBody(),
         nickname = nickname.toPlainTextRequestBody(),
         kakaoId = kakaoId.toString().toPlainTextRequestBody(),
         deviceId = deviceId.toPlainTextRequestBody()
