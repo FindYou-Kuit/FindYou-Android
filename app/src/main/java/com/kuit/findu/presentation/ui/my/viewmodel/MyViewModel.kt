@@ -128,6 +128,7 @@ class MyViewModel @Inject constructor(
         viewModelScope.launch {
             deleteUserUseCase().fold(
                 onSuccess = {
+                    clearToken()
                     _deleteUserMessage.value = "회원 탈퇴가 완료되었습니다."
                 },
                 onFailure = {

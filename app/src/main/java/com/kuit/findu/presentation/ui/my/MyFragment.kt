@@ -175,7 +175,6 @@ class MyFragment : Fragment() {
                     context = requireContext(),
                     onWithdrawalClick = {
                         myViewModel.deleteUserData()
-                        myViewModel.clearToken()
                         with(requireActivity()) {
                             startActivity(Intent(requireContext(), LoginActivity::class.java))
                             finish()
