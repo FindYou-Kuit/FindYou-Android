@@ -19,7 +19,7 @@ sealed class SearchListItem {
 }
 
 class SearchListAdapter(
-    private val listener: SearchListListener
+    private val listener: SearchListListener,
 ) : ListAdapter<SearchListItem, SearchListAdapter.BaseVH>(DIFF) {
 
     companion object {
@@ -28,16 +28,23 @@ class SearchListAdapter(
         const val VIEW_TYPE_GRID = 1
 
         private val DIFF = object : DiffUtil.ItemCallback<SearchListItem>() {
-            override fun areItemsTheSame(oldItem: SearchListItem, newItem: SearchListItem): Boolean {
+            override fun areItemsTheSame(
+                oldItem: SearchListItem,
+                newItem: SearchListItem,
+            ): Boolean {
                 return when {
                     oldItem is SearchListItem.Header && newItem is SearchListItem.Header -> true
                     oldItem is SearchListItem.Content && newItem is SearchListItem.Content ->
                         oldItem.data.reportId == newItem.data.reportId
+
                     else -> false
                 }
             }
 
-            override fun areContentsTheSame(oldItem: SearchListItem, newItem: SearchListItem): Boolean {
+            override fun areContentsTheSame(
+                oldItem: SearchListItem,
+                newItem: SearchListItem,
+            ): Boolean {
                 return oldItem == newItem
             }
         }
@@ -65,10 +72,12 @@ class SearchListAdapter(
                 ItemSearchHeaderBinding.inflate(inflater, parent, false),
                 listener
             )
+
             VIEW_TYPE_GRID -> BaseVH.GridVH(
                 ItemSearchGridContentBinding.inflate(inflater, parent, false),
                 listener
             )
+
             else -> BaseVH.HorizontalVH(
                 SearchHorizontalContentItemBinding.inflate(inflater, parent, false),
                 listener
@@ -87,7 +96,7 @@ class SearchListAdapter(
     sealed class BaseVH(bindingRoot: ViewGroup) : RecyclerView.ViewHolder(bindingRoot) {
         class HeaderVH(
             private val binding: ItemSearchHeaderBinding,
-            private val listener: SearchListListener
+            private val listener: SearchListListener,
         ) : BaseVH(binding.root as ViewGroup) {
             private var isGrid = false
             fun bind() = with(binding) {
@@ -106,13 +115,15 @@ class SearchListAdapter(
 
         class HorizontalVH(
             private val binding: SearchHorizontalContentItemBinding,
-            private val listener: SearchListListener
+            private val listener: SearchListListener,
         ) : BaseVH(binding.root as ViewGroup) {
             fun bind(item: SearchRv) = with(binding) {
                 tvSearchContentName.text = item.name
-                tvSearchContentDate.text = item.date
+                tvSearchFoundDate.text = item.date
+                tvSearchContentDate.text = item.createdAt
                 tvSearchContentAddress.text = item.location
                 tvSearchContentStatus.text = item.tag.text
+                tvSearchFoundDateTitle.text = item.tag.dateTag
                 tvSearchContentStatus.setTextColor(root.context.getColor(item.tag.textColor))
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
                 updateBookmarkIcon(item.isBookmark)
@@ -143,13 +154,15 @@ class SearchListAdapter(
 
         class GridVH(
             private val binding: ItemSearchGridContentBinding,
-            private val listener: SearchListListener
+            private val listener: SearchListListener,
         ) : BaseVH(binding.root as ViewGroup) {
             fun bind(item: SearchRv) = with(binding) {
                 tvSearchContentName.text = item.name
-                tvSearchContentDate.text = item.date
+                tvSearchFoundDate.text = item.date
+                tvSearchContentDate.text = item.createdAt
                 tvSearchContentAddress.text = item.location
                 tvSearchContentStatus.text = item.tag.text
+                tvSearchFoundDateTitle.text = item.tag.dateTag
                 tvSearchContentStatus.setTextColor(root.context.getColor(item.tag.textColor))
                 tvSearchContentStatus.setBackgroundResource(item.tag.backgroundRes)
                 updateBookmarkIcon(item.isBookmark)

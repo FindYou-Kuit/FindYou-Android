@@ -9,5 +9,6 @@ data class SearchRv(
     val location : String,
     var isBookmark : Boolean,
     var tag : SearchRvTag,
-    val reportId: Long
+    val reportId: Long,
+    val createdAt: String,
 ) : Serializable

@@ -26,6 +26,7 @@ fun SearchAnimalCard.toDomain(): SearchAnimal {
         date = this.date,
         location = this.location,
         interest = this.interest,
+        createdAt = this.createdAt,
     )
 }
 
