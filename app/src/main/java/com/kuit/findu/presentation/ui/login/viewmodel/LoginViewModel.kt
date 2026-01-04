@@ -9,6 +9,7 @@ import com.kuit.findu.domain.usecase.SetNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostGuestLoginUseCase
 import com.kuit.findu.domain.usecase.auth.PostLoginUseCase
 import com.kuit.findu.domain.usecase.token.SetAccessTokenUseCase
+import com.kuit.findu.domain.usecase.token.SetRefreshTokenUseCase
 import com.kuit.findu.presentation.util.Nickname.GUEST_NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,6 +22,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: PostLoginUseCase,
     private val guestLoginUseCase: PostGuestLoginUseCase,
     private val setAccessTokenUseCase: SetAccessTokenUseCase,
+    private val setRefreshTokenUseCase: SetRefreshTokenUseCase,
     private val setNicknameUseCase: SetNicknameUseCase,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
@@ -41,6 +43,7 @@ class LoginViewModel @Inject constructor(
                         userName = loginData.userInfo?.nickname ?: "Null Nickname", type = "kakao"
                     )
                     setAccessTokenUseCase(accessToken = loginData.userInfo!!.accessToken)
+                    setRefreshTokenUseCase(refreshToken = loginData.userInfo.refreshToken)
                     setNicknameUseCase(nickname = loginData.userInfo.nickname)
                     startMainActivity()
                 }
@@ -56,6 +59,7 @@ class LoginViewModel @Inject constructor(
                 .onSuccess { loginData ->
                     analyticsHelper.logUserSignIn(userName = GUEST_NAME, type = "Guest")
                     setAccessTokenUseCase(accessToken = loginData.accessToken)
+                    setRefreshTokenUseCase(refreshToken = loginData.refreshToken)
                     setNicknameUseCase(nickname = GUEST_NAME)
                     onSuccess()
                     startMainActivity()

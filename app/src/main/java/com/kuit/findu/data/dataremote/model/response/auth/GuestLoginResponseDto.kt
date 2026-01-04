@@ -8,5 +8,7 @@ data class GuestLoginResponseDto(
     @SerialName("userId")
     val userId: Long,
     @SerialName("accessToken")
-    val accessToken: String
+    val accessToken: String,
+    @SerialName("refreshToken")
+    val refreshToken: String
 )

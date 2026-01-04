@@ -6,5 +6,6 @@ import com.kuit.findu.domain.model.GuestLoginData
 fun GuestLoginResponseDto.toDomain(): GuestLoginData =
     GuestLoginData(
         userId = this.userId,
-        accessToken = this.accessToken
+        accessToken = this.accessToken,
+        refreshToken = this.refreshToken
     )
