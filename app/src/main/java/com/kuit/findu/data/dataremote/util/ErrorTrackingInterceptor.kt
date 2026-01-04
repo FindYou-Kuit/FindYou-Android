@@ -41,7 +41,7 @@ class ErrorTrackingInterceptor @Inject constructor(
                 key("api_status", code)
             }
 
-            if (code in 500..599) {
+            if (code in 400..599) {
                 CoroutineScope(Dispatchers.IO).launch {
                     discordLogger.logServerError(
                         code = code,
