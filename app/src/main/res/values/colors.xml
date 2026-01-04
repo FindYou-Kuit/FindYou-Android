@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--main color-->
+    <color name="main_color_deprecated">#FFA938</color>
     <color name="main_color">#FF9000</color>
     <color name="main_color2">#FFEED9</color>
     <!--red-->
