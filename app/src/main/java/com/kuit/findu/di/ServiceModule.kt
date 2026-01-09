@@ -12,8 +12,10 @@ import com.kuit.findu.data.dataremote.service.InquiryService
 import com.kuit.findu.data.dataremote.service.InterestService
 import com.kuit.findu.data.dataremote.service.MyService
 import com.kuit.findu.data.dataremote.service.NaverService
+import com.kuit.findu.data.dataremote.service.ReissueService
 import com.kuit.findu.data.dataremote.service.ReportService
 import com.kuit.findu.data.dataremote.service.SearchService
+import com.kuit.findu.di.qualifier.ReissueRetrofit
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -115,4 +117,9 @@ object ServiceModule {
     @Singleton
     fun provideInquiryService(retrofit: Retrofit): InquiryService =
         retrofit.create(InquiryService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideReissueService(@ReissueRetrofit reissueRetrofit: Retrofit): ReissueService =
+        reissueRetrofit.create(ReissueService::class.java)
 }

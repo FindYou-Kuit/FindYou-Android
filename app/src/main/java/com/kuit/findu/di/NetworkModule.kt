@@ -6,10 +6,12 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.kuit.findu.BuildConfig
 import com.kuit.findu.BuildConfig.DEBUG
 import com.kuit.findu.data.datalocal.datasource.TokenLocalDataSource
+import com.kuit.findu.data.dataremote.service.ReissueService
 import com.kuit.findu.data.dataremote.util.AuthAuthenticator
 import com.kuit.findu.data.dataremote.util.AuthInterceptor
 import com.kuit.findu.data.dataremote.util.DiscordLogger
 import com.kuit.findu.data.dataremote.util.ErrorTrackingInterceptor
+import com.kuit.findu.di.qualifier.ReissueRetrofit
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,7 +56,7 @@ object NetworkModule {
             addInterceptor(authInterceptor)
             if (DEBUG) addInterceptor(loggingInterceptor)
             else addInterceptor(errorTrackingInterceptor)
-            addInterceptor(authAuthenticator)
+            authenticator(authAuthenticator)
         }.build()
 
     @Provides
@@ -77,24 +79,23 @@ object NetworkModule {
     @Singleton
     fun provideAuthAuthenticator(
         tokenLocalDataSource: TokenLocalDataSource,
-        @ApplicationContext context: Context,
+        reissueService: ReissueService,
     ): AuthAuthenticator {
-        return AuthAuthenticator(tokenLocalDataSource, context)
+        return AuthAuthenticator(tokenLocalDataSource, reissueService)
     }
 
     @Provides
     @Singleton
     fun provideErrorTrackingInterceptor(
         firebaseCrashlytics: FirebaseCrashlytics,
-        discordLogger: DiscordLogger
+        discordLogger: DiscordLogger,
     ): ErrorTrackingInterceptor {
         return ErrorTrackingInterceptor(
-            firebaseCrashlytics= firebaseCrashlytics,
+            firebaseCrashlytics = firebaseCrashlytics,
             discordLogger = discordLogger
         )
     }
 
-    @ExperimentalSerializationApi
     @Provides
     @Singleton
     fun providesRetrofit(
@@ -108,4 +109,24 @@ object NetworkModule {
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull()))
             )
             .build()
+
+    @Provides
+    @ReissueRetrofit
+    @Singleton
+    fun providesReissueRetrofit(
+        loggingInterceptor: HttpLoggingInterceptor,
+        json: Json,
+    ): Retrofit {
+        val authOkHttpClient = OkHttpClient.Builder().apply {
+            readTimeout(20, TimeUnit.SECONDS)
+            if (DEBUG) addInterceptor(loggingInterceptor)
+        }.build()
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(authOkHttpClient)
+            .addConverterFactory(
+                json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull()))
+            )
+            .build()
+    }
 }

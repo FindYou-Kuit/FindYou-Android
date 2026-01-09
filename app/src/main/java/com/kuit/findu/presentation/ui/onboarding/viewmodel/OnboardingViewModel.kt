@@ -9,6 +9,8 @@ import com.kuit.findu.analytics.AnalyticsHelper
 import com.kuit.findu.analytics.logUserSignUp
 import com.kuit.findu.domain.usecase.auth.PostCheckNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostSignupUseCase
+import com.kuit.findu.domain.usecase.token.SetAccessTokenUseCase
+import com.kuit.findu.domain.usecase.token.SetRefreshTokenUseCase
 import com.kuit.findu.presentation.type.DefaultProfileType
 import com.kuit.findu.presentation.type.NicknameValidType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,6 +39,8 @@ class OnboardingViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val postCheckNicknameUseCase: PostCheckNicknameUseCase,
     private val postSignupUseCase: PostSignupUseCase,
+    private val setAccessTokenUseCase: SetAccessTokenUseCase,
+    private val setRefreshTokenUseCase: SetRefreshTokenUseCase,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OnboardingUiState())
@@ -122,8 +126,10 @@ class OnboardingViewModel @Inject constructor(
                 defaultImageName = uiState.value.defaultProfileType.string,
                 nickname = uiState.value.nickname,
                 kakaoId = uiState.value.kakaoId
-            ).onSuccess {
+            ).onSuccess { data ->
                 analyticsHelper.logUserSignUp(userName = uiState.value.nickname)
+                setAccessTokenUseCase(data.accessToken)
+                setRefreshTokenUseCase(data.refreshToken)
                 startMainActivity()
             }.onFailure { e ->
                 Log.d("http", "Error Message: : $e")
