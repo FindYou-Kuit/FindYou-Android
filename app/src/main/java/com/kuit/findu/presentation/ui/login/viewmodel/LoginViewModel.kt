@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kuit.findu.analytics.AnalyticsHelper
 import com.kuit.findu.analytics.logUserSignIn
 import com.kuit.findu.data.dataremote.exception.ApiNotFoundException
+import com.kuit.findu.domain.usecase.SetIsGuestLoginUseCase
 import com.kuit.findu.domain.usecase.SetNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostGuestLoginUseCase
 import com.kuit.findu.domain.usecase.auth.PostLoginUseCase
@@ -25,6 +26,7 @@ class LoginViewModel @Inject constructor(
     private val setAccessTokenUseCase: SetAccessTokenUseCase,
     private val setRefreshTokenUseCase: SetRefreshTokenUseCase,
     private val setNicknameUseCase: SetNicknameUseCase,
+    private val setIsGuestLoginUseCase: SetIsGuestLoginUseCase,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _startMainActivity = MutableSharedFlow<Unit>()
@@ -49,6 +51,7 @@ class LoginViewModel @Inject constructor(
                     setAccessTokenUseCase(accessToken = loginData.userInfo!!.accessToken)
                     setRefreshTokenUseCase(refreshToken = loginData.userInfo.refreshToken)
                     setNicknameUseCase(nickname = loginData.userInfo.nickname)
+                    setIsGuestLoginUseCase(isGuest = false)
                     startMainActivity()
                 }
             }.onFailure { e ->
@@ -65,6 +68,7 @@ class LoginViewModel @Inject constructor(
                     setAccessTokenUseCase(accessToken = loginData.accessToken)
                     setRefreshTokenUseCase(refreshToken = loginData.refreshToken)
                     setNicknameUseCase(nickname = GUEST_NAME)
+                    setIsGuestLoginUseCase(isGuest = true)
                     onSuccess()
                     startMainActivity()
                 }

@@ -7,6 +7,7 @@ import com.kuit.findu.data.dataremote.util.AuthenticationException
 import com.kuit.findu.domain.model.HomeData
 import com.kuit.findu.domain.model.ProtectAnimal
 import com.kuit.findu.domain.model.ReportAnimal
+import com.kuit.findu.domain.usecase.GetIsGuestLoginUseCase
 import com.kuit.findu.domain.usecase.GetNicknameUseCase
 import com.kuit.findu.domain.usecase.home.GetHomeUseCase
 import com.kuit.findu.presentation.type.HomeReportDurationType
@@ -87,6 +88,7 @@ sealed class HomeUiEffect {
 class HomeViewModel @Inject constructor(
     private val homeUseCase: GetHomeUseCase,
     private val getNicknameUseCase: GetNicknameUseCase,
+    private val getIsGuestLoginUseCase: GetIsGuestLoginUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
 
@@ -114,7 +116,13 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnHomeReportDurationClick -> changeReportDuration(event.duration)
 
             is HomeUiEvent.OnReportDialogClick -> {
-                _uiState.update { it.copy(isReportDialogVisible = true) }
+                if (getIsGuestLoginUseCase()) {
+                    viewModelScope.launch {
+                        _uiEffect.send(HomeUiEffect.ShowToast("로그인 이후에 제보해주세요!"))
+                    }
+                } else {
+                    _uiState.update { it.copy(isReportDialogVisible = true) }
+                }
             }
 
             is HomeUiEvent.OnReportDialogDismiss -> {
@@ -241,13 +249,21 @@ class HomeViewModel @Inject constructor(
 
     fun navigateToLostReport() {
         viewModelScope.launch {
-            _uiEffect.send(HomeUiEffect.NavigateToLostReport)
+            if (getIsGuestLoginUseCase()) {
+                _uiEffect.send(HomeUiEffect.ShowToast("로그인 이후에 제보해주세요!"))
+            } else {
+                _uiEffect.send(HomeUiEffect.NavigateToLostReport)
+            }
         }
     }
 
     fun navigateToFindReport() {
         viewModelScope.launch {
-            _uiEffect.send(HomeUiEffect.NavigateToFindReport)
+            if (getIsGuestLoginUseCase()) {
+                _uiEffect.send(HomeUiEffect.ShowToast("로그인 이후에 제보해주세요!"))
+            } else {
+                _uiEffect.send(HomeUiEffect.NavigateToFindReport)
+            }
         }
     }
 

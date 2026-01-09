@@ -23,6 +23,10 @@ class DeviceLocalDataSourceImpl @Inject constructor(
         get() = sharedPreferences.getString(NICKNAME, INITIAL_VALUE).toString()
         set(value) = sharedPreferences.edit { putString(NICKNAME, value) }
 
+    override var isGuestLogin: Boolean
+        get() = sharedPreferences.getBoolean(IS_GUEST_LOGIN, false)
+        set(value) = sharedPreferences.edit { putBoolean(IS_GUEST_LOGIN, value) }
+
     override fun clear() {
         val currentDeviceId = deviceId
         sharedPreferences.edit {
@@ -34,6 +38,7 @@ class DeviceLocalDataSourceImpl @Inject constructor(
         const val PREFERENCES_NAME = "device_preferences"
         const val DEVICE_ID = "deviceId"
         const val NICKNAME = "nickname"
+        const val IS_GUEST_LOGIN = "isGuestLogin"
 
         const val INITIAL_VALUE = ""
     }

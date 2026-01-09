@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.findu.analytics.AnalyticsHelper
 import com.kuit.findu.analytics.logUserSignUp
+import com.kuit.findu.domain.usecase.SetIsGuestLoginUseCase
 import com.kuit.findu.domain.usecase.auth.PostCheckNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostSignupUseCase
 import com.kuit.findu.domain.usecase.token.SetAccessTokenUseCase
@@ -41,6 +42,7 @@ class OnboardingViewModel @Inject constructor(
     private val postSignupUseCase: PostSignupUseCase,
     private val setAccessTokenUseCase: SetAccessTokenUseCase,
     private val setRefreshTokenUseCase: SetRefreshTokenUseCase,
+    private val setIsGuestLoginUseCase: SetIsGuestLoginUseCase,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OnboardingUiState())
@@ -130,6 +132,7 @@ class OnboardingViewModel @Inject constructor(
                 analyticsHelper.logUserSignUp(userName = uiState.value.nickname)
                 setAccessTokenUseCase(data.accessToken)
                 setRefreshTokenUseCase(data.refreshToken)
+                setIsGuestLoginUseCase(false)
                 startMainActivity()
             }.onFailure { e ->
                 Log.d("http", "Error Message: : $e")
