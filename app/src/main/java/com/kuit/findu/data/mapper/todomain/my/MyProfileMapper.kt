@@ -6,5 +6,5 @@ import com.kuit.findu.domain.model.my.MyProfileData
 fun MyNickNameResponseDto.toDomain(): MyProfileData =
     MyProfileData(
         nickname = nickname,
-        profileImage = profileImage
+        profileImage = profileImage ?: ""
     )

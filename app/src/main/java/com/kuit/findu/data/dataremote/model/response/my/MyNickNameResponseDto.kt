@@ -9,5 +9,5 @@ data class MyNickNameResponseDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("profileImage")
-    val profileImage : String,
+    val profileImage : String? = null,
 )
