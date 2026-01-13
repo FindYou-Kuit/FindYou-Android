@@ -33,7 +33,6 @@ data class HomeUiState(
     val nickname: String = "",
     val isRefreshing: Boolean = false,
     val bannerCurrentPage: Int = 0,
-    val isScrollToTopVisible: Boolean = false,
     val isReportDialogVisible: Boolean = false,
     val locationPermission: Boolean = false,
 ) {
@@ -63,7 +62,6 @@ sealed class HomeUiEvent {
 
     data class OnBannerPageChanged(val page: Int) : HomeUiEvent()
 
-    data class OnScrollPositionChanged(val firstVisibleItemIndex: Int) : HomeUiEvent()
     data class SetLocationPermission(val locationPermission: Boolean) : HomeUiEvent()
     data object SetUserNickname : HomeUiEvent()
 
@@ -111,7 +109,6 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.ClearError -> clearError()
 
             is HomeUiEvent.OnBannerPageChanged -> updateBannerPage(event.page)
-            is HomeUiEvent.OnScrollPositionChanged -> updateScrollToTopVisibility(event.firstVisibleItemIndex)
             is HomeUiEvent.OnAlarmButtonClick -> alarmButtonClicked()
             is HomeUiEvent.OnHomeReportDurationClick -> changeReportDuration(event.duration)
 
@@ -275,11 +272,6 @@ class HomeViewModel @Inject constructor(
 
     private fun updateBannerPage(page: Int) {
         _uiState.update { it.copy(bannerCurrentPage = page) }
-    }
-
-    private fun updateScrollToTopVisibility(firstVisibleItemIndex: Int) {
-        val isVisible = firstVisibleItemIndex > 2
-        _uiState.update { it.copy(isScrollToTopVisible = isVisible) }
     }
 
 }
