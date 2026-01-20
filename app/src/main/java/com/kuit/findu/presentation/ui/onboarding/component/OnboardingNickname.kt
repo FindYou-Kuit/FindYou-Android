@@ -59,7 +59,7 @@ fun OnboardingNickname(
             .fillMaxWidth()
     ) {
         // NOTE: 페이지 아이콘 첫/끝 요소 여백 불균형으로 임시 여백 삽입 (디자인 수정 시 제거 예정)
-        BaseVectorIcon(vectorResource = R.drawable.ic_onboarding_page_last, modifier = Modifier.padding(start = 4.dp))
+//        BaseVectorIcon(vectorResource = R.drawable.ic_onboarding_page_last, modifier = Modifier.padding(start = 4.dp))
         Spacer(modifier = Modifier.height(40.dp))
         Text(
             text = stringResource(R.string.onboarding_nickname_title_first),

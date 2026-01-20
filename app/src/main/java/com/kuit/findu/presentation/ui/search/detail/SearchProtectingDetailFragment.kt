@@ -139,19 +139,26 @@ class SearchProtectingDetailFragment : Fragment() {
             tvValueFoundDate.text = data.foundDate
             tvValueHairColor.text = data.furColor
             tvSpecialNote.text = data.significant
-            tvShelterLocation.text = data.careAddr
             tvValueShelterName.text = data.careName
             tvValueNotiDate.text = data.noticeDuration
             tvValueNotiNum.text = data.noticeNumber
             tvValueShelterPhoneNumber.text = data.careTel
             tvValueJurisdiction.text = data.authority
-            tvValueProtectLocation.text = data.foundLocation.ifBlank { data.careAddr }
+            tvValueProtectLocation.text = data.careAddr
+            tvValueFoundLocation.text = data.foundLocation
 
             initTagView(data.tag)
             if (data.imageUrls.isNotEmpty()) {
                 initViewPager(data.imageUrls)
             }
-            setupMap(data.latitude, data.longitude)
+
+            // latitude, longitude가 null이면 지도 숨기기
+            if (data.latitude != null && data.longitude != null) {
+                clSearchMap.visibility = View.VISIBLE
+                setupMap(data.latitude, data.longitude)
+            } else {
+                clSearchMap.visibility = View.GONE
+            }
         }
 
     }

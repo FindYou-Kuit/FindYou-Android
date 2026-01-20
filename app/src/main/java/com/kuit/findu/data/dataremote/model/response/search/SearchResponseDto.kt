@@ -8,9 +8,9 @@ data class SearchResponseDto(
     @SerialName("cards")
     val cards: List<SearchAnimalCard>,
     @SerialName("lastId")
-    val lastId : Long?,
+    val lastId: Long?,
     @SerialName("isLast")
-    val isLast : Boolean
+    val isLast: Boolean,
 )
 
 @Serializable
@@ -28,5 +28,7 @@ data class SearchAnimalCard(
     @SerialName("location")
     val location: String,
     @SerialName("interest")
-    val interest: Boolean = false
+    val interest: Boolean = false,
+    @SerialName("createdAt")
+    val createdAt: String,
 )

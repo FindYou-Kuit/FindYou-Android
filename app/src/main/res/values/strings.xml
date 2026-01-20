@@ -14,7 +14,7 @@
     <string name="login_title_second">누군가의 세상이 됩니다.</string>
     <string name="login_description_text">유기동물 관련 어플리케이션</string>
     <string name="login_without_signup">가입없이 시작하기</string>
-    <string name="login_without_signup_toast_message">가입없이 찾아유 실행</string>
+    <string name="login_without_signup_toast_message">찾아유에 오신 것을 환영합니다!</string>
 
 
     <!--signup-->

@@ -22,6 +22,8 @@ class PostSignupUseCase(
         nickname = nickname,
         kakaoId = kakaoId,
         deviceId = userInfoRepository.getDeviceId()
-    )
+    ).onSuccess {
+        userInfoRepository.setIsGuestLogin(false)
+    }
 
 }

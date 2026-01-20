@@ -7,5 +7,6 @@ fun UserInfoDto.toDomain(): UserInfo =
     UserInfo(
         userId = this.userId,
         nickname = this.nickname,
-        accessToken = this.accessToken
+        accessToken = this.accessToken,
+        refreshToken = this.refreshToken
     )

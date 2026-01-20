@@ -15,13 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,7 +35,6 @@ import com.kuit.findu.presentation.ui.home.component.HomeProtectAnimalList
 import com.kuit.findu.presentation.ui.home.component.HomeReportCard
 import com.kuit.findu.presentation.ui.home.component.HomeReportDialog
 import com.kuit.findu.presentation.ui.home.component.HomeReportedAnimalList
-import com.kuit.findu.presentation.ui.home.component.HomeScrollToTopButton
 import com.kuit.findu.presentation.ui.home.component.HomeTopBar
 import com.kuit.findu.presentation.ui.home.component.HomeWebLinkList
 import com.kuit.findu.presentation.ui.home.viewmodel.HomeUiState
@@ -46,7 +42,6 @@ import com.kuit.findu.ui.theme.FindUTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -72,17 +67,6 @@ fun HomeScreen(
     val bannerList = HomeBannerType.entries
     val pagerState = rememberPagerState()
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-
-    val isLastItemVisible = remember {
-        derivedStateOf {
-            val layoutInfo = listState.layoutInfo
-            val totalItemsCount = layoutInfo.totalItemsCount
-            val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
-
-            lastVisibleItem == totalItemsCount - 1
-        }
-    }
 
     LaunchedEffect(pagerState) {
         while (true) {
@@ -185,18 +169,6 @@ fun HomeScreen(
                     HomeWebLinkList()
                 }
             }
-        }
-        if (isLastItemVisible.value) {
-            HomeScrollToTopButton(
-                onClick = {
-                    coroutineScope.launch {
-                        listState.animateScrollToItem(0)
-                    }
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 60.dp, end = 20.dp)
-            )
         }
         if (uiState.isReportDialogVisible) {
             HomeReportDialog(

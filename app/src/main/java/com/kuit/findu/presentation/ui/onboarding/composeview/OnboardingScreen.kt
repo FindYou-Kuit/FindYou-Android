@@ -56,14 +56,15 @@ fun OnboardingScreen(
                 focusManager.clearFocus()
             }
     ) {
-        BaseVectorIcon(
-            vectorResource = R.drawable.ic_arrow_back_24,
-            modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 18.dp)
-                .noRippleClickable(backButtonClicked)
-        )
+//        BaseVectorIcon(
+//            vectorResource = R.drawable.ic_arrow_back_24,
+//            modifier = Modifier
+//                .padding(horizontal = 20.dp, vertical = 18.dp)
+//                .noRippleClickable(backButtonClicked)
+//        )
+        Spacer(modifier = Modifier.height(110.dp))
         Spacer(modifier = Modifier.height(12.dp))
-        when (uiState.pageState) {
+        /*when (uiState.pageState) {
             1 -> OnboardingProfile(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 defaultProfileType = uiState.defaultProfileType,
@@ -73,7 +74,7 @@ fun OnboardingScreen(
                 clearProfileImage = clearProfileImage
             )
 
-            2 -> OnboardingNickname(
+            2 -> */OnboardingNickname(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 nicknameValueChanged = { nickname ->
                     nicknameValueChanged(nickname)
@@ -86,7 +87,7 @@ fun OnboardingScreen(
                 },
                 focusChanged = { focusChanged(it) }
             )
-        }
+//        }
         Spacer(modifier = Modifier.weight(1f))
         OnboardingButton(
             enabled = isNextButtonEnabled,

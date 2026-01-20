@@ -5,7 +5,7 @@ import com.kuit.findu.domain.repository.UserInfoRepository
 import javax.inject.Inject
 
 class UserInfoRepositoryImpl @Inject constructor(
-    private val deviceLocalDataSource: DeviceLocalDataSource
+    private val deviceLocalDataSource: DeviceLocalDataSource,
 ) : UserInfoRepository {
     override fun getDeviceId(): String = deviceLocalDataSource.deviceId
 
@@ -17,6 +17,12 @@ class UserInfoRepositoryImpl @Inject constructor(
 
     override fun setNickname(nickname: String) {
         deviceLocalDataSource.nickname = nickname
+    }
+
+    override fun getIsGuestLogin(): Boolean = deviceLocalDataSource.isGuestLogin
+
+    override fun setIsGuestLogin(isGuest: Boolean) {
+        deviceLocalDataSource.isGuestLogin = isGuest
     }
 
     override fun clear() = deviceLocalDataSource.clear()

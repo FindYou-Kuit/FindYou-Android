@@ -122,7 +122,11 @@ class MyFragment : Fragment() {
             }
 
             btnMyReportHistory.setOnClickListener {
-                findNavController().navigate(R.id.action_fragment_my_to_fragment_my_report_history)
+                if (myViewModel.isGuest()) {
+                    Toast.makeText(requireContext(), "로그인 이후에 이용해주세요!", Toast.LENGTH_SHORT).show()
+                } else {
+                    findNavController().navigate(R.id.action_fragment_my_to_fragment_my_report_history)
+                }
             }
 
             clMyRecentHistory.setOnClickListener {
@@ -175,7 +179,6 @@ class MyFragment : Fragment() {
                     context = requireContext(),
                     onWithdrawalClick = {
                         myViewModel.deleteUserData()
-                        myViewModel.clearToken()
                         with(requireActivity()) {
                             startActivity(Intent(requireContext(), LoginActivity::class.java))
                             finish()

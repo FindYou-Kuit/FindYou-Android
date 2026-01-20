@@ -14,9 +14,11 @@ import com.kuit.findu.domain.repository.report.ReportRepository
 import com.kuit.findu.domain.usecase.GetBreedDataUseCase
 import com.kuit.findu.domain.usecase.GetBreedValidationUseCase
 import com.kuit.findu.domain.usecase.GetDetailSearchUseCase
+import com.kuit.findu.domain.usecase.GetIsGuestLoginUseCase
 import com.kuit.findu.domain.usecase.GetNicknameUseCase
 import com.kuit.findu.domain.usecase.GetSearchUseCase
 import com.kuit.findu.domain.usecase.PostAiDetectionUseCase
+import com.kuit.findu.domain.usecase.SetIsGuestLoginUseCase
 import com.kuit.findu.domain.usecase.SetNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostCheckNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostGuestLoginUseCase
@@ -290,4 +292,16 @@ object UseCaseModule {
     fun provideGetSigunguUseCase(
         informationRepository: InformationRepository,
     ): GetSigunguUseCase = GetSigunguUseCase(informationRepository)
+
+    @Provides
+    @Singleton
+    fun provideSetIsGuestLoginUseCase(
+        userInfoRepository: UserInfoRepository,
+    ): SetIsGuestLoginUseCase = SetIsGuestLoginUseCase(userInfoRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetIsGuestLoginUseCase(
+        userInfoRepository: UserInfoRepository,
+    ): GetIsGuestLoginUseCase = GetIsGuestLoginUseCase(userInfoRepository)
 }

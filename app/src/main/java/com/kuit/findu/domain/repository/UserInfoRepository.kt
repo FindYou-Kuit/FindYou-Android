@@ -5,5 +5,7 @@ interface UserInfoRepository {
     fun setDeviceId(deviceId: String)
     fun getNickname(): String
     fun setNickname(nickname: String)
+    fun getIsGuestLogin(): Boolean
+    fun setIsGuestLogin(isGuest: Boolean)
     fun clear()
 }

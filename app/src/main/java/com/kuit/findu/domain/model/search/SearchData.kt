@@ -5,7 +5,7 @@ import java.io.Serializable
 data class SearchData(
     val cards: List<SearchAnimal>,
     val lastId: Long,
-    val isLast: Boolean
+    val isLast: Boolean,
 ) : Serializable
 
 data class SearchAnimal(
@@ -15,7 +15,9 @@ data class SearchAnimal(
     val tag: SearchStatus,
     val date: String,
     val location: String,
-    val interest: Boolean
+    val interest: Boolean,
+    val createdAt: String,
+
 ) : Serializable
 
 fun String.toSearchStatus(): SearchStatus {

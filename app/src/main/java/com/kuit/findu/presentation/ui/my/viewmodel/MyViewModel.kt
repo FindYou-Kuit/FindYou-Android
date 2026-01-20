@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.findu.domain.model.my.MyProfileData
 import com.kuit.findu.domain.model.my.MyProfileImageUpdate
+import com.kuit.findu.domain.usecase.GetIsGuestLoginUseCase
 import com.kuit.findu.domain.usecase.interest.DeleteInterestAnimalUseCase
 import com.kuit.findu.domain.usecase.interest.PostInterestAnimalUseCase
 import com.kuit.findu.domain.usecase.my.DeleteUserUseCase
@@ -46,6 +47,7 @@ class MyViewModel @Inject constructor(
     private val deleteReportUseCase: DeleteReportUseCase,
     private val patchProfileImageUseCase: PatchProfileImageUseCase,
     private val clearTokenUseCase: ClearTokenUseCase,
+    private val getIsGuestLoginUseCase: GetIsGuestLoginUseCase,
 ) : ViewModel() {
 
     private val _interestAnimals = MutableStateFlow<List<MyInterestRv>>(emptyList())
@@ -128,6 +130,7 @@ class MyViewModel @Inject constructor(
         viewModelScope.launch {
             deleteUserUseCase().fold(
                 onSuccess = {
+                    clearToken()
                     _deleteUserMessage.value = "회원 탈퇴가 완료되었습니다."
                 },
                 onFailure = {
@@ -249,5 +252,7 @@ class MyViewModel @Inject constructor(
             clearTokenUseCase()
         }
     }
+
+    fun isGuest(): Boolean = getIsGuestLoginUseCase()
 
 }

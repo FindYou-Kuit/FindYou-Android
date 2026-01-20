@@ -13,8 +13,8 @@ data class DetailMissingData(
     val significant: String,
     val missingLocation: String,
     val missingAddress: String,
-    val latitude: Double,
-    val longitude: Double,
+    val latitude: Double?,
+    val longitude: Double?,
     val reporterName: String,
     val reporterTel: String,
     val interest: Boolean

@@ -7,8 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.findu.analytics.AnalyticsHelper
 import com.kuit.findu.analytics.logUserSignUp
+import com.kuit.findu.domain.usecase.SetIsGuestLoginUseCase
 import com.kuit.findu.domain.usecase.auth.PostCheckNicknameUseCase
 import com.kuit.findu.domain.usecase.auth.PostSignupUseCase
+import com.kuit.findu.domain.usecase.token.SetAccessTokenUseCase
+import com.kuit.findu.domain.usecase.token.SetRefreshTokenUseCase
 import com.kuit.findu.presentation.type.DefaultProfileType
 import com.kuit.findu.presentation.type.NicknameValidType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +27,7 @@ import java.io.File
 import javax.inject.Inject
 
 data class OnboardingUiState(
-    val pageState: Int = 1,
+    val pageState: Int = 2,
     val kakaoId: Long = -1L,
     val profileImageUri: Uri? = null,
     val defaultProfileType: DefaultProfileType = DefaultProfileType.DEFAULT,
@@ -37,6 +40,9 @@ class OnboardingViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val postCheckNicknameUseCase: PostCheckNicknameUseCase,
     private val postSignupUseCase: PostSignupUseCase,
+    private val setAccessTokenUseCase: SetAccessTokenUseCase,
+    private val setRefreshTokenUseCase: SetRefreshTokenUseCase,
+    private val setIsGuestLoginUseCase: SetIsGuestLoginUseCase,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OnboardingUiState())
@@ -122,8 +128,11 @@ class OnboardingViewModel @Inject constructor(
                 defaultImageName = uiState.value.defaultProfileType.string,
                 nickname = uiState.value.nickname,
                 kakaoId = uiState.value.kakaoId
-            ).onSuccess {
+            ).onSuccess { data ->
                 analyticsHelper.logUserSignUp(userName = uiState.value.nickname)
+                setAccessTokenUseCase(data.accessToken)
+                setRefreshTokenUseCase(data.refreshToken)
+                setIsGuestLoginUseCase(false)
                 startMainActivity()
             }.onFailure { e ->
                 Log.d("http", "Error Message: : $e")

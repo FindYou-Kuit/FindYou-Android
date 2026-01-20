@@ -322,25 +322,38 @@
                         app:layout_constraintStart_toEndOf="@id/tv_value_shelter_name"
                         app:layout_constraintTop_toTopOf="@id/tv_value_shelter_name" />
 
+                    <androidx.constraintlayout.helper.widget.Flow
+                        android:id="@+id/flow_protect_location"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        app:constraint_referenced_ids="tv_value_protect_location,cl_protect_location_copy"
+                        app:flow_horizontalAlign="start"
+                        app:flow_horizontalBias="0"
+                        app:flow_horizontalGap="3dp"
+                        app:flow_horizontalStyle="packed"
+                        app:flow_verticalGap="5dp"
+                        app:flow_wrapMode="chain"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_value_shelter_name" />
+
                     <TextView
                         android:id="@+id/tv_value_protect_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="@string/search_detail_protect_location_value"
                         android:textAppearance="@style/TextAppearance.FindU.caption_12"
                         android:textColor="@color/gray5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_value_shelter_name" />
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="0dp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_protect_location_copy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_value_protect_location"
-                        app:layout_constraintStart_toEndOf="@id/tv_value_protect_location"
-                        app:layout_constraintTop_toTopOf="@id/tv_value_protect_location">
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="0dp">
 
                         <ImageView
                             android:id="@+id/iv_search_copy"

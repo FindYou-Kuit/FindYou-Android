@@ -16,8 +16,8 @@ data class DetailMissingResponseDto(
     @SerialName("significant") val significant: String,
     @SerialName("missingLocation") val missingLocation: String,
     @SerialName("missingAddress") val missingAddress: String,
-    @SerialName("latitude") val latitude: Double,
-    @SerialName("longitude") val longitude: Double,
+    @SerialName("latitude") val latitude: Double?,
+    @SerialName("longitude") val longitude: Double?,
     @SerialName("reporterName") val reporterName: String,
     @SerialName("reporterTel") val reporterTel: String,
     @SerialName("interest") val interest: Boolean

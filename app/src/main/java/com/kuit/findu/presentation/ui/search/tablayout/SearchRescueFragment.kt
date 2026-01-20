@@ -119,7 +119,8 @@ class SearchRescueFragment : Fragment(), SearchListListener {
                 location = item.location,
                 isBookmark = item.interest,
                 tag = item.tag.toSearchRvTag(),
-                reportId = item.reportId
+                reportId = item.reportId,
+                createdAt = item.createdAt,
             )
         }
 

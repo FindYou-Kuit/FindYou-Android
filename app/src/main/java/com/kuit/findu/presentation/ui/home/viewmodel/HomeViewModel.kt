@@ -7,6 +7,7 @@ import com.kuit.findu.data.dataremote.util.AuthenticationException
 import com.kuit.findu.domain.model.HomeData
 import com.kuit.findu.domain.model.ProtectAnimal
 import com.kuit.findu.domain.model.ReportAnimal
+import com.kuit.findu.domain.usecase.GetIsGuestLoginUseCase
 import com.kuit.findu.domain.usecase.GetNicknameUseCase
 import com.kuit.findu.domain.usecase.home.GetHomeUseCase
 import com.kuit.findu.presentation.type.HomeReportDurationType
@@ -32,7 +33,6 @@ data class HomeUiState(
     val nickname: String = "",
     val isRefreshing: Boolean = false,
     val bannerCurrentPage: Int = 0,
-    val isScrollToTopVisible: Boolean = false,
     val isReportDialogVisible: Boolean = false,
     val locationPermission: Boolean = false,
 ) {
@@ -62,7 +62,6 @@ sealed class HomeUiEvent {
 
     data class OnBannerPageChanged(val page: Int) : HomeUiEvent()
 
-    data class OnScrollPositionChanged(val firstVisibleItemIndex: Int) : HomeUiEvent()
     data class SetLocationPermission(val locationPermission: Boolean) : HomeUiEvent()
     data object SetUserNickname : HomeUiEvent()
 
@@ -87,6 +86,7 @@ sealed class HomeUiEffect {
 class HomeViewModel @Inject constructor(
     private val homeUseCase: GetHomeUseCase,
     private val getNicknameUseCase: GetNicknameUseCase,
+    private val getIsGuestLoginUseCase: GetIsGuestLoginUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
 
@@ -109,12 +109,17 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.ClearError -> clearError()
 
             is HomeUiEvent.OnBannerPageChanged -> updateBannerPage(event.page)
-            is HomeUiEvent.OnScrollPositionChanged -> updateScrollToTopVisibility(event.firstVisibleItemIndex)
             is HomeUiEvent.OnAlarmButtonClick -> alarmButtonClicked()
             is HomeUiEvent.OnHomeReportDurationClick -> changeReportDuration(event.duration)
 
             is HomeUiEvent.OnReportDialogClick -> {
-                _uiState.update { it.copy(isReportDialogVisible = true) }
+                if (getIsGuestLoginUseCase()) {
+                    viewModelScope.launch {
+                        _uiEffect.send(HomeUiEffect.ShowToast("로그인 이후에 제보해주세요!"))
+                    }
+                } else {
+                    _uiState.update { it.copy(isReportDialogVisible = true) }
+                }
             }
 
             is HomeUiEvent.OnReportDialogDismiss -> {
@@ -241,13 +246,21 @@ class HomeViewModel @Inject constructor(
 
     fun navigateToLostReport() {
         viewModelScope.launch {
-            _uiEffect.send(HomeUiEffect.NavigateToLostReport)
+            if (getIsGuestLoginUseCase()) {
+                _uiEffect.send(HomeUiEffect.ShowToast("로그인 이후에 제보해주세요!"))
+            } else {
+                _uiEffect.send(HomeUiEffect.NavigateToLostReport)
+            }
         }
     }
 
     fun navigateToFindReport() {
         viewModelScope.launch {
-            _uiEffect.send(HomeUiEffect.NavigateToFindReport)
+            if (getIsGuestLoginUseCase()) {
+                _uiEffect.send(HomeUiEffect.ShowToast("로그인 이후에 제보해주세요!"))
+            } else {
+                _uiEffect.send(HomeUiEffect.NavigateToFindReport)
+            }
         }
     }
 
@@ -259,11 +272,6 @@ class HomeViewModel @Inject constructor(
 
     private fun updateBannerPage(page: Int) {
         _uiState.update { it.copy(bannerCurrentPage = page) }
-    }
-
-    private fun updateScrollToTopVisibility(firstVisibleItemIndex: Int) {
-        val isVisible = firstVisibleItemIndex > 2
-        _uiState.update { it.copy(isScrollToTopVisible = isVisible) }
     }
 
 }

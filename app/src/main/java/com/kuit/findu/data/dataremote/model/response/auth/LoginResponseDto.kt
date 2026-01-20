@@ -18,5 +18,7 @@ data class UserInfoDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("accessToken")
-    val accessToken: String
+    val accessToken: String,
+    @SerialName("refreshToken")
+    val refreshToken: String,
 )
