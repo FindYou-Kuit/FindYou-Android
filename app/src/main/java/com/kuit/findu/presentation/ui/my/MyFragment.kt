@@ -30,9 +30,15 @@ import com.kuit.findu.presentation.ui.my.dialog.MyProfileImageDialog
 import com.kuit.findu.presentation.ui.my.dialog.MyWithdrawalDialog
 import com.kuit.findu.presentation.ui.my.model.ProfileImageType
 import com.kuit.findu.presentation.ui.my.viewmodel.MyViewModel
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.LoadAdError
 import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
+import com.kuit.findu.analytics.AnalyticsEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -76,6 +82,30 @@ class MyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeViewModel()
+        setupAdView()
+    }
+
+    private fun setupAdView() {
+        val analytics = FirebaseAnalytics.getInstance(requireContext())
+
+        binding.adViewMy.adListener = object : AdListener() {
+            override fun onAdClicked() {
+                analytics.logEvent(AnalyticsEvent.AD_CLICK, android.os.Bundle().apply {
+                    putString(AnalyticsEvent.AD_LOCATION, "my_page")
+                })
+            }
+
+            override fun onAdImpression() {
+                analytics.logEvent(AnalyticsEvent.AD_IMPRESSION, android.os.Bundle().apply {
+                    putString(AnalyticsEvent.AD_LOCATION, "my_page")
+                })
+            }
+
+            override fun onAdFailedToLoad(error: LoadAdError) {
+                // 광고 로드 실패 시 처리
+            }
+        }
+        binding.adViewMy.loadAd(AdRequest.Builder().build())
     }
 
     private fun initListener() {

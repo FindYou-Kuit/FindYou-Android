@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.findu.R
 import com.kuit.findu.presentation.ui.base.BaseVectorIcon
+import com.kuit.findu.presentation.ui.common.AdBanner
 import com.kuit.findu.presentation.util.WebViewUrl.CENTER_URL
 import com.kuit.findu.presentation.util.WebViewUrl.PART_URL
 import com.kuit.findu.ui.theme.FindUTheme
@@ -51,15 +52,9 @@ fun HomeWebLinkList(modifier: Modifier = Modifier) {
             buttonText = "종합유기견보호센터 바로가기",
             webUrl = CENTER_URL
         )
-        Spacer(modifier = Modifier.height(60.dp))
-        Text(
-            text = "서비스 관련 정보 \n" +
-                    "문의처는 어쩌고 저쩌고 \n" +
-                    "전화번호 00-10-3-20442",
-            style = FindUTheme.typography.captionRegular12,
-            color = FindUTheme.colors.gray5
-        )
-
+        Spacer(modifier = Modifier.height(40.dp))
+        AdBanner(adLocation = "home_web_link")
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 

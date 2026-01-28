@@ -462,6 +462,13 @@
 
     </ScrollView>
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_view_my"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-7675272869453438/1213424875"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

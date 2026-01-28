@@ -38,6 +38,7 @@ import com.kuit.findu.presentation.ui.home.component.HomeReportedAnimalList
 import com.kuit.findu.presentation.ui.home.component.HomeTopBar
 import com.kuit.findu.presentation.ui.home.component.HomeWebLinkList
 import com.kuit.findu.presentation.ui.home.viewmodel.HomeUiState
+import com.kuit.findu.presentation.ui.common.AdBanner
 import com.kuit.findu.ui.theme.FindUTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
@@ -130,6 +131,12 @@ fun HomeScreen(
                         HomeBannerPager(
                             bannerList = bannerList,
                             pagerState = pagerState
+                        )
+                        Spacer(modifier = Modifier.height(15.dp))
+
+                        AdBanner(
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            adLocation = "home_screen"
                         )
                         Spacer(modifier = Modifier.height(30.dp))
                     }
