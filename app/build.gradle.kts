@@ -24,8 +24,8 @@ android {
         applicationId = "com.kuit.findu"
         minSdk = 28
         targetSdk = 35
-        versionCode = 14
-        versionName = "1.0.13"
+        versionCode = 15
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
