@@ -24,8 +24,8 @@ android {
         applicationId = "com.kuit.findu"
         minSdk = 28
         targetSdk = 35
-        versionCode = 14
-        versionName = "1.0.13"
+        versionCode = 15
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
@@ -53,7 +53,9 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
             buildConfigField("String", "BASE_URL", properties["base.url.release"].toString())
+            buildConfigField("String", "ADMOB_BANNER_ID", properties["ADMOB_BANNER_ID_RELEASE"].toString())
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -64,7 +66,7 @@ android {
             isDebuggable = true
             versionNameSuffix = "-DEBUG"
             buildConfigField("String", "BASE_URL", properties["base.url.dev"].toString())
-
+            buildConfigField("String", "ADMOB_BANNER_ID", properties["ADMOB_BANNER_ID_DEBUG"].toString())
         }
     }
     buildFeatures {
@@ -169,4 +171,7 @@ dependencies {
     implementation(libs.firebase.analytics.ktx)
     implementation(libs.firebase.config.ktx)
     implementation(libs.firebase.crashlytics)
+
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:23.1.0")
 }

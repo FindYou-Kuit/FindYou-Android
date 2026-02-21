@@ -94,6 +94,10 @@
 -dontwarn com.google.firebase.**
 -dontwarn com.google.android.gms.**
 
+# ========== AdMob ==========
+-keep class com.google.android.gms.ads.** { *; }
+-dontwarn com.google.android.gms.ads.**
+
 # ========== Jetpack Compose ==========
 -keep class androidx.compose.** { *; }
 -keep class androidx.compose.runtime.** { *; }
