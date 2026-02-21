@@ -13,7 +13,7 @@ class TokenRepositoryImpl @Inject constructor(
         tokenLocalDataSource.accessToken = accessToken
     }
 
-    override fun getRefreshToken(): String = tokenLocalDataSource.accessToken
+    override fun getRefreshToken(): String = tokenLocalDataSource.refreshToken
 
     override fun setRefreshToken(refreshToken: String) {
         tokenLocalDataSource.refreshToken = refreshToken
