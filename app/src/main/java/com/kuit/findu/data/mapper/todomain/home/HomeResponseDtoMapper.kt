@@ -34,7 +34,7 @@ fun PeriodStatisticsDto.toDomain() = PeriodStatistics(
 
 fun ProtectingAnimal.toDomain() = ProtectAnimal(
     protectId = reportId,
-    thumbnailImageUrl = thumbnailImageUrl,
+    thumbnailImageUrl = thumbnailImageUrl.orEmpty(),
     title = title,
     tag = tag,
     noticeStartDate = happenDate,
@@ -43,7 +43,7 @@ fun ProtectingAnimal.toDomain() = ProtectAnimal(
 
 fun WitnessedOrMissingAnimal.toDomain() = ReportAnimal(
     reportId = reportId,
-    thumbnailImageUrl = thumbnailImageUrl,
+    thumbnailImageUrl = thumbnailImageUrl.orEmpty(),
     title = title,
     tag = tag,
     registerDate = happenDate,

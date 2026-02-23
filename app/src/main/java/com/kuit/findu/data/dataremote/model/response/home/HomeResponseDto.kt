@@ -40,7 +40,7 @@ data class ProtectingAnimal(
     @SerialName("reportId")
     val reportId: Int,
     @SerialName("thumbnailImageUrl")
-    val thumbnailImageUrl: String,
+    val thumbnailImageUrl: String?,
     @SerialName("title")
     val title: String,
     @SerialName("tag")
@@ -56,7 +56,7 @@ data class WitnessedOrMissingAnimal(
     @SerialName("reportId")
     val reportId: Int,
     @SerialName("thumbnailImageUrl")
-    val thumbnailImageUrl: String,
+    val thumbnailImageUrl: String?,
     @SerialName("title")
     val title: String,
     @SerialName("tag")
