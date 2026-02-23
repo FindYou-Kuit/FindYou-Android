@@ -15,24 +15,29 @@ class DiscordLogger @Inject constructor(
         code: Int,
         method: String,
         url: String,
+        reason: String? = null,
     ) {
         val deviceId = userInfoRepository.getDeviceId()
         val nickname = userInfoRepository.getNickname()
+        val sanitizedReason = reason?.takeIf { it.isNotBlank() }
+        val content = buildString {
+            appendLine("🚨 **Server Error 발생**")
+            appendLine()
+            appendLine("👤 User")
+            appendLine("- Nickname: $nickname")
+            appendLine("- DeviceId: $deviceId")
+            appendLine()
+            appendLine("🌐 Request")
+            appendLine("- Method: $method")
+            appendLine("- Url: $url")
+            append("- Code: $code")
+            sanitizedReason?.let {
+                appendLine()
+                append("- Reason: $it")
+            }
+        }.trim()
 
-        val body = DiscordLogBody(
-            content = """
-            🚨 **Server Error 발생**
-            
-            👤 User
-            - Nickname: $nickname
-            - DeviceId: $deviceId
-            
-            🌐 Request
-            - Method: $method
-            - Url: $url
-            - Code: $code
-            """.trimIndent()
-        )
+        val body = DiscordLogBody(content = content)
 
         runCatching {
             webhookService.sendLog(webhookUrl, body)
