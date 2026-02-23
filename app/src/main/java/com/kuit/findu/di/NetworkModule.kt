@@ -1,6 +1,5 @@
 package com.kuit.findu.di
 
-import android.content.Context
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuit.findu.BuildConfig
@@ -15,7 +14,6 @@ import com.kuit.findu.di.qualifier.ReissueRetrofit
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -70,10 +68,7 @@ object NetworkModule {
     @Singleton
     fun provideAuthInterceptor(
         tokenLocalDataSource: TokenLocalDataSource,
-        @ApplicationContext context: Context,
-    ): AuthInterceptor {
-        return AuthInterceptor(tokenLocalDataSource, context)
-    }
+    ): AuthInterceptor = AuthInterceptor(tokenLocalDataSource)
 
     @Provides
     @Singleton

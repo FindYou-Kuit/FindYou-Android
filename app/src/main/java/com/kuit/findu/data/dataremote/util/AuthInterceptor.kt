@@ -1,8 +1,6 @@
 package com.kuit.findu.data.dataremote.util
 
-import android.content.Context
 import com.kuit.findu.data.datalocal.datasource.TokenLocalDataSource
-import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -10,7 +8,6 @@ import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
     private val tokenLocalDataSource: TokenLocalDataSource,
-    @ApplicationContext private val context: Context
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
