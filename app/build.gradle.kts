@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.navigationSafeArgs)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.firebaseCrashlytics)
+    alias(libs.plugins.firebasePerf)
 }
 
 val properties = Properties().apply {
@@ -24,8 +25,8 @@ android {
         applicationId = "com.kuit.findu"
         minSdk = 28
         targetSdk = 35
-        versionCode = 19
-        versionName = "1.1.4"
+        versionCode = 20
+        versionName = "1.1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
@@ -171,6 +172,7 @@ dependencies {
     implementation(libs.firebase.analytics.ktx)
     implementation(libs.firebase.config.ktx)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.perf)
 
     // AdMob
     implementation("com.google.android.gms:play-services-ads:23.1.0")
