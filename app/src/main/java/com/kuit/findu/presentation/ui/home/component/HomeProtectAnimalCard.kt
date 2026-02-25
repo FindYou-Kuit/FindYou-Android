@@ -25,6 +25,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import android.os.SystemClock
+import android.util.Log
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.perf.FirebasePerformance
@@ -55,12 +57,22 @@ fun HomeProtectAnimalCard(
             val context = LocalContext.current
             val imageRequest = remember(animal.thumbnailImageUrl) {
                 val trace = FirebasePerformance.getInstance().newTrace("home_protect_image_load")
+                var startTime = 0L
                 ImageRequest.Builder(context)
                     .data(animal.thumbnailImageUrl)
                     .listener(
-                        onStart = { trace.start() },
-                        onSuccess = { _, _ -> trace.stop() },
+                        onStart = {
+                            startTime = SystemClock.elapsedRealtime()
+                            trace.start()
+                        },
+                        onSuccess = { _, _ ->
+                            val duration = SystemClock.elapsedRealtime() - startTime
+                            Log.d("ImagePerf", "보호동물 이미지 로딩 완료: ${duration}ms | ${animal.thumbnailImageUrl}")
+                            trace.stop()
+                        },
                         onError = { _, _ ->
+                            val duration = SystemClock.elapsedRealtime() - startTime
+                            Log.e("ImagePerf", "보호동물 이미지 로딩 실패: ${duration}ms | ${animal.thumbnailImageUrl}")
                             trace.putAttribute("status", "error")
                             trace.stop()
                         }
