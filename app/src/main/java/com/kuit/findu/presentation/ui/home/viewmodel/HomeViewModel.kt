@@ -14,6 +14,7 @@ import com.kuit.findu.presentation.type.HomeReportDurationType
 import com.kuit.findu.presentation.type.HomeUserStatusType
 import com.kuit.findu.presentation.type.view.LoadState
 import com.kuit.findu.presentation.util.Nickname.GUEST_NAME
+import com.google.firebase.perf.FirebasePerformance
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -137,8 +138,14 @@ class HomeViewModel @Inject constructor(
     private fun loadHomeData() {
         viewModelScope.launch {
             _uiState.update { it.copy(loadState = LoadState.Loading) }
+            val trace = FirebasePerformance.getInstance().newTrace("home_data_load")
+            trace.start()
             homeUseCase().fold(
                 onSuccess = { data ->
+                    trace.putAttribute("status", "success")
+                    trace.putMetric("protect_animal_count", data.protectAnimalCards.size.toLong())
+                    trace.putMetric("report_animal_count", data.reportAnimalCards.size.toLong())
+                    trace.stop()
                     _uiState.update {
                         it.copy(
                             loadState = LoadState.Success,
@@ -148,6 +155,8 @@ class HomeViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
+                    trace.putAttribute("status", "failure")
+                    trace.stop()
                     Log.e("HomeViewModel", "loadHomeData: $error")
                     if(error.message?.contains("401") == true) {
                         _uiEffect.send(HomeUiEffect.NavigateToLogin)
