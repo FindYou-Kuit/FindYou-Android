@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.findu.R
 import com.kuit.findu.presentation.ui.base.BaseVectorIcon
-import com.kuit.findu.presentation.ui.common.AdBanner
 import com.kuit.findu.presentation.util.WebViewUrl.CENTER_URL
 import com.kuit.findu.presentation.util.WebViewUrl.PART_URL
 import com.kuit.findu.ui.theme.FindUTheme
@@ -52,8 +51,6 @@ fun HomeWebLinkList(modifier: Modifier = Modifier) {
             buttonText = "종합유기견보호센터 바로가기",
             webUrl = CENTER_URL
         )
-        Spacer(modifier = Modifier.height(40.dp))
-        AdBanner(adLocation = "home_web_link")
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
