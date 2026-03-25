@@ -7,9 +7,11 @@ import com.kuit.findu.BuildConfig.DEBUG
 import com.kuit.findu.data.datalocal.datasource.TokenLocalDataSource
 import com.kuit.findu.data.dataremote.service.ReissueService
 import com.kuit.findu.data.dataremote.util.AuthAuthenticator
+import com.kuit.findu.data.dataremote.util.AuthErrorInterceptor
 import com.kuit.findu.data.dataremote.util.AuthInterceptor
 import com.kuit.findu.data.dataremote.util.DiscordLogger
 import com.kuit.findu.data.dataremote.util.ErrorTrackingInterceptor
+import com.kuit.findu.data.dataremote.util.SessionExpiredEventManager
 import com.kuit.findu.di.qualifier.ReissueRetrofit
 import dagger.Module
 import dagger.Provides
@@ -45,6 +47,7 @@ object NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         authAuthenticator: AuthAuthenticator,
+        authErrorInterceptor: AuthErrorInterceptor,
         errorTrackingInterceptor: ErrorTrackingInterceptor,
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
@@ -52,6 +55,7 @@ object NetworkModule {
             writeTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
             addInterceptor(authInterceptor)
+            addInterceptor(authErrorInterceptor)
             if (DEBUG) addInterceptor(loggingInterceptor)
             else addInterceptor(errorTrackingInterceptor)
             authenticator(authAuthenticator)
@@ -75,8 +79,18 @@ object NetworkModule {
     fun provideAuthAuthenticator(
         tokenLocalDataSource: TokenLocalDataSource,
         reissueService: ReissueService,
+        sessionExpiredEventManager: SessionExpiredEventManager,
     ): AuthAuthenticator {
-        return AuthAuthenticator(tokenLocalDataSource, reissueService)
+        return AuthAuthenticator(tokenLocalDataSource, reissueService, sessionExpiredEventManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthErrorInterceptor(
+        tokenLocalDataSource: TokenLocalDataSource,
+        sessionExpiredEventManager: SessionExpiredEventManager,
+    ): AuthErrorInterceptor {
+        return AuthErrorInterceptor(tokenLocalDataSource, sessionExpiredEventManager)
     }
 
     @Provides

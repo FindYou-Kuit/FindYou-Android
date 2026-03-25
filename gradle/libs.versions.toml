@@ -5,6 +5,7 @@ coilCompose = "2.5.0"
 composeBom = "2024.04.01"
 firebaseBom = "34.6.0"
 firebaseCrashlytics = "3.0.6"
+firebasePerf = "2.0.2"
 googleServices = "4.4.2"
 kotlin = "2.0.21"
 coreKtx = "1.15.0"
@@ -54,6 +55,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics" }
 firebase-config-ktx = { module = "com.google.firebase:firebase-config" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics"}
+firebase-perf = { module = "com.google.firebase:firebase-perf" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -105,6 +107,7 @@ dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt
 navigationSafeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationFragmentKtx" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
+firebasePerf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerf" }
 
 [bundles]
 hilt = [

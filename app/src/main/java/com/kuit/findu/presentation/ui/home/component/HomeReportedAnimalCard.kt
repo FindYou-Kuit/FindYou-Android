@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,8 +21,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import android.os.SystemClock
+import android.util.Log
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.google.firebase.perf.FirebasePerformance
 import com.kuit.findu.R
 import com.kuit.findu.domain.model.ReportAnimal
 import com.kuit.findu.presentation.type.AnimalStateType
@@ -43,8 +49,33 @@ fun HomeReportedAnimalCard(
             .background(shape = RoundedCornerShape(10.dp), color = FindUTheme.colors.white)
             .noRippleClickable { navigateToReportDetail(animal) }
     ) {
+        val context = LocalContext.current
+        val imageRequest = remember(animal.thumbnailImageUrl) {
+            val trace = FirebasePerformance.getInstance().newTrace("home_report_image_load")
+            var startTime = 0L
+            ImageRequest.Builder(context)
+                .data(animal.thumbnailImageUrl)
+                .listener(
+                    onStart = {
+                        startTime = SystemClock.elapsedRealtime()
+                        trace.start()
+                    },
+                    onSuccess = { _, _ ->
+                        val duration = SystemClock.elapsedRealtime() - startTime
+                        Log.d("ImagePerf", "제보동물 이미지 로딩 완료: ${duration}ms | ${animal.thumbnailImageUrl}")
+                        trace.stop()
+                    },
+                    onError = { _, _ ->
+                        val duration = SystemClock.elapsedRealtime() - startTime
+                        Log.e("ImagePerf", "제보동물 이미지 로딩 실패: ${duration}ms | ${animal.thumbnailImageUrl}")
+                        trace.putAttribute("status", "error")
+                        trace.stop()
+                    }
+                )
+                .build()
+        }
         AsyncImage(
-            model = animal.thumbnailImageUrl,
+            model = imageRequest,
             contentDescription = "Animal Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
