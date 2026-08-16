@@ -19,14 +19,14 @@ val properties = Properties().apply {
 
 android {
     namespace = "com.kuit.findu"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.kuit.findu"
         minSdk = 28
-        targetSdk = 35
-        versionCode = 23
-        versionName = "1.1.8"
+        targetSdk = 36
+        versionCode = 24
+        versionName = "1.1.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GPT_KEY", properties["GPT_KEY"].toString())
